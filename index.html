@@ -1,744 +1,1423 @@
-/* =========================================
-   SCHOOL PORTAL
-   PREMIUM NAVY + GOLD THEME
-========================================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --navy: #071a33;
-    --navy-light: #0d2a4d;
-    --navy-medium: #123b67;
-    --gold: #d4af37;
-    --gold-light: #f1d675;
-    --white: #ffffff;
-    --background: #f4f6f9;
-    --text: #172033;
-    --muted: #6b7280;
-    --border: #e2e6ec;
-    --danger: #c62828;
-    --success: #16803c;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--background);
-    color: var(--text);
-}
-
-
-/* =========================================
-   LOGIN PAGE
-========================================= */
-
-.login-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    background:
-        linear-gradient(
-            rgba(7, 26, 51, 0.94),
-            rgba(7, 26, 51, 0.97)
-        );
-}
-
-.login-container {
-    width: 100%;
-    max-width: 450px;
-    background: var(--white);
-    border-radius: 16px;
-    padding: 40px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
-}
-
-.login-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.school-logo {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--navy);
-    border: 3px solid var(--gold);
-    color: var(--gold);
-    font-size: 24px;
-    font-weight: 800;
-}
-
-.school-logo.small {
-    width: 44px;
-    height: 44px;
-    margin: 0;
-    border-width: 2px;
-    font-size: 15px;
-}
-
-.login-header h1 {
-    color: var(--navy);
-    font-size: 27px;
-    margin-bottom: 8px;
-}
-
-.login-header p {
-    color: var(--muted);
-    font-size: 14px;
-}
-
-
-/* =========================================
-   FORM
-========================================= */
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--navy);
-    font-weight: 700;
-    font-size: 14px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: #fafbfc;
-    color: var(--text);
-    font-size: 15px;
-    outline: none;
-    transition: 0.2s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-}
-
-.login-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 22px;
-    font-size: 13px;
-}
-
-.login-options a {
-    color: var(--navy-medium);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.login-options a:hover {
-    color: var(--gold);
-}
-
-.login-button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: var(--navy);
-    color: var(--white);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.login-button:hover {
-    background: var(--navy-light);
-    transform: translateY(-1px);
-}
-
-.error-message {
-    margin-top: 15px;
-    padding: 11px;
-    border-radius: 7px;
-    background: #fde8e8;
-    color: var(--danger);
-    text-align: center;
-    font-size: 13px;
-}
-
-.demo-login {
-    margin-top: 25px;
-    padding: 15px;
-    border-left: 4px solid var(--gold);
-    background: #f8f8f6;
-    border-radius: 6px;
-    font-size: 12px;
-}
-
-.demo-login h3 {
-    color: var(--navy);
-    margin-bottom: 9px;
-}
-
-.demo-login p {
-    margin: 5px 0;
-    color: #555;
-}
-
-
-/* =========================================
-   PORTAL
-========================================= */
-
-.portal-page {
-    min-height: 100vh;
-    display: flex;
-}
-
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
-.sidebar {
-    width: 260px;
-    min-height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    background: var(--navy);
-    color: var(--white);
-    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.12);
-    z-index: 100;
-}
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 22px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-header h2 {
-    font-size: 17px;
-    color: var(--white);
-}
-
-.sidebar-header span {
-    display: block;
-    margin-top: 3px;
-    color: #aeb8c6;
-    font-size: 10px;
-}
-
-.sidebar-user {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 20px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-avatar,
-.top-avatar {
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--gold);
-    color: var(--navy);
-    font-weight: 800;
-}
-
-.sidebar-user strong {
-    display: block;
-    font-size: 13px;
-}
-
-.sidebar-user span {
-    display: block;
-    margin-top: 4px;
-    color: #aeb8c6;
-    font-size: 11px;
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: 15px 10px;
-}
-
-.nav-link {
-    display: block;
-    margin-bottom: 4px;
-    padding: 13px 15px;
-    border-radius: 7px;
-    color: #cbd3df;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    transition: 0.2s;
-}
-
-.nav-link:hover {
-    background: rgba(255, 255, 255, 0.07);
-    color: var(--white);
-}
-
-.nav-link.active {
-    background: var(--gold);
-    color: var(--navy);
-}
-
-.sidebar-bottom {
-    padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.logout-button {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 7px;
-    background: transparent;
-    color: #e8edf4;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.logout-button:hover {
-    background: var(--danger);
-    border-color: var(--danger);
-}
-
-
-/* =========================================
-   MAIN AREA
-========================================= */
-
-.main-content {
-    width: calc(100% - 260px);
-    margin-left: 260px;
-    padding: 25px;
-}
-
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--white);
-    padding: 18px 22px;
-    margin-bottom: 25px;
-    border-radius: 10px;
-    border-bottom: 3px solid var(--gold);
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-}
-
-.topbar h1 {
-    color: var(--navy);
-    font-size: 24px;
-}
-
-.topbar p {
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.topbar-user strong {
-    display: block;
-    color: var(--navy);
-    font-size: 13px;
-}
-
-.topbar-user span {
-    display: block;
-    margin-top: 3px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-
-/* =========================================
-   WELCOME CARD
-========================================= */
-
-.welcome-card {
-    margin-bottom: 25px;
-    padding: 30px;
-    border-radius: 12px;
-    background:
-        linear-gradient(
-            135deg,
-            var(--navy),
-            var(--navy-medium)
-        );
-    color: var(--white);
-    border-left: 5px solid var(--gold);
-    box-shadow: 0 8px 20px rgba(7, 26, 51, 0.15);
-}
-
-.welcome-card h2 {
-    margin-bottom: 8px;
-    font-size: 22px;
-}
-
-.welcome-card p {
-    color: #d9e1ec;
-    font-size: 14px;
-}
-
-
-/* =========================================
-   STATISTICS
-========================================= */
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.stat-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 21px;
-    background: var(--white);
-    border-radius: 10px;
-    border-top: 3px solid var(--gold);
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-}
-
-.stat-card h3 {
-    margin-bottom: 4px;
-    color: var(--navy);
-    font-size: 24px;
-}
-
-.stat-card p {
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.stat-icon {
-    font-size: 27px;
-}
-
-
-/* =========================================
-   CONTENT CARDS
-========================================= */
-
-.content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.content-card {
-    margin-bottom: 20px;
-    padding: 22px;
-    background: var(--white);
-    border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-}
-
-.card-header {
-    margin-bottom: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-.card-header h3 {
-    color: var(--navy);
-    font-size: 17px;
-}
-
-
-/* =========================================
-   ANNOUNCEMENTS
-========================================= */
-
-.announcement-item {
-    padding: 15px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.announcement-item:last-child {
-    border-bottom: none;
-}
-
-.announcement-item strong {
-    color: var(--navy);
-    font-size: 14px;
-}
-
-.announcement-item p {
-    margin: 6px 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.announcement-item small {
-    color: #9aa3af;
-    font-size: 11px;
-}
-
-
-/* =========================================
-   ASSIGNMENTS
-========================================= */
-
-.assignment-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.assignment-item:last-child {
-    border-bottom: none;
-}
-
-.assignment-item strong {
-    color: var(--navy);
-    font-size: 13px;
-}
-
-.assignment-item span {
-    color: #927719;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-
-/* =========================================
-   TABLES
-========================================= */
-
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 13px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background: var(--navy);
-    color: var(--white);
-    font-size: 12px;
-    font-weight: 700;
-}
-
-td {
-    color: #374151;
-    font-size: 13px;
-}
-
-tbody tr:hover {
-    background: #faf8ef;
-}
-
-
-/* =========================================
-   PROFILE
-========================================= */
-
-.profile-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
-}
-
-.profile-grid label {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.profile-grid p {
-    color: var(--navy);
-    font-weight: 700;
-    font-size: 14px;
-}
-
-
-/* =========================================
-   ASSIGNMENT PAGE
-========================================= */
-
-.assignment-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 17px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.assignment-row:last-child {
-    border-bottom: none;
-}
-
-.assignment-row strong {
-    color: var(--navy);
-    font-size: 14px;
-}
-
-.assignment-row p {
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.assignment-row span {
-    color: #927719;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 1000px) {
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .content-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-@media (max-width: 700px) {
-
-    .sidebar {
-        width: 215px;
-    }
-
-    .main-content {
-        width: calc(100% - 215px);
-        margin-left: 215px;
-        padding: 15px;
-    }
-
-    .topbar {
-        align-items: flex-start;
-    }
-
-    .topbar-user {
-        display: none;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .profile-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .login-container {
-        padding: 28px;
-    }
-}
-
-
-@media (max-width: 520px) {
-
-    .sidebar {
-        width: 70px;
-    }
-
-    .sidebar-header {
-        justify-content: center;
-        padding: 18px 5px;
-    }
-
-    .sidebar-header h2,
-    .sidebar-header span,
-    .sidebar-user strong,
-    .sidebar-user span {
-        display: none;
-    }
-
-    .sidebar-user {
-        justify-content: center;
-        padding: 15px 5px;
-    }
-
-    .nav-link {
-        padding: 14px 5px;
-        text-align: center;
-        font-size: 0;
-    }
-
-    .nav-link::first-letter {
-        font-size: 18px;
-    }
-
-    .main-content {
-        width: calc(100% - 70px);
-        margin-left: 70px;
-        padding: 12px;
-    }
-
-    .topbar h1 {
-        font-size: 20px;
-    }
-
-    .welcome-card {
-        padding: 22px;
-    }
-
-    .assignment-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .login-container {
-        padding: 22px;
-    }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN PAGE
+========================= -->
+
+<div class="login-page" id="loginPage">
+
+    <div class="login-container">
+
+        <div class="login-header">
+            <div class="school-logo">SP</div>
+            <h1>School Portal</h1>
+            <p>Student, Parent & School Management System</p>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="userType">Account Type</label>
+                <select id="userType" required>
+                    <option value="student">Student</option>
+                    <option value="parent">Parent / Guardian</option>
+                    <option value="admin">School Administrator</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    required
+                >
+            </div>
+
+            <div class="login-options">
+                <label>
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+
+                <a href="#" id="forgotPassword">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-button">
+                Login
+            </button>
+
+            <div id="loginMessage"></div>
+
+        </form>
+
+        <div class="demo-login">
+            <h3>Demo Login Details</h3>
+
+            <p><strong>Student:</strong> student001 / 123456</p>
+            <p><strong>Parent:</strong> parent001 / 123456</p>
+            <p><strong>Administrator:</strong> admin / admin123</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     PORTAL PAGE
+========================= -->
+
+<div class="portal-page" id="portalPage" style="display:none;">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <div class="school-logo small">SP</div>
+
+            <div>
+                <h2>School Portal</h2>
+                <span>Management System</span>
+            </div>
+        </div>
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar" id="sidebarAvatar">
+                G
+            </div>
+
+            <div>
+                <strong id="sidebarUserName">User</strong>
+                <span id="sidebarUserType">Student</span>
+            </div>
+
+        </div>
+
+
+        <!-- STUDENT NAVIGATION -->
+
+        <nav class="sidebar-nav" id="studentNavigation">
+
+            <a href="#" class="nav-link active" data-page="dashboard">
+                🏠 Dashboard
+            </a>
+
+            <a href="#" class="nav-link" data-page="profile">
+                👤 My Profile
+            </a>
+
+            <a href="#" class="nav-link" data-page="subjects">
+                📚 My Subjects
+            </a>
+
+            <a href="#" class="nav-link" data-page="results">
+                📊 My Results
+            </a>
+
+            <a href="#" class="nav-link" data-page="attendance">
+                📅 Attendance
+            </a>
+
+            <a href="#" class="nav-link" data-page="assignments">
+                📝 Assignments
+            </a>
+
+            <a href="#" class="nav-link" data-page="fees">
+                💰 Fees
+            </a>
+
+            <a href="#" class="nav-link" data-page="announcements">
+                📢 Announcements
+            </a>
+
+            <a href="#" class="nav-link" data-page="settings">
+                ⚙️ Settings
+            </a>
+
+        </nav>
+
+
+        <!-- PARENT NAVIGATION -->
+
+        <nav class="sidebar-nav" id="parentNavigation" style="display:none;">
+
+            <a href="#" class="nav-link active" data-page="dashboard">
+                🏠 Dashboard
+            </a>
+
+            <a href="#" class="nav-link" data-page="profile">
+                👤 Parent Profile
+            </a>
+
+            <a href="#" class="nav-link" data-page="results">
+                📊 Child Results
+            </a>
+
+            <a href="#" class="nav-link" data-page="attendance">
+                📅 Attendance
+            </a>
+
+            <a href="#" class="nav-link" data-page="assignments">
+                📝 Assignments
+            </a>
+
+            <a href="#" class="nav-link" data-page="fees">
+                💰 Fees
+            </a>
+
+            <a href="#" class="nav-link" data-page="announcements">
+                📢 Announcements
+            </a>
+
+            <a href="#" class="nav-link" data-page="settings">
+                ⚙️ Settings
+            </a>
+
+        </nav>
+
+
+        <!-- ADMIN NAVIGATION -->
+
+        <nav class="sidebar-nav" id="adminNavigation" style="display:none;">
+
+            <a href="#" class="nav-link active" data-page="adminDashboard">
+                🏠 Dashboard
+            </a>
+
+            <a href="#" class="nav-link" data-page="students">
+                👨‍🎓 Students
+            </a>
+
+            <a href="#" class="nav-link" data-page="parents">
+                👪 Parents & Guardians
+            </a>
+
+            <a href="#" class="nav-link" data-page="teachers">
+                👨‍🏫 Teachers
+            </a>
+
+            <a href="#" class="nav-link" data-page="classes">
+                🏫 Classes
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolSubjects">
+                📚 Subjects
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolResults">
+                📊 Results
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolAttendance">
+                📅 Attendance
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolAssignments">
+                📝 Assignments
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolFees">
+                💰 Fees
+            </a>
+
+            <a href="#" class="nav-link" data-page="schoolAnnouncements">
+                📢 Announcements
+            </a>
+
+            <a href="#" class="nav-link" data-page="reports">
+                📄 Reports
+            </a>
+
+            <a href="#" class="nav-link" data-page="settings">
+                ⚙️ Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button class="logout-button" id="logoutBtn">
+                🚪 Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle">
+                    Welcome to your school portal.
+                </p>
+            </div>
+
+            <div class="topbar-user">
+
+                <div class="top-avatar">
+                    G
+                </div>
+
+                <div>
+                    <strong id="topUserName">User</strong>
+                    <span id="topUserType">Student</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STUDENT DASHBOARD
+        ========================= -->
+
+        <section class="portal-section" id="dashboardPage">
+
+            <div class="welcome-card">
+
+                <h2>
+                    Welcome, <span id="welcomeName">Student</span>!
+                </h2>
+
+                <p>
+                    Welcome to your school portal. Access your academic
+                    information, attendance, assignments and school updates.
+                </p>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div>
+                        <h3>8</h3>
+                        <p>Subjects</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div>
+                        <h3>82%</h3>
+                        <p>Average Result</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div>
+                        <h3>94%</h3>
+                        <p>Attendance</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div>
+                        <h3>3</h3>
+                        <p>Assignments</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="content-grid">
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Latest Announcements</h3>
+                    </div>
+
+                    <div class="announcement-item">
+                        <strong>Mid-Term Examination</strong>
+                        <p>
+                            Mid-term examinations begin next month.
+                            Students should prepare accordingly.
+                        </p>
+                        <small>September 25, 2026</small>
+                    </div>
+
+                    <div class="announcement-item">
+                        <strong>School Meeting</strong>
+                        <p>
+                            Parents and guardians are invited to the
+                            upcoming school meeting.
+                        </p>
+                        <small>September 22, 2026</small>
+                    </div>
+
+                </div>
+
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Upcoming Assignments</h3>
+                    </div>
+
+                    <div class="assignment-item">
+                        <strong>Mathematics Exercise</strong>
+                        <span>Due Oct 2</span>
+                    </div>
+
+                    <div class="assignment-item">
+                        <strong>Science Project</strong>
+                        <span>Due Oct 5</span>
+                    </div>
+
+                    <div class="assignment-item">
+                        <strong>English Essay</strong>
+                        <span>Due Oct 7</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROFILE
+        ========================= -->
+
+        <section class="portal-section" id="profilePage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Personal Information</h3>
+                </div>
+
+                <div class="profile-grid">
+
+                    <div>
+                        <label>Full Name</label>
+                        <p id="profileName">Gabriel Quansah</p>
+                    </div>
+
+                    <div>
+                        <label>Student / User ID</label>
+                        <p id="profileId">STU-001</p>
+                    </div>
+
+                    <div>
+                        <label>Class</label>
+                        <p id="profileClass">Basic 8</p>
+                    </div>
+
+                    <div>
+                        <label>Academic Year</label>
+                        <p>2026/2027</p>
+                    </div>
+
+                    <div>
+                        <label>Status</label>
+                        <p>Active</p>
+                    </div>
+
+                    <div>
+                        <label>School</label>
+                        <p>School Portal Demo School</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SUBJECTS
+        ========================= -->
+
+        <section class="portal-section" id="subjectsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>My Subjects</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Class</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Mathematics</td>
+                                <td>Mr. Mensah</td>
+                                <td>Basic 8</td>
+                            </tr>
+
+                            <tr>
+                                <td>English Language</td>
+                                <td>Mrs. Addo</td>
+                                <td>Basic 8</td>
+                            </tr>
+
+                            <tr>
+                                <td>Integrated Science</td>
+                                <td>Mr. Boateng</td>
+                                <td>Basic 8</td>
+                            </tr>
+
+                            <tr>
+                                <td>Social Studies</td>
+                                <td>Mrs. Owusu</td>
+                                <td>Basic 8</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RESULTS
+        ========================= -->
+
+        <section class="portal-section" id="resultsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Academic Results</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Mathematics</td>
+                                <td>85%</td>
+                                <td>A</td>
+                                <td>Excellent</td>
+                            </tr>
+
+                            <tr>
+                                <td>English Language</td>
+                                <td>82%</td>
+                                <td>A</td>
+                                <td>Very Good</td>
+                            </tr>
+
+                            <tr>
+                                <td>Integrated Science</td>
+                                <td>78%</td>
+                                <td>B</td>
+                                <td>Good</td>
+                            </tr>
+
+                            <tr>
+                                <td>Social Studies</td>
+                                <td>80%</td>
+                                <td>A</td>
+                                <td>Very Good</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ATTENDANCE
+        ========================= -->
+
+        <section class="portal-section" id="attendancePage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Attendance Record</h3>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div>
+                            <h3>94%</h3>
+                            <p>Attendance</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div>
+                            <h3>47</h3>
+                            <p>Days Present</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">❌</div>
+                        <div>
+                            <h3>3</h3>
+                            <p>Days Absent</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ASSIGNMENTS
+        ========================= -->
+
+        <section class="portal-section" id="assignmentsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Assignments</h3>
+                </div>
+
+                <div class="assignment-row">
+                    <div>
+                        <strong>Mathematics Exercise</strong>
+                        <p>Complete questions 1–20.</p>
+                    </div>
+                    <span>Due Oct 2</span>
+                </div>
+
+                <div class="assignment-row">
+                    <div>
+                        <strong>Science Project</strong>
+                        <p>Prepare a report on ecosystems.</p>
+                    </div>
+                    <span>Due Oct 5</span>
+                </div>
+
+                <div class="assignment-row">
+                    <div>
+                        <strong>English Essay</strong>
+                        <p>Write a 500-word essay.</p>
+                    </div>
+                    <span>Due Oct 7</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FEES
+        ========================= -->
+
+        <section class="portal-section" id="feesPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Fees & Payments</h3>
+                </div>
+
+                <div class="profile-grid">
+
+                    <div>
+                        <label>Total Fees</label>
+                        <p>GH₵ 3,500</p>
+                    </div>
+
+                    <div>
+                        <label>Amount Paid</label>
+                        <p>GH₵ 2,500</p>
+                    </div>
+
+                    <div>
+                        <label>Outstanding Balance</label>
+                        <p>GH₵ 1,000</p>
+                    </div>
+
+                    <div>
+                        <label>Payment Status</label>
+                        <p>Partially Paid</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ANNOUNCEMENTS
+        ========================= -->
+
+        <section class="portal-section" id="announcementsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>School Announcements</h3>
+                </div>
+
+                <div class="announcement-item">
+                    <strong>Mid-Term Examination</strong>
+                    <p>
+                        Mid-term examinations will begin next month.
+                    </p>
+                    <small>September 25, 2026</small>
+                </div>
+
+                <div class="announcement-item">
+                    <strong>Parent Meeting</strong>
+                    <p>
+                        Parents and guardians are invited to the school meeting.
+                    </p>
+                    <small>September 22, 2026</small>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN DASHBOARD
+        ========================= -->
+
+        <section class="portal-section" id="adminDashboardPage" style="display:none;">
+
+            <div class="welcome-card">
+
+                <h2>
+                    Welcome, <span id="adminWelcomeName">Administrator</span>!
+                </h2>
+
+                <p>
+                    Manage students, teachers, classes, results,
+                    attendance, fees and school information.
+                </p>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍🎓</div>
+                    <div>
+                        <h3>248</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍🏫</div>
+                    <div>
+                        <h3>32</h3>
+                        <p>Total Teachers</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🏫</div>
+                    <div>
+                        <h3>12</h3>
+                        <p>Total Classes</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div>
+                        <h3>GH₵48,500</h3>
+                        <p>Outstanding Fees</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="content-grid">
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+
+                    <div class="assignment-row">
+                        <strong>Add New Student</strong>
+                        <button class="login-button quick-action"
+                                data-page="students">
+                            Open
+                        </button>
+                    </div>
+
+                    <div class="assignment-row">
+                        <strong>Enter Results</strong>
+                        <button class="login-button quick-action"
+                                data-page="schoolResults">
+                            Open
+                        </button>
+                    </div>
+
+                    <div class="assignment-row">
+                        <strong>Record Attendance</strong>
+                        <button class="login-button quick-action"
+                                data-page="schoolAttendance">
+                            Open
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <div class="content-card">
+
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                    </div>
+
+                    <div class="announcement-item">
+                        <strong>New student registered</strong>
+                        <p>Student registration was completed.</p>
+                        <small>Today</small>
+                    </div>
+
+                    <div class="announcement-item">
+                        <strong>Results updated</strong>
+                        <p>Term results were updated.</p>
+                        <small>Yesterday</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN STUDENTS
+        ========================= -->
+
+        <section class="portal-section" id="studentsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Student Management</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>STU-001</td>
+                                <td>Gabriel Quansah</td>
+                                <td>Basic 8</td>
+                                <td>Active</td>
+                            </tr>
+
+                            <tr>
+                                <td>STU-002</td>
+                                <td>Kwame Mensah</td>
+                                <td>Basic 8</td>
+                                <td>Active</td>
+                            </tr>
+
+                            <tr>
+                                <td>STU-003</td>
+                                <td>Adwoa Owusu</td>
+                                <td>Basic 7</td>
+                                <td>Active</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN PARENTS
+        ========================= -->
+
+        <section class="portal-section" id="parentsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Parents & Guardians</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Student</th>
+                                <th>Contact</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>PAR-001</td>
+                                <td>Parent / Guardian</td>
+                                <td>Gabriel Quansah</td>
+                                <td>024 XXX XXXX</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN TEACHERS
+        ========================= -->
+
+        <section class="portal-section" id="teachersPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Teachers</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>TCH-001</td>
+                                <td>Mr. Mensah</td>
+                                <td>Mathematics</td>
+                                <td>Active</td>
+                            </tr>
+
+                            <tr>
+                                <td>TCH-002</td>
+                                <td>Mrs. Addo</td>
+                                <td>English</td>
+                                <td>Active</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN CLASSES
+        ========================= -->
+
+        <section class="portal-section" id="classesPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Classes</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Students</th>
+                                <th>Class Teacher</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Basic 7</td>
+                                <td>38</td>
+                                <td>Mrs. Owusu</td>
+                            </tr>
+
+                            <tr>
+                                <td>Basic 8</td>
+                                <td>42</td>
+                                <td>Mr. Mensah</td>
+                            </tr>
+
+                            <tr>
+                                <td>Basic 9</td>
+                                <td>35</td>
+                                <td>Mrs. Addo</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN SUBJECTS
+        ========================= -->
+
+        <section class="portal-section" id="schoolSubjectsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>School Subjects</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Classes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Mathematics</td>
+                                <td>Mr. Mensah</td>
+                                <td>Basic 7–9</td>
+                            </tr>
+
+                            <tr>
+                                <td>English Language</td>
+                                <td>Mrs. Addo</td>
+                                <td>Basic 7–9</td>
+                            </tr>
+
+                            <tr>
+                                <td>Integrated Science</td>
+                                <td>Mr. Boateng</td>
+                                <td>Basic 7–9</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN RESULTS
+        ========================= -->
+
+        <section class="portal-section" id="schoolResultsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Results Management</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Gabriel Quansah</td>
+                                <td>Mathematics</td>
+                                <td>85%</td>
+                                <td>A</td>
+                            </tr>
+
+                            <tr>
+                                <td>Kwame Mensah</td>
+                                <td>Mathematics</td>
+                                <td>78%</td>
+                                <td>B</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN ATTENDANCE
+        ========================= -->
+
+        <section class="portal-section" id="schoolAttendancePage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Attendance Management</h3>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Present</th>
+                                <th>Attendance</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Gabriel Quansah</td>
+                                <td>Basic 8</td>
+                                <td>47</td>
+                                <td>94%</td>
+                            </tr>
+
+                            <tr>
+                                <td>Kwame Mensah</td>
+                                <td>Basic 8</td>
+                                <td>45</td>
+                                <td>90%</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN ASSIGNMENTS
+        ========================= -->
+
+        <section class="portal-section" id="schoolAssignmentsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Assignment Management</h3>
+                </div>
+
+                <div class="assignment-row">
+                    <div>
+                        <strong>Mathematics Exercise</strong>
+                        <p>Basic 8</p>
+                    </div>
+                    <span>Due Oct 2</span>
+                </div>
+
+                <div class="assignment-row">
+                    <div>
+                        <strong>Science Project</strong>
+                        <p>Basic 8</p>
+                    </div>
+                    <span>Due Oct 5</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN FEES
+        ========================= -->
+
+        <section class="portal-section" id="schoolFeesPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Fees Management</h3>
+                </div>
+
+                <div class="profile-grid">
+
+                    <div>
+                        <label>Total Fees Collected</label>
+                        <p>GH₵ 125,000</p>
+                    </div>
+
+                    <div>
+                        <label>Outstanding Fees</label>
+                        <p>GH₵ 48,500</p>
+                    </div>
+
+                    <div>
+                        <label>Students With Balances</label>
+                        <p>76</p>
+                    </div>
+
+                    <div>
+                        <label>Academic Year</label>
+                        <p>2026/2027</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN ANNOUNCEMENTS
+        ========================= -->
+
+        <section class="portal-section" id="schoolAnnouncementsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>School Announcements</h3>
+                </div>
+
+                <div class="announcement-item">
+                    <strong>Mid-Term Examination</strong>
+                    <p>Mid-term examinations begin next month.</p>
+                    <small>September 25, 2026</small>
+                </div>
+
+                <div class="announcement-item">
+                    <strong>Parent Meeting</strong>
+                    <p>Parents are invited to the upcoming school meeting.</p>
+                    <small>September 22, 2026</small>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             REPORTS
+        ========================= -->
+
+        <section class="portal-section" id="reportsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>School Reports</h3>
+                </div>
+
+                <div class="assignment-row">
+                    <strong>Student Enrollment Report</strong>
+                    <span>248 Students</span>
+                </div>
+
+                <div class="assignment-row">
+                    <strong>Attendance Report</strong>
+                    <span>94% Average</span>
+                </div>
+
+                <div class="assignment-row">
+                    <strong>Fee Collection Report</strong>
+                    <span>GH₵125,000</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SETTINGS
+        ========================= -->
+
+        <section class="portal-section" id="settingsPage" style="display:none;">
+
+            <div class="content-card">
+
+                <div class="card-header">
+                    <h3>Settings</h3>
+                </div>
+
+                <div class="profile-grid">
+
+                    <div>
+                        <label>Portal Status</label>
+                        <p>Active</p>
+                    </div>
+
+                    <div>
+                        <label>Academic Year</label>
+                        <p>2026/2027</p>
+                    </div>
+
+                    <div>
+                        <label>System Version</label>
+                        <p>1.0 Demo</p>
+                    </div>
+
+                    <div>
+                        <label>School Portal</label>
+                        <p>Student & Parent Management</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
