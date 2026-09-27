@@ -275,7 +275,7 @@ textarea:focus {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 18px;
     margin-bottom: 25px;
 }
@@ -446,7 +446,29 @@ th {
     margin: 2px;
 }
 
+.curriculum-box {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    padding: 12px;
+    margin-top: 8px;
+}
+
+.curriculum-box strong {
+    color: #0b2858;
+}
+
+.subject-class-list {
+    max-width: 500px;
+}
+
 /* RESPONSIVE */
+@media(max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media(max-width: 1100px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -569,7 +591,6 @@ th {
 <!-- PORTAL -->
 <div id="portal" class="portal hidden">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
 
         <div class="sidebar-header">
@@ -627,7 +648,6 @@ th {
     </aside>
 
 
-    <!-- MAIN -->
     <main class="main-content">
 
         <div class="topbar">
@@ -672,12 +692,18 @@ th {
                     <p>Total Classes</p>
                 </div>
 
+                <div class="stat-card">
+                    <h3 id="subjectCount">0</h3>
+                    <p>Total Subjects</p>
+                </div>
+
             </div>
 
             <div class="card">
                 <h2>Portal Overview</h2>
                 <p style="margin-top:10px;color:#777;">
-                    Manage students, parents, teachers and classes from the administration section.
+                    Manage students, parents, teachers, classes and subjects
+                    from the administration section.
                 </p>
             </div>
 
@@ -1102,7 +1128,6 @@ th {
 
             <div class="management-grid">
 
-                <!-- CLASS FORM -->
                 <div class="card">
 
                     <div class="card-header">
@@ -1132,7 +1157,7 @@ th {
                                 <input
                                     type="text"
                                     id="className"
-                                    placeholder="e.g. Basic 8"
+                                    placeholder="e.g. Primary 1"
                                     required
                                 >
                             </div>
@@ -1181,18 +1206,11 @@ th {
 
                         <div class="form-actions">
 
-                            <button
-                                class="btn btn-primary"
-                                type="submit"
-                            >
+                            <button class="btn btn-primary" type="submit">
                                 Save Class
                             </button>
 
-                            <button
-                                class="btn btn-secondary"
-                                type="button"
-                                id="cancelClassEdit"
-                            >
+                            <button class="btn btn-secondary" type="button" id="cancelClassEdit">
                                 Cancel
                             </button>
 
@@ -1203,7 +1221,6 @@ th {
                 </div>
 
 
-                <!-- CLASS TABLE -->
                 <div class="card">
 
                     <div class="card-header">
@@ -1238,6 +1255,204 @@ th {
                             </thead>
 
                             <tbody id="classTableBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUBJECT MANAGEMENT -->
+        <section id="page-adminSubjects" class="page">
+
+            <div class="page-title">
+                <h1>Subject Management</h1>
+                <p>
+                    Manage subjects, classes, teachers and the school curriculum.
+                </p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>School Curriculum</h2>
+                        <p style="color:#777;margin-top:5px;font-size:13px;">
+                            Primary 1–6 and JHS 1–3 subject structure.
+                        </p>
+                    </div>
+
+                    <button
+                        class="btn btn-success"
+                        type="button"
+                        id="loadCurriculumBtn"
+                    >
+                        Load Curriculum Subjects
+                    </button>
+                </div>
+
+                <div class="curriculum-box">
+
+                    <p>
+                        <strong>Primary 1–6:</strong>
+                        English, Mathematics, Science, Computing, French,
+                        Ghanaian Language, RME, Creative Arts, History
+                    </p>
+
+                    <p style="margin-top:10px;">
+                        <strong>JHS 1–3:</strong>
+                        English, Mathematics, Science, Social Studies, French,
+                        Ghanaian Language, ICT, Career Technology, RME
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="management-grid">
+
+                <!-- SUBJECT FORM -->
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2 id="subjectFormTitle">Add Subject</h2>
+                    </div>
+
+                    <div id="subjectMessage"></div>
+
+                    <form id="subjectForm">
+
+                        <input type="hidden" id="subjectEditId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Subject ID *</label>
+                                <input
+                                    type="text"
+                                    id="subjectId"
+                                    placeholder="e.g. SUB-001"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Subject Name *</label>
+                                <input
+                                    type="text"
+                                    id="subjectName"
+                                    placeholder="e.g. Mathematics"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Subject Code</label>
+                                <input
+                                    type="text"
+                                    id="subjectCode"
+                                    placeholder="e.g. MATH"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Academic Year *</label>
+                                <input
+                                    type="text"
+                                    id="subjectAcademicYear"
+                                    value="2026/2027"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>Teacher</label>
+
+                                <select id="subjectTeacher">
+                                    <option value="">-- Unassigned --</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>Assign Classes</label>
+
+                                <div
+                                    id="subjectClassCheckboxes"
+                                    class="checkbox-list"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit"
+                            >
+                                Save Subject
+                            </button>
+
+                            <button
+                                class="btn btn-secondary"
+                                type="button"
+                                id="cancelSubjectEdit"
+                            >
+                                Cancel
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- SUBJECT TABLE -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h2>Subjects</h2>
+
+                        <input
+                            type="text"
+                            id="subjectSearch"
+                            class="search-box"
+                            placeholder="Search subjects..."
+                        >
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Subject</th>
+                                    <th>Code</th>
+                                    <th>Teacher</th>
+                                    <th>Classes</th>
+                                    <th>Academic Year</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="subjectTableBody"></tbody>
 
                         </table>
 
@@ -1380,11 +1595,6 @@ th {
 
 
         <!-- ADMIN PLACEHOLDERS -->
-        <section id="page-adminSubjects" class="page">
-            <div class="page-title"><h1>Subject Management</h1></div>
-            <div class="card"><p>Subject Management will be built next.</p></div>
-        </section>
-
         <section id="page-adminResults" class="page">
             <div class="page-title"><h1>Results Management</h1></div>
             <div class="card"><p>Results Management will be built next.</p></div>
@@ -1475,6 +1685,113 @@ function saveClasses(classes) {
     );
 }
 
+function getSubjects() {
+    return JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [];
+}
+
+function saveSubjects(subjects) {
+    localStorage.setItem(
+        "schoolPortalSubjects",
+        JSON.stringify(subjects)
+    );
+}
+
+
+/* =========================================================
+   CURRICULUM
+========================================================= */
+
+const primarySubjects = [
+    "English",
+    "Mathematics",
+    "Science",
+    "Computing",
+    "French",
+    "Ghanaian Language",
+    "RME",
+    "Creative Arts",
+    "History"
+];
+
+const jhsSubjects = [
+    "English",
+    "Mathematics",
+    "Science",
+    "Social Studies",
+    "French",
+    "Ghanaian Language",
+    "ICT",
+    "Career Technology",
+    "RME"
+];
+
+const primaryClasses = [
+    "Primary 1",
+    "Primary 2",
+    "Primary 3",
+    "Primary 4",
+    "Primary 5",
+    "Primary 6"
+];
+
+const jhsClasses = [
+    "JHS 1",
+    "JHS 2",
+    "JHS 3"
+];
+
+function getSubjectCode(name) {
+
+    const codes = {
+        "English": "ENG",
+        "Mathematics": "MATH",
+        "Science": "SCI",
+        "Computing": "COMP",
+        "French": "FRE",
+        "Ghanaian Language": "GH-LANG",
+        "RME": "RME",
+        "Creative Arts": "CART",
+        "History": "HIST",
+        "Social Studies": "SOC",
+        "ICT": "ICT",
+        "Career Technology": "CT"
+    };
+
+    return codes[name] || name
+        .replace(/[^A-Za-z]/g, "")
+        .substring(0, 5)
+        .toUpperCase();
+
+}
+
+function getCurriculumClasses(subjectName) {
+
+    if (primarySubjects.includes(subjectName)) {
+        return primaryClasses;
+    }
+
+    if (jhsSubjects.includes(subjectName)) {
+        return jhsClasses;
+    }
+
+    return [];
+
+}
+
+function curriculumContains(subjectName, className) {
+
+    if (primarySubjects.includes(subjectName)) {
+        return primaryClasses.includes(className);
+    }
+
+    if (jhsSubjects.includes(subjectName)) {
+        return jhsClasses.includes(className);
+    }
+
+    return false;
+
+}
+
 
 /* =========================================================
    DEFAULT DATA
@@ -1554,6 +1871,13 @@ function initializeData() {
 
     }
 
+
+    if (!localStorage.getItem("schoolPortalSubjects")) {
+
+        saveSubjects([]);
+
+    }
+
 }
 
 
@@ -1573,6 +1897,7 @@ function escapeHtml(value) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
 }
 
 
@@ -1590,6 +1915,7 @@ function showMessage(elementId, message, type = "success") {
     setTimeout(() => {
         element.innerHTML = "";
     }, 3500);
+
 }
 
 
@@ -1621,6 +1947,9 @@ function updateDashboardCounts() {
 
     document.getElementById("classCount").textContent =
         getClasses().length;
+
+    document.getElementById("subjectCount").textContent =
+        getSubjects().length;
 
 }
 
@@ -1687,11 +2016,13 @@ function showPage(pageId) {
     }
 
     document.querySelectorAll(".nav-link").forEach(link => {
+
         link.classList.remove("active");
 
         if (link.dataset.page === pageId) {
             link.classList.add("active");
         }
+
     });
 
     document.getElementById("topbarTitle").textContent =
@@ -1702,14 +2033,29 @@ function showPage(pageId) {
         updateDashboardCounts();
     }
 
+    if (pageId === "students") {
+        renderStudents();
+    }
+
     if (pageId === "parents") {
         renderParentStudentCheckboxes();
+        renderParents();
+    }
+
+    if (pageId === "teachers") {
+        renderTeachers();
     }
 
     if (pageId === "classes") {
         renderClassTeacherOptions();
         renderClassStudentCheckboxes();
         renderClasses();
+    }
+
+    if (pageId === "adminSubjects") {
+        renderSubjectTeacherOptions();
+        renderSubjectClassCheckboxes();
+        renderSubjects();
     }
 
     if (pageId === "children") {
@@ -1985,14 +2331,20 @@ function renderProfile(user) {
 
     container.innerHTML = `
         <p><strong>Name:</strong> ${escapeHtml(user.name)}</p>
+
         <p style="margin-top:10px;">
-            <strong>Username:</strong> ${escapeHtml(user.username)}
+            <strong>Username:</strong>
+            ${escapeHtml(user.username)}
         </p>
+
         <p style="margin-top:10px;">
-            <strong>Role:</strong> ${escapeHtml(user.role)}
+            <strong>Role:</strong>
+            ${escapeHtml(user.role)}
         </p>
+
         <p style="margin-top:10px;">
-            <strong>ID:</strong> ${escapeHtml(user.id)}
+            <strong>ID:</strong>
+            ${escapeHtml(user.id)}
         </p>
     `;
 
@@ -2264,8 +2616,6 @@ function deleteStudent(id) {
     saveStudents(students);
 
 
-    /* Remove deleted student from parents */
-
     const parents = getParents();
 
     parents.forEach(parent => {
@@ -2278,8 +2628,6 @@ function deleteStudent(id) {
 
     saveParents(parents);
 
-
-    /* Remove deleted student from classes */
 
     const classes = getClasses();
 
@@ -2330,9 +2678,7 @@ document.getElementById("studentSearch")
    PARENT MANAGEMENT
 ========================================================= */
 
-function renderParentStudentCheckboxes(
-    selectedIds = null
-) {
+function renderParentStudentCheckboxes(selectedIds = null) {
 
     const container =
         document.getElementById(
@@ -2916,7 +3262,11 @@ document.getElementById("teacherForm")
 
         renderClassTeacherOptions();
 
+        renderSubjectTeacherOptions();
+
         renderClasses();
+
+        renderSubjects();
 
         updateDashboardCounts();
 
@@ -2990,18 +3340,15 @@ function deleteTeacher(id) {
     saveTeachers(teachers);
 
 
-    /*
-       We deliberately keep classes.
-       Their teacher will simply show as
-       "Unassigned" if the teacher no longer exists.
-    */
-
-
     renderTeachers();
 
     renderClassTeacherOptions();
 
+    renderSubjectTeacherOptions();
+
     renderClasses();
+
+    renderSubjects();
 
     updateDashboardCounts();
 
@@ -3031,9 +3378,7 @@ document.getElementById("teacherSearch")
    CLASS MANAGEMENT
 ========================================================= */
 
-function renderClassTeacherOptions(
-    selectedTeacherId = null
-) {
+function renderClassTeacherOptions(selectedTeacherId = null) {
 
     const select =
         document.getElementById("classTeacher");
@@ -3075,9 +3420,7 @@ function renderClassTeacherOptions(
 }
 
 
-function renderClassStudentCheckboxes(
-    selectedIds = null
-) {
+function renderClassStudentCheckboxes(selectedIds = null) {
 
     const container =
         document.getElementById(
@@ -3166,6 +3509,24 @@ function getStudentNames(studentIds) {
             )
         )
         .filter(Boolean);
+
+}
+
+
+function getClassName(classId) {
+
+    const classItem =
+        getClasses().find(
+            c => c.id === classId
+        );
+
+    if (!classItem) {
+        return "Unknown Class";
+    }
+
+    return classItem.section
+        ? `${classItem.name} ${classItem.section}`
+        : classItem.name;
 
 }
 
@@ -3305,8 +3666,6 @@ function renderClasses() {
 }
 
 
-/* SAVE CLASS */
-
 document.getElementById("classForm")
     .addEventListener("submit", function(e) {
 
@@ -3364,14 +3723,12 @@ document.getElementById("classForm")
 
 
         const classItem = {
-
             id,
             name,
             section,
             academicYear,
             teacherId,
             studentIds
-
         };
 
 
@@ -3406,11 +3763,6 @@ document.getElementById("classForm")
         saveClasses(classes);
 
 
-        /*
-           Keep each selected student's class information
-           synchronized with the class being saved.
-        */
-
         const students = getStudents();
 
         students.forEach(student => {
@@ -3441,12 +3793,12 @@ document.getElementById("classForm")
 
         renderStudents();
 
+        renderSubjectClassCheckboxes();
+
         updateDashboardCounts();
 
     });
 
-
-/* EDIT CLASS */
 
 function editClass(id) {
 
@@ -3489,8 +3841,6 @@ function editClass(id) {
 }
 
 
-/* DELETE CLASS */
-
 function deleteClass(id) {
 
     if (!confirm("Delete this class?")) {
@@ -3506,14 +3856,31 @@ function deleteClass(id) {
     saveClasses(classes);
 
 
+    /* Remove deleted class from subjects */
+
+    const subjects = getSubjects();
+
+    subjects.forEach(subject => {
+
+        subject.classIds =
+            (subject.classIds || [])
+                .filter(classId => classId !== id);
+
+    });
+
+    saveSubjects(subjects);
+
+
     renderClasses();
+
+    renderSubjectClassCheckboxes();
+
+    renderSubjects();
 
     updateDashboardCounts();
 
 }
 
-
-/* RESET CLASS FORM */
 
 function resetClassForm() {
 
@@ -3542,6 +3909,674 @@ document.getElementById("classSearch")
     .addEventListener(
         "input",
         renderClasses
+    );
+
+
+/* =========================================================
+   SUBJECT MANAGEMENT
+========================================================= */
+
+function renderSubjectTeacherOptions(selectedTeacherId = null) {
+
+    const select =
+        document.getElementById("subjectTeacher");
+
+    if (!select) return;
+
+
+    const currentValue =
+        selectedTeacherId !== null
+            ? selectedTeacherId
+            : select.value;
+
+
+    const teachers = getTeachers();
+
+
+    select.innerHTML =
+        `<option value="">-- Unassigned --</option>`;
+
+
+    teachers.forEach(teacher => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = teacher.id;
+
+        option.textContent =
+            `${teacher.name} (${teacher.id})`;
+
+        if (teacher.id === currentValue) {
+            option.selected = true;
+        }
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+function renderSubjectClassCheckboxes(selectedIds = null) {
+
+    const container =
+        document.getElementById(
+            "subjectClassCheckboxes"
+        );
+
+    if (!container) return;
+
+
+    const classes = getClasses();
+
+
+    const currentIds =
+        selectedIds ||
+        Array.from(
+            document.querySelectorAll(
+                "#subjectClassCheckboxes input:checked"
+            )
+        ).map(input => input.value);
+
+
+    if (!classes.length) {
+
+        container.innerHTML =
+            `<p style="color:#777;font-size:13px;">
+                No classes have been created yet.
+                Create Primary 1–6 or JHS 1–3 classes in Class Management first.
+            </p>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        classes.map(classItem => {
+
+            const displayName =
+                classItem.section
+                    ? `${classItem.name} ${classItem.section}`
+                    : classItem.name;
+
+            return `
+
+                <div class="checkbox-item">
+
+                    <input
+                        type="checkbox"
+                        id="subjectClass-${escapeHtml(classItem.id)}"
+                        value="${escapeHtml(classItem.id)}"
+                        ${currentIds.includes(classItem.id) ? "checked" : ""}
+                    >
+
+                    <label
+                        for="subjectClass-${escapeHtml(classItem.id)}"
+                    >
+                        ${escapeHtml(displayName)}
+                        (${escapeHtml(classItem.academicYear)})
+                    </label>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+function getSubjectClassNames(classIds) {
+
+    return (classIds || [])
+        .map(id => {
+
+            const classItem =
+                getClasses().find(
+                    c => c.id === id
+                );
+
+            if (!classItem) return null;
+
+            return classItem.section
+                ? `${classItem.name} ${classItem.section}`
+                : classItem.name;
+
+        })
+        .filter(Boolean);
+
+}
+
+
+function renderSubjects() {
+
+    const subjects = getSubjects();
+
+    const searchInput =
+        document.getElementById("subjectSearch");
+
+    if (!searchInput) return;
+
+    const search =
+        searchInput.value.toLowerCase();
+
+
+    const filtered =
+        subjects.filter(subject => {
+
+            const teacherName =
+                getTeacherName(subject.teacherId);
+
+            const classNames =
+                getSubjectClassNames(
+                    subject.classIds || []
+                ).join(" ");
+
+            const curriculumText =
+                (subject.curriculumClasses || []).join(" ");
+
+            return (
+                subject.id + " " +
+                subject.name + " " +
+                subject.code + " " +
+                teacherName + " " +
+                classNames + " " +
+                curriculumText + " " +
+                subject.academicYear
+            )
+            .toLowerCase()
+            .includes(search);
+
+        });
+
+
+    const tbody =
+        document.getElementById(
+            "subjectTableBody"
+        );
+
+
+    if (!filtered.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty-state">
+                    No subjects found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        filtered.map(subject => {
+
+            const classNames =
+                getSubjectClassNames(
+                    subject.classIds || []
+                );
+
+
+            let classDisplay = "";
+
+            if (classNames.length) {
+
+                classDisplay =
+                    classNames.map(
+                        name =>
+                            `<span class="badge">
+                                ${escapeHtml(name)}
+                            </span>`
+                    ).join("");
+
+            } else if (
+                subject.curriculumClasses &&
+                subject.curriculumClasses.length
+            ) {
+
+                classDisplay =
+                    `<small style="color:#777;">
+                        Curriculum:
+                        ${escapeHtml(
+                            subject.curriculumClasses.join(", ")
+                        )}
+                    </small>`;
+
+            } else {
+
+                classDisplay = "None";
+
+            }
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(subject.id)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(subject.name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(subject.code || "-")}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            getTeacherName(subject.teacherId)
+                        )}
+                    </td>
+
+                    <td class="subject-class-list">
+                        ${classDisplay}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(subject.academicYear)}
+                    </td>
+
+                    <td>
+
+                        <div class="action-buttons">
+
+                            <button
+                                class="btn btn-gold"
+                                onclick="editSubject('${escapeHtml(subject.id)}')"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn btn-danger"
+                                onclick="deleteSubject('${escapeHtml(subject.id)}')"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+}
+
+
+document.getElementById("subjectForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+        const subjects = getSubjects();
+
+        const editingId =
+            document.getElementById("subjectEditId").value;
+
+
+        const id =
+            document.getElementById("subjectId").value.trim();
+
+        const name =
+            document.getElementById("subjectName").value.trim();
+
+        const code =
+            document.getElementById("subjectCode").value.trim();
+
+        const academicYear =
+            document.getElementById("subjectAcademicYear").value.trim();
+
+        const teacherId =
+            document.getElementById("subjectTeacher").value;
+
+
+        const classIds =
+            Array.from(
+                document.querySelectorAll(
+                    "#subjectClassCheckboxes input:checked"
+                )
+            ).map(input => input.value);
+
+
+        const duplicate =
+            subjects.find(
+                subject =>
+                    subject.id.toLowerCase() === id.toLowerCase() &&
+                    subject.id !== editingId
+            );
+
+
+        if (duplicate) {
+
+            showMessage(
+                "subjectMessage",
+                "A subject with this ID already exists.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const existingSubject =
+            subjects.find(
+                subject => subject.id === editingId
+            );
+
+
+        const subject = {
+
+            id,
+            name,
+            code,
+            academicYear,
+            teacherId,
+            classIds,
+
+            curriculumClasses:
+                existingSubject &&
+                existingSubject.curriculumClasses
+                    ? existingSubject.curriculumClasses
+                    : getCurriculumClasses(name)
+
+        };
+
+
+        if (editingId) {
+
+            const index =
+                subjects.findIndex(
+                    s => s.id === editingId
+                );
+
+            if (index !== -1) {
+                subjects[index] = subject;
+            }
+
+            showMessage(
+                "subjectMessage",
+                "Subject updated successfully."
+            );
+
+        } else {
+
+            subjects.push(subject);
+
+            showMessage(
+                "subjectMessage",
+                "Subject added successfully."
+            );
+
+        }
+
+
+        saveSubjects(subjects);
+
+        resetSubjectForm();
+
+        renderSubjects();
+
+        updateDashboardCounts();
+
+    });
+
+
+function editSubject(id) {
+
+    const subject =
+        getSubjects().find(
+            s => s.id === id
+        );
+
+    if (!subject) return;
+
+
+    document.getElementById("subjectEditId").value =
+        subject.id;
+
+    document.getElementById("subjectId").value =
+        subject.id;
+
+    document.getElementById("subjectName").value =
+        subject.name;
+
+    document.getElementById("subjectCode").value =
+        subject.code || "";
+
+    document.getElementById("subjectAcademicYear").value =
+        subject.academicYear || "2026/2027";
+
+
+    renderSubjectTeacherOptions(
+        subject.teacherId || ""
+    );
+
+
+    renderSubjectClassCheckboxes(
+        subject.classIds || []
+    );
+
+
+    document.getElementById("subjectFormTitle")
+        .textContent = "Edit Subject";
+
+
+    showPage("adminSubjects");
+
+}
+
+
+function deleteSubject(id) {
+
+    if (!confirm("Delete this subject?")) {
+        return;
+    }
+
+
+    const subjects =
+        getSubjects().filter(
+            subject => subject.id !== id
+        );
+
+
+    saveSubjects(subjects);
+
+    renderSubjects();
+
+    updateDashboardCounts();
+
+}
+
+
+function resetSubjectForm() {
+
+    document.getElementById("subjectForm").reset();
+
+    document.getElementById("subjectEditId").value = "";
+
+    document.getElementById("subjectAcademicYear").value =
+        "2026/2027";
+
+    document.getElementById("subjectFormTitle")
+        .textContent = "Add Subject";
+
+    renderSubjectTeacherOptions("");
+
+    renderSubjectClassCheckboxes([]);
+
+}
+
+
+document.getElementById("cancelSubjectEdit")
+    .addEventListener(
+        "click",
+        resetSubjectForm
+    );
+
+
+document.getElementById("subjectSearch")
+    .addEventListener(
+        "input",
+        renderSubjects
+    );
+
+
+/* =========================================================
+   LOAD SCHOOL CURRICULUM
+========================================================= */
+
+function loadCurriculumSubjects() {
+
+    const subjects = getSubjects();
+
+    let added = 0;
+
+
+    /*
+       Primary curriculum
+    */
+
+    primarySubjects.forEach((name, index) => {
+
+        const id =
+            "PRI-" +
+            String(index + 1).padStart(2, "0");
+
+
+        const exists =
+            subjects.some(
+                subject =>
+                    subject.name === name &&
+                    subject.curriculumType === "Primary"
+            );
+
+
+        if (!exists) {
+
+            subjects.push({
+
+                id,
+
+                name,
+
+                code: getSubjectCode(name),
+
+                academicYear: "2026/2027",
+
+                teacherId: "",
+
+                classIds: [],
+
+                curriculumType: "Primary",
+
+                curriculumClasses: [
+                    ...primaryClasses
+                ]
+
+            });
+
+            added++;
+
+        }
+
+    });
+
+
+    /*
+       JHS curriculum
+    */
+
+    jhsSubjects.forEach((name, index) => {
+
+        const id =
+            "JHS-" +
+            String(index + 1).padStart(2, "0");
+
+
+        const exists =
+            subjects.some(
+                subject =>
+                    subject.name === name &&
+                    subject.curriculumType === "JHS"
+            );
+
+
+        if (!exists) {
+
+            subjects.push({
+
+                id,
+
+                name,
+
+                code: getSubjectCode(name),
+
+                academicYear: "2026/2027",
+
+                teacherId: "",
+
+                classIds: [],
+
+                curriculumType: "JHS",
+
+                curriculumClasses: [
+                    ...jhsClasses
+                ]
+
+            });
+
+            added++;
+
+        }
+
+    });
+
+
+    saveSubjects(subjects);
+
+    renderSubjects();
+
+    updateDashboardCounts();
+
+
+    if (added > 0) {
+
+        showMessage(
+            "subjectMessage",
+            `${added} curriculum subjects loaded successfully.`
+        );
+
+    } else {
+
+        showMessage(
+            "subjectMessage",
+            "The curriculum subjects are already loaded."
+        );
+
+    }
+
+}
+
+
+document.getElementById("loadCurriculumBtn")
+    .addEventListener(
+        "click",
+        loadCurriculumSubjects
     );
 
 
@@ -3685,6 +4720,78 @@ function renderTeacherSubjects() {
     }
 
 
+    const subjects =
+        getSubjects().filter(
+            subject =>
+                subject.teacherId === teacher.id
+        );
+
+
+    let subjectDisplay = "";
+
+
+    if (subjects.length) {
+
+        subjectDisplay =
+            subjects.map(subject => {
+
+                const classes =
+                    getSubjectClassNames(
+                        subject.classIds || []
+                    );
+
+
+                const curriculum =
+                    subject.curriculumClasses || [];
+
+
+                return `
+
+                    <div style="
+                        border:1px solid #e5e7eb;
+                        border-radius:10px;
+                        padding:15px;
+                        margin-top:12px;
+                    ">
+
+                        <h3 style="color:#0b2858;">
+                            ${escapeHtml(subject.name)}
+                        </h3>
+
+                        <p style="margin-top:6px;">
+                            Code:
+                            <strong>
+                                ${escapeHtml(subject.code || "-")}
+                            </strong>
+                        </p>
+
+                        <p style="margin-top:6px;">
+                            Classes:
+                            ${
+                                classes.length
+                                    ? escapeHtml(classes.join(", "))
+                                    : escapeHtml(
+                                        curriculum.join(", ")
+                                    )
+                            }
+                        </p>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    } else {
+
+        subjectDisplay =
+            `<p style="margin-top:15px;color:#777;">
+                No subjects have been assigned to you yet.
+            </p>`;
+
+    }
+
+
     container.innerHTML = `
 
         <h3 style="color:#0b2858;">
@@ -3697,9 +4804,17 @@ function renderTeacherSubjects() {
         </p>
 
         <p style="margin-top:10px;">
-            <strong>Subject(s):</strong>
-            ${escapeHtml(teacher.subjects)}
+            <strong>Teacher ID:</strong>
+            ${escapeHtml(teacher.id)}
         </p>
+
+        <div style="margin-top:20px;">
+            <h3 style="color:#0b2858;">
+                Assigned Subjects
+            </h3>
+
+            ${subjectDisplay}
+        </div>
 
     `;
 
@@ -3720,11 +4835,17 @@ renderTeachers();
 
 renderClasses();
 
+renderSubjects();
+
 renderParentStudentCheckboxes();
 
 renderClassTeacherOptions();
 
 renderClassStudentCheckboxes();
+
+renderSubjectTeacherOptions();
+
+renderSubjectClassCheckboxes();
 
 updateDashboardCounts();
 
