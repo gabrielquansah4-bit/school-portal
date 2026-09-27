@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +9,6 @@
 </head>
 
 <body>
-
-<!-- =========================
-     LOGIN PAGE
-========================= -->
 
 <div class="login-page" id="loginPage">
 
@@ -27,6 +24,7 @@
 
             <div class="form-group">
                 <label for="userType">Account Type</label>
+
                 <select id="userType" required>
                     <option value="student">Student</option>
                     <option value="parent">Parent / Guardian</option>
@@ -36,31 +34,39 @@
 
             <div class="form-group">
                 <label for="username">Username</label>
+
                 <input
                     type="text"
                     id="username"
                     placeholder="Enter username"
+                    autocomplete="username"
                     required
                 >
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
+
                 <input
                     type="password"
                     id="password"
                     placeholder="Enter password"
+                    autocomplete="current-password"
                     required
                 >
             </div>
 
             <div class="login-options">
+
                 <label>
                     <input type="checkbox" id="rememberMe">
                     Remember me
                 </label>
 
-                <a href="#" id="forgotPassword">Forgot password?</a>
+                <a href="#" id="forgotPassword">
+                    Forgot password?
+                </a>
+
             </div>
 
             <button type="submit" class="login-button">
@@ -72,11 +78,24 @@
         </form>
 
         <div class="demo-login">
+
             <h3>Demo Login Details</h3>
 
-            <p><strong>Student:</strong> student001 / 123456</p>
-            <p><strong>Parent:</strong> parent001 / 123456</p>
-            <p><strong>Administrator:</strong> admin / admin123</p>
+            <p>
+                <strong>Student:</strong>
+                student001 / 123456
+            </p>
+
+            <p>
+                <strong>Parent:</strong>
+                parent001 / 123456
+            </p>
+
+            <p>
+                <strong>Administrator:</strong>
+                admin / admin123
+            </p>
+
         </div>
 
     </div>
@@ -84,24 +103,23 @@
 </div>
 
 
-<!-- =========================
-     PORTAL PAGE
-========================= -->
-
 <div class="portal-page" id="portalPage" style="display:none;">
-
-    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
         <div class="sidebar-header">
-            <div class="school-logo small">SP</div>
+
+            <div class="school-logo small">
+                SP
+            </div>
 
             <div>
                 <h2>School Portal</h2>
                 <span>Management System</span>
             </div>
+
         </div>
+
 
         <div class="sidebar-user">
 
@@ -110,8 +128,13 @@
             </div>
 
             <div>
-                <strong id="sidebarUserName">User</strong>
-                <span id="sidebarUserType">Student</span>
+                <strong id="sidebarUserName">
+                    User
+                </strong>
+
+                <span id="sidebarUserType">
+                    Student
+                </span>
             </div>
 
         </div>
@@ -162,7 +185,11 @@
 
         <!-- PARENT NAVIGATION -->
 
-        <nav class="sidebar-nav" id="parentNavigation" style="display:none;">
+        <nav
+            class="sidebar-nav"
+            id="parentNavigation"
+            style="display:none;"
+        >
 
             <a href="#" class="nav-link active" data-page="dashboard">
                 🏠 Dashboard
@@ -201,7 +228,11 @@
 
         <!-- ADMIN NAVIGATION -->
 
-        <nav class="sidebar-nav" id="adminNavigation" style="display:none;">
+        <nav
+            class="sidebar-nav"
+            id="adminNavigation"
+            style="display:none;"
+        >
 
             <a href="#" class="nav-link active" data-page="adminDashboard">
                 🏠 Dashboard
@@ -269,17 +300,20 @@
     </aside>
 
 
-    <!-- MAIN CONTENT -->
-
     <main class="main-content">
 
         <div class="topbar">
 
             <div>
-                <h1 id="pageTitle">Dashboard</h1>
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
                 <p id="pageSubtitle">
                     Welcome to your school portal.
                 </p>
+
             </div>
 
             <div class="topbar-user">
@@ -289,8 +323,15 @@
                 </div>
 
                 <div>
-                    <strong id="topUserName">User</strong>
-                    <span id="topUserType">Student</span>
+
+                    <strong id="topUserName">
+                        User
+                    </strong>
+
+                    <span id="topUserType">
+                        Student
+                    </span>
+
                 </div>
 
             </div>
@@ -298,21 +339,26 @@
         </div>
 
 
-        <!-- =========================
-             STUDENT DASHBOARD
-        ========================= -->
+        <!-- STUDENT / PARENT DASHBOARD -->
 
-        <section class="portal-section" id="dashboardPage">
+        <section
+            class="portal-section"
+            id="dashboardPage"
+        >
 
             <div class="welcome-card">
 
                 <h2>
-                    Welcome, <span id="welcomeName">Student</span>!
+                    Welcome,
+                    <span id="welcomeName">
+                        Student
+                    </span>!
                 </h2>
 
                 <p>
-                    Welcome to your school portal. Access your academic
-                    information, attendance, assignments and school updates.
+                    Welcome to your school portal.
+                    Access academic information,
+                    attendance, assignments and school updates.
                 </p>
 
             </div>
@@ -364,21 +410,37 @@
                     </div>
 
                     <div class="announcement-item">
-                        <strong>Mid-Term Examination</strong>
+
+                        <strong>
+                            Mid-Term Examination
+                        </strong>
+
                         <p>
                             Mid-term examinations begin next month.
                             Students should prepare accordingly.
                         </p>
-                        <small>September 25, 2026</small>
+
+                        <small>
+                            September 25, 2026
+                        </small>
+
                     </div>
 
                     <div class="announcement-item">
-                        <strong>School Meeting</strong>
+
+                        <strong>
+                            School Meeting
+                        </strong>
+
                         <p>
-                            Parents and guardians are invited to the
-                            upcoming school meeting.
+                            Parents and guardians are invited
+                            to the upcoming school meeting.
                         </p>
-                        <small>September 22, 2026</small>
+
+                        <small>
+                            September 22, 2026
+                        </small>
+
                     </div>
 
                 </div>
@@ -412,11 +474,13 @@
         </section>
 
 
-        <!-- =========================
-             PROFILE
-        ========================= -->
+        <!-- PROFILE -->
 
-        <section class="portal-section" id="profilePage" style="display:none;">
+        <section
+            class="portal-section"
+            id="profilePage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -432,7 +496,7 @@
                     </div>
 
                     <div>
-                        <label>Student / User ID</label>
+                        <label>User ID</label>
                         <p id="profileId">STU-001</p>
                     </div>
 
@@ -463,11 +527,13 @@
         </section>
 
 
-        <!-- =========================
-             SUBJECTS
-        ========================= -->
+        <!-- SUBJECTS -->
 
-        <section class="portal-section" id="subjectsPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="subjectsPage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -524,11 +590,13 @@
         </section>
 
 
-        <!-- =========================
-             RESULTS
-        ========================= -->
+        <!-- RESULTS -->
 
-        <section class="portal-section" id="resultsPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="resultsPage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -590,11 +658,13 @@
         </section>
 
 
-        <!-- =========================
-             ATTENDANCE
-        ========================= -->
+        <!-- ATTENDANCE -->
 
-        <section class="portal-section" id="attendancePage" style="display:none;">
+        <section
+            class="portal-section"
+            id="attendancePage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -635,11 +705,13 @@
         </section>
 
 
-        <!-- =========================
-             ASSIGNMENTS
-        ========================= -->
+        <!-- ASSIGNMENTS -->
 
-        <section class="portal-section" id="assignmentsPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="assignmentsPage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -648,27 +720,36 @@
                 </div>
 
                 <div class="assignment-row">
+
                     <div>
                         <strong>Mathematics Exercise</strong>
                         <p>Complete questions 1–20.</p>
                     </div>
+
                     <span>Due Oct 2</span>
+
                 </div>
 
                 <div class="assignment-row">
+
                     <div>
                         <strong>Science Project</strong>
                         <p>Prepare a report on ecosystems.</p>
                     </div>
+
                     <span>Due Oct 5</span>
+
                 </div>
 
                 <div class="assignment-row">
+
                     <div>
                         <strong>English Essay</strong>
                         <p>Write a 500-word essay.</p>
                     </div>
+
                     <span>Due Oct 7</span>
+
                 </div>
 
             </div>
@@ -676,11 +757,13 @@
         </section>
 
 
-        <!-- =========================
-             FEES
-        ========================= -->
+        <!-- FEES -->
 
-        <section class="portal-section" id="feesPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="feesPage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -717,11 +800,13 @@
         </section>
 
 
-        <!-- =========================
-             ANNOUNCEMENTS
-        ========================= -->
+        <!-- ANNOUNCEMENTS -->
 
-        <section class="portal-section" id="announcementsPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="announcementsPage"
+            style="display:none;"
+        >
 
             <div class="content-card">
 
@@ -730,19 +815,32 @@
                 </div>
 
                 <div class="announcement-item">
+
                     <strong>Mid-Term Examination</strong>
+
                     <p>
                         Mid-term examinations will begin next month.
                     </p>
-                    <small>September 25, 2026</small>
+
+                    <small>
+                        September 25, 2026
+                    </small>
+
                 </div>
 
                 <div class="announcement-item">
+
                     <strong>Parent Meeting</strong>
+
                     <p>
-                        Parents and guardians are invited to the school meeting.
+                        Parents and guardians are invited
+                        to the school meeting.
                     </p>
-                    <small>September 22, 2026</small>
+
+                    <small>
+                        September 22, 2026
+                    </small>
+
                 </div>
 
             </div>
@@ -750,25 +848,29 @@
         </section>
 
 
-        <!-- =========================
-             ADMIN DASHBOARD
-        ========================= -->
+        <!-- ADMIN DASHBOARD -->
 
-        <section class="portal-section" id="adminDashboardPage" style="display:none;">
+        <section
+            class="portal-section"
+            id="adminDashboardPage"
+            style="display:none;"
+        >
 
             <div class="welcome-card">
 
                 <h2>
-                    Welcome, <span id="adminWelcomeName">Administrator</span>!
+                    Welcome,
+                    <span id="adminWelcomeName">
+                        Administrator
+                    </span>!
                 </h2>
 
                 <p>
-                    Manage students, teachers, classes, results,
-                    attendance, fees and school information.
+                    Manage students, teachers, classes,
+                    results, attendance, fees and school information.
                 </p>
 
             </div>
-
 
             <div class="stats-grid">
 
@@ -806,7 +908,6 @@
 
             </div>
 
-
             <div class="content-grid">
 
                 <div class="content-card">
@@ -816,31 +917,45 @@
                     </div>
 
                     <div class="assignment-row">
+
                         <strong>Add New Student</strong>
-                        <button class="login-button quick-action"
-                                data-page="students">
+
+                        <button
+                            class="login-button quick-action"
+                            data-page="students"
+                        >
                             Open
                         </button>
+
                     </div>
 
                     <div class="assignment-row">
+
                         <strong>Enter Results</strong>
-                        <button class="login-button quick-action"
-                                data-page="schoolResults">
+
+                        <button
+                            class="login-button quick-action"
+                            data-page="schoolResults"
+                        >
                             Open
                         </button>
+
                     </div>
 
                     <div class="assignment-row">
+
                         <strong>Record Attendance</strong>
-                        <button class="login-button quick-action"
-                                data-page="schoolAttendance">
+
+                        <button
+                            class="login-button quick-action"
+                            data-page="schoolAttendance"
+                        >
                             Open
                         </button>
+
                     </div>
 
                 </div>
-
 
                 <div class="content-card">
 
@@ -849,15 +964,31 @@
                     </div>
 
                     <div class="announcement-item">
-                        <strong>New student registered</strong>
-                        <p>Student registration was completed.</p>
+
+                        <strong>
+                            New student registered
+                        </strong>
+
+                        <p>
+                            Student registration was completed.
+                        </p>
+
                         <small>Today</small>
+
                     </div>
 
                     <div class="announcement-item">
-                        <strong>Results updated</strong>
-                        <p>Term results were updated.</p>
+
+                        <strong>
+                            Results updated
+                        </strong>
+
+                        <p>
+                            Term results were updated.
+                        </p>
+
                         <small>Yesterday</small>
+
                     </div>
 
                 </div>
@@ -867,22 +998,16 @@
         </section>
 
 
-        <!-- =========================
-             ADMIN STUDENTS
-        ========================= -->
+        <!-- ADMIN MANAGEMENT PAGES -->
 
         <section class="portal-section" id="studentsPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Student Management</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -893,7 +1018,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>STU-001</td>
                                 <td>Gabriel Quansah</td>
@@ -914,34 +1038,21 @@
                                 <td>Basic 7</td>
                                 <td>Active</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN PARENTS
-        ========================= -->
-
         <section class="portal-section" id="parentsPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Parents & Guardians</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -952,41 +1063,27 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>PAR-001</td>
                                 <td>Parent / Guardian</td>
                                 <td>Gabriel Quansah</td>
                                 <td>024 XXX XXXX</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN TEACHERS
-        ========================= -->
-
         <section class="portal-section" id="teachersPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Teachers</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -997,7 +1094,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>TCH-001</td>
                                 <td>Mr. Mensah</td>
@@ -1011,34 +1107,21 @@
                                 <td>English</td>
                                 <td>Active</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN CLASSES
-        ========================= -->
-
         <section class="portal-section" id="classesPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Classes</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Class</th>
@@ -1048,7 +1131,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>Basic 7</td>
                                 <td>38</td>
@@ -1066,34 +1148,21 @@
                                 <td>35</td>
                                 <td>Mrs. Addo</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN SUBJECTS
-        ========================= -->
-
         <section class="portal-section" id="schoolSubjectsPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>School Subjects</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Subject</th>
@@ -1103,7 +1172,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>Mathematics</td>
                                 <td>Mr. Mensah</td>
@@ -1121,34 +1189,21 @@
                                 <td>Mr. Boateng</td>
                                 <td>Basic 7–9</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN RESULTS
-        ========================= -->
-
         <section class="portal-section" id="schoolResultsPage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Results Management</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Student</th>
@@ -1159,7 +1214,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>Gabriel Quansah</td>
                                 <td>Mathematics</td>
@@ -1173,34 +1227,21 @@
                                 <td>78%</td>
                                 <td>B</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN ATTENDANCE
-        ========================= -->
-
         <section class="portal-section" id="schoolAttendancePage" style="display:none;">
-
             <div class="content-card">
-
                 <div class="card-header">
                     <h3>Attendance Management</h3>
                 </div>
 
                 <div class="table-container">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Student</th>
@@ -1211,7 +1252,6 @@
                         </thead>
 
                         <tbody>
-
                             <tr>
                                 <td>Gabriel Quansah</td>
                                 <td>Basic 8</td>
@@ -1225,24 +1265,14 @@
                                 <td>45</td>
                                 <td>90%</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN ASSIGNMENTS
-        ========================= -->
-
         <section class="portal-section" id="schoolAssignmentsPage" style="display:none;">
-
             <div class="content-card">
 
                 <div class="card-header">
@@ -1266,16 +1296,10 @@
                 </div>
 
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN FEES
-        ========================= -->
-
         <section class="portal-section" id="schoolFeesPage" style="display:none;">
-
             <div class="content-card">
 
                 <div class="card-header">
@@ -1307,16 +1331,10 @@
                 </div>
 
             </div>
-
         </section>
 
 
-        <!-- =========================
-             ADMIN ANNOUNCEMENTS
-        ========================= -->
-
         <section class="portal-section" id="schoolAnnouncementsPage" style="display:none;">
-
             <div class="content-card">
 
                 <div class="card-header">
@@ -1336,16 +1354,10 @@
                 </div>
 
             </div>
-
         </section>
 
 
-        <!-- =========================
-             REPORTS
-        ========================= -->
-
         <section class="portal-section" id="reportsPage" style="display:none;">
-
             <div class="content-card">
 
                 <div class="card-header">
@@ -1368,16 +1380,10 @@
                 </div>
 
             </div>
-
         </section>
 
 
-        <!-- =========================
-             SETTINGS
-        ========================= -->
-
         <section class="portal-section" id="settingsPage" style="display:none;">
-
             <div class="content-card">
 
                 <div class="card-header">
@@ -1409,15 +1415,14 @@
                 </div>
 
             </div>
-
         </section>
 
     </main>
 
 </div>
 
-
 <script src="script.js"></script>
 
 </body>
 </html>
+```
