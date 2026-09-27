@@ -6,113 +6,129 @@
 <title>School Portal</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#f4f6f9;color:#1f2937}
-button,input,select,textarea{font:inherit}
-.hidden{display:none!important}
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6f9;
+    color:#1f2937;
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
 
 .login-screen{
     min-height:100vh;
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#071a3d,#123d7a);
     padding:20px;
-    background:linear-gradient(135deg,#071a3d,#174985)
 }
 
-.login-card{
+.login-box{
     width:100%;
     max-width:430px;
     background:white;
     padding:35px;
-    border-radius:18px;
-    box-shadow:0 20px 50px rgba(0,0,0,.2)
+    border-radius:16px;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
-.logo{text-align:center;margin-bottom:25px}
-.logo h1{color:#0b2d63;font-size:30px}
-.logo p{color:#777;margin-top:6px}
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
 
-.form-group{margin-bottom:16px}
+.logo h1{
+    color:#0b2a5b;
+    margin-bottom:5px;
+}
+
+.logo p{
+    color:#777;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
 .form-group label{
     display:block;
+    font-weight:bold;
     margin-bottom:7px;
-    font-weight:bold
 }
+
 .form-group input,
 .form-group select,
 .form-group textarea{
     width:100%;
-    padding:12px;
-    border:1px solid #d5dbe3;
+    padding:11px 12px;
+    border:1px solid #d1d5db;
     border-radius:8px;
-    outline:none
+    outline:none;
 }
+
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
-    border-color:#174985
+    border-color:#123d7a;
 }
 
-.login-button,
-.primary-button{
-    background:#0b2d63;
-    color:white;
-    border:0;
+.btn{
+    border:none;
     border-radius:8px;
-    padding:12px 18px;
+    padding:11px 18px;
     cursor:pointer;
-    font-weight:bold
+    font-weight:bold;
 }
 
-.login-button{width:100%}
-.login-button:hover,
-.primary-button:hover{background:#174985}
+.btn-primary{
+    background:#0b2a5b;
+    color:white;
+}
 
-.remember{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-bottom:16px
+.btn-primary:hover{
+    background:#123d7a;
+}
+
+.btn-gold{
+    background:#d9a441;
+    color:#111;
+}
+
+.btn-danger{
+    background:#dc3545;
+    color:white;
+}
+
+.btn-secondary{
+    background:#6c757d;
+    color:white;
+}
+
+.login-btn{
+    width:100%;
+    margin-top:5px;
 }
 
 .demo-box{
     margin-top:20px;
-    padding:13px;
     background:#f5f7fa;
+    padding:14px;
     border-radius:8px;
     font-size:13px;
-    line-height:1.7
 }
 
-.error-message,
-.status-message{
+.demo-box strong{
+    color:#0b2a5b;
+}
+
+.portal{
     display:none;
-    padding:10px;
-    border-radius:7px;
-    margin-bottom:15px
+    min-height:100vh;
 }
-
-.error-message{
-    background:#fee4e2;
-    color:#b42318
-}
-
-.status-success{
-    display:block;
-    background:#dcfae6;
-    color:#176b3a
-}
-
-.status-error{
-    display:block;
-    background:#fee4e2;
-    color:#b42318
-}
-
-/* PORTAL */
-
-.portal{display:none;min-height:100vh}
 
 .sidebar{
     position:fixed;
@@ -122,310 +138,300 @@ button,input,select,textarea{font:inherit}
     width:250px;
     background:#071a3d;
     color:white;
+    padding:20px 15px;
     overflow-y:auto;
-    z-index:20
 }
 
-.sidebar-header{
-    padding:24px 20px;
-    border-bottom:1px solid rgba(255,255,255,.1)
+.sidebar-logo{
+    padding:10px;
+    text-align:center;
+    margin-bottom:20px;
 }
 
-.sidebar-header h2{font-size:22px}
-.sidebar-header p{color:#bfcce2;font-size:13px;margin-top:5px}
+.sidebar-logo h2{
+    color:#d9a441;
+}
+
+.sidebar-logo small{
+    color:#cbd5e1;
+}
 
 .nav-section{
-    padding:15px 15px 5px;
-    color:#9fb2d0;
+    margin-bottom:20px;
+}
+
+.nav-title{
+    color:#9ca3af;
     font-size:11px;
     text-transform:uppercase;
-    font-weight:bold
+    margin:12px 10px 7px;
 }
 
 .nav-link{
     display:block;
-    width:calc(100% - 16px);
-    margin:2px 8px;
-    padding:11px 18px;
-    border:0;
+    padding:11px 12px;
+    color:#e5e7eb;
+    text-decoration:none;
     border-radius:7px;
-    background:none;
-    color:#dce5f3;
-    text-align:left;
-    cursor:pointer
+    margin-bottom:3px;
+    cursor:pointer;
 }
 
 .nav-link:hover,
 .nav-link.active{
-    background:#174985;
-    color:white
+    background:#123d7a;
+    color:white;
 }
 
-.logout-link{color:#ffb4b4}
-
-.main-content{
+.main{
     margin-left:250px;
-    min-height:100vh
+    min-height:100vh;
 }
 
 .topbar{
-    height:70px;
     background:white;
-    border-bottom:1px solid #e5e7eb;
+    padding:17px 25px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    padding:0 30px;
-    position:sticky;
-    top:0;
-    z-index:10
+    align-items:center;
+    border-bottom:1px solid #e5e7eb;
 }
 
-.topbar h2{color:#0b2d63}
+.topbar h2{
+    color:#0b2a5b;
+}
 
-.user-info{text-align:right}
-.user-info strong{display:block}
-.user-info small{color:#777}
+.user-info{
+    font-size:14px;
+}
 
-.content{padding:30px}
+.content{
+    padding:25px;
+}
 
-.page{display:none}
-.page.active{display:block}
+.page{
+    display:none;
+}
 
-.page-title{margin-bottom:22px}
-.page-title h1{color:#0b2d63}
-.page-title p{color:#777;margin-top:5px}
-
-/* DASHBOARD */
+.page.active{
+    display:block;
+}
 
 .welcome-card{
-    background:linear-gradient(135deg,#0b2d63,#2464ad);
+    background:linear-gradient(135deg,#0b2a5b,#1e5799);
     color:white;
-    padding:28px;
-    border-radius:15px;
-    margin-bottom:25px
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:25px;
 }
 
-.welcome-card h1{margin-bottom:8px}
+.welcome-card h1{
+    margin-bottom:8px;
+}
 
-.stats-grid{
+.stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:18px
+    gap:18px;
+    margin-bottom:25px;
 }
 
 .stat-card{
     background:white;
     padding:22px;
     border-radius:12px;
-    box-shadow:0 3px 12px rgba(0,0,0,.06)
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.stat-card h3{color:#777;font-size:14px}
+.stat-card h3{
+    color:#777;
+    font-size:14px;
+    margin-bottom:8px;
+}
 
-.stat-card strong{
-    display:block;
+.stat-card .number{
     font-size:30px;
-    color:#0b2d63;
-    margin-top:8px
+    font-weight:bold;
+    color:#0b2a5b;
 }
-
-/* CARDS */
 
 .card{
     background:white;
     border-radius:12px;
     padding:22px;
-    box-shadow:0 3px 12px rgba(0,0,0,.06);
-    margin-bottom:20px
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
-/* MANAGEMENT */
-
-.management-header{
+.card-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-bottom:18px;
     gap:15px;
-    margin-bottom:20px;
-    flex-wrap:wrap
+    flex-wrap:wrap;
+}
+
+.card-header h2{
+    color:#0b2a5b;
 }
 
 .search-box{
-    padding:11px 13px;
-    border:1px solid #d5dbe3;
+    max-width:300px;
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #d1d5db;
     border-radius:8px;
-    min-width:250px;
-    outline:none
 }
-
-.secondary-button{
-    background:#e9edf3;
-    color:#243447;
-    border:0;
-    padding:11px 18px;
-    border-radius:8px;
-    cursor:pointer
-}
-
-.student-form,
-.parent-form{
-    display:none;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    padding:20px;
-    border-radius:10px;
-    margin-bottom:20px
-}
-
-.student-form.show,
-.parent-form.show{display:block}
 
 .form-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:15px
+    gap:15px;
+}
+
+.full{
+    grid-column:1/-1;
 }
 
 .form-actions{
     display:flex;
     gap:10px;
-    margin-top:18px
+    margin-top:10px;
 }
 
-.table-container{overflow-x:auto}
+.table-wrapper{
+    overflow-x:auto;
+}
 
 table{
     width:100%;
-    border-collapse:collapse
+    border-collapse:collapse;
+    min-width:800px;
 }
 
 th,td{
     padding:12px;
     border-bottom:1px solid #e5e7eb;
     text-align:left;
-    white-space:nowrap
+    font-size:14px;
 }
 
 th{
-    background:#f5f7fa;
-    color:#0b2d63
+    background:#f8fafc;
+    color:#374151;
 }
 
-.action-button{
-    padding:7px 11px;
-    border:0;
+.action-buttons{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.action-buttons button{
+    padding:6px 10px;
+    border:none;
     border-radius:6px;
     cursor:pointer;
-    margin-right:4px
+    font-size:12px;
 }
 
-.edit-button{
-    background:#e8f1ff;
-    color:#1455a0
+.edit-btn{
+    background:#d9a441;
 }
 
-.delete-button{
-    background:#fee4e2;
-    color:#b42318
+.delete-btn{
+    background:#dc3545;
+    color:white;
 }
 
-.empty-message{
+.empty{
     text-align:center;
     padding:30px;
-    color:#777
+    color:#777;
 }
 
-/* PARENT STUDENT SELECTION */
+.message{
+    padding:10px 13px;
+    border-radius:7px;
+    margin-bottom:15px;
+    display:none;
+}
 
-.student-selection{
-    grid-column:1/-1;
-    background:white;
-    border:1px solid #dce2e9;
+.message.success{
+    background:#d1fae5;
+    color:#065f46;
+    display:block;
+}
+
+.message.error{
+    background:#fee2e2;
+    color:#991b1b;
+    display:block;
+}
+
+.checkbox-list{
+    border:1px solid #ddd;
     border-radius:8px;
-    padding:15px
+    padding:12px;
+    max-height:200px;
+    overflow-y:auto;
 }
 
-.student-selection h4{
-    color:#0b2d63;
-    margin-bottom:12px
-}
-
-.student-checkbox-list{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:8px
-}
-
-.student-checkbox{
+.checkbox-item{
     display:flex;
     align-items:center;
     gap:8px;
-    padding:10px;
-    background:#f8fafc;
-    border-radius:6px
+    padding:7px;
+    border-bottom:1px solid #eee;
 }
 
-.student-checkbox input{width:auto}
-
-/* CHILDREN */
-
-.child-card{
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 3px 12px rgba(0,0,0,.06);
-    margin-bottom:15px
+.checkbox-item:last-child{
+    border-bottom:none;
 }
 
-.child-card h3{
-    color:#0b2d63;
-    margin-bottom:12px
-}
-
-.child-details{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    color:#555
-}
-
-.mobile-menu{
-    display:none;
-    border:0;
-    background:#0b2d63;
-    color:white;
-    padding:8px 12px;
-    border-radius:6px;
-    cursor:pointer
+.logout{
+    color:#ffb4b4 !important;
 }
 
 @media(max-width:900px){
-    .stats-grid{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:700px){
-
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.25s
+    .stats{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .sidebar.open{transform:translateX(0)}
+    .sidebar{
+        width:220px;
+    }
 
-    .main-content{margin-left:0}
+    .main{
+        margin-left:220px;
+    }
+}
 
-    .mobile-menu{display:block}
+@media(max-width:650px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
 
-    .topbar{padding:0 15px}
+    .main{
+        margin-left:0;
+    }
 
-    .content{padding:18px}
+    .form-grid{
+        grid-template-columns:1fr;
+    }
 
-    .form-grid{grid-template-columns:1fr}
+    .stats{
+        grid-template-columns:1fr;
+    }
 
-    .student-checkbox-list{grid-template-columns:1fr}
-
-    .user-info{display:none}
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
 }
 </style>
 </head>
@@ -433,910 +439,1247 @@ th{
 <body>
 
 <!-- LOGIN -->
-
 <div id="loginScreen" class="login-screen">
 
-<div class="login-card">
+    <div class="login-box">
 
-<div class="logo">
-<h1>School Portal</h1>
-<p>Student & Parent Management System</p>
-</div>
+        <div class="logo">
+            <h1>School Portal</h1>
+            <p>Student & Parent Management System</p>
+        </div>
 
-<div id="loginError" class="error-message"></div>
+        <div id="loginMessage" class="message"></div>
 
-<form id="loginForm">
+        <form id="loginForm">
 
-<div class="form-group">
-<label>Account Type</label>
+            <div class="form-group">
+                <label>Account Type</label>
+                <select id="accountType">
+                    <option value="student">Student</option>
+                    <option value="parent">Parent / Guardian</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
 
-<select id="accountType">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" required>
+            </div>
 
-<option value="student">Student</option>
-<option value="parent">Parent / Guardian</option>
-<option value="admin">Administrator</option>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" required>
+            </div>
 
-</select>
-</div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+            </div>
 
-<div class="form-group">
-<label>Username</label>
-<input type="text" id="username" required>
-</div>
+            <button class="btn btn-primary login-btn" type="submit">
+                Login
+            </button>
 
-<div class="form-group">
-<label>Password</label>
-<input type="password" id="password" required>
-</div>
+        </form>
 
-<label class="remember">
-<input type="checkbox">
-Remember me
-</label>
+        <div class="demo-box">
+            <strong>Demo Accounts</strong><br><br>
+            Student: student001 / 123456<br>
+            Parent: parent001 / 123456<br>
+            Teacher: teacher001 / 123456<br>
+            Administrator: admin / admin123
+        </div>
 
-<button class="login-button" type="submit">
-Login
-</button>
-
-</form>
-
-<div class="demo-box">
-<strong>Demo Accounts</strong><br>
-Student: student001 / 123456<br>
-Parent: parent001 / 123456<br>
-Admin: admin / admin123
-</div>
-
-</div>
+    </div>
 </div>
 
 
 <!-- PORTAL -->
-
 <div id="portal" class="portal">
 
-<aside id="sidebar" class="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-<div class="sidebar-header">
-<h2>School Portal</h2>
-<p>Management System</p>
-</div>
+        <div class="sidebar-logo">
+            <h2>School Portal</h2>
+            <small>Management System</small>
+        </div>
 
-<div class="nav-section">Main</div>
+        <div class="nav-section">
 
-<button class="nav-link active" data-page="dashboard">
-Dashboard
-</button>
+            <div class="nav-title">Main</div>
 
-<button class="nav-link" data-page="profile">
-My Profile
-</button>
+            <a class="nav-link active" data-page="dashboard">
+                Dashboard
+            </a>
 
+            <a class="nav-link" data-page="profile">
+                My Profile
+            </a>
 
-<div id="studentNavigation">
+        </div>
 
-<div class="nav-section">Student</div>
 
-<button class="nav-link" data-page="subjects">My Subjects</button>
-<button class="nav-link" data-page="results">Results</button>
-<button class="nav-link" data-page="attendance">Attendance</button>
-<button class="nav-link" data-page="assignments">Assignments</button>
-<button class="nav-link" data-page="fees">Fees</button>
-<button class="nav-link" data-page="announcements">Announcements</button>
+        <!-- STUDENT NAVIGATION -->
+        <div id="studentNavigation" class="nav-section" style="display:none">
 
-</div>
+            <div class="nav-title">Student</div>
 
+            <a class="nav-link" data-page="subjects">
+                My Subjects
+            </a>
 
-<div id="parentNavigation">
+            <a class="nav-link" data-page="results">
+                Results
+            </a>
 
-<div class="nav-section">Parent</div>
+            <a class="nav-link" data-page="attendance">
+                Attendance
+            </a>
 
-<button class="nav-link" data-page="children">My Children</button>
-<button class="nav-link" data-page="parentResults">Results</button>
-<button class="nav-link" data-page="parentAttendance">Attendance</button>
-<button class="nav-link" data-page="parentAssignments">Assignments</button>
-<button class="nav-link" data-page="parentFees">Fees</button>
-<button class="nav-link" data-page="parentAnnouncements">Announcements</button>
+            <a class="nav-link" data-page="assignments">
+                Assignments
+            </a>
 
-</div>
+            <a class="nav-link" data-page="fees">
+                Fees
+            </a>
 
+            <a class="nav-link" data-page="announcements">
+                Announcements
+            </a>
 
-<div id="adminNavigation">
+        </div>
 
-<div class="nav-section">Administration</div>
 
-<button class="nav-link" data-page="students">Students</button>
-<button class="nav-link" data-page="parents">Parents</button>
-<button class="nav-link" data-page="teachers">Teachers</button>
-<button class="nav-link" data-page="classes">Classes</button>
-<button class="nav-link" data-page="subjectsAdmin">Subjects</button>
-<button class="nav-link" data-page="adminResults">Results</button>
-<button class="nav-link" data-page="adminAttendance">Attendance</button>
-<button class="nav-link" data-page="adminAssignments">Assignments</button>
-<button class="nav-link" data-page="adminFees">Fees</button>
-<button class="nav-link" data-page="adminAnnouncements">Announcements</button>
-<button class="nav-link" data-page="reports">Reports</button>
-<button class="nav-link" data-page="settings">Settings</button>
+        <!-- PARENT NAVIGATION -->
+        <div id="parentNavigation" class="nav-section" style="display:none">
 
-</div>
+            <div class="nav-title">Parent</div>
 
-<button class="nav-link logout-link" id="logoutButton">
-Logout
-</button>
+            <a class="nav-link" data-page="children">
+                My Children
+            </a>
 
-</aside>
+            <a class="nav-link" data-page="parentResults">
+                Results
+            </a>
 
+            <a class="nav-link" data-page="parentAttendance">
+                Attendance
+            </a>
 
-<main class="main-content">
+            <a class="nav-link" data-page="parentAssignments">
+                Assignments
+            </a>
 
-<header class="topbar">
+            <a class="nav-link" data-page="parentFees">
+                Fees
+            </a>
 
-<div style="display:flex;align-items:center;gap:12px">
+            <a class="nav-link" data-page="parentAnnouncements">
+                Announcements
+            </a>
 
-<button class="mobile-menu" id="mobileMenu">☰</button>
+        </div>
 
-<h2 id="pageHeader">Dashboard</h2>
 
-</div>
+        <!-- TEACHER NAVIGATION -->
+        <div id="teacherNavigation" class="nav-section" style="display:none">
 
-<div class="user-info">
+            <div class="nav-title">Teacher</div>
 
-<strong id="topUserName">User</strong>
+            <a class="nav-link" data-page="teacherSubjects">
+                My Subjects
+            </a>
 
-<small id="topUserRole">Role</small>
+            <a class="nav-link" data-page="teacherStudents">
+                Students
+            </a>
 
-</div>
+            <a class="nav-link" data-page="teacherResults">
+                Results
+            </a>
 
-</header>
+            <a class="nav-link" data-page="teacherAttendance">
+                Attendance
+            </a>
 
+            <a class="nav-link" data-page="teacherAssignments">
+                Assignments
+            </a>
 
-<div class="content">
+            <a class="nav-link" data-page="teacherAnnouncements">
+                Announcements
+            </a>
 
+        </div>
 
-<!-- DASHBOARD -->
 
-<section id="dashboard" class="page active">
+        <!-- ADMIN NAVIGATION -->
+        <div id="adminNavigation" class="nav-section" style="display:none">
 
-<div class="welcome-card">
+            <div class="nav-title">Administration</div>
 
-<h1>
-Welcome, <span id="welcomeName">User</span>
-</h1>
+            <a class="nav-link" data-page="students">
+                Students
+            </a>
 
-<p>Welcome to your school portal.</p>
+            <a class="nav-link" data-page="parents">
+                Parents
+            </a>
 
-</div>
+            <a class="nav-link" data-page="teachers">
+                Teachers
+            </a>
 
+            <a class="nav-link" data-page="classes">
+                Classes
+            </a>
 
-<div class="stats-grid">
+            <a class="nav-link" data-page="adminSubjects">
+                Subjects
+            </a>
 
-<div class="stat-card">
-<h3>Students</h3>
-<strong id="dashboardStudentCount">0</strong>
-</div>
+            <a class="nav-link" data-page="adminResults">
+                Results
+            </a>
 
-<div class="stat-card">
-<h3>Parents</h3>
-<strong id="dashboardParentCount">0</strong>
-</div>
+            <a class="nav-link" data-page="adminAttendance">
+                Attendance
+            </a>
 
-<div class="stat-card">
-<h3>Teachers</h3>
-<strong>0</strong>
-</div>
+            <a class="nav-link" data-page="adminAssignments">
+                Assignments
+            </a>
 
-<div class="stat-card">
-<h3>Classes</h3>
-<strong>0</strong>
-</div>
+            <a class="nav-link" data-page="adminFees">
+                Fees
+            </a>
 
-</div>
+            <a class="nav-link" data-page="adminAnnouncements">
+                Announcements
+            </a>
 
-</section>
+            <a class="nav-link" data-page="reports">
+                Reports
+            </a>
 
+            <a class="nav-link" data-page="settings">
+                Settings
+            </a>
 
-<!-- PROFILE -->
+        </div>
 
-<section id="profile" class="page">
+        <a id="logoutBtn" class="nav-link logout">
+            Logout
+        </a>
 
-<div class="page-title">
-<h1>My Profile</h1>
-<p>Your account information.</p>
-</div>
+    </aside>
 
-<div class="card">
 
-<p>
-<strong>Name:</strong>
-<span id="profileName"></span>
-</p>
+    <!-- MAIN -->
+    <main class="main">
 
-<p style="margin-top:10px">
-<strong>Role:</strong>
-<span id="profileRole"></span>
-</p>
+        <div class="topbar">
 
-<p style="margin-top:10px">
-<strong>ID:</strong>
-<span id="profileId"></span>
-</p>
+            <h2 id="pageTitle">Dashboard</h2>
 
-<p style="margin-top:10px">
-<strong>Class:</strong>
-<span id="profileClass"></span>
-</p>
+            <div class="user-info">
+                Welcome, <strong id="topUserName">User</strong>
+            </div>
 
-</div>
+        </div>
 
-</section>
 
+        <div class="content">
 
-<!-- STUDENTS -->
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="page active">
 
-<section id="students" class="page">
+                <div class="welcome-card">
+                    <h1>Welcome to the School Portal</h1>
+                    <p id="welcomeText">
+                        Manage your school information from one place.
+                    </p>
+                </div>
 
-<div class="page-title">
-<h1>Student Management</h1>
-<p>Add, edit, search and manage students.</p>
-</div>
+                <div class="stats">
 
-<div class="management-header">
+                    <div class="stat-card">
+                        <h3>Students</h3>
+                        <div class="number" id="studentCount">0</div>
+                    </div>
 
-<input
-id="studentSearch"
-class="search-box"
-placeholder="Search students..."
->
+                    <div class="stat-card">
+                        <h3>Parents</h3>
+                        <div class="number" id="parentCount">0</div>
+                    </div>
 
-<button id="addStudentButton" class="primary-button">
-+ Add Student
-</button>
+                    <div class="stat-card">
+                        <h3>Teachers</h3>
+                        <div class="number" id="teacherCount">0</div>
+                    </div>
 
-</div>
+                    <div class="stat-card">
+                        <h3>Classes</h3>
+                        <div class="number" id="classCount">0</div>
+                    </div>
 
-<div id="studentStatus" class="status-message"></div>
+                </div>
 
+            </section>
 
-<form id="studentForm" class="student-form">
 
-<input type="hidden" id="editingStudentId">
+            <!-- PROFILE -->
+            <section id="profile" class="page">
 
-<div class="form-grid">
+                <div class="card">
 
-<div class="form-group">
-<label>Student ID *</label>
-<input id="studentId" required>
-</div>
+                    <div class="card-header">
+                        <h2>My Profile</h2>
+                    </div>
 
-<div class="form-group">
-<label>Full Name *</label>
-<input id="studentName" required>
-</div>
+                    <div id="profileContent"></div>
 
-<div class="form-group">
-<label>Gender *</label>
+                </div>
 
-<select id="studentGender" required>
+            </section>
 
-<option value="">Select Gender</option>
-<option>Male</option>
-<option>Female</option>
 
-</select>
+            <!-- STUDENT MANAGEMENT -->
+            <section id="students" class="page">
 
-</div>
+                <div class="card">
 
-<div class="form-group">
-<label>Date of Birth</label>
-<input type="date" id="studentDob">
-</div>
+                    <div class="card-header">
+                        <h2>Student Management</h2>
 
-<div class="form-group">
-<label>Class *</label>
-<input id="studentClass" required>
-</div>
+                        <input
+                            type="text"
+                            id="studentSearch"
+                            class="search-box"
+                            placeholder="Search students..."
+                        >
+                    </div>
 
-<div class="form-group">
-<label>Parent / Guardian</label>
-<input id="studentParent">
-</div>
+                    <div id="studentMessage" class="message"></div>
 
-<div class="form-group">
-<label>Phone</label>
-<input id="studentPhone">
-</div>
+                    <form id="studentForm">
 
-<div class="form-group">
-<label>Email</label>
-<input type="email" id="studentEmail">
-</div>
+                        <input type="hidden" id="editingStudentId">
 
-</div>
+                        <div class="form-grid">
 
-<div class="form-actions">
+                            <div class="form-group">
+                                <label>Student ID *</label>
+                                <input type="text" id="studentId" required>
+                            </div>
 
-<button class="primary-button" type="submit">
-Save Student
-</button>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="studentName" required>
+                            </div>
 
-<button
-type="button"
-id="cancelStudentButton"
-class="secondary-button">
-Cancel
-</button>
+                            <div class="form-group">
+                                <label>Gender *</label>
+                                <select id="studentGender" required>
+                                    <option value="">Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </div>
 
-</div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" id="studentDob">
+                            </div>
 
-</form>
+                            <div class="form-group">
+                                <label>Class *</label>
+                                <input type="text" id="studentClass" required>
+                            </div>
 
+                            <div class="form-group">
+                                <label>Parent / Guardian</label>
+                                <input type="text" id="studentParent">
+                            </div>
 
-<div class="card">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="studentPhone">
+                            </div>
 
-<div class="table-container">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="studentEmail">
+                            </div>
 
-<table>
+                        </div>
 
-<thead>
+                        <div class="form-actions">
 
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Gender</th>
-<th>Class</th>
-<th>Parent</th>
-<th>Phone</th>
-<th>Actions</th>
-</tr>
+                            <button type="submit" class="btn btn-primary">
+                                Save Student
+                            </button>
 
-</thead>
+                            <button
+                                type="button"
+                                id="cancelStudentEdit"
+                                class="btn btn-secondary"
+                                style="display:none"
+                            >
+                                Cancel
+                            </button>
 
-<tbody id="studentTableBody"></tbody>
+                        </div>
 
-</table>
+                    </form>
 
-</div>
+                </div>
 
-</div>
 
-</section>
+                <div class="card">
 
+                    <div class="card-header">
+                        <h2>Students</h2>
+                    </div>
 
-<!-- PARENTS -->
+                    <div class="table-wrapper">
 
-<section id="parents" class="page">
+                        <table>
 
-<div class="page-title">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Class</th>
+                                    <th>Parent</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
-<h1>Parent Management</h1>
+                            <tbody id="studentTableBody"></tbody>
 
-<p>
-Add, edit, search and link parents or guardians to students.
-</p>
+                        </table>
 
-</div>
+                    </div>
 
+                </div>
 
-<div class="management-header">
+            </section>
 
-<input
-id="parentSearch"
-class="search-box"
-placeholder="Search parents..."
->
 
-<button id="addParentButton" class="primary-button">
-+ Add Parent
-</button>
+            <!-- PARENT MANAGEMENT -->
+            <section id="parents" class="page">
 
-</div>
+                <div class="card">
 
+                    <div class="card-header">
+                        <h2>Parent / Guardian Management</h2>
 
-<div id="parentStatus" class="status-message"></div>
+                        <input
+                            type="text"
+                            id="parentSearch"
+                            class="search-box"
+                            placeholder="Search parents..."
+                        >
+                    </div>
 
+                    <div id="parentMessage" class="message"></div>
 
-<form id="parentForm" class="parent-form">
+                    <form id="parentForm">
 
-<input type="hidden" id="editingParentId">
+                        <input type="hidden" id="editingParentId">
 
-<div class="form-grid">
+                        <div class="form-grid">
 
+                            <div class="form-group">
+                                <label>Parent ID *</label>
+                                <input type="text" id="parentId" required>
+                            </div>
 
-<div class="form-group">
-<label>Parent ID *</label>
-<input id="parentId" required>
-</div>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="parentName" required>
+                            </div>
 
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="parentPhone">
+                            </div>
 
-<div class="form-group">
-<label>Full Name *</label>
-<input id="parentName" required>
-</div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="parentEmail">
+                            </div>
 
+                            <div class="form-group full">
+                                <label>Address</label>
+                                <textarea id="parentAddress"></textarea>
+                            </div>
 
-<div class="form-group">
-<label>Phone</label>
-<input id="parentPhone">
-</div>
+                            <div class="form-group">
+                                <label>Username *</label>
+                                <input type="text" id="parentUsername" required>
+                            </div>
 
+                            <div class="form-group">
+                                <label>Password *</label>
+                                <input type="text" id="parentPassword" required>
+                            </div>
 
-<div class="form-group">
-<label>Email</label>
-<input type="email" id="parentEmail">
-</div>
+                            <div class="form-group full">
 
+                                <label>Link Children / Students</label>
 
-<div class="form-group" style="grid-column:1/-1">
+                                <div
+                                    id="studentCheckboxes"
+                                    class="checkbox-list"
+                                ></div>
 
-<label>Address</label>
+                            </div>
 
-<textarea id="parentAddress" rows="3"></textarea>
+                        </div>
 
-</div>
+                        <div class="form-actions">
 
+                            <button type="submit" class="btn btn-primary">
+                                Save Parent
+                            </button>
 
-<div class="form-group">
-<label>Username *</label>
-<input id="parentUsername" required>
-</div>
+                            <button
+                                type="button"
+                                id="cancelParentEdit"
+                                class="btn btn-secondary"
+                                style="display:none"
+                            >
+                                Cancel
+                            </button>
 
+                        </div>
 
-<div class="form-group">
-<label>Password *</label>
-<input id="parentPassword" required>
-</div>
+                    </form>
 
+                </div>
 
-<div class="student-selection">
 
-<h4>Link Parent to Student(s)</h4>
+                <div class="card">
 
-<div id="studentCheckboxList"
-class="student-checkbox-list">
-</div>
+                    <div class="card-header">
+                        <h2>Parents / Guardians</h2>
+                    </div>
 
-</div>
+                    <div class="table-wrapper">
 
+                        <table>
 
-</div>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Children</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
+                            <tbody id="parentTableBody"></tbody>
 
-<div class="form-actions">
+                        </table>
 
-<button class="primary-button" type="submit">
-Save Parent
-</button>
+                    </div>
 
-<button
-type="button"
-id="cancelParentButton"
-class="secondary-button">
-Cancel
-</button>
+                </div>
 
-</div>
+            </section>
 
-</form>
 
+            <!-- TEACHER MANAGEMENT -->
+            <section id="teachers" class="page">
 
-<div class="card">
+                <div class="card">
 
-<div class="table-container">
+                    <div class="card-header">
 
-<table>
+                        <h2>Teacher Management</h2>
 
-<thead>
+                        <input
+                            type="text"
+                            id="teacherSearch"
+                            class="search-box"
+                            placeholder="Search teachers..."
+                        >
 
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Phone</th>
-<th>Email</th>
-<th>Username</th>
-<th>Children</th>
-<th>Actions</th>
-</tr>
+                    </div>
 
-</thead>
+                    <div id="teacherMessage" class="message"></div>
 
-<tbody id="parentTableBody"></tbody>
+                    <form id="teacherForm">
 
-</table>
+                        <input type="hidden" id="editingTeacherId">
 
-</div>
+                        <div class="form-grid">
 
-</div>
+                            <div class="form-group">
+                                <label>Teacher ID *</label>
+                                <input type="text" id="teacherId" required>
+                            </div>
 
-</section>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="teacherName" required>
+                            </div>
 
+                            <div class="form-group">
+                                <label>Gender *</label>
 
-<!-- CHILDREN -->
+                                <select id="teacherGender" required>
+                                    <option value="">Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
 
-<section id="children" class="page">
+                            </div>
 
-<div class="page-title">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" id="teacherDob">
+                            </div>
 
-<h1>My Children</h1>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" id="teacherPhone">
+                            </div>
 
-<p>
-Students linked to your parent account.
-</p>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="teacherEmail">
+                            </div>
 
-</div>
+                            <div class="form-group full">
+                                <label>Address</label>
+                                <textarea id="teacherAddress"></textarea>
+                            </div>
 
-<div id="childrenContainer"></div>
+                            <div class="form-group">
+                                <label>Qualification *</label>
+                                <input
+                                    type="text"
+                                    id="teacherQualification"
+                                    placeholder="e.g. B.Ed."
+                                    required
+                                >
+                            </div>
 
-</section>
+                            <div class="form-group">
+                                <label>Subject(s) *</label>
+                                <input
+                                    type="text"
+                                    id="teacherSubjects"
+                                    placeholder="e.g. Mathematics, Science"
+                                    required
+                                >
+                            </div>
 
+                            <div class="form-group">
+                                <label>Username *</label>
+                                <input
+                                    type="text"
+                                    id="teacherUsername"
+                                    required
+                                >
+                            </div>
 
-<!-- OTHER PAGES -->
+                            <div class="form-group">
+                                <label>Password *</label>
+                                <input
+                                    type="text"
+                                    id="teacherPassword"
+                                    required
+                                >
+                            </div>
 
-<section id="subjects" class="page">
-<div class="page-title">
-<h1>My Subjects</h1>
-<p>Student subjects will appear here.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                        </div>
 
-<section id="results" class="page">
-<div class="page-title">
-<h1>Results</h1>
-<p>Your academic results.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                        <div class="form-actions">
 
-<section id="attendance" class="page">
-<div class="page-title">
-<h1>Attendance</h1>
-<p>Your attendance records.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Save Teacher
+                            </button>
 
-<section id="assignments" class="page">
-<div class="page-title">
-<h1>Assignments</h1>
-<p>Your assignments.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                            <button
+                                type="button"
+                                id="cancelTeacherEdit"
+                                class="btn btn-secondary"
+                                style="display:none"
+                            >
+                                Cancel
+                            </button>
 
-<section id="fees" class="page">
-<div class="page-title">
-<h1>Fees</h1>
-<p>Your school fees.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                        </div>
 
-<section id="announcements" class="page">
-<div class="page-title">
-<h1>Announcements</h1>
-<p>School announcements.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                    </form>
 
-<section id="parentResults" class="page">
-<div class="page-title">
-<h1>Children's Results</h1>
-<p>View results for your children.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                </div>
 
-<section id="parentAttendance" class="page">
-<div class="page-title">
-<h1>Children's Attendance</h1>
-<p>View attendance for your children.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
 
-<section id="parentAssignments" class="page">
-<div class="page-title">
-<h1>Children's Assignments</h1>
-<p>View assignments for your children.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                <div class="card">
 
-<section id="parentFees" class="page">
-<div class="page-title">
-<h1>Children's Fees</h1>
-<p>View fees for your children.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                    <div class="card-header">
+                        <h2>Teachers</h2>
+                    </div>
 
-<section id="parentAnnouncements" class="page">
-<div class="page-title">
-<h1>Announcements</h1>
-<p>School announcements for parents.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                    <div class="table-wrapper">
 
-<section id="teachers" class="page">
-<div class="page-title">
-<h1>Teacher Management</h1>
-<p>Teacher management will be added next.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                        <table>
 
-<section id="classes" class="page">
-<div class="page-title">
-<h1>Class Management</h1>
-<p>Class management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                            <thead>
 
-<section id="subjectsAdmin" class="page">
-<div class="page-title">
-<h1>Subject Management</h1>
-<p>Subject management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Qualification</th>
+                                    <th>Subject(s)</th>
+                                    <th>Username</th>
+                                    <th>Actions</th>
+                                </tr>
 
-<section id="adminResults" class="page">
-<div class="page-title">
-<h1>Results Management</h1>
-<p>Results management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                            </thead>
 
-<section id="adminAttendance" class="page">
-<div class="page-title">
-<h1>Attendance Management</h1>
-<p>Attendance management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                            <tbody id="teacherTableBody"></tbody>
 
-<section id="adminAssignments" class="page">
-<div class="page-title">
-<h1>Assignment Management</h1>
-<p>Assignment management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                        </table>
 
-<section id="adminFees" class="page">
-<div class="page-title">
-<h1>Fees Management</h1>
-<p>Fees management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                    </div>
 
-<section id="adminAnnouncements" class="page">
-<div class="page-title">
-<h1>Announcement Management</h1>
-<p>Announcement management will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+                </div>
 
-<section id="reports" class="page">
-<div class="page-title">
-<h1>Reports</h1>
-<p>School reports will be added later.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
+            </section>
 
-<section id="settings" class="page">
-<div class="page-title">
-<h1>Settings</h1>
-<p>Portal settings.</p>
-</div>
-<div class="card">Coming soon.</div>
-</section>
 
-</div>
-</main>
+            <!-- MY CHILDREN -->
+            <section id="children" class="page">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2>My Children</h2>
+                    </div>
+
+                    <div id="childrenContent"></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- GENERAL PLACEHOLDER PAGES -->
+
+            <section id="subjects" class="page">
+                <div class="card">
+                    <h2>My Subjects</h2>
+                    <p>This section will be connected to Subject Management.</p>
+                </div>
+            </section>
+
+            <section id="results" class="page">
+                <div class="card">
+                    <h2>Results</h2>
+                    <p>Results management will be added next.</p>
+                </div>
+            </section>
+
+            <section id="attendance" class="page">
+                <div class="card">
+                    <h2>Attendance</h2>
+                    <p>Attendance management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="assignments" class="page">
+                <div class="card">
+                    <h2>Assignments</h2>
+                    <p>Assignments will be added later.</p>
+                </div>
+            </section>
+
+            <section id="fees" class="page">
+                <div class="card">
+                    <h2>Fees</h2>
+                    <p>Fees management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="announcements" class="page">
+                <div class="card">
+                    <h2>Announcements</h2>
+                    <p>Announcements will be added later.</p>
+                </div>
+            </section>
+
+
+            <!-- TEACHER PAGES -->
+
+            <section id="teacherSubjects" class="page">
+                <div class="card">
+                    <h2>My Subjects</h2>
+                    <p id="teacherSubjectsContent"></p>
+                </div>
+            </section>
+
+            <section id="teacherStudents" class="page">
+                <div class="card">
+                    <h2>My Students</h2>
+                    <p>Teacher student access will be connected to classes.</p>
+                </div>
+            </section>
+
+            <section id="teacherResults" class="page">
+                <div class="card">
+                    <h2>Student Results</h2>
+                    <p>Result entry will be connected after Subject and Class Management.</p>
+                </div>
+            </section>
+
+            <section id="teacherAttendance" class="page">
+                <div class="card">
+                    <h2>Student Attendance</h2>
+                    <p>Attendance entry will be added later.</p>
+                </div>
+            </section>
+
+            <section id="teacherAssignments" class="page">
+                <div class="card">
+                    <h2>Assignments</h2>
+                    <p>Teacher assignment management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="teacherAnnouncements" class="page">
+                <div class="card">
+                    <h2>Announcements</h2>
+                    <p>Teacher announcements will be added later.</p>
+                </div>
+            </section>
+
+
+            <!-- PARENT PLACEHOLDERS -->
+
+            <section id="parentResults" class="page">
+                <div class="card">
+                    <h2>Children's Results</h2>
+                    <p>Results will appear here after Results Management is built.</p>
+                </div>
+            </section>
+
+            <section id="parentAttendance" class="page">
+                <div class="card">
+                    <h2>Children's Attendance</h2>
+                    <p>Attendance will appear here after Attendance Management is built.</p>
+                </div>
+            </section>
+
+            <section id="parentAssignments" class="page">
+                <div class="card">
+                    <h2>Children's Assignments</h2>
+                    <p>Assignments will appear here after Assignment Management is built.</p>
+                </div>
+            </section>
+
+            <section id="parentFees" class="page">
+                <div class="card">
+                    <h2>Children's Fees</h2>
+                    <p>Fees will appear here after Fees Management is built.</p>
+                </div>
+            </section>
+
+            <section id="parentAnnouncements" class="page">
+                <div class="card">
+                    <h2>Announcements</h2>
+                    <p>School announcements will appear here.</p>
+                </div>
+            </section>
+
+
+            <!-- ADMIN PLACEHOLDERS -->
+
+            <section id="classes" class="page">
+                <div class="card">
+                    <h2>Class Management</h2>
+                    <p>Class Management is the next major module.</p>
+                </div>
+            </section>
+
+            <section id="adminSubjects" class="page">
+                <div class="card">
+                    <h2>Subject Management</h2>
+                    <p>Subject Management will be added after Classes.</p>
+                </div>
+            </section>
+
+            <section id="adminResults" class="page">
+                <div class="card">
+                    <h2>Results Management</h2>
+                    <p>Results Management will be connected to students, classes and subjects.</p>
+                </div>
+            </section>
+
+            <section id="adminAttendance" class="page">
+                <div class="card">
+                    <h2>Attendance Management</h2>
+                    <p>Attendance Management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="adminAssignments" class="page">
+                <div class="card">
+                    <h2>Assignment Management</h2>
+                    <p>Assignment Management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="adminFees" class="page">
+                <div class="card">
+                    <h2>Fees Management</h2>
+                    <p>Fees Management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="adminAnnouncements" class="page">
+                <div class="card">
+                    <h2>Announcement Management</h2>
+                    <p>Announcement Management will be added later.</p>
+                </div>
+            </section>
+
+            <section id="reports" class="page">
+                <div class="card">
+                    <h2>Reports</h2>
+                    <p>Reports will be connected after the main modules are complete.</p>
+                </div>
+            </section>
+
+            <section id="settings" class="page">
+                <div class="card">
+                    <h2>Settings</h2>
+                    <p>School settings will be added later.</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
 </div>
 
 
 <script>
 
-/* =========================
-   DEFAULT DATA
-========================= */
-
-const defaultStudent={
-    id:"STU-001",
-    name:"Gabriel Quansah",
-    gender:"Male",
-    dob:"",
-    className:"Basic 8",
-    parent:"Parent / Guardian",
-    phone:"",
-    email:"student@school.com"
-};
-
-const defaultParent={
-    id:"PAR-001",
-    name:"Parent / Guardian",
-    phone:"",
-    email:"",
-    address:"",
-    username:"parent001",
-    password:"123456",
-    studentIds:["STU-001"]
-};
-
-
-/* =========================
-   STUDENTS
-========================= */
+/* ================================
+   STORAGE
+================================ */
 
 function getStudents(){
 
-    let data=JSON.parse(
-        localStorage.getItem("schoolPortalStudents")||"null"
-    );
+    let students =
+        JSON.parse(localStorage.getItem("schoolPortalStudents"));
 
-    if(!Array.isArray(data)||data.length===0){
+    if(!students){
 
-        data=[defaultStudent];
+        students = [
+            {
+                id:"STU-001",
+                name:"Gabriel Quansah",
+                gender:"Male",
+                dob:"",
+                className:"Basic 8",
+                parent:"Parent / Guardian",
+                phone:"",
+                email:"student@school.com"
+            }
+        ];
 
         localStorage.setItem(
             "schoolPortalStudents",
-            JSON.stringify(data)
+            JSON.stringify(students)
         );
     }
 
-    return data;
+    return students;
 }
 
-function saveStudents(data){
+
+function saveStudents(students){
 
     localStorage.setItem(
         "schoolPortalStudents",
-        JSON.stringify(data)
+        JSON.stringify(students)
     );
-
-    updateStudentCount();
 }
 
-
-/* =========================
-   PARENTS
-========================= */
 
 function getParents(){
 
-    let data=JSON.parse(
-        localStorage.getItem("schoolPortalParents")||"null"
-    );
+    let parents =
+        JSON.parse(localStorage.getItem("schoolPortalParents"));
 
-    if(!Array.isArray(data)||data.length===0){
+    if(!parents){
 
-        data=[defaultParent];
+        parents = [
+            {
+                id:"PAR-001",
+                name:"Parent / Guardian",
+                phone:"",
+                email:"",
+                address:"",
+                username:"parent001",
+                password:"123456",
+                studentIds:["STU-001"]
+            }
+        ];
 
         localStorage.setItem(
             "schoolPortalParents",
-            JSON.stringify(data)
+            JSON.stringify(parents)
         );
     }
 
-    return data;
+    return parents;
 }
 
-function saveParents(data){
+
+function saveParents(parents){
 
     localStorage.setItem(
         "schoolPortalParents",
-        JSON.stringify(data)
+        JSON.stringify(parents)
     );
-
-    updateParentCount();
 }
 
 
-/* =========================
+function getTeachers(){
+
+    let teachers =
+        JSON.parse(localStorage.getItem("schoolPortalTeachers"));
+
+    if(!teachers){
+
+        teachers = [
+            {
+                id:"TCH-001",
+                name:"Demo Teacher",
+                gender:"Male",
+                dob:"",
+                phone:"",
+                email:"teacher@school.com",
+                address:"",
+                qualification:"B.Ed.",
+                subjects:"Mathematics",
+                username:"teacher001",
+                password:"123456"
+            }
+        ];
+
+        localStorage.setItem(
+            "schoolPortalTeachers",
+            JSON.stringify(teachers)
+        );
+    }
+
+    return teachers;
+}
+
+
+function saveTeachers(teachers){
+
+    localStorage.setItem(
+        "schoolPortalTeachers",
+        JSON.stringify(teachers)
+    );
+}
+
+
+/* ================================
    HELPERS
-========================= */
+================================ */
 
 function escapeHtml(value){
 
-    return String(value??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function escapeJs(value){
-
-    return String(value??"")
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'");
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
-/* =========================
+function showMessage(element,message,type){
+
+    element.textContent = message;
+    element.className = "message " + type;
+
+    setTimeout(function(){
+
+        element.className = "message";
+
+    },3500);
+}
+
+
+/* ================================
    LOGIN
-========================= */
+================================ */
 
-document.getElementById("loginForm")
-.addEventListener("submit",function(e){
+const loginForm =
+    document.getElementById("loginForm");
+
+loginForm.addEventListener("submit",function(e){
 
     e.preventDefault();
 
-    const type=document.getElementById("accountType").value;
-    const username=document.getElementById("username").value.trim();
-    const password=document.getElementById("password").value;
+    const accountType =
+        document.getElementById("accountType").value;
 
-    let user=null;
+    const username =
+        document.getElementById("loginUsername").value.trim();
 
+    const password =
+        document.getElementById("loginPassword").value;
 
-    if(type==="student" &&
-       username==="student001" &&
-       password==="123456"){
+    const message =
+        document.getElementById("loginMessage");
 
-        user={
-            username:"student001",
-            name:"Gabriel Quansah",
-            role:"Student",
-            id:"STU-001",
-            className:"Basic 8"
-        };
-    }
+    let user = null;
 
 
-    if(type==="admin" &&
-       username==="admin" &&
-       password==="admin123"){
+    /* STUDENT */
 
-        user={
-            username:"admin",
-            name:"School Administrator",
-            role:"Administrator",
-            id:"ADMIN-001",
-            className:"Administration"
-        };
-    }
+    if(accountType === "student"){
 
+        const students = getStudents();
 
-    if(type==="parent"){
-
-        const parents=getParents();
-
-        const found=parents.find(parent=>
-            parent.username===username &&
-            parent.password===password
+        const found = students.find(student =>
+            student.username === username &&
+            student.password === password
         );
 
         if(found){
 
-            user={
+            user = {
+                username:found.username,
+                name:found.name,
+                role:"Student",
+                id:found.id,
+                className:found.className
+            };
+
+        }else if(username === "student001" && password === "123456"){
+
+            user = {
+                username:"student001",
+                name:"Gabriel Quansah",
+                role:"Student",
+                id:"STU-001",
+                className:"Basic 8"
+            };
+
+        }
+
+    }
+
+
+    /* PARENT */
+
+    if(accountType === "parent"){
+
+        const parents = getParents();
+
+        const found = parents.find(parent =>
+            parent.username === username &&
+            parent.password === password
+        );
+
+        if(found){
+
+            user = {
                 username:found.username,
                 name:found.name,
                 role:"Parent",
                 id:found.id,
-                className:"Guardian Account"
+                className:"Parent Account"
             };
+
         }
+
+    }
+
+
+    /* TEACHER */
+
+    if(accountType === "teacher"){
+
+        const teachers = getTeachers();
+
+        const found = teachers.find(teacher =>
+            teacher.username === username &&
+            teacher.password === password
+        );
+
+        if(found){
+
+            user = {
+                username:found.username,
+                name:found.name,
+                role:"Teacher",
+                id:found.id,
+                className:"Teacher Account"
+            };
+
+        }
+
+    }
+
+
+    /* ADMIN */
+
+    if(
+        accountType === "admin" &&
+        username === "admin" &&
+        password === "admin123"
+    ){
+
+        user = {
+            username:"admin",
+            name:"Administrator",
+            role:"Administrator",
+            id:"ADMIN-001",
+            className:"Administration"
+        };
+
     }
 
 
     if(!user){
 
-        const error=document.getElementById("loginError");
-
-        error.textContent=
-            "Invalid username, password or account type.";
-
-        error.style.display="block";
+        showMessage(
+            message,
+            "Invalid username, password or account type.",
+            "error"
+        );
 
         return;
     }
@@ -1352,9 +1695,9 @@ document.getElementById("loginForm")
 });
 
 
-/* =========================
+/* ================================
    SHOW PORTAL
-========================= */
+================================ */
 
 function showPortal(user){
 
@@ -1362,258 +1705,294 @@ function showPortal(user){
 
     document.getElementById("portal").style.display="block";
 
-    document.getElementById("topUserName").textContent=user.name;
-    document.getElementById("topUserRole").textContent=user.role;
-    document.getElementById("welcomeName").textContent=user.name;
+    document.getElementById("topUserName").textContent =
+        user.name;
 
-    document.getElementById("profileName").textContent=user.name;
-    document.getElementById("profileRole").textContent=user.role;
-    document.getElementById("profileId").textContent=user.id;
-    document.getElementById("profileClass").textContent=user.className;
+    document.getElementById("welcomeText").textContent =
+        "Welcome, " + user.name + ". You are logged in as " + user.role + ".";
 
 
-    document.getElementById("studentNavigation").style.display=
-        user.role==="Student"?"block":"none";
+    document.getElementById("studentNavigation").style.display =
+        user.role === "Student" ? "block" : "none";
 
-    document.getElementById("parentNavigation").style.display=
-        user.role==="Parent"?"block":"none";
+    document.getElementById("parentNavigation").style.display =
+        user.role === "Parent" ? "block" : "none";
 
-    document.getElementById("adminNavigation").style.display=
-        user.role==="Administrator"?"block":"none";
+    document.getElementById("teacherNavigation").style.display =
+        user.role === "Teacher" ? "block" : "none";
+
+    document.getElementById("adminNavigation").style.display =
+        user.role === "Administrator" ? "block" : "none";
 
 
     updateStudentCount();
     updateParentCount();
+    updateTeacherCount();
 
-    renderStudents();
-    renderParents();
-    renderStudentCheckboxes();
-    renderChildren();
+    renderProfile(user);
 
-    showPage("dashboard");
+    if(user.role === "Parent"){
+        renderChildren(user);
+    }
+
+    if(user.role === "Teacher"){
+        renderTeacherSubjects(user);
+    }
+
 }
 
 
-/* =========================
+/* ================================
    LOGOUT
-========================= */
+================================ */
 
-document.getElementById("logoutButton")
-.addEventListener("click",function(){
+document.getElementById("logoutBtn")
+    .addEventListener("click",function(){
 
-    localStorage.removeItem("schoolPortalUser");
+        localStorage.removeItem("schoolPortalUser");
 
-    document.getElementById("portal").style.display="none";
+        document.getElementById("portal").style.display="none";
 
-    document.getElementById("loginScreen").style.display="flex";
+        document.getElementById("loginScreen").style.display="flex";
 
-    document.getElementById("username").value="";
-    document.getElementById("password").value="";
+        document.getElementById("loginForm").reset();
 
-});
+    });
 
 
-/* =========================
+/* ================================
    NAVIGATION
-========================= */
+================================ */
 
 document.querySelectorAll(".nav-link[data-page]")
-.forEach(button=>{
+.forEach(function(link){
 
-    button.addEventListener("click",function(){
+    link.addEventListener("click",function(){
 
-        showPage(this.dataset.page);
+        const page =
+            this.getAttribute("data-page");
 
-        document
-        .getElementById("sidebar")
-        .classList.remove("open");
+        showPage(page);
 
     });
 
 });
 
 
-function showPage(id){
+function showPage(pageId){
 
     document.querySelectorAll(".page")
-    .forEach(page=>page.classList.remove("active"));
+    .forEach(function(page){
 
-    const page=document.getElementById(id);
+        page.classList.remove("active");
 
-    if(page) page.classList.add("active");
+    });
+
+
+    const target =
+        document.getElementById(pageId);
+
+    if(target){
+        target.classList.add("active");
+    }
 
 
     document.querySelectorAll(".nav-link[data-page]")
-    .forEach(button=>{
+    .forEach(function(link){
 
-        button.classList.toggle(
-            "active",
-            button.dataset.page===id
-        );
+        link.classList.remove("active");
+
+        if(link.getAttribute("data-page") === pageId){
+            link.classList.add("active");
+        }
 
     });
 
 
-    const titles={
-        dashboard:"Dashboard",
-        profile:"My Profile",
-        students:"Student Management",
-        parents:"Parent Management",
-        children:"My Children",
-        subjects:"My Subjects",
-        results:"Results",
-        attendance:"Attendance",
-        assignments:"Assignments",
-        fees:"Fees",
-        announcements:"Announcements",
-        parentResults:"Children's Results",
-        parentAttendance:"Children's Attendance",
-        parentAssignments:"Children's Assignments",
-        parentFees:"Children's Fees",
-        parentAnnouncements:"Announcements",
-        teachers:"Teacher Management",
-        classes:"Class Management",
-        subjectsAdmin:"Subject Management",
-        adminResults:"Results Management",
-        adminAttendance:"Attendance Management",
-        adminAssignments:"Assignment Management",
-        adminFees:"Fees Management",
-        adminAnnouncements:"Announcement Management",
-        reports:"Reports",
-        settings:"Settings"
-    };
+    const activeLink =
+        document.querySelector(
+            '.nav-link[data-page="' + pageId + '"]'
+        );
 
-    document.getElementById("pageHeader").textContent=
-        titles[id]||"School Portal";
+    if(activeLink){
+
+        document.getElementById("pageTitle")
+            .textContent =
+            activeLink.textContent.trim();
+
+    }
 
 
-    if(id==="children") renderChildren();
-
-    if(id==="parents"){
-
-        renderParents();
+    if(pageId === "parents"){
         renderStudentCheckboxes();
+    }
+
+    if(pageId === "children"){
+
+        const user =
+            JSON.parse(
+                localStorage.getItem("schoolPortalUser") || "null"
+            );
+
+        if(user){
+            renderChildren(user);
+        }
 
     }
 
 }
 
 
-/* =========================
-   MOBILE
-========================= */
-
-document.getElementById("mobileMenu")
-.addEventListener("click",function(){
-
-    document
-    .getElementById("sidebar")
-    .classList.toggle("open");
-
-});
-
-
-/* =========================
+/* ================================
    COUNTS
-========================= */
+================================ */
 
 function updateStudentCount(){
 
-    document.getElementById("dashboardStudentCount")
-    .textContent=getStudents().length;
+    document.getElementById("studentCount")
+        .textContent =
+        getStudents().length;
 
 }
+
 
 function updateParentCount(){
 
-    document.getElementById("dashboardParentCount")
-    .textContent=getParents().length;
+    document.getElementById("parentCount")
+        .textContent =
+        getParents().length;
 
 }
 
 
-/* =========================
-   STUDENT FORM
-========================= */
+function updateTeacherCount(){
 
-const studentForm=
+    document.getElementById("teacherCount")
+        .textContent =
+        getTeachers().length;
+
+}
+
+
+/* ================================
+   PROFILE
+================================ */
+
+function renderProfile(user){
+
+    const container =
+        document.getElementById("profileContent");
+
+    container.innerHTML = `
+        <div class="form-grid">
+
+            <div>
+                <strong>Name</strong>
+                <p>${escapeHtml(user.name)}</p>
+            </div>
+
+            <div>
+                <strong>Username</strong>
+                <p>${escapeHtml(user.username)}</p>
+            </div>
+
+            <div>
+                <strong>Account Type</strong>
+                <p>${escapeHtml(user.role)}</p>
+            </div>
+
+            <div>
+                <strong>ID</strong>
+                <p>${escapeHtml(user.id)}</p>
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* ================================
+   STUDENT MANAGEMENT
+================================ */
+
+const studentForm =
     document.getElementById("studentForm");
-
-
-document.getElementById("addStudentButton")
-.addEventListener("click",function(){
-
-    studentForm.reset();
-
-    document.getElementById("editingStudentId").value="";
-
-    studentForm.classList.add("show");
-
-});
-
-
-document.getElementById("cancelStudentButton")
-.addEventListener("click",function(){
-
-    studentForm.reset();
-
-    document.getElementById("editingStudentId").value="";
-
-    studentForm.classList.remove("show");
-
-});
-
 
 studentForm.addEventListener("submit",function(e){
 
     e.preventDefault();
 
-    const students=getStudents();
+    let students = getStudents();
 
-    const editingId=
+    const editingId =
         document.getElementById("editingStudentId").value;
 
-    const id=
+    const id =
         document.getElementById("studentId").value.trim();
 
-    const student={
-        id:id,
-        name:document.getElementById("studentName").value.trim(),
-        gender:document.getElementById("studentGender").value,
-        dob:document.getElementById("studentDob").value,
-        className:document.getElementById("studentClass").value.trim(),
-        parent:document.getElementById("studentParent").value.trim(),
-        phone:document.getElementById("studentPhone").value.trim(),
-        email:document.getElementById("studentEmail").value.trim()
-    };
+    const name =
+        document.getElementById("studentName").value.trim();
+
+    const gender =
+        document.getElementById("studentGender").value;
+
+    const dob =
+        document.getElementById("studentDob").value;
+
+    const className =
+        document.getElementById("studentClass").value.trim();
+
+    const parent =
+        document.getElementById("studentParent").value.trim();
+
+    const phone =
+        document.getElementById("studentPhone").value.trim();
+
+    const email =
+        document.getElementById("studentEmail").value.trim();
 
 
-    const duplicate=students.find(s=>
-        s.id.toLowerCase()===id.toLowerCase() &&
-        s.id!==editingId
-    );
-
+    const duplicate =
+        students.find(student =>
+            student.id === id &&
+            student.id !== editingId
+        );
 
     if(duplicate){
 
-        showStatus(
-            "studentStatus",
-            "A student with this ID already exists.",
-            false
+        showMessage(
+            document.getElementById("studentMessage"),
+            "Student ID already exists.",
+            "error"
         );
 
         return;
     }
 
 
+    const student = {
+        id,
+        name,
+        gender,
+        dob,
+        className,
+        parent,
+        phone,
+        email
+    };
+
+
     if(editingId){
 
-        const index=students.findIndex(
-            s=>s.id===editingId
-        );
+        const index =
+            students.findIndex(
+                s => s.id === editingId
+            );
 
-        if(index!==-1)
-            students[index]=student;
+        if(index !== -1){
+            students[index] = student;
+        }
 
     }else{
 
@@ -1624,24 +2003,18 @@ studentForm.addEventListener("submit",function(e){
 
     saveStudents(students);
 
+    resetStudentForm();
+
     renderStudents();
-    renderParents();
+
     renderStudentCheckboxes();
-    renderChildren();
 
-    studentForm.reset();
+    updateStudentCount();
 
-    document.getElementById("editingStudentId").value="";
-
-    studentForm.classList.remove("show");
-
-
-    showStatus(
-        "studentStatus",
-        editingId
-        ?"Student updated successfully."
-        :"Student added successfully.",
-        true
+    showMessage(
+        document.getElementById("studentMessage"),
+        editingId ? "Student updated successfully." : "Student added successfully.",
+        "success"
     );
 
 });
@@ -1649,301 +2022,303 @@ studentForm.addEventListener("submit",function(e){
 
 function renderStudents(){
 
-    const students=getStudents();
+    const students = getStudents();
 
-    const search=
+    const search =
         document.getElementById("studentSearch")
-        .value.toLowerCase().trim();
+        .value.toLowerCase();
 
-    const tbody=
+    const filtered =
+        students.filter(student =>
+            (
+                student.id + " " +
+                student.name + " " +
+                student.className + " " +
+                student.parent
+            ).toLowerCase().includes(search)
+        );
+
+
+    const body =
         document.getElementById("studentTableBody");
 
 
-    const filtered=students.filter(s=>
-        s.id.toLowerCase().includes(search) ||
-        s.name.toLowerCase().includes(search) ||
-        s.className.toLowerCase().includes(search) ||
-        (s.parent||"").toLowerCase().includes(search)
-    );
+    if(filtered.length === 0){
 
-
-    if(filtered.length===0){
-
-        tbody.innerHTML=
-        `<tr>
-        <td colspan="7" class="empty-message">
-        No students found.
-        </td>
-        </tr>`;
+        body.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    No students found.
+                </td>
+            </tr>
+        `;
 
         return;
     }
 
 
-    tbody.innerHTML=filtered.map(s=>`
+    body.innerHTML =
+        filtered.map(student => `
 
-<tr>
+            <tr>
 
-<td>${escapeHtml(s.id)}</td>
+                <td>${escapeHtml(student.id)}</td>
 
-<td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(student.name)}</td>
 
-<td>${escapeHtml(s.gender)}</td>
+                <td>${escapeHtml(student.gender)}</td>
 
-<td>${escapeHtml(s.className)}</td>
+                <td>${escapeHtml(student.className)}</td>
 
-<td>${escapeHtml(s.parent||"-")}</td>
+                <td>${escapeHtml(student.parent)}</td>
 
-<td>${escapeHtml(s.phone||"-")}</td>
+                <td>${escapeHtml(student.phone)}</td>
 
-<td>
+                <td>
 
-<button
-class="action-button edit-button"
-onclick="editStudent('${escapeJs(s.id)}')">
-Edit
-</button>
+                    <div class="action-buttons">
 
-<button
-class="action-button delete-button"
-onclick="deleteStudent('${escapeJs(s.id)}')">
-Delete
-</button>
+                        <button
+                            class="edit-btn"
+                            onclick="editStudent('${student.id}')"
+                        >
+                            Edit
+                        </button>
 
-</td>
+                        <button
+                            class="delete-btn"
+                            onclick="deleteStudent('${student.id}')"
+                        >
+                            Delete
+                        </button>
 
-</tr>
+                    </div>
 
-`).join("");
+                </td>
+
+            </tr>
+
+        `).join("");
 
 }
 
 
 document.getElementById("studentSearch")
-.addEventListener("input",renderStudents);
+    .addEventListener("input",renderStudents);
 
 
-window.editStudent=function(id){
+window.editStudent = function(id){
 
-    const student=getStudents().find(s=>s.id===id);
+    const student =
+        getStudents().find(s => s.id === id);
 
-    if(!student)return;
+    if(!student) return;
 
 
-    document.getElementById("editingStudentId").value=student.id;
-    document.getElementById("studentId").value=student.id;
-    document.getElementById("studentName").value=student.name;
-    document.getElementById("studentGender").value=student.gender;
-    document.getElementById("studentDob").value=student.dob||"";
-    document.getElementById("studentClass").value=student.className;
-    document.getElementById("studentParent").value=student.parent||"";
-    document.getElementById("studentPhone").value=student.phone||"";
-    document.getElementById("studentEmail").value=student.email||"";
+    document.getElementById("editingStudentId").value =
+        student.id;
 
-    studentForm.classList.add("show");
+    document.getElementById("studentId").value =
+        student.id;
+
+    document.getElementById("studentName").value =
+        student.name;
+
+    document.getElementById("studentGender").value =
+        student.gender;
+
+    document.getElementById("studentDob").value =
+        student.dob;
+
+    document.getElementById("studentClass").value =
+        student.className;
+
+    document.getElementById("studentParent").value =
+        student.parent;
+
+    document.getElementById("studentPhone").value =
+        student.phone;
+
+    document.getElementById("studentEmail").value =
+        student.email;
+
+
+    document.getElementById("cancelStudentEdit")
+        .style.display="inline-block";
+
+
+    showPage("students");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 };
 
 
-window.deleteStudent=function(id){
+window.deleteStudent = function(id){
 
-    if(!confirm("Delete this student?"))return;
-
-    let students=getStudents();
-
-    students=students.filter(s=>s.id!==id);
-
-    saveStudents(students);
-
-    renderStudents();
-    renderParents();
-    renderStudentCheckboxes();
-    renderChildren();
-
-    showStatus(
-        "studentStatus",
-        "Student deleted successfully.",
-        true
-    );
-
-};
-
-
-/* =========================
-   PARENT FORM
-========================= */
-
-const parentForm=
-    document.getElementById("parentForm");
-
-
-document.getElementById("addParentButton")
-.addEventListener("click",function(){
-
-    parentForm.reset();
-
-    document.getElementById("editingParentId").value="";
-
-    renderStudentCheckboxes();
-
-    parentForm.classList.add("show");
-
-});
-
-
-document.getElementById("cancelParentButton")
-.addEventListener("click",function(){
-
-    parentForm.reset();
-
-    document.getElementById("editingParentId").value="";
-
-    parentForm.classList.remove("show");
-
-});
-
-
-function renderStudentCheckboxes(selected=[]){
-
-    const students=getStudents();
-
-    const container=
-        document.getElementById("studentCheckboxList");
-
-
-    if(students.length===0){
-
-        container.innerHTML=
-        "<p>No students available.</p>";
-
+    if(!confirm("Delete this student?")){
         return;
     }
 
 
-    container.innerHTML=students.map(student=>`
+    let students = getStudents();
 
-<label class="student-checkbox">
+    students =
+        students.filter(student =>
+            student.id !== id
+        );
 
-<input
-type="checkbox"
-value="${escapeHtml(student.id)}"
-${selected.includes(student.id)?"checked":""}
->
+    saveStudents(students);
 
-<span>
-<strong>${escapeHtml(student.name)}</strong>
-<small>
-(${escapeHtml(student.id)} -
-${escapeHtml(student.className)})
-</small>
-</span>
 
-</label>
+    let parents = getParents();
 
-`).join("");
+    parents.forEach(parent => {
+
+        parent.studentIds =
+            (parent.studentIds || [])
+            .filter(studentId =>
+                studentId !== id
+            );
+
+    });
+
+    saveParents(parents);
+
+
+    renderStudents();
+    renderStudentCheckboxes();
+
+    updateStudentCount();
+
+};
+
+
+function resetStudentForm(){
+
+    studentForm.reset();
+
+    document.getElementById("editingStudentId")
+        .value="";
+
+    document.getElementById("cancelStudentEdit")
+        .style.display="none";
 
 }
+
+
+document.getElementById("cancelStudentEdit")
+    .addEventListener("click",resetStudentForm);
+
+
+/* ================================
+   PARENT MANAGEMENT
+================================ */
+
+const parentForm =
+    document.getElementById("parentForm");
 
 
 parentForm.addEventListener("submit",function(e){
 
     e.preventDefault();
 
-    const parents=getParents();
+    let parents = getParents();
 
-    const editingId=
+    const editingId =
         document.getElementById("editingParentId").value;
 
-    const id=
+    const id =
         document.getElementById("parentId").value.trim();
 
-    const username=
+    const name =
+        document.getElementById("parentName").value.trim();
+
+    const phone =
+        document.getElementById("parentPhone").value.trim();
+
+    const email =
+        document.getElementById("parentEmail").value.trim();
+
+    const address =
+        document.getElementById("parentAddress").value.trim();
+
+    const username =
         document.getElementById("parentUsername").value.trim();
 
+    const password =
+        document.getElementById("parentPassword").value;
 
-    const duplicateId=parents.find(p=>
-        p.id.toLowerCase()===id.toLowerCase() &&
-        p.id!==editingId
-    );
 
+    const studentIds =
+        Array.from(
+            document.querySelectorAll(
+                "#studentCheckboxes input:checked"
+            )
+        ).map(input => input.value);
+
+
+    const duplicateId =
+        parents.find(parent =>
+            parent.id === id &&
+            parent.id !== editingId
+        );
 
     if(duplicateId){
 
-        showStatus(
-            "parentStatus",
-            "A parent with this ID already exists.",
-            false
+        showMessage(
+            document.getElementById("parentMessage"),
+            "Parent ID already exists.",
+            "error"
         );
 
         return;
     }
 
 
-    const duplicateUsername=parents.find(p=>
-        p.username.toLowerCase()===username.toLowerCase() &&
-        p.id!==editingId
-    );
-
+    const duplicateUsername =
+        parents.find(parent =>
+            parent.username === username &&
+            parent.id !== editingId
+        );
 
     if(duplicateUsername){
 
-        showStatus(
-            "parentStatus",
-            "That username is already being used.",
-            false
+        showMessage(
+            document.getElementById("parentMessage"),
+            "Parent username already exists.",
+            "error"
         );
 
         return;
     }
 
 
-    const studentIds=
-        Array.from(
-            document.querySelectorAll(
-                "#studentCheckboxList input:checked"
-            )
-        ).map(input=>input.value);
-
-
-    const parent={
-
-        id:id,
-
-        name:
-            document.getElementById("parentName")
-            .value.trim(),
-
-        phone:
-            document.getElementById("parentPhone")
-            .value.trim(),
-
-        email:
-            document.getElementById("parentEmail")
-            .value.trim(),
-
-        address:
-            document.getElementById("parentAddress")
-            .value.trim(),
-
-        username:username,
-
-        password:
-            document.getElementById("parentPassword")
-            .value,
-
-        studentIds:studentIds
-
+    const parent = {
+        id,
+        name,
+        phone,
+        email,
+        address,
+        username,
+        password,
+        studentIds
     };
 
 
     if(editingId){
 
-        const index=parents.findIndex(
-            p=>p.id===editingId
-        );
+        const index =
+            parents.findIndex(
+                p => p.id === editingId
+            );
 
-        if(index!==-1)
-            parents[index]=parent;
+        if(index !== -1){
+            parents[index] = parent;
+        }
 
     }else{
 
@@ -1954,319 +2329,756 @@ parentForm.addEventListener("submit",function(e){
 
     saveParents(parents);
 
+    resetParentForm();
+
     renderParents();
-    renderChildren();
 
-    parentForm.reset();
-
-    document.getElementById("editingParentId").value="";
-
-    parentForm.classList.remove("show");
+    updateParentCount();
 
 
-    showStatus(
-        "parentStatus",
-        editingId
-        ?"Parent updated successfully."
-        :"Parent added successfully.",
-        true
+    showMessage(
+        document.getElementById("parentMessage"),
+        editingId ?
+        "Parent updated successfully." :
+        "Parent added successfully.",
+        "success"
     );
 
 });
 
 
-function renderParents(){
+function renderStudentCheckboxes(selectedIds = []){
 
-    const parents=getParents();
+    const students = getStudents();
 
-    const search=
-        document.getElementById("parentSearch")
-        .value.toLowerCase().trim();
-
-    const tbody=
-        document.getElementById("parentTableBody");
+    const container =
+        document.getElementById("studentCheckboxes");
 
 
-    const filtered=parents.filter(p=>
-        p.id.toLowerCase().includes(search) ||
-        p.name.toLowerCase().includes(search) ||
-        p.username.toLowerCase().includes(search) ||
-        (p.phone||"").toLowerCase().includes(search) ||
-        (p.email||"").toLowerCase().includes(search)
-    );
+    if(students.length === 0){
 
-
-    if(filtered.length===0){
-
-        tbody.innerHTML=
-        `<tr>
-        <td colspan="7" class="empty-message">
-        No parents found.
-        </td>
-        </tr>`;
+        container.innerHTML =
+            `<div class="empty">No students available.</div>`;
 
         return;
     }
 
 
-    tbody.innerHTML=filtered.map(parent=>{
+    container.innerHTML =
+        students.map(student => `
 
-        const students=getStudents().filter(student=>
-            (parent.studentIds||[]).includes(student.id)
+            <label class="checkbox-item">
+
+                <input
+                    type="checkbox"
+                    value="${escapeHtml(student.id)}"
+                    ${selectedIds.includes(student.id) ? "checked" : ""}
+                >
+
+                <span>
+                    ${escapeHtml(student.name)}
+                    (${escapeHtml(student.id)})
+                </span>
+
+            </label>
+
+        `).join("");
+
+}
+
+
+function renderParents(){
+
+    const parents = getParents();
+
+    const search =
+        document.getElementById("parentSearch")
+        .value.toLowerCase();
+
+
+    const filtered =
+        parents.filter(parent =>
+            (
+                parent.id + " " +
+                parent.name + " " +
+                parent.phone + " " +
+                parent.email + " " +
+                parent.username
+            ).toLowerCase().includes(search)
         );
 
 
-        const children=students.length
-            ?students.map(s=>escapeHtml(s.name)).join(", ")
-            :"No linked students";
+    const students = getStudents();
+
+    const body =
+        document.getElementById("parentTableBody");
 
 
-        return `
+    if(filtered.length === 0){
 
-<tr>
+        body.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    No parents found.
+                </td>
+            </tr>
+        `;
 
-<td>${escapeHtml(parent.id)}</td>
+        return;
+    }
 
-<td>${escapeHtml(parent.name)}</td>
 
-<td>${escapeHtml(parent.phone||"-")}</td>
+    body.innerHTML =
+        filtered.map(parent => {
 
-<td>${escapeHtml(parent.email||"-")}</td>
+            const children =
+                (parent.studentIds || [])
+                .map(id => {
 
-<td>${escapeHtml(parent.username)}</td>
+                    const student =
+                        students.find(s => s.id === id);
 
-<td>${children}</td>
+                    return student
+                        ? student.name
+                        : id;
 
-<td>
+                })
+                .join(", ");
 
-<button
-class="action-button edit-button"
-onclick="editParent('${escapeJs(parent.id)}')">
-Edit
-</button>
 
-<button
-class="action-button delete-button"
-onclick="deleteParent('${escapeJs(parent.id)}')">
-Delete
-</button>
+            return `
 
-</td>
+                <tr>
 
-</tr>
+                    <td>${escapeHtml(parent.id)}</td>
 
-`;
+                    <td>${escapeHtml(parent.name)}</td>
 
-    }).join("");
+                    <td>${escapeHtml(parent.phone)}</td>
+
+                    <td>${escapeHtml(parent.email)}</td>
+
+                    <td>${escapeHtml(parent.username)}</td>
+
+                    <td>${escapeHtml(children || "None")}</td>
+
+                    <td>
+
+                        <div class="action-buttons">
+
+                            <button
+                                class="edit-btn"
+                                onclick="editParent('${parent.id}')"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteParent('${parent.id}')"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
 
 }
 
 
 document.getElementById("parentSearch")
-.addEventListener("input",renderParents);
+    .addEventListener("input",renderParents);
 
 
-window.editParent=function(id){
+window.editParent = function(id){
 
-    const parent=getParents().find(p=>p.id===id);
+    const parent =
+        getParents().find(p => p.id === id);
 
-    if(!parent)return;
-
-
-    document.getElementById("editingParentId").value=parent.id;
-
-    document.getElementById("parentId").value=parent.id;
-
-    document.getElementById("parentName").value=parent.name;
-
-    document.getElementById("parentPhone").value=parent.phone||"";
-
-    document.getElementById("parentEmail").value=parent.email||"";
-
-    document.getElementById("parentAddress").value=parent.address||"";
-
-    document.getElementById("parentUsername").value=parent.username;
-
-    document.getElementById("parentPassword").value=parent.password;
+    if(!parent) return;
 
 
-    renderStudentCheckboxes(parent.studentIds||[]);
+    document.getElementById("editingParentId").value =
+        parent.id;
 
-    parentForm.classList.add("show");
+    document.getElementById("parentId").value =
+        parent.id;
 
-};
+    document.getElementById("parentName").value =
+        parent.name;
+
+    document.getElementById("parentPhone").value =
+        parent.phone;
+
+    document.getElementById("parentEmail").value =
+        parent.email;
+
+    document.getElementById("parentAddress").value =
+        parent.address;
+
+    document.getElementById("parentUsername").value =
+        parent.username;
+
+    document.getElementById("parentPassword").value =
+        parent.password;
 
 
-window.deleteParent=function(id){
-
-    const parent=getParents().find(p=>p.id===id);
-
-    if(!parent)return;
-
-    if(!confirm("Delete "+parent.name+"?"))return;
+    renderStudentCheckboxes(parent.studentIds || []);
 
 
-    saveParents(
-        getParents().filter(p=>p.id!==id)
-    );
+    document.getElementById("cancelParentEdit")
+        .style.display="inline-block";
 
-    renderParents();
-    renderChildren();
 
-    showStatus(
-        "parentStatus",
-        "Parent deleted successfully.",
-        true
-    );
+    showPage("parents");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 };
 
 
-/* =========================
-   MY CHILDREN
-========================= */
+window.deleteParent = function(id){
 
-function renderChildren(){
-
-    const container=
-        document.getElementById("childrenContainer");
-
-    const user=
-        JSON.parse(
-            localStorage.getItem("schoolPortalUser")||"null"
-        );
-
-
-    if(!user||user.role!=="Parent"){
-
-        container.innerHTML=
-        `<div class="card">
-        This section is available for parent accounts.
-        </div>`;
-
+    if(!confirm("Delete this parent?")){
         return;
     }
 
 
-    const parent=getParents().find(
-        p=>p.id===user.id
-    );
+    let parents = getParents();
+
+    parents =
+        parents.filter(parent =>
+            parent.id !== id
+        );
+
+    saveParents(parents);
+
+
+    renderParents();
+
+    updateParentCount();
+
+};
+
+
+function resetParentForm(){
+
+    parentForm.reset();
+
+    document.getElementById("editingParentId")
+        .value="";
+
+    document.getElementById("cancelParentEdit")
+        .style.display="none";
+
+    renderStudentCheckboxes();
+
+}
+
+
+document.getElementById("cancelParentEdit")
+    .addEventListener("click",resetParentForm);
+
+
+/* ================================
+   MY CHILDREN
+================================ */
+
+function renderChildren(user){
+
+    const parents = getParents();
+
+    const students = getStudents();
+
+    const parent =
+        parents.find(p => p.id === user.id);
+
+
+    const container =
+        document.getElementById("childrenContent");
 
 
     if(!parent){
 
-        container.innerHTML=
-        `<div class="card">
-        Parent account not found.
-        </div>`;
+        container.innerHTML =
+            `<div class="empty">Parent account not found.</div>`;
 
         return;
     }
 
 
-    const students=getStudents().filter(student=>
-        (parent.studentIds||[]).includes(student.id)
+    const children =
+        students.filter(student =>
+            (parent.studentIds || [])
+            .includes(student.id)
+        );
+
+
+    if(children.length === 0){
+
+        container.innerHTML =
+            `<div class="empty">No children linked to this account.</div>`;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        children.map(student => `
+
+            <div class="card">
+
+                <h3>
+                    ${escapeHtml(student.name)}
+                </h3>
+
+                <br>
+
+                <div class="form-grid">
+
+                    <div>
+                        <strong>Student ID</strong>
+                        <p>${escapeHtml(student.id)}</p>
+                    </div>
+
+                    <div>
+                        <strong>Class</strong>
+                        <p>${escapeHtml(student.className)}</p>
+                    </div>
+
+                    <div>
+                        <strong>Gender</strong>
+                        <p>${escapeHtml(student.gender)}</p>
+                    </div>
+
+                    <div>
+                        <strong>Email</strong>
+                        <p>${escapeHtml(student.email)}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* ================================
+   TEACHER MANAGEMENT
+================================ */
+
+const teacherForm =
+    document.getElementById("teacherForm");
+
+
+teacherForm.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    let teachers = getTeachers();
+
+    const editingId =
+        document.getElementById("editingTeacherId").value;
+
+    const id =
+        document.getElementById("teacherId").value.trim();
+
+    const name =
+        document.getElementById("teacherName").value.trim();
+
+    const gender =
+        document.getElementById("teacherGender").value;
+
+    const dob =
+        document.getElementById("teacherDob").value;
+
+    const phone =
+        document.getElementById("teacherPhone").value.trim();
+
+    const email =
+        document.getElementById("teacherEmail").value.trim();
+
+    const address =
+        document.getElementById("teacherAddress").value.trim();
+
+    const qualification =
+        document.getElementById("teacherQualification")
+        .value.trim();
+
+    const subjects =
+        document.getElementById("teacherSubjects")
+        .value.trim();
+
+    const username =
+        document.getElementById("teacherUsername")
+        .value.trim();
+
+    const password =
+        document.getElementById("teacherPassword")
+        .value;
+
+
+    const duplicateId =
+        teachers.find(teacher =>
+            teacher.id === id &&
+            teacher.id !== editingId
+        );
+
+    if(duplicateId){
+
+        showMessage(
+            document.getElementById("teacherMessage"),
+            "Teacher ID already exists.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const duplicateUsername =
+        teachers.find(teacher =>
+            teacher.username === username &&
+            teacher.id !== editingId
+        );
+
+    if(duplicateUsername){
+
+        showMessage(
+            document.getElementById("teacherMessage"),
+            "Teacher username already exists.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const teacher = {
+
+        id,
+        name,
+        gender,
+        dob,
+        phone,
+        email,
+        address,
+        qualification,
+        subjects,
+        username,
+        password
+
+    };
+
+
+    if(editingId){
+
+        const index =
+            teachers.findIndex(
+                t => t.id === editingId
+            );
+
+        if(index !== -1){
+            teachers[index] = teacher;
+        }
+
+    }else{
+
+        teachers.push(teacher);
+
+    }
+
+
+    saveTeachers(teachers);
+
+    resetTeacherForm();
+
+    renderTeachers();
+
+    updateTeacherCount();
+
+
+    showMessage(
+        document.getElementById("teacherMessage"),
+        editingId ?
+        "Teacher updated successfully." :
+        "Teacher added successfully.",
+        "success"
     );
 
+});
 
-    if(students.length===0){
 
-        container.innerHTML=
-        `<div class="card">
-        No students are linked to this parent account.
-        </div>`;
+function renderTeachers(){
+
+    const teachers = getTeachers();
+
+    const search =
+        document.getElementById("teacherSearch")
+        .value.toLowerCase();
+
+
+    const filtered =
+        teachers.filter(teacher =>
+            (
+                teacher.id + " " +
+                teacher.name + " " +
+                teacher.phone + " " +
+                teacher.email + " " +
+                teacher.qualification + " " +
+                teacher.subjects + " " +
+                teacher.username
+            ).toLowerCase().includes(search)
+        );
+
+
+    const body =
+        document.getElementById("teacherTableBody");
+
+
+    if(filtered.length === 0){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">
+                    No teachers found.
+                </td>
+            </tr>
+        `;
 
         return;
     }
 
 
-    container.innerHTML=students.map(student=>`
+    body.innerHTML =
+        filtered.map(teacher => `
 
-<div class="child-card">
+            <tr>
 
-<h3>${escapeHtml(student.name)}</h3>
+                <td>${escapeHtml(teacher.id)}</td>
 
-<div class="child-details">
+                <td>${escapeHtml(teacher.name)}</td>
 
-<div>
-<strong>Student ID:</strong>
-${escapeHtml(student.id)}
-</div>
+                <td>${escapeHtml(teacher.gender)}</td>
 
-<div>
-<strong>Class:</strong>
-${escapeHtml(student.className)}
-</div>
+                <td>${escapeHtml(teacher.phone)}</td>
 
-<div>
-<strong>Gender:</strong>
-${escapeHtml(student.gender)}
-</div>
+                <td>${escapeHtml(teacher.email)}</td>
 
-<div>
-<strong>Date of Birth:</strong>
-${escapeHtml(student.dob||"Not provided")}
-</div>
+                <td>${escapeHtml(teacher.qualification)}</td>
 
-<div>
-<strong>Phone:</strong>
-${escapeHtml(student.phone||"Not provided")}
-</div>
+                <td>${escapeHtml(teacher.subjects)}</td>
 
-<div>
-<strong>Email:</strong>
-${escapeHtml(student.email||"Not provided")}
-</div>
+                <td>${escapeHtml(teacher.username)}</td>
 
-</div>
+                <td>
 
-</div>
+                    <div class="action-buttons">
 
-`).join("");
+                        <button
+                            class="edit-btn"
+                            onclick="editTeacher('${teacher.id}')"
+                        >
+                            Edit
+                        </button>
 
-}
+                        <button
+                            class="delete-btn"
+                            onclick="deleteTeacher('${teacher.id}')"
+                        >
+                            Delete
+                        </button>
 
+                    </div>
 
-/* =========================
-   STATUS
-========================= */
+                </td>
 
-function showStatus(id,message,success){
+            </tr>
 
-    const element=document.getElementById(id);
-
-    element.textContent=message;
-
-    element.className=
-        "status-message "+
-        (success?"status-success":"status-error");
-
-
-    setTimeout(()=>{
-        element.className="status-message";
-    },4000);
+        `).join("");
 
 }
 
 
-/* =========================
-   START
-========================= */
+document.getElementById("teacherSearch")
+    .addEventListener("input",renderTeachers);
+
+
+window.editTeacher = function(id){
+
+    const teacher =
+        getTeachers().find(t => t.id === id);
+
+    if(!teacher) return;
+
+
+    document.getElementById("editingTeacherId").value =
+        teacher.id;
+
+    document.getElementById("teacherId").value =
+        teacher.id;
+
+    document.getElementById("teacherName").value =
+        teacher.name;
+
+    document.getElementById("teacherGender").value =
+        teacher.gender;
+
+    document.getElementById("teacherDob").value =
+        teacher.dob;
+
+    document.getElementById("teacherPhone").value =
+        teacher.phone;
+
+    document.getElementById("teacherEmail").value =
+        teacher.email;
+
+    document.getElementById("teacherAddress").value =
+        teacher.address;
+
+    document.getElementById("teacherQualification").value =
+        teacher.qualification;
+
+    document.getElementById("teacherSubjects").value =
+        teacher.subjects;
+
+    document.getElementById("teacherUsername").value =
+        teacher.username;
+
+    document.getElementById("teacherPassword").value =
+        teacher.password;
+
+
+    document.getElementById("cancelTeacherEdit")
+        .style.display="inline-block";
+
+
+    showPage("teachers");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+};
+
+
+window.deleteTeacher = function(id){
+
+    if(!confirm("Delete this teacher?")){
+        return;
+    }
+
+
+    let teachers = getTeachers();
+
+    teachers =
+        teachers.filter(teacher =>
+            teacher.id !== id
+        );
+
+    saveTeachers(teachers);
+
+
+    renderTeachers();
+
+    updateTeacherCount();
+
+};
+
+
+function resetTeacherForm(){
+
+    teacherForm.reset();
+
+    document.getElementById("editingTeacherId")
+        .value="";
+
+    document.getElementById("cancelTeacherEdit")
+        .style.display="none";
+
+}
+
+
+document.getElementById("cancelTeacherEdit")
+    .addEventListener("click",resetTeacherForm);
+
+
+/* ================================
+   TEACHER SUBJECTS
+================================ */
+
+function renderTeacherSubjects(user){
+
+    const teachers = getTeachers();
+
+    const teacher =
+        teachers.find(t => t.id === user.id);
+
+
+    const container =
+        document.getElementById("teacherSubjectsContent");
+
+
+    if(!teacher){
+
+        container.textContent =
+            "Teacher account not found.";
+
+        return;
+    }
+
+
+    container.innerHTML = `
+        <strong>Teacher:</strong>
+        ${escapeHtml(teacher.name)}
+        <br><br>
+
+        <strong>Qualification:</strong>
+        ${escapeHtml(teacher.qualification)}
+        <br><br>
+
+        <strong>Subject(s):</strong>
+        ${escapeHtml(teacher.subjects)}
+    `;
+
+}
+
+
+/* ================================
+   INITIALIZE
+================================ */
 
 getStudents();
 getParents();
+getTeachers();
 
 updateStudentCount();
 updateParentCount();
+updateTeacherCount();
 
 renderStudents();
 renderParents();
+renderTeachers();
+
 renderStudentCheckboxes();
 
 
-const savedUser=
+const savedUser =
     JSON.parse(
-        localStorage.getItem("schoolPortalUser")||"null"
+        localStorage.getItem("schoolPortalUser") || "null"
     );
 
 
