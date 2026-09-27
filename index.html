@@ -1,10 +1,11 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>School Portal</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,78 +19,130 @@
 
         <div class="login-container">
 
-            <div class="school-brand">
-                <div class="school-logo">🎓</div>
+            <div class="login-header">
+
+                <div class="school-logo">
+                    SP
+                </div>
+
                 <h1>School Portal</h1>
-                <p>Student & Parent Information System</p>
-            </div>
 
-            <div class="login-card">
-
-                <h2>Welcome Back</h2>
-                <p class="login-subtitle">Sign in to access your portal</p>
-
-                <form id="loginForm">
-
-                    <div class="form-group">
-                        <label for="userType">Login As</label>
-
-                        <select id="userType" required>
-                            <option value="">Select account type</option>
-                            <option value="student">Student</option>
-                            <option value="parent">Parent / Guardian</option>
-                            <option value="admin">School Administrator</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Username / ID</label>
-
-                        <input
-                            type="text"
-                            id="username"
-                            placeholder="Enter your username or ID"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Enter your password"
-                            required
-                        >
-                    </div>
-
-                    <div class="login-options">
-
-                        <label class="remember">
-                            <input type="checkbox" id="rememberMe">
-                            Remember me
-                        </label>
-
-                        <a href="#" onclick="forgotPassword(event)">
-                            Forgot password?
-                        </a>
-
-                    </div>
-
-                    <button type="submit" class="login-button">
-                        Sign In
-                    </button>
-
-                </form>
-
-                <div id="loginMessage" class="login-message"></div>
+                <p>Student & Parent Management System</p>
 
             </div>
 
-            <p class="login-footer">
-                © 2026 School Portal. All rights reserved.
-            </p>
+            <form id="loginForm" class="login-form">
+
+                <div class="form-group">
+
+                    <label for="userType">
+                        Account Type
+                    </label>
+
+                    <select id="userType" required>
+
+                        <option value="student">
+                            Student
+                        </option>
+
+                        <option value="parent">
+                            Parent / Guardian
+                        </option>
+
+                        <option value="admin">
+                            School Administrator
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="login-options">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                        >
+
+                        Remember me
+
+                    </label>
+
+                    <a href="#" onclick="alert('Please contact the school administrator to reset your password.')">
+                        Forgot password?
+                    </a>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    Login
+                </button>
+
+
+                <div id="loginMessage"></div>
+
+            </form>
+
+
+            <div class="demo-login">
+
+                <h3>Demo Login Details</h3>
+
+                <p>
+                    <strong>Student:</strong>
+                    student001 / 123456
+                </p>
+
+                <p>
+                    <strong>Parent:</strong>
+                    parent001 / 123456
+                </p>
+
+                <p>
+                    <strong>Admin:</strong>
+                    admin / admin123
+                </p>
+
+            </div>
 
         </div>
 
@@ -97,22 +150,52 @@
 
 
     <!-- =========================
-         MAIN PORTAL
+         PORTAL
     ========================== -->
 
-    <div id="portalPage" class="portal-page hidden">
+    <div id="portalPage" class="portal-page" style="display:none;">
+
 
         <!-- SIDEBAR -->
 
-        <aside class="sidebar" id="sidebar">
+        <aside id="sidebar" class="sidebar">
 
-            <div class="sidebar-brand">
+            <div class="sidebar-header">
 
-                <div class="sidebar-logo">🎓</div>
+                <div class="school-logo small">
+                    SP
+                </div>
 
                 <div>
+
                     <h2>School Portal</h2>
-                    <span>Information System</span>
+
+                    <span>Management System</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="sidebar-user">
+
+                <div
+                    id="sidebarAvatar"
+                    class="user-avatar"
+                >
+                    G
+                </div>
+
+                <div>
+
+                    <strong id="sidebarUserName">
+                        User
+                    </strong>
+
+                    <span id="sidebarUserType">
+                        Student
+                    </span>
+
                 </div>
 
             </div>
@@ -120,75 +203,89 @@
 
             <nav class="sidebar-nav">
 
-                <a href="#" class="nav-link active" data-page="dashboard">
-                    <span>📊</span>
-                    Dashboard
+                <a
+                    href="#"
+                    class="nav-link active"
+                    data-page="dashboard"
+                >
+                    🏠 Dashboard
                 </a>
 
-                <a href="#" class="nav-link" data-page="profile">
-                    <span>👤</span>
-                    My Profile
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="profile"
+                >
+                    👤 My Profile
                 </a>
 
-                <a href="#" class="nav-link" data-page="subjects">
-                    <span>📚</span>
-                    Subjects
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="subjects"
+                >
+                    📚 Subjects
                 </a>
 
-                <a href="#" class="nav-link" data-page="results">
-                    <span>📈</span>
-                    Results
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="results"
+                >
+                    📝 Results
                 </a>
 
-                <a href="#" class="nav-link" data-page="attendance">
-                    <span>📅</span>
-                    Attendance
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="attendance"
+                >
+                    📅 Attendance
                 </a>
 
-                <a href="#" class="nav-link" data-page="assignments">
-                    <span>📝</span>
-                    Assignments
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="assignments"
+                >
+                    📋 Assignments
                 </a>
 
-                <a href="#" class="nav-link" data-page="fees">
-                    <span>💰</span>
-                    Fees
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="fees"
+                >
+                    💰 Fees
                 </a>
 
-                <a href="#" class="nav-link" data-page="announcements">
-                    <span>📢</span>
-                    Announcements
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="announcements"
+                >
+                    📢 Announcements
                 </a>
 
-                <div class="sidebar-divider"></div>
-
-                <a href="#" class="nav-link" data-page="settings">
-                    <span>⚙️</span>
-                    Settings
-                </a>
-
-                <a href="#" class="nav-link logout-link" onclick="logout(event)">
-                    <span>🚪</span>
-                    Logout
+                <a
+                    href="#"
+                    class="nav-link"
+                    data-page="settings"
+                >
+                    ⚙️ Settings
                 </a>
 
             </nav>
 
-            <div class="sidebar-user">
 
-                <div class="user-avatar" id="sidebarAvatar">
-                    G
-                </div>
+            <div class="sidebar-bottom">
 
-                <div>
-                    <strong id="sidebarUserName">
-                        User
-                    </strong>
-
-                    <small id="sidebarUserType">
-                        Student
-                    </small>
-                </div>
+                <button
+                    id="logoutBtn"
+                    class="logout-button"
+                >
+                    🚪 Logout
+                </button>
 
             </div>
 
@@ -199,15 +296,12 @@
 
         <main class="main-content">
 
+
             <!-- TOP BAR -->
 
             <header class="topbar">
 
-                <button class="menu-button" onclick="toggleSidebar()">
-                    ☰
-                </button>
-
-                <div class="page-title">
+                <div>
 
                     <h1 id="pageTitle">
                         Dashboard
@@ -220,29 +314,22 @@
                 </div>
 
 
-                <div class="topbar-actions">
+                <div class="topbar-user">
 
-                    <button class="notification-button">
-                        🔔
-                        <span class="notification-count">3</span>
-                    </button>
+                    <div>
 
-                    <div class="topbar-user">
+                        <strong id="topUserName">
+                            User
+                        </strong>
 
-                        <div class="user-avatar">
-                            G
-                        </div>
+                        <span id="topUserType">
+                            Student
+                        </span>
 
-                        <div>
-                            <strong id="topUserName">
-                                User
-                            </strong>
+                    </div>
 
-                            <small id="topUserType">
-                                Student
-                            </small>
-                        </div>
-
+                    <div class="top-avatar">
+                        G
                     </div>
 
                 </div>
@@ -250,412 +337,277 @@
             </header>
 
 
-            <!-- PAGE CONTENT -->
+            <!-- =========================
+                 DASHBOARD
+            ========================== -->
 
-            <section class="content-area">
+            <section
+                id="dashboardPage"
+                class="portal-section"
+            >
+
+                <div class="welcome-card">
+
+                    <div>
+
+                        <h2>
+                            Welcome, <span id="welcomeName">
+                                User
+                            </span> 👋
+                        </h2>
+
+                        <p>
+                            Here's an overview of your school information.
+                        </p>
+
+                    </div>
+
+                </div>
 
 
-                <!-- DASHBOARD -->
+                <div class="stats-grid">
 
-                <div class="page-section active-page" id="dashboardPage">
+                    <div class="stat-card">
 
-                    <div class="welcome-card">
+                        <span class="stat-icon">
+                            📚
+                        </span>
 
                         <div>
 
-                            <span class="welcome-label">
-                                Welcome back
-                            </span>
+                            <h3>8</h3>
 
-                            <h2 id="welcomeName">
-                                Student
-                            </h2>
+                            <p>Subjects</p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-icon">
+                            📝
+                        </span>
+
+                        <div>
+
+                            <h3>78%</h3>
+
+                            <p>Average Result</p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-icon">
+                            📅
+                        </span>
+
+                        <div>
+
+                            <h3>94%</h3>
+
+                            <p>Attendance</p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-icon">
+                            📋
+                        </span>
+
+                        <div>
+
+                            <h3>4</h3>
+
+                            <p>Assignments</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="content-grid">
+
+                    <div class="content-card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                Recent Announcements
+                            </h3>
+
+                        </div>
+
+                        <div class="announcement-item">
+
+                            <strong>
+                                Mid-Term Examination
+                            </strong>
 
                             <p>
-                                Here's what's happening with your school account.
+                                Mid-term examinations begin next week.
+                            </p>
+
+                            <small>
+                                School Administration
+                            </small>
+
+                        </div>
+
+
+                        <div class="announcement-item">
+
+                            <strong>
+                                Parent Meeting
+                            </strong>
+
+                            <p>
+                                Parent-teacher meeting scheduled for Friday.
+                            </p>
+
+                            <small>
+                                School Administration
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="content-card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                Upcoming Assignments
+                            </h3>
+
+                        </div>
+
+                        <div class="assignment-item">
+
+                            <strong>
+                                Mathematics
+                            </strong>
+
+                            <span>
+                                Due: Monday
+                            </span>
+
+                        </div>
+
+
+                        <div class="assignment-item">
+
+                            <strong>
+                                Science
+                            </strong>
+
+                            <span>
+                                Due: Wednesday
+                            </span>
+
+                        </div>
+
+
+                        <div class="assignment-item">
+
+                            <strong>
+                                English
+                            </strong>
+
+                            <span>
+                                Due: Friday
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROFILE -->
+
+            <section
+                id="profilePage"
+                class="portal-section"
+                style="display:none;"
+            >
+
+                <div class="content-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            My Profile
+                        </h3>
+
+                    </div>
+
+                    <div class="profile-grid">
+
+                        <div>
+
+                            <label>
+                                Full Name
+                            </label>
+
+                            <p id="profileName">
+                                User
                             </p>
 
                         </div>
 
-                        <div class="welcome-icon">
-                            🎓
-                        </div>
 
-                    </div>
+                        <div>
 
+                            <label>
+                                Student / User ID
+                            </label>
 
-                    <!-- STAT CARDS -->
-
-                    <div class="stats-grid">
-
-                        <div class="stat-card">
-
-                            <div class="stat-icon">
-                                📚
-                            </div>
-
-                            <div>
-                                <span>Subjects</span>
-                                <strong>8</strong>
-                            </div>
+                            <p id="profileId">
+                                STU-001
+                            </p>
 
                         </div>
 
 
-                        <div class="stat-card">
+                        <div>
 
-                            <div class="stat-icon">
-                                📈
-                            </div>
+                            <label>
+                                Class
+                            </label>
 
-                            <div>
-                                <span>Average Score</span>
-                                <strong>78%</strong>
-                            </div>
-
-                        </div>
-
-
-                        <div class="stat-card">
-
-                            <div class="stat-icon">
-                                📅
-                            </div>
-
-                            <div>
-                                <span>Attendance</span>
-                                <strong>94%</strong>
-                            </div>
+                            <p id="profileClass">
+                                Basic 8
+                            </p>
 
                         </div>
 
 
-                        <div class="stat-card">
-
-                            <div class="stat-icon">
-                                💰
-                            </div>
-
-                            <div>
-                                <span>Fee Balance</span>
-                                <strong>GH₵ 1,250</strong>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- DASHBOARD GRID -->
-
-                    <div class="dashboard-grid">
-
-
-                        <!-- RECENT RESULTS -->
-
-                        <div class="dashboard-card">
-
-                            <div class="card-header">
-
-                                <div>
-                                    <h3>Recent Results</h3>
-                                    <p>Latest academic performance</p>
-                                </div>
-
-                                <button
-                                    class="view-button"
-                                    onclick="showPage('results')"
-                                >
-                                    View All
-                                </button>
-
-                            </div>
-
-
-                            <div class="result-list">
-
-                                <div class="result-item">
-
-                                    <div class="subject-icon">
-                                        M
-                                    </div>
-
-                                    <div class="result-info">
-
-                                        <strong>
-                                            Mathematics
-                                        </strong>
-
-                                        <span>
-                                            Mid-Term Assessment
-                                        </span>
-
-                                    </div>
-
-                                    <strong class="score">
-                                        82%
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="result-item">
-
-                                    <div class="subject-icon">
-                                        E
-                                    </div>
-
-                                    <div class="result-info">
-
-                                        <strong>
-                                            English Language
-                                        </strong>
-
-                                        <span>
-                                            Mid-Term Assessment
-                                        </span>
-
-                                    </div>
-
-                                    <strong class="score">
-                                        79%
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="result-item">
-
-                                    <div class="subject-icon">
-                                        S
-                                    </div>
-
-                                    <div class="result-info">
-
-                                        <strong>
-                                            Science
-                                        </strong>
-
-                                        <span>
-                                            Mid-Term Assessment
-                                        </span>
-
-                                    </div>
-
-                                    <strong class="score">
-                                        85%
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="result-item">
-
-                                    <div class="subject-icon">
-                                        C
-                                    </div>
-
-                                    <div class="result-info">
-
-                                        <strong>
-                                            Computing
-                                        </strong>
-
-                                        <span>
-                                            Class Assessment
-                                        </span>
-
-                                    </div>
-
-                                    <strong class="score">
-                                        91%
-                                    </strong>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ANNOUNCEMENTS -->
-
-                        <div class="dashboard-card">
-
-                            <div class="card-header">
-
-                                <div>
-                                    <h3>Announcements</h3>
-                                    <p>Latest school updates</p>
-                                </div>
-
-                                <button
-                                    class="view-button"
-                                    onclick="showPage('announcements')"
-                                >
-                                    View All
-                                </button>
-
-                            </div>
-
-
-                            <div class="announcement-list">
-
-                                <div class="announcement-item">
-
-                                    <div class="announcement-icon">
-                                        📢
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Parent-Teacher Meeting
-                                        </strong>
-
-                                        <p>
-                                            Scheduled for October 5, 2026.
-                                        </p>
-
-                                        <small>
-                                            2 hours ago
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="announcement-item">
-
-                                    <div class="announcement-icon">
-                                        🏫
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            School Reopening
-                                        </strong>
-
-                                        <p>
-                                            Please take note of the new term dates.
-                                        </p>
-
-                                        <small>
-                                            Yesterday
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="announcement-item">
-
-                                    <div class="announcement-icon">
-                                        ⚽
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Inter-House Sports
-                                        </strong>
-
-                                        <p>
-                                            Registration is now open.
-                                        </p>
-
-                                        <small>
-                                            2 days ago
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- UPCOMING -->
-
-                    <div class="dashboard-card">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h3>Upcoming</h3>
-                                <p>Important dates and activities</p>
-                            </div>
-
-                        </div>
-
-
-                        <div class="upcoming-grid">
-
-                            <div class="upcoming-item">
-
-                                <div class="date-box">
-                                    <strong>28</strong>
-                                    <span>SEP</span>
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        Mathematics Assignment
-                                    </strong>
-
-                                    <p>
-                                        Due by 4:00 PM
-                                    </p>
-                                </div>
-
-                            </div>
-
-
-                            <div class="upcoming-item">
-
-                                <div class="date-box">
-                                    <strong>30</strong>
-                                    <span>SEP</span>
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        Science Test
-                                    </strong>
-
-                                    <p>
-                                        Science Laboratory
-                                    </p>
-                                </div>
-
-                            </div>
-
-
-                            <div class="upcoming-item">
-
-                                <div class="date-box">
-                                    <strong>05</strong>
-                                    <span>OCT</span>
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        Parent-Teacher Meeting
-                                    </strong>
-
-                                    <p>
-                                        School Auditorium
-                                    </p>
-                                </div>
-
-                            </div>
+                        <div>
+
+                            <label>
+                                Academic Year
+                            </label>
+
+                            <p>
+                                2026 / 2027
+                            </p>
 
                         </div>
 
@@ -663,198 +615,47 @@
 
                 </div>
 
-
-                <!-- PROFILE -->
-
-                <div class="page-section" id="profilePage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>My Profile</h2>
-                            <p>View your personal information</p>
-                        </div>
-
-                    </div>
+            </section>
 
 
-                    <div class="profile-card">
+            <!-- SUBJECTS -->
 
-                        <div class="profile-header">
+            <section
+                id="subjectsPage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                            <div class="large-avatar">
-                                G
-                            </div>
+                <div class="content-card">
 
-                            <div>
-                                <h2 id="profileName">
-                                    Gabriel Quansah
-                                </h2>
+                    <div class="card-header">
 
-                                <p>
-                                    Student ID: STU-001
-                                </p>
-
-                                <span class="status-badge">
-                                    Active
-                                </span>
-                            </div>
-
-                        </div>
-
-
-                        <div class="profile-details">
-
-                            <div class="detail-item">
-                                <span>Full Name</span>
-                                <strong>Gabriel Quansah</strong>
-                            </div>
-
-                            <div class="detail-item">
-                                <span>Student ID</span>
-                                <strong>STU-001</strong>
-                            </div>
-
-                            <div class="detail-item">
-                                <span>Class</span>
-                                <strong>Basic 8</strong>
-                            </div>
-
-                            <div class="detail-item">
-                                <span>Academic Year</span>
-                                <strong>2026 / 2027</strong>
-                            </div>
-
-                            <div class="detail-item">
-                                <span>Email</span>
-                                <strong>student@example.com</strong>
-                            </div>
-
-                            <div class="detail-item">
-                                <span>Phone</span>
-                                <strong>+233 20 000 0000</strong>
-                            </div>
-
-                        </div>
+                        <h3>
+                            My Subjects
+                        </h3>
 
                     </div>
 
-                </div>
-
-
-                <!-- SUBJECTS -->
-
-                <div class="page-section" id="subjectsPage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>My Subjects</h2>
-                            <p>Subjects enrolled for this academic year</p>
-                        </div>
-
-                    </div>
-
-
-                    <div class="subjects-grid">
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">M</div>
-                            <h3>Mathematics</h3>
-                            <p>Mr. Mensah</p>
-                            <span>Average: 82%</span>
-                        </div>
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">E</div>
-                            <h3>English Language</h3>
-                            <p>Mrs. Owusu</p>
-                            <span>Average: 79%</span>
-                        </div>
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">S</div>
-                            <h3>Integrated Science</h3>
-                            <p>Mr. Boateng</p>
-                            <span>Average: 85%</span>
-                        </div>
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">C</div>
-                            <h3>Computing</h3>
-                            <p>Mr. Quaye</p>
-                            <span>Average: 91%</span>
-                        </div>
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">G</div>
-                            <h3>Social Studies</h3>
-                            <p>Mrs. Addo</p>
-                            <span>Average: 76%</span>
-                        </div>
-
-                        <div class="subject-card">
-                            <div class="subject-card-icon">R</div>
-                            <h3>Religious & Moral Education</h3>
-                            <p>Mr. Arthur</p>
-                            <span>Average: 81%</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RESULTS -->
-
-                <div class="page-section" id="resultsPage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>Academic Results</h2>
-                            <p>View your academic performance</p>
-                        </div>
-
-                        <button class="primary-button">
-                            📄 Download Report
-                        </button>
-
-                    </div>
-
-
-                    <div class="results-summary">
-
-                        <div>
-                            <span>Overall Average</span>
-                            <strong>82%</strong>
-                        </div>
-
-                        <div>
-                            <span>Position</span>
-                            <strong>8th</strong>
-                        </div>
-
-                        <div>
-                            <span>Total Subjects</span>
-                            <strong>8</strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="table-card">
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
 
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Class Score</th>
-                                    <th>Exam Score</th>
-                                    <th>Total</th>
-                                    <th>Grade</th>
+
+                                    <th>
+                                        Subject
+                                    </th>
+
+                                    <th>
+                                        Teacher
+                                    </th>
+
+                                    <th>
+                                        Periods
+                                    </th>
+
                                 </tr>
 
                             </thead>
@@ -862,35 +663,33 @@
                             <tbody>
 
                                 <tr>
-                                    <td>Mathematics</td>
-                                    <td>25</td>
-                                    <td>57</td>
-                                    <td>82</td>
-                                    <td><span class="grade">A</span></td>
+                                    <td>English Language</td>
+                                    <td>Mr. Mensah</td>
+                                    <td>5</td>
                                 </tr>
 
                                 <tr>
-                                    <td>English Language</td>
-                                    <td>24</td>
-                                    <td>55</td>
-                                    <td>79</td>
-                                    <td><span class="grade">B+</span></td>
+                                    <td>Mathematics</td>
+                                    <td>Mrs. Owusu</td>
+                                    <td>6</td>
                                 </tr>
 
                                 <tr>
                                     <td>Integrated Science</td>
-                                    <td>26</td>
-                                    <td>59</td>
-                                    <td>85</td>
-                                    <td><span class="grade">A</span></td>
+                                    <td>Mr. Addo</td>
+                                    <td>5</td>
                                 </tr>
 
                                 <tr>
-                                    <td>Computing</td>
-                                    <td>28</td>
-                                    <td>63</td>
-                                    <td>91</td>
-                                    <td><span class="grade">A+</span></td>
+                                    <td>Social Studies</td>
+                                    <td>Mrs. Boateng</td>
+                                    <td>4</td>
+                                </tr>
+
+                                <tr>
+                                    <td>ICT</td>
+                                    <td>Mr. Arthur</td>
+                                    <td>3</td>
                                 </tr>
 
                             </tbody>
@@ -901,57 +700,47 @@
 
                 </div>
 
-
-                <!-- ATTENDANCE -->
-
-                <div class="page-section" id="attendancePage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>Attendance</h2>
-                            <p>Track your school attendance</p>
-                        </div>
-
-                    </div>
+            </section>
 
 
-                    <div class="attendance-summary">
+            <!-- RESULTS -->
 
-                        <div class="attendance-card">
-                            <span>Present</span>
-                            <strong>47</strong>
-                        </div>
+            <section
+                id="resultsPage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                        <div class="attendance-card">
-                            <span>Absent</span>
-                            <strong>2</strong>
-                        </div>
+                <div class="content-card">
 
-                        <div class="attendance-card">
-                            <span>Late</span>
-                            <strong>1</strong>
-                        </div>
+                    <div class="card-header">
 
-                        <div class="attendance-card">
-                            <span>Attendance Rate</span>
-                            <strong>94%</strong>
-                        </div>
+                        <h3>
+                            Academic Results
+                        </h3>
 
                     </div>
 
-
-                    <div class="table-card">
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
 
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Day</th>
-                                    <th>Status</th>
-                                    <th>Remarks</th>
+
+                                    <th>
+                                        Subject
+                                    </th>
+
+                                    <th>
+                                        Score
+                                    </th>
+
+                                    <th>
+                                        Grade
+                                    </th>
+
                                 </tr>
 
                             </thead>
@@ -959,31 +748,33 @@
                             <tbody>
 
                                 <tr>
-                                    <td>25 Sep 2026</td>
-                                    <td>Friday</td>
-                                    <td><span class="attendance-present">Present</span></td>
-                                    <td>—</td>
+                                    <td>English Language</td>
+                                    <td>82%</td>
+                                    <td>A</td>
                                 </tr>
 
                                 <tr>
-                                    <td>24 Sep 2026</td>
-                                    <td>Thursday</td>
-                                    <td><span class="attendance-present">Present</span></td>
-                                    <td>—</td>
+                                    <td>Mathematics</td>
+                                    <td>76%</td>
+                                    <td>B+</td>
                                 </tr>
 
                                 <tr>
-                                    <td>23 Sep 2026</td>
-                                    <td>Wednesday</td>
-                                    <td><span class="attendance-late">Late</span></td>
-                                    <td>Arrived at 8:20 AM</td>
+                                    <td>Integrated Science</td>
+                                    <td>79%</td>
+                                    <td>B+</td>
                                 </tr>
 
                                 <tr>
-                                    <td>22 Sep 2026</td>
-                                    <td>Tuesday</td>
-                                    <td><span class="attendance-absent">Absent</span></td>
-                                    <td>Excused</td>
+                                    <td>Social Studies</td>
+                                    <td>81%</td>
+                                    <td>A</td>
+                                </tr>
+
+                                <tr>
+                                    <td>ICT</td>
+                                    <td>85%</td>
+                                    <td>A</td>
                                 </tr>
 
                             </tbody>
@@ -994,106 +785,152 @@
 
                 </div>
 
+            </section>
 
-                <!-- ASSIGNMENTS -->
 
-                <div class="page-section" id="assignmentsPage">
+            <!-- ATTENDANCE -->
 
-                    <div class="section-header">
+            <section
+                id="attendancePage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                        <div>
-                            <h2>Assignments</h2>
-                            <p>View your current assignments</p>
-                        </div>
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <h3>
+                            94%
+                        </h3>
+
+                        <p>
+                            Overall Attendance
+                        </p>
 
                     </div>
 
+                    <div class="stat-card">
+
+                        <h3>
+                            47
+                        </h3>
+
+                        <p>
+                            Days Present
+                        </p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h3>
+                            3
+                        </h3>
+
+                        <p>
+                            Days Absent
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="content-card">
+
+                    <h3>
+                        Attendance Record
+                    </h3>
+
+                    <p>
+                        Attendance records will appear here.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ASSIGNMENTS -->
+
+            <section
+                id="assignmentsPage"
+                class="portal-section"
+                style="display:none;"
+            >
+
+                <div class="content-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Assignments
+                        </h3>
+
+                    </div>
 
                     <div class="assignment-list">
 
-                        <div class="assignment-card">
+                        <div class="assignment-row">
 
-                            <div class="assignment-icon">
-                                📐
-                            </div>
+                            <div>
 
-                            <div class="assignment-info">
-
-                                <h3>
-                                    Mathematics — Algebra
-                                </h3>
+                                <strong>
+                                    Mathematics Homework
+                                </strong>
 
                                 <p>
-                                    Complete questions 1–20 on page 45.
+                                    Complete exercises 1–20.
                                 </p>
-
-                                <span>
-                                    Due: 28 September 2026
-                                </span>
 
                             </div>
 
-                            <button class="secondary-button">
-                                View
-                            </button>
+                            <span>
+                                Due Monday
+                            </span>
 
                         </div>
 
 
-                        <div class="assignment-card">
+                        <div class="assignment-row">
 
-                            <div class="assignment-icon">
-                                🔬
-                            </div>
+                            <div>
 
-                            <div class="assignment-info">
-
-                                <h3>
+                                <strong>
                                     Science Project
-                                </h3>
+                                </strong>
 
                                 <p>
-                                    Prepare a report on the water cycle.
+                                    Prepare a short report.
                                 </p>
-
-                                <span>
-                                    Due: 30 September 2026
-                                </span>
 
                             </div>
 
-                            <button class="secondary-button">
-                                View
-                            </button>
+                            <span>
+                                Due Wednesday
+                            </span>
 
                         </div>
 
 
-                        <div class="assignment-card">
+                        <div class="assignment-row">
 
-                            <div class="assignment-icon">
-                                💻
-                            </div>
+                            <div>
 
-                            <div class="assignment-info">
-
-                                <h3>
-                                    Computing Assignment
-                                </h3>
+                                <strong>
+                                    English Essay
+                                </strong>
 
                                 <p>
-                                    Create a simple HTML webpage.
+                                    Write a 500-word essay.
                                 </p>
-
-                                <span>
-                                    Due: 2 October 2026
-                                </span>
 
                             </div>
 
-                            <button class="secondary-button">
-                                View
-                            </button>
+                            <span>
+                                Due Friday
+                            </span>
 
                         </div>
 
@@ -1101,52 +938,47 @@
 
                 </div>
 
-
-                <!-- FEES -->
-
-                <div class="page-section" id="feesPage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>School Fees</h2>
-                            <p>View your fee information</p>
-                        </div>
-
-                    </div>
+            </section>
 
 
-                    <div class="fee-summary">
+            <!-- FEES -->
 
-                        <div>
-                            <span>Total Fees</span>
-                            <strong>GH₵ 5,000</strong>
-                        </div>
+            <section
+                id="feesPage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                        <div>
-                            <span>Amount Paid</span>
-                            <strong>GH₵ 3,750</strong>
-                        </div>
+                <div class="content-card">
 
-                        <div>
-                            <span>Balance</span>
-                            <strong>GH₵ 1,250</strong>
-                        </div>
+                    <div class="card-header">
+
+                        <h3>
+                            Fees & Payments
+                        </h3>
 
                     </div>
 
-
-                    <div class="table-card">
+                    <div class="table-container">
 
                         <table>
 
                             <thead>
 
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
                                 </tr>
 
                             </thead>
@@ -1154,24 +986,35 @@
                             <tbody>
 
                                 <tr>
-                                    <td>First Term Fees</td>
-                                    <td>GH₵ 2,500</td>
-                                    <td><span class="paid">Paid</span></td>
-                                    <td>05 Sep 2026</td>
+
+                                    <td>
+                                        School Fees
+                                    </td>
+
+                                    <td>
+                                        GH₵ 2,500
+                                    </td>
+
+                                    <td>
+                                        Pending
+                                    </td>
+
                                 </tr>
 
                                 <tr>
-                                    <td>Second Installment</td>
-                                    <td>GH₵ 1,250</td>
-                                    <td><span class="paid">Paid</span></td>
-                                    <td>18 Sep 2026</td>
-                                </tr>
 
-                                <tr>
-                                    <td>Outstanding Balance</td>
-                                    <td>GH₵ 1,250</td>
-                                    <td><span class="pending">Pending</span></td>
-                                    <td>—</td>
+                                    <td>
+                                        ICT Levy
+                                    </td>
+
+                                    <td>
+                                        GH₵ 150
+                                    </td>
+
+                                    <td>
+                                        Paid
+                                    </td>
+
                                 </tr>
 
                             </tbody>
@@ -1182,171 +1025,80 @@
 
                 </div>
 
+            </section>
 
-                <!-- ANNOUNCEMENTS -->
 
-                <div class="page-section" id="announcementsPage">
+            <!-- ANNOUNCEMENTS -->
 
-                    <div class="section-header">
+            <section
+                id="announcementsPage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                        <div>
-                            <h2>Announcements</h2>
-                            <p>Important school information</p>
-                        </div>
+                <div class="content-card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            School Announcements
+                        </h3>
+
+                    </div>
+
+                    <div class="announcement-item">
+
+                        <strong>
+                            Mid-Term Examination
+                        </strong>
+
+                        <p>
+                            Mid-term examinations begin next week.
+                        </p>
 
                     </div>
 
 
-                    <div class="announcement-full">
+                    <div class="announcement-item">
 
-                        <article>
+                        <strong>
+                            Parent Meeting
+                        </strong>
 
-                            <div class="announcement-full-icon">
-                                📢
-                            </div>
-
-                            <div>
-
-                                <span>School Administration · Today</span>
-
-                                <h3>
-                                    Parent-Teacher Meeting
-                                </h3>
-
-                                <p>
-                                    Parents and guardians are invited to attend
-                                    the upcoming Parent-Teacher Meeting scheduled
-                                    for October 5, 2026.
-                                </p>
-
-                            </div>
-
-                        </article>
-
-
-                        <article>
-
-                            <div class="announcement-full-icon">
-                                🏫
-                            </div>
-
-                            <div>
-
-                                <span>School Administration · Yesterday</span>
-
-                                <h3>
-                                    School Reopening
-                                </h3>
-
-                                <p>
-                                    Students are reminded to take note of the
-                                    academic calendar and reopening dates.
-                                </p>
-
-                            </div>
-
-                        </article>
-
-
-                        <article>
-
-                            <div class="announcement-full-icon">
-                                ⚽
-                            </div>
-
-                            <div>
-
-                                <span>Sports Department · 2 days ago</span>
-
-                                <h3>
-                                    Inter-House Sports
-                                </h3>
-
-                                <p>
-                                    Registration for the annual Inter-House
-                                    Sports competition is now open.
-                                </p>
-
-                            </div>
-
-                        </article>
+                        <p>
+                            Parent-teacher meeting will be held on Friday.
+                        </p>
 
                     </div>
 
                 </div>
 
-
-                <!-- SETTINGS -->
-
-                <div class="page-section" id="settingsPage">
-
-                    <div class="section-header">
-
-                        <div>
-                            <h2>Settings</h2>
-                            <p>Manage your portal preferences</p>
-                        </div>
-
-                    </div>
+            </section>
 
 
-                    <div class="settings-card">
+            <!-- SETTINGS -->
 
-                        <div class="setting-item">
+            <section
+                id="settingsPage"
+                class="portal-section"
+                style="display:none;"
+            >
 
-                            <div>
-                                <h3>Email Notifications</h3>
-                                <p>
-                                    Receive important school notifications
-                                    by email.
-                                </p>
-                            </div>
+                <div class="content-card">
 
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span></span>
-                            </label>
+                    <div class="card-header">
 
-                        </div>
-
-
-                        <div class="setting-item">
-
-                            <div>
-                                <h3>Assignment Notifications</h3>
-                                <p>
-                                    Get notified when new assignments are posted.
-                                </p>
-                            </div>
-
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span></span>
-                            </label>
-
-                        </div>
-
-
-                        <div class="setting-item">
-
-                            <div>
-                                <h3>Result Notifications</h3>
-                                <p>
-                                    Receive notifications when results are published.
-                                </p>
-                            </div>
-
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span></span>
-                            </label>
-
-                        </div>
+                        <h3>
+                            Account Settings
+                        </h3>
 
                     </div>
+
+                    <p>
+                        Account settings and preferences will be available here.
+                    </p>
 
                 </div>
-
 
             </section>
 
@@ -1355,11 +1107,7 @@
     </div>
 
 
-    <!-- JAVASCRIPT -->
-
     <script src="script.js"></script>
 
 </body>
-
 </html>
-```
