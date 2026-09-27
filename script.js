@@ -1,11 +1,7 @@
 ```javascript
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ================================
-    // DEMO USER ACCOUNTS
-    // ================================
-
-    const demoUsers = {
+    const users = {
         student: {
             username: "student001",
             password: "123456",
@@ -35,13 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-    // ================================
-    // GET PAGE ELEMENTS
-    // ================================
-
     const loginPage = document.getElementById("loginPage");
     const portalPage = document.getElementById("portalPage");
-
     const loginForm = document.getElementById("loginForm");
     const loginMessage = document.getElementById("loginMessage");
 
@@ -52,169 +43,234 @@ document.addEventListener("DOMContentLoaded", function () {
     const logoutBtn = document.getElementById("logoutBtn");
 
 
-    // ================================
-    // SHOW LOGIN
-    // ================================
-
     function showLogin() {
 
-        if (portalPage) {
-            portalPage.style.display = "none";
-        }
+        loginPage.style.display = "flex";
+        portalPage.style.display = "none";
 
-        if (loginPage) {
-            loginPage.style.display = "flex";
-        }
     }
 
 
-    // ================================
-    // SHOW PORTAL
-    // ================================
+    function hideAllPages() {
 
-    function showPortal(user) {
+        document
+            .querySelectorAll(".portal-section")
+            .forEach(function (page) {
 
-        if (loginPage) {
-            loginPage.style.display = "none";
-        }
+                page.style.display = "none";
 
-        if (portalPage) {
-            portalPage.style.display = "flex";
-        }
+            });
+
+    }
 
 
-        // User information
+    function updateUserInformation(user) {
 
-        const sidebarUserName = document.getElementById("sidebarUserName");
-        const sidebarUserType = document.getElementById("sidebarUserType");
+        document.getElementById("sidebarUserName").textContent =
+            user.name;
 
-        const topUserName = document.getElementById("topUserName");
-        const topUserType = document.getElementById("topUserType");
+        document.getElementById("sidebarUserType").textContent =
+            user.role;
 
-        const welcomeName = document.getElementById("welcomeName");
+        document.getElementById("topUserName").textContent =
+            user.name;
 
-        const profileName = document.getElementById("profileName");
-        const profileId = document.getElementById("profileId");
-        const profileClass = document.getElementById("profileClass");
+        document.getElementById("topUserType").textContent =
+            user.role;
 
+        document.getElementById("profileName").textContent =
+            user.name;
 
-        if (sidebarUserName) {
-            sidebarUserName.textContent = user.name;
-        }
+        document.getElementById("profileId").textContent =
+            user.id;
 
-        if (sidebarUserType) {
-            sidebarUserType.textContent = user.role;
-        }
+        document.getElementById("profileClass").textContent =
+            user.className;
 
-        if (topUserName) {
-            topUserName.textContent = user.name;
-        }
-
-        if (topUserType) {
-            topUserType.textContent = user.role;
-        }
+        const welcomeName =
+            document.getElementById("welcomeName");
 
         if (welcomeName) {
             welcomeName.textContent = user.name;
         }
 
-        if (profileName) {
-            profileName.textContent = user.name;
+        const adminWelcomeName =
+            document.getElementById("adminWelcomeName");
+
+        if (adminWelcomeName) {
+            adminWelcomeName.textContent = user.name;
         }
 
-        if (profileId) {
-            profileId.textContent = user.id;
-        }
-
-        if (profileClass) {
-            profileClass.textContent = user.className;
-        }
+    }
 
 
-        // ================================
-        // NAVIGATION
-        // ================================
+    function hideAllNavigation() {
 
-        const studentNavigation =
-            document.getElementById("studentNavigation");
+        document.getElementById("studentNavigation")
+            .style.display = "none";
 
-        const parentNavigation =
-            document.getElementById("parentNavigation");
+        document.getElementById("parentNavigation")
+            .style.display = "none";
 
-        const adminNavigation =
-            document.getElementById("adminNavigation");
+        document.getElementById("adminNavigation")
+            .style.display = "none";
+
+    }
 
 
-        if (studentNavigation) {
-            studentNavigation.style.display = "none";
-        }
+    function showDashboard(user) {
 
-        if (parentNavigation) {
-            parentNavigation.style.display = "none";
-        }
+        hideAllPages();
 
-        if (adminNavigation) {
-            adminNavigation.style.display = "none";
-        }
+        hideAllNavigation();
+
+        updateUserInformation(user);
+
+        loginPage.style.display = "none";
+        portalPage.style.display = "flex";
 
 
         if (user.role === "Student") {
 
-            if (studentNavigation) {
-                studentNavigation.style.display = "block";
-            }
+            document.getElementById("studentNavigation")
+                .style.display = "block";
 
-            showPage("dashboard");
+            document.getElementById("dashboardPage")
+                .style.display = "block";
 
-        } else if (user.role === "Parent / Guardian") {
+            document.getElementById("pageTitle")
+                .textContent = "Dashboard";
 
-            if (parentNavigation) {
-                parentNavigation.style.display = "block";
-            }
+            document.getElementById("pageSubtitle")
+                .textContent =
+                "Welcome to your school portal.";
 
-            showPage("dashboard");
-
-        } else if (user.role === "Administrator") {
-
-            if (adminNavigation) {
-                adminNavigation.style.display = "block";
-            }
-
-            showPage("adminDashboard");
         }
+
+
+        else if (user.role === "Parent / Guardian") {
+
+            document.getElementById("parentNavigation")
+                .style.display = "block";
+
+            document.getElementById("dashboardPage")
+                .style.display = "block";
+
+            document.getElementById("pageTitle")
+                .textContent = "Dashboard";
+
+            document.getElementById("pageSubtitle")
+                .textContent =
+                "Welcome to your school portal.";
+
+        }
+
+
+        else if (user.role === "Administrator") {
+
+            document.getElementById("adminNavigation")
+                .style.display = "block";
+
+            document.getElementById("adminDashboardPage")
+                .style.display = "block";
+
+            document.getElementById("pageTitle")
+                .textContent =
+                "Administration Dashboard";
+
+            document.getElementById("pageSubtitle")
+                .textContent =
+                "Manage your school from one central dashboard.";
+
+        }
+
     }
 
 
-    // ================================
-    // SHOW A PORTAL PAGE
-    // ================================
+    loginForm.addEventListener("submit", function (event) {
 
-    function showPage(pageName) {
+        event.preventDefault();
 
-        const pages =
-            document.querySelectorAll(".portal-section");
+        const type = userType.value;
 
-        pages.forEach(function (page) {
-            page.style.display = "none";
-        });
+        const enteredUsername =
+            username.value.trim();
 
+        const enteredPassword =
+            password.value;
+
+        const user = users[type];
+
+
+        if (
+            user &&
+            enteredUsername === user.username &&
+            enteredPassword === user.password
+        ) {
+
+            localStorage.setItem(
+                "schoolPortalUser",
+                JSON.stringify(user)
+            );
+
+            loginMessage.textContent = "";
+            loginMessage.className = "";
+
+            showDashboard(user);
+
+        }
+
+        else {
+
+            loginMessage.textContent =
+                "Invalid username or password.";
+
+            loginMessage.className =
+                "error-message";
+
+        }
+
+    });
+
+
+    logoutBtn.addEventListener("click", function () {
+
+        localStorage.removeItem("schoolPortalUser");
+
+        loginForm.reset();
+
+        showLogin();
+
+    });
+
+
+    document.addEventListener("click", function (event) {
+
+        const link =
+            event.target.closest(".nav-link");
+
+        if (!link) return;
+
+        event.preventDefault();
+
+        const pageName =
+            link.getAttribute("data-page");
+
+        hideAllPages();
 
         const selectedPage =
             document.getElementById(pageName + "Page");
 
-
         if (selectedPage) {
+
             selectedPage.style.display = "block";
+
         }
 
-
-        // Page titles
 
         const titles = {
 
             dashboard: "Dashboard",
-
-            adminDashboard: "Administration Dashboard",
 
             profile: "My Profile",
 
@@ -252,288 +308,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
             reports: "Reports",
 
-            settings: "Settings"
+            settings: "Settings",
+
+            adminDashboard: "Administration Dashboard"
+
         };
 
 
-        const subtitles = {
+        document.getElementById("pageTitle")
+            .textContent =
+            titles[pageName] || "Dashboard";
 
-            dashboard: "Welcome to your school portal.",
-
-            adminDashboard:
-                "Manage your school from one central dashboard.",
-
-            profile:
-                "View your personal information.",
-
-            subjects:
-                "View your registered subjects.",
-
-            results:
-                "View academic results.",
-
-            attendance:
-                "View attendance records.",
-
-            assignments:
-                "View assignments and deadlines.",
-
-            fees:
-                "View fees and payment information.",
-
-            announcements:
-                "View important school announcements.",
-
-            students:
-                "Manage student records and enrollment.",
-
-            parents:
-                "Manage parents and guardians.",
-
-            teachers:
-                "Manage teachers and teaching assignments.",
-
-            classes:
-                "Manage school classes.",
-
-            schoolSubjects:
-                "Manage school subjects.",
-
-            schoolResults:
-                "Enter and manage student results.",
-
-            schoolAttendance:
-                "Record and monitor student attendance.",
-
-            schoolAssignments:
-                "Create and manage assignments.",
-
-            schoolFees:
-                "Manage school fees and payments.",
-
-            schoolAnnouncements:
-                "Publish important school information.",
-
-            reports:
-                "Generate school management reports.",
-
-            settings:
-                "Manage your account and portal settings."
-        };
-
-
-        const pageTitle =
-            document.getElementById("pageTitle");
-
-        const pageSubtitle =
-            document.getElementById("pageSubtitle");
-
-
-        if (pageTitle) {
-            pageTitle.textContent =
-                titles[pageName] || "Dashboard";
-        }
-
-        if (pageSubtitle) {
-            pageSubtitle.textContent =
-                subtitles[pageName] ||
-                "Welcome to your school portal.";
-        }
-
-
-        // Active navigation link
 
         document
             .querySelectorAll(".nav-link")
-            .forEach(function (link) {
+            .forEach(function (item) {
 
-                link.classList.remove("active");
+                item.classList.remove("active");
+
             });
 
+        link.classList.add("active");
 
-        document
-            .querySelectorAll(
-                '.nav-link[data-page="' + pageName + '"]'
-            )
-            .forEach(function (link) {
-
-                link.classList.add("active");
-            });
-    }
-
-
-    // ================================
-    // LOGIN
-    // ================================
-
-    if (loginForm) {
-
-        loginForm.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-
-            const selectedType =
-                userType ? userType.value : "";
-
-            const enteredUsername =
-                username ? username.value.trim() : "";
-
-            const enteredPassword =
-                password ? password.value : "";
-
-
-            const user =
-                demoUsers[selectedType];
-
-
-            if (
-                user &&
-                enteredUsername === user.username &&
-                enteredPassword === user.password
-            ) {
-
-                // Save login
-
-                localStorage.setItem(
-                    "schoolPortalUser",
-                    JSON.stringify(user)
-                );
-
-
-                // Clear error
-
-                if (loginMessage) {
-                    loginMessage.textContent = "";
-                    loginMessage.className = "";
-                }
-
-
-                // Open portal
-
-                showPortal(user);
-
-            } else {
-
-                if (loginMessage) {
-
-                    loginMessage.textContent =
-                        "Invalid username or password.";
-
-                    loginMessage.className =
-                        "error-message";
-                }
-            }
-
-        });
-    }
-
-
-    // ================================
-    // LOGOUT
-    // ================================
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", function () {
-
-            localStorage.removeItem(
-                "schoolPortalUser"
-            );
-
-            if (loginForm) {
-                loginForm.reset();
-            }
-
-            showLogin();
-        });
-    }
-
-
-    // ================================
-    // NAVIGATION LINKS
-    // ================================
-
-    document.addEventListener("click", function (event) {
-
-        const link =
-            event.target.closest(".nav-link");
-
-
-        if (!link) {
-            return;
-        }
-
-
-        event.preventDefault();
-
-
-        const pageName =
-            link.getAttribute("data-page");
-
-
-        if (pageName) {
-            showPage(pageName);
-        }
     });
 
-
-    // ================================
-    // QUICK ACTION BUTTONS
-    // ================================
 
     document.addEventListener("click", function (event) {
 
         const button =
             event.target.closest(".quick-action");
 
-
-        if (!button) {
-            return;
-        }
-
+        if (!button) return;
 
         const pageName =
             button.getAttribute("data-page");
 
+        hideAllPages();
 
-        if (pageName) {
-            showPage(pageName);
+        const selectedPage =
+            document.getElementById(pageName + "Page");
+
+        if (selectedPage) {
+
+            selectedPage.style.display = "block";
+
         }
+
+        const titles = {
+
+            students: "Students",
+
+            schoolResults: "Results Management",
+
+            schoolAttendance: "Attendance Management"
+
+        };
+
+        document.getElementById("pageTitle")
+            .textContent =
+            titles[pageName] || "Dashboard";
+
     });
 
-
-    // ================================
-    // VIEW LINKS
-    // ================================
-
-    document.addEventListener("click", function (event) {
-
-        const link =
-            event.target.closest(".view-link");
-
-
-        if (!link) {
-            return;
-        }
-
-
-        event.preventDefault();
-
-
-        const pageName =
-            link.getAttribute("data-page");
-
-
-        if (pageName) {
-            showPage(pageName);
-        }
-    });
-
-
-    // ================================
-    // RESTORE PREVIOUS LOGIN
-    // ================================
 
     const savedUser =
         localStorage.getItem("schoolPortalUser");
@@ -546,32 +382,34 @@ document.addEventListener("DOMContentLoaded", function () {
             const user =
                 JSON.parse(savedUser);
 
+            if (user && user.username) {
 
-            if (
-                user &&
-                user.username &&
-                user.role
-            ) {
-
-                showPortal(user);
+                showDashboard(user);
 
             } else {
 
                 showLogin();
+
             }
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             localStorage.removeItem(
                 "schoolPortalUser"
             );
 
             showLogin();
+
         }
 
-    } else {
+    }
+
+    else {
 
         showLogin();
+
     }
 
 });
