@@ -985,7 +985,8 @@ let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
     }
 ];
 
-let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];\nlet attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
+let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
+let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
 
 let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
 
@@ -994,7 +995,9 @@ let editingParentId = null;
 let editingTeacherId = null;
 let editingClassId = null;
 let editingSubjectId = null;
-let editingResultId = null;\nlet editingAttendanceId = null;\nlet editingTeacherAttendanceId = null;
+let editingResultId = null;
+let editingAttendanceId = null;
+let editingTeacherAttendanceId = null;
 
 
 /* =========================
@@ -1007,7 +1010,8 @@ function saveAll(){
     localStorage.setItem("schoolPortalTeachers",JSON.stringify(teachers));
     localStorage.setItem("schoolPortalClasses",JSON.stringify(classes));
     localStorage.setItem("schoolPortalSubjects",JSON.stringify(subjects));
-    localStorage.setItem("schoolPortalResults",JSON.stringify(results));\n    localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
+    localStorage.setItem("schoolPortalResults",JSON.stringify(results));
+    localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
 }
 
 function escapeHtml(value){
@@ -1076,7 +1080,8 @@ function refreshDashboard(){
     document.getElementById("teacherCount").textContent=teachers.length;
     document.getElementById("classCount").textContent=classes.length;
     document.getElementById("subjectCount").textContent=subjects.length;
-    document.getElementById("resultCount").textContent=results.length;\n    document.getElementById("attendanceCount").textContent=attendance.length;
+    document.getElementById("resultCount").textContent=results.length;
+    document.getElementById("attendanceCount").textContent=attendance.length;
 }
 
 
@@ -1410,7 +1415,8 @@ function deleteStudent(id){
         c.studentIds=(c.studentIds||[]).filter(x=>x!==id);
     });
 
-    results=results.filter(r=>r.studentId!==id);\n    attendance=attendance.filter(a=>a.studentId!==id);
+    results=results.filter(r=>r.studentId!==id);
+    attendance=attendance.filter(a=>a.studentId!==id);
 
     saveAll();
     renderStudents();
@@ -3157,7 +3163,9 @@ document.getElementById("parentSearch").addEventListener("input",renderParents);
 document.getElementById("teacherSearch").addEventListener("input",renderTeachers);
 document.getElementById("classSearch").addEventListener("input",renderClasses);
 document.getElementById("subjectSearch").addEventListener("input",renderSubjects);
-document.getElementById("resultSearch").addEventListener("input",renderResults);\ndocument.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);\ndocument.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
+document.getElementById("resultSearch").addEventListener("input",renderResults);
+document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
+document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
 
 
 /* =========================
