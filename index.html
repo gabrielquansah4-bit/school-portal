@@ -512,14 +512,13 @@ td{font-size:14px}
 <div id="loginScreen" class="login-screen">
     <div class="login-box">
         <h1>School Portal</h1>
-        <p>Student & Parent Management System</p>
+        <p>Admin, Teacher & Parent Management System</p>
 
         <div id="loginMessage" class="message"></div>
 
         <div class="form-group">
             <label>Account Type</label>
             <select id="loginRole">
-                <option value="Student">Student</option>
                 <option value="Parent">Parent / Guardian</option>
                 <option value="Teacher">Teacher</option>
                 <option value="Administrator">Administrator</option>
@@ -540,7 +539,6 @@ td{font-size:14px}
 
         <div class="demo-box">
             <strong>Demo Accounts</strong><br><br>
-            Student: student001 / 123456<br>
             Parent: parent001 / 123456 <small>(set your own password after first login)</small><br>
             Teacher: teacher001 / 123456<br>
             Administrator: admin / admin123
@@ -560,16 +558,6 @@ td{font-size:14px}
     <div class="nav-section">Main</div>
     <div class="nav-link" data-page="dashboard">Dashboard</div>
     <div class="nav-link" data-page="profile">My Profile</div>
-
-    <div id="studentNav">
-        <div class="nav-section">Student</div>
-        <div class="nav-link" data-page="subjects">My Subjects</div>
-        <div class="nav-link" data-page="studentResults">Results</div>
-        <div class="nav-link" data-page="attendance">Attendance</div>
-        <div class="nav-link" data-page="assignments">Assignments</div>
-        <div class="nav-link" data-page="fees">Fees</div>
-        <div class="nav-link" data-page="announcements">Announcements</div>
-    </div>
 
     <div id="parentNav">
         <div class="nav-section">Parent</div>
@@ -678,25 +666,10 @@ td{font-size:14px}
 </section>
 
 <!-- STUDENT SUBJECTS -->
-<section id="subjects" class="page">
-    <div class="page-header">
-        <div><h1>My Subjects</h1><p>Subjects assigned to your class.</p></div>
-    </div>
-    <div class="panel">
-        <div id="studentSubjectsContent"></div>
-    </div>
-</section>
+
 
 <!-- STUDENT RESULTS -->
-<section id="studentResults" class="page">
-    <div class="page-header">
-        <div><h1>My Results</h1><p>Your academic performance.</p></div>
-    </div>
-    <div id="studentResultSummary" class="cards"></div>
-    <div class="panel">
-        <div id="studentResultsContent"></div>
-    </div>
-</section>
+
 
 <!-- PARENT CHILDREN -->
 <section id="children" class="page">
@@ -1046,18 +1019,10 @@ td{font-size:14px}
 </section>
 
 <!-- STUDENT ATTENDANCE -->
-<section id="attendance" class="page">
-    <div class="page-header">
-        <div><h1>My Attendance</h1><p>Your attendance record.</p></div>
-    </div>
-    <div id="studentAttendanceSummary" class="cards"></div>
-    <div class="panel">
-        <div id="studentAttendanceContent"></div>
-    </div>
-</section>
-<section id="assignments" class="page"><div class="panel"><h1>Assignments</h1><p>Assignments Management will be added next.</p></div></section>
+
+
 <section id="fees" class="page"><div class="panel"><h1>Fees</h1><p>Fees Management will be added next.</p></div></section>
-<section id="announcements" class="page"><div class="panel"><h1>Announcements</h1><p>Announcements Management will be added next.</p></div></section>
+
 
 <section id="parentAttendance" class="page">
     <div class="page-header">
@@ -1396,28 +1361,6 @@ function login(){
         }
     }
 
-    if(role==="Student"){
-        const found=students.find(s=>s.username===username && s.password===password);
-
-        if(found){
-            user={
-                username:found.username,
-                name:found.name,
-                role:"Student",
-                id:found.id,
-                className:found.className
-            };
-        }else if(username==="student001" && password==="123456"){
-            user={
-                username:"student001",
-                name:"Gabriel Quansah",
-                role:"Student",
-                id:"STU-001",
-                className:"Basic 8"
-            };
-        }
-    }
-
     if(role==="Parent"){
         const found=parents.find(p=>p.username===username && p.password===password);
 
@@ -1451,6 +1394,11 @@ function login(){
         return;
     }
 
+    if(!["Administrator","Teacher","Parent"].includes(user.role)){
+        showMessage("loginMessage","This account type is no longer available.","error");
+        return;
+    }
+
     currentUser=user;
     localStorage.setItem("schoolPortalUser",JSON.stringify(user));
 
@@ -1463,9 +1411,6 @@ function showPortal(user){
 
     document.getElementById("topUser").textContent=user.name;
     document.getElementById("topRole").textContent=user.role;
-
-    document.getElementById("studentNav").style.display =
-        user.role==="Student" ? "block":"none";
 
     document.getElementById("parentNav").style.display =
         user.role==="Parent" ? "block":"none";
@@ -1499,8 +1444,11 @@ function logout(){
     document.getElementById("loginScreen").style.display="flex";
 }
 
-if(currentUser){
+if(currentUser && ["Administrator","Teacher","Parent"].includes(currentUser.role)){
     showPortal(currentUser);
+}else if(currentUser){
+    localStorage.removeItem("schoolPortalUser");
+    currentUser=null;
 }
 
 
@@ -1531,7 +1479,7 @@ function showPage(pageId){
         }
     });
 
-    const title=pageId==="adminResults" || pageId==="studentResults" || pageId==="parentResults" || pageId==="teacherResults"
+    const title=pageId==="adminResults" || pageId==="parentResults" || pageId==="teacherResults"
         ? "Results"
         : pageId.charAt(0).toUpperCase()+pageId.slice(1);
 
@@ -1542,13 +1490,10 @@ function showPage(pageId){
 
 function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
-    if(pageId==="subjects")renderStudentSubjects();
-    if(pageId==="studentResults")renderStudentResults();
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
     if(pageId==="teacherSubjects")renderTeacherSubjects();
     if(pageId==="teacherResults")renderTeacherResults();
-    if(pageId==="attendance")renderStudentAttendance();
     if(pageId==="parentAttendance")renderParentAttendance();
     if(pageId==="teacherAttendance")renderTeacherAttendance();
     if(pageId==="adminAttendance"){
