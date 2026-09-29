@@ -3090,8 +3090,9 @@ function renderResults(){
 ========================= */
 
 function getTeacherBulkClasses(){
-    if(!currentUser)return [];
-    return classes.filter(c=>c.teacherId===currentUser.id);
+    // The teacher selects the class only. All available classes are shown;
+    // the Excel sheet will then include every subject linked to that class.
+    return classes.filter(c=>c && c.id);
 }
 
 function getTeacherBulkSubjects(classId){
