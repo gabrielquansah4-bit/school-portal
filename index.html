@@ -1845,13 +1845,25 @@ function changePortalPassword(role){
     if(newPassword.length<6){showError("Your new password must be at least 6 characters.");return;}
     if(newPassword===current){showError("Your new password must be different from the current password.");return;}
     if(newPassword!==confirmPassword){showError("The new passwords do not match.");return;}
+    // Save the new password permanently to the parent's/teacher's account.
+    // The old temporary password is replaced immediately, so it can no longer be used.
     account.password=newPassword;
     account.mustChangePassword=false;
     saveAll();
+
+    // Keep the active session in sync with the saved account.
+    currentUser.password=newPassword;
     currentUser.mustChangePassword=false;
     localStorage.setItem("schoolPortalUser",JSON.stringify(currentUser));
-    if(message){message.className="message success";message.textContent="Password updated successfully.";}
-    setTimeout(()=>showPortal(currentUser),700);
+
+    if(message){
+        message.className="message success";
+        message.textContent=role==="Parent"
+            ? "Password created successfully. From now on, use your username and this new password to log in."
+            : "Password updated successfully.";
+    }
+
+    setTimeout(()=>showPortal(currentUser),900);
 }
 
 function openForgotPassword(){
@@ -2095,6 +2107,15 @@ document.getElementById("parentForm").addEventListener("submit",function(e){
             : true,
         studentIds
     };
+
+    // When editing an existing parent, keep the current password if the password field is left blank.
+    if(editingParentId){
+        const existing=parents.find(p=>p.id===editingParentId);
+        if(existing && !data.password) data.password=existing.password;
+    }else if(!data.password){
+        showMessage("parentMessage","Please set a temporary password for the new parent.","error");
+        return;
+    }
 
     if(editingParentId){
         const index=parents.findIndex(p=>p.id===editingParentId);
