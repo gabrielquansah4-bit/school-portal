@@ -1445,7 +1445,49 @@ function importValue(row, keys){
     return "";
 }
 
-function importRowsFromFile(file, callback){
+function rowHasData(row){
+    return Array.isArray(row) ? row.some(v=>String(v??"").trim()!=="") : Object.values(row||{}).some(v=>String(v??"").trim()!=="");
+}
+
+function detectHeaderRow(matrix, type){
+    const max=Math.min(matrix.length,40);
+    const studentKeys=["id","studentid","name","fullname","studentname","firstname","lastname","class","classname","classsection"];
+    const teacherKeys=["id","teacherid","name","fullname","teachername","firstname","lastname","phone","email","username","password","qualification","subjects"];
+    const keys=type==="teacher" ? teacherKeys : studentKeys;
+    let best={index:-1,score:0,headers:[]};
+    for(let i=0;i<max;i++){
+        const row=matrix[i]||[];
+        const headers=row.map(v=>String(v??"").trim());
+        if(!headers.some(Boolean)) continue;
+        const normalized=headers.map(normalizeImportKey);
+        const score=normalized.reduce((n,h)=>n+(keys.includes(h)?1:0),0);
+        if(score>best.score){best={index:i,score,headers};}
+    }
+    return best.score>=2 ? best : null;
+}
+
+function parseImportSheet(sheet,type){
+    const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:true,blankrows:false});
+    if(!matrix.length) return {rows:[],headerRow:-1,headers:[],totalRows:0};
+
+    const detected=detectHeaderRow(matrix,type);
+    if(!detected){
+        return {rows:[],headerRow:-1,headers:[],totalRows:Math.max(0,matrix.length-1),error:"Could not detect the header row. Expected columns such as Student ID, First Name, Last Name and Class."};
+    }
+
+    const headers=detected.headers.map((h,i)=>String(h||`Column ${i+1}`).trim()||`Column ${i+1}`);
+    const rows=[];
+    for(let r=detected.index+1;r<matrix.length;r++){
+        const values=matrix[r]||[];
+        if(!rowHasData(values)) continue;
+        const obj={};
+        headers.forEach((h,i)=>{obj[h]=values[i]??"";});
+        rows.push(obj);
+    }
+    return {rows,headerRow:detected.index,headers,totalRows:rows.length};
+}
+
+function importRowsFromFile(file, callback, type="student"){
     if(!file){ callback(new Error("Please select an Excel or CSV file first.")); return; }
     if(typeof XLSX==="undefined"){
         callback(new Error("Excel support could not be loaded. Check your internet connection and try again."));
@@ -1456,9 +1498,11 @@ function importRowsFromFile(file, callback){
         try{
             const data=new Uint8Array(e.target.result);
             const workbook=XLSX.read(data,{type:"array",cellDates:true});
+            if(!workbook.SheetNames.length) throw new Error("The selected file does not contain a worksheet.");
             const firstSheet=workbook.Sheets[workbook.SheetNames[0]];
-            const rows=XLSX.utils.sheet_to_json(firstSheet,{defval:""});
-            callback(null,rows);
+            const parsed=parseImportSheet(firstSheet,type);
+            if(parsed.error){ callback(new Error(parsed.error)); return; }
+            callback(null,parsed.rows,parsed);
         }catch(err){ callback(err); }
     };
     reader.onerror=function(){callback(new Error("The selected file could not be read."));};
@@ -1473,25 +1517,40 @@ function cleanDate(value){
     return isNaN(d) ? text : d.toISOString().slice(0,10);
 }
 
+function buildStudentName(row){
+    const full=String(importValue(row,["Name","Full Name","Student Name","StudentName"])).trim();
+    if(full) return full;
+    const first=String(importValue(row,["First Name","FirstName","Given Name","GivenName"])).trim();
+    const middle=String(importValue(row,["Middle Name","MiddleName"])).trim();
+    const last=String(importValue(row,["Last Name","LastName","Surname","Family Name"])).trim();
+    return [first,middle,last].filter(Boolean).join(" ").trim();
+}
+
 function importStudentsFromExcel(){
     const input=document.getElementById("studentExcelFile");
     const file=input?.files?.[0];
-    importRowsFromFile(file,function(err,rows){
+    importRowsFromFile(file,function(err,rows,meta){
         if(err){showMessage("studentImportMessage",err.message,"error");return;}
-        if(!rows.length){showMessage("studentImportMessage","No student rows were found in the file.","error");return;}
+        if(!rows.length){showMessage("studentImportMessage","No student data rows were found below the detected header row.","error");return;}
         let added=0,updated=0,skipped=0;
-        rows.forEach((row,index)=>{
-            const id=String(importValue(row,["ID","Student ID","StudentID"])).trim();
-            const name=String(importValue(row,["Name","Full Name","Student Name"])).trim();
-            if(!id||!name){skipped++;return;}
+        const reasons={};
+        rows.forEach(row=>{
+            const id=String(importValue(row,["ID","Student ID","StudentID","Student Id"])).trim();
+            const name=buildStudentName(row);
+            if(!id||!name){
+                skipped++;
+                const reason=!id&&!name?"missing Student ID and name":!id?"missing Student ID":"missing name";
+                reasons[reason]=(reasons[reason]||0)+1;
+                return;
+            }
             const data={
                 id,name,
                 gender:String(importValue(row,["Gender","Sex"])).trim(),
-                dob:cleanDate(importValue(row,["DOB","Date of Birth","DateOfBirth"])),
-                className:String(importValue(row,["Class","Class Name"])).trim(),
-                parent:String(importValue(row,["Parent","Parent / Guardian","Guardian"])).trim(),
-                phone:String(importValue(row,["Phone","Telephone","Mobile"])).trim(),
-                email:String(importValue(row,["Email","E-mail"])).trim()
+                dob:cleanDate(importValue(row,["DOB","Date of Birth","DateOfBirth","Birth Date"])),
+                className:String(importValue(row,["Class","Class Name","ClassName","Class / Section","ClassSection"])).trim(),
+                parent:String(importValue(row,["Parent","Parent / Guardian","Guardian","Parent Name"])).trim(),
+                phone:String(importValue(row,["Phone","Telephone","Mobile","Phone Number"])).trim(),
+                email:String(importValue(row,["Email","E-mail","Email Address"])).trim()
             };
             const existing=students.findIndex(s=>s.id===id);
             if(existing>=0){students[existing]={...students[existing],...data};updated++;}
@@ -1500,15 +1559,18 @@ function importStudentsFromExcel(){
         saveAll();
         renderStudents();
         refreshDashboard();
-        showMessage("studentImportMessage",`${added} student(s) added, ${updated} updated, ${skipped} skipped.`,skipped&&added+updated===0?"error":"success");
+        let msg=`Imported ${added+updated} student(s): ${added} added, ${updated} updated, ${skipped} skipped.`;
+        if(meta) msg+=` Detected header row ${meta.headerRow+1}: ${meta.headers.filter(Boolean).join(" | ")}.`;
+        if(skipped) msg+=` Skipped: ${Object.entries(reasons).map(([k,v])=>`${v} ${k}`).join(", ")}.`;
+        showMessage("studentImportMessage",msg,skipped&&added+updated===0?"error":"success");
         if(input)input.value="";
-    });
+    },"student");
 }
 
 function importTeachersFromExcel(){
     const input=document.getElementById("teacherExcelFile");
     const file=input?.files?.[0];
-    importRowsFromFile(file,function(err,rows){
+    importRowsFromFile(file,function(err,rows,meta){
         if(err){showMessage("teacherImportMessage",err.message,"error");return;}
         if(!rows.length){showMessage("teacherImportMessage","No teacher rows were found in the file.","error");return;}
         let added=0,updated=0,skipped=0;
@@ -1537,7 +1599,7 @@ function importTeachersFromExcel(){
         refreshDashboard();
         showMessage("teacherImportMessage",`${added} teacher(s) added, ${updated} updated, ${skipped} skipped.`,skipped&&added+updated===0?"error":"success");
         if(input)input.value="";
-    });
+    },"teacher");
 }
 
 function downloadStudentTemplate(){
