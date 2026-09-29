@@ -749,7 +749,7 @@ td{font-size:14px}
 <!-- TEACHER RESULTS -->
 <section id="teacherResults" class="page">
     <div class="page-header">
-        <div><h1>Student Results</h1><p>View and upload results for your classes and subjects.</p></div>
+        <div><h1>Student Results</h1><p>Download one Excel sheet for a class, enter marks progressively, and upload it for review.</p></div>
     </div>
 
     <div class="panel" id="teacherBulkMarksPanel">
@@ -3095,14 +3095,9 @@ function getTeacherBulkClasses(){
 }
 
 function getTeacherBulkSubjects(classId){
-    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
-
-    // If subjects have teacher assignments, only show this teacher's subjects.
-    const assigned=classSubjects.filter(s=>s.teacherId===currentUser?.id);
-    if(assigned.length)return assigned;
-
-    // Supports schools where subjects are linked to classes only.
-    return classSubjects.filter(s=>!s.teacherId);
+    // Teachers download one complete class sheet. Every subject linked
+    // to the selected class must appear on the Excel sheet.
+    return subjects.filter(s=>(s.classIds||[]).includes(classId));
 }
 
 function populateTeacherBulkMarksClassSelect(selected=""){
@@ -3147,7 +3142,7 @@ function downloadTeacherBulkMarksTemplate(){
         return;
     }
     if(!classSubjects.length){
-        showMessage("teacherBulkMarksMessage","No subjects available for this class and your teacher account.","error");
+        showMessage("teacherBulkMarksMessage","No subjects are linked to this class.","error");
         return;
     }
 
