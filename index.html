@@ -3072,6 +3072,13 @@ function renderResults(){
    TEACHER BULK MARKS UPLOAD
 ========================= */
 
+function normalizeExcelHeader(value){
+    return String(value||"")
+        .trim()
+        .replace(/\s+/g," ")
+        .toLowerCase();
+}
+
 function getTeacherBulkClasses(){
     // The teacher selects the class only. All available classes are shown;
     // the Excel sheet will then include every subject linked to that class.
@@ -3189,68 +3196,117 @@ function importTeacherBulkMarksFromExcel(){
     const classStudents=getClassStudents(classId);
     const classSubjects=getTeacherBulkSubjects(classId);
 
-    if(!schoolClass || !getTeacherBulkClasses().some(c=>c.id===classId)){
-        showMessage("teacherBulkMarksMessage","You are not assigned to this class.","error");
-        return;
-    }
+    if(!schoolClass){showMessage("teacherBulkMarksMessage","The selected class could not be found.","error");return;}
     if(!classStudents.length){showMessage("teacherBulkMarksMessage","This class has no students.","error");return;}
-    if(!classSubjects.length){showMessage("teacherBulkMarksMessage","No subjects are available for this class and your teacher account.","error");return;}
+    if(!classSubjects.length){showMessage("teacherBulkMarksMessage","No subjects are linked to this class.","error");return;}
 
     const reader=new FileReader();
     reader.onload=function(e){
         try{
-            const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+            // Read the actual workbook as an ArrayBuffer. Using a 2-D array
+            // instead of sheet_to_json makes the import tolerant of Excel
+            // formatting and prevents header parsing from failing.
+            let wb;
+            try{
+                wb=XLSX.read(e.target.result,{type:"array",cellDates:false,raw:false});
+            }catch(readErr){
+                throw new Error("Excel workbook could not be opened. Make sure you are uploading the .xlsx file downloaded from SwiftSchool, not the HTML portal file.");
+            }
+            if(!wb || !wb.SheetNames || !wb.SheetNames.length){
+                throw new Error("No worksheet found in the uploaded file.");
+            }
+
             const sheet=wb.Sheets[wb.SheetNames[0]];
-            const rows=XLSX.utils.sheet_to_json(sheet,{defval:""});
-            if(!rows.length){showMessage("teacherBulkMarksMessage","The Excel sheet is empty.","error");return;}
+            if(!sheet)throw new Error("The first worksheet could not be opened.");
 
-            const headers=Object.keys(rows[0]);
-            const findHeader=wanted=>headers.find(h=>normalizeExcelHeader(h)===normalizeExcelHeader(wanted));
-            const studentIdHeader=findHeader("Student ID");
-            const studentNameHeader=findHeader("Student Name");
+            const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false});
+            if(!matrix.length)throw new Error("The worksheet is empty.");
 
-            if(!studentIdHeader || !studentNameHeader){
-                showMessage("teacherBulkMarksMessage","The sheet must contain Student ID and Student Name columns. Download a new class sheet if needed.","error");
-                return;
+            // Find the header row rather than assuming it is always row 1.
+            let headerRowIndex=-1;
+            for(let i=0;i<Math.min(matrix.length,10);i++){
+                const row=Array.isArray(matrix[i])?matrix[i]:[];
+                const normalized=row.map(normalizeExcelHeader);
+                if(normalized.includes("student id") && normalized.includes("student name")){
+                    headerRowIndex=i;
+                    break;
+                }
+            }
+
+            if(headerRowIndex===-1){
+                throw new Error("Student ID and Student Name columns were not found. Please upload the Excel sheet downloaded from SwiftSchool.");
+            }
+
+            const headerRow=matrix[headerRowIndex].map(v=>String(v??"").trim());
+            const headerIndexes={};
+            headerRow.forEach((h,i)=>{
+                const key=normalizeExcelHeader(h);
+                if(key && headerIndexes[key]===undefined)headerIndexes[key]=i;
+            });
+
+            const findColumn=wanted=>{
+                const wantedKey=normalizeExcelHeader(wanted);
+                if(headerIndexes[wantedKey]!==undefined)return headerIndexes[wantedKey];
+                const wantedCompact=wantedKey.replace(/[^a-z0-9]+/g,"");
+                for(const key of Object.keys(headerIndexes)){
+                    const compact=key.replace(/[^a-z0-9]+/g,"");
+                    if(compact===wantedCompact)return headerIndexes[key];
+                }
+                return undefined;
+            };
+            const studentIdCol=findColumn("Student ID");
+            const studentNameCol=findColumn("Student Name");
+
+            if(studentIdCol===undefined || studentNameCol===undefined){
+                throw new Error("The sheet must contain Student ID and Student Name columns. Download a new class sheet and use that file.");
             }
 
             const columns={};
             const missing=[];
             classSubjects.forEach(subject=>{
-                const classHeader=findHeader(`${subject.name} Class Score /50`);
-                const examHeader=findHeader(`${subject.name} Exam Mark /100`);
-                if(!classHeader || !examHeader)missing.push(subject.name);
-                columns[subject.id]={subject,classHeader,examHeader};
+                const classCol=findColumn(`${subject.name} Class Score /50`);
+                const examCol=findColumn(`${subject.name} Exam Mark /100`);
+                if(classCol===undefined || examCol===undefined)missing.push(subject.name);
+                columns[subject.id]={subject,classCol,examCol};
             });
 
             if(missing.length){
-                showMessage("teacherBulkMarksMessage",`The sheet is missing columns for: ${missing.join(", ")}. Download a fresh class sheet.` ,"error");
-                return;
+                throw new Error(`The uploaded sheet is missing subject columns for: ${missing.join(", ")}. Please download a fresh class sheet.`);
             }
 
             const studentMap=new Map(classStudents.map(s=>[String(s.id).trim().toLowerCase(),s]));
             let created=0,updated=0,uploaded=0,skipped=0,incomplete=0;
             const errors=[];
 
-            rows.forEach((row,index)=>{
-                const rowNumber=index+2;
-                const studentId=String(row[studentIdHeader]??"").trim();
-                const studentName=String(row[studentNameHeader]??"").trim();
-                if(!studentId && !studentName)return;
+            for(let i=headerRowIndex+1;i<matrix.length;i++){
+                const row=Array.isArray(matrix[i])?matrix[i]:[];
+                const valueAt=col=>col===undefined?"":String(row[col]??"").trim();
+                const studentId=valueAt(studentIdCol);
+                const studentName=valueAt(studentNameCol);
 
+                if(!studentId && !studentName)continue;
+
+                const rowNumber=i+1;
                 const student=studentMap.get(studentId.toLowerCase());
-                if(!student){errors.push(`Row ${rowNumber}: Student ID ${studentId||"(blank)"} is not in this class.`);skipped++;return;}
+                if(!student){
+                    errors.push(`Row ${rowNumber}: Student ID ${studentId||"(blank)"} is not in this class.`);
+                    skipped++;
+                    continue;
+                }
+
                 if(studentName && studentName.toLowerCase()!==String(student.name).trim().toLowerCase()){
-                    errors.push(`Row ${rowNumber}: Student name does not match Student ID ${student.id}.`);skipped++;return;
+                    errors.push(`Row ${rowNumber}: Student name does not match Student ID ${student.id}.`);
+                    skipped++;
+                    continue;
                 }
 
                 let rowUploaded=0;
 
-                Object.values(columns).forEach(({subject,classHeader,examHeader})=>{
-                    const rawClass=String(row[classHeader]??"").trim();
-                    const rawExam=String(row[examHeader]??"").trim();
+                Object.values(columns).forEach(({subject,classCol,examCol})=>{
+                    const rawClass=valueAt(classCol);
+                    const rawExam=valueAt(examCol);
 
-                    // Blank pair means this subject has not been reviewed yet. Skip it.
+                    // Blank pair means this subject has not been reviewed yet.
                     if(rawClass==="" && rawExam==="")return;
                     if(rawClass==="" || rawExam===""){
                         incomplete++;
@@ -3260,8 +3316,14 @@ function importTeacherBulkMarksFromExcel(){
 
                     const classScore=Number(rawClass);
                     const examMark=Number(rawExam);
-                    if(!Number.isFinite(classScore) || classScore<0 || classScore>50){errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);return;}
-                    if(!Number.isFinite(examMark) || examMark<0 || examMark>100){errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);return;}
+                    if(!Number.isFinite(classScore) || classScore<0 || classScore>50){
+                        errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);
+                        return;
+                    }
+                    if(!Number.isFinite(examMark) || examMark<0 || examMark>100){
+                        errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);
+                        return;
+                    }
 
                     const examScore=(examMark*50)/100;
                     const total=classScore+examScore;
@@ -3303,7 +3365,7 @@ function importTeacherBulkMarksFromExcel(){
                 });
 
                 if(rowUploaded===0)skipped++;
-            });
+            }
 
             saveAll();
             renderTeacherResults();
@@ -3320,13 +3382,21 @@ function importTeacherBulkMarksFromExcel(){
                 box.innerHTML+=`<div style="margin-top:8px;font-size:13px">${detail}${errors.length>8?"<br>…and more.":""}</div>`;
             }
         }catch(err){
-            console.error(err);
-            showMessage("teacherBulkMarksMessage","Could not read the Excel file. Please use the downloaded class template.","error");
+            console.error("SwiftSchool Excel import error:",err);
+            const reason=err?.message||"Unknown Excel reading error.";
+            const msg=document.getElementById("teacherBulkMarksMessage");
+            if(msg){
+                msg.className="message error";
+                msg.textContent=`Excel upload failed: ${reason}`;
+            }
         }
+    };
+    reader.onerror=function(){
+        const msg=document.getElementById("teacherBulkMarksMessage");
+        if(msg){msg.className="message error";msg.textContent="Excel upload failed: the browser could not read this file. Please upload the .xlsx file downloaded from SwiftSchool.";}
     };
     reader.readAsArrayBuffer(file);
 }
-
 
 /* =========================
    TEACHER RESULT VIEW
