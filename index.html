@@ -1125,7 +1125,7 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <form id="teacherAttendanceForm">
             <div class="form-grid">
                 <div class="form-group"><label>Academic Year *</label><input id="teacherAttendanceYear" value="2026/2027" required></div>
-                <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required></select></div>
+                <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required onchange="renderTeacherAttendanceStudents(this.value)"></select></div>
                 <div class="form-group"><label>Date *</label><input id="teacherAttendanceDate" type="date" required></div>
             </div>
             <div id="teacherAttendanceStudents" style="margin-top:18px"></div>
@@ -3291,23 +3291,41 @@ function getClassStudents(classId){
 
     const ids=Array.isArray(c.studentIds)?c.studentIds:[];
     const listed=ids.map(id=>getStudent(id)).filter(Boolean);
-    const listedIds=new Set(listed.map(s=>String(s.id)));
+    const foundIds=new Set(listed.map(s=>String(s.id)));
 
-    // Match students by both the class studentIds list and their own class
-    // assignment. This handles classes created before students were imported.
-    const className=String(c.name||"").trim().toLowerCase();
-    const classSection=String(c.section||"").trim().toLowerCase();
+    const normalize=v=>String(v??"").trim().toLowerCase().replace(/\s+/g," ");
+    const className=normalize(c.name);
+    const section=normalize(c.section);
 
-    const fallback=students.filter(s=>{
-        if(listedIds.has(String(s.id)))return false;
-        const studentClass=String(s.className||s.class||"").trim().toLowerCase();
-        if(studentClass===className)return true;
-        if(classSection && studentClass===`${className} - ${classSection}`)return true;
-        if(classSection && studentClass===`${className} ${classSection}`)return true;
+    const matchesClass=(student)=>{
+        const studentClassId=student.classId||student.classID||student.class_id;
+        if(studentClassId && String(studentClassId)===String(classId))return true;
+
+        const values=[
+            student.className,
+            student.class,
+            student.classSection,
+            student.class_name,
+            student.classroom
+        ].map(normalize).filter(Boolean);
+
+        if(values.includes(className))return true;
+        if(section && values.includes(`${className} - ${section}`))return true;
+        if(section && values.includes(`${className} ${section}`))return true;
         return false;
+    };
+
+    students.forEach(student=>{
+        if(!foundIds.has(String(student.id)) && matchesClass(student)){
+            listed.push(student);
+            foundIds.add(String(student.id));
+        }
     });
 
-    return [...listed,...fallback];
+    // Keep the class relationship synchronized for future attendance/report use.
+    c.studentIds=listed.map(s=>s.id);
+
+    return listed;
 }
 
 function populateAttendanceClassSelect(type,selected=""){
@@ -3377,6 +3395,7 @@ function openAttendanceForm(type="Admin",id=null){
         document.getElementById("teacherAttendanceDate").value=today;
         populateAttendanceClassSelect("Teacher");
         document.getElementById(titleId).textContent=id ? "Edit Attendance" : "Mark Attendance";
+        renderTeacherAttendanceStudents(document.getElementById("teacherAttendanceClass")?.value||"");
     }else{
         document.getElementById("attendanceYear").value="2026/2027";
         document.getElementById("attendanceDate").value=today;
@@ -3467,6 +3486,9 @@ document.getElementById("attendanceClass").addEventListener("change",function(){
 
 document.getElementById("teacherAttendanceClass").addEventListener("change",function(){
     renderTeacherAttendanceStudents(this.value);
+});
+document.getElementById("teacherAttendanceDate")?.addEventListener("change",function(){
+    renderTeacherAttendanceStudents(document.getElementById("teacherAttendanceClass")?.value||"");
 });
 
 document.getElementById("attendanceForm").addEventListener("submit",function(e){
