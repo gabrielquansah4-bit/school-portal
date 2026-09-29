@@ -1252,10 +1252,24 @@ td{font-size:14px}
     <div class="panel">
         <div class="form-grid">
             <div class="form-group"><label>Search</label><input class="search-box" id="feeSearch" placeholder="Search student, class, fee type, term or reference..."></div>
+            <div class="form-group"><label>Academic Year</label><select id="feeFilterYear"><option value="">All Academic Years</option></select></div>
+            <div class="form-group"><label>Class</label><select id="feeFilterClass"><option value="">All Classes</option></select></div>
+            <div class="form-group"><label>Student</label><select id="feeFilterStudent"><option value="">All Students</option></select></div>
             <div class="form-group"><label>Term</label><select id="feeFilterTerm"><option value="">All Terms</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
             <div class="form-group"><label>Status</label><select id="feeFilterStatus"><option value="">All Statuses</option><option>Paid</option><option>Part Payment</option><option>Unpaid</option></select></div>
         </div>
         <div id="feeTable"></div>
+    </div>
+
+    <div class="panel" id="feeStatementPanel" style="display:none">
+        <div class="page-header">
+            <div><h2>Student Fee Statement</h2><p id="feeStatementSubtitle"></p></div>
+            <div>
+                <button class="primary-btn" onclick="printFeeStatement()">Print Statement</button>
+                <button class="secondary-btn" onclick="closeFeeStatement()">Close</button>
+            </div>
+        </div>
+        <div id="feeStatementContent"></div>
     </div>
 </section>
 <section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
@@ -3962,26 +3976,60 @@ function closeFeeForm(){
     editingFeeId=null;
 }
 
+function populateFeeFilters(){
+    const yearSelect=document.getElementById("feeFilterYear");
+    const classSelect=document.getElementById("feeFilterClass");
+    const studentSelect=document.getElementById("feeFilterStudent");
+    if(!yearSelect||!classSelect||!studentSelect)return;
+
+    const currentYear=yearSelect.value;
+    const currentClass=classSelect.value;
+    const currentStudent=studentSelect.value;
+
+    const years=[...new Set(fees.map(f=>String(f.academicYear||"").trim()).filter(Boolean))].sort().reverse();
+    yearSelect.innerHTML='<option value="">All Academic Years</option>'+years.map(y=>`<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
+    if(years.includes(currentYear))yearSelect.value=currentYear;
+
+    classSelect.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    if(classes.some(c=>c.id===currentClass))classSelect.value=currentClass;
+
+    const classId=classSelect.value;
+    const studentPool=classId ? students.filter(s=>{
+        const c=getClass(classId);
+        return (c?.studentIds||[]).includes(s.id) || s.classId===classId || s.className===c?.name;
+    }) : students;
+    studentSelect.innerHTML='<option value="">All Students</option>'+studentPool.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
+    if(studentPool.some(s=>s.id===currentStudent))studentSelect.value=currentStudent;
+}
+
 function renderFees(){
+    populateFeeFilters();
     const search=(document.getElementById("feeSearch")?.value||"").toLowerCase();
+    const year=document.getElementById("feeFilterYear")?.value||"";
+    const classId=document.getElementById("feeFilterClass")?.value||"";
+    const studentId=document.getElementById("feeFilterStudent")?.value||"";
     const term=document.getElementById("feeFilterTerm")?.value||"";
     const status=document.getElementById("feeFilterStatus")?.value||"";
     const filtered=fees.filter(f=>{
         const st=getStudent(f.studentId), c=getClass(f.classId);
         const text=[st?.name,st?.id,c?classDisplay(c):f.className,f.feeType,f.term,f.academicYear,f.reference,f.paymentMethod,f.remark].join(" ").toLowerCase();
-        return (!search||text.includes(search)) && (!term||f.term===term) && (!status||feeStatus(f.amount,f.paid)===status);
+        return (!search||text.includes(search)) && (!year||String(f.academicYear||"")===year) && (!classId||f.classId===classId) && (!studentId||f.studentId===studentId) && (!term||f.term===term) && (!status||feeStatus(f.amount,f.paid)===status);
     });
-    const totalDue=fees.reduce((a,f)=>a+Number(f.amount||0),0);
-    const totalPaid=fees.reduce((a,f)=>a+Number(f.paid||0),0);
-    document.getElementById("feeSummaryRecords").textContent=fees.length;
+
+    const summarySource=filtered.length || search || year || classId || studentId || term || status ? filtered : fees;
+    const totalDue=summarySource.reduce((a,f)=>a+Number(f.amount||0),0);
+    const totalPaid=summarySource.reduce((a,f)=>a+Number(f.paid||0),0);
+    document.getElementById("feeSummaryRecords").textContent=summarySource.length;
     document.getElementById("feeSummaryDue").textContent=totalDue.toFixed(2);
     document.getElementById("feeSummaryPaid").textContent=totalPaid.toFixed(2);
     document.getElementById("feeSummaryBalance").textContent=Math.max(0,totalDue-totalPaid).toFixed(2);
+
     const box=document.getElementById("feeTable");
     if(!filtered.length){box.innerHTML='<p>No fee records found.</p>';return;}
+
     box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Student</th><th>Class</th><th>Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(f=>{
         const st=getStudent(f.studentId), c=getClass(f.classId), bal=feeBalance(f.amount,f.paid), stat=feeStatus(f.amount,f.paid);
-        return `<tr><td>${escapeHtml(st?.name||f.studentName||"Unknown")}</td><td>${escapeHtml(c?classDisplay(c):f.className||"—")}</td><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${bal.toFixed(2)}</td><td><span class="badge ${stat.toLowerCase().replace(/\s+/g,'-')}">${stat}</span></td><td><button class="small-btn" onclick="openFeeForm('${escapeHtml(f.id)}')">Edit</button> <button class="small-btn danger" onclick="deleteFee('${escapeHtml(f.id)}')">Delete</button> <button class="small-btn" onclick="printFeeReceipt('${escapeHtml(f.id)}')">Receipt</button></td></tr>`;
+        return `<tr><td>${escapeHtml(st?.name||f.studentName||"Unknown")}</td><td>${escapeHtml(c?classDisplay(c):f.className||"—")}</td><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${bal.toFixed(2)}</td><td><span class="badge ${stat.toLowerCase().replace(/\s+/g,'-')}">${stat}</span></td><td><button class="small-btn" onclick="openFeeForm('${escapeHtml(f.id)}')">Edit</button> <button class="small-btn danger" onclick="deleteFee('${escapeHtml(f.id)}')">Delete</button> <button class="small-btn" onclick="printFeeReceipt('${escapeHtml(f.id)}')">Receipt</button> <button class="small-btn" onclick="openFeeStatement('${escapeHtml(f.studentId)}')">Statement</button></td></tr>`;
     }).join("")}</tbody></table></div>`;
 }
 
@@ -4022,6 +4070,52 @@ function renderParentFees(){
     box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Child</th><th>Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${mine.map(f=>`<tr><td>${escapeHtml(getStudent(f.studentId)?.name||f.studentName)}</td><td>${escapeHtml(f.academicYear)}</td><td>${escapeHtml(f.term)}</td><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td><td>${Number(f.paid).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${feeStatus(f.amount,f.paid)}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
+let currentFeeStatementStudentId="";
+
+function openFeeStatement(studentId){
+    const student=getStudent(studentId);
+    if(!student){showMessage("feeMessage","Student not found.","error");return;}
+
+    currentFeeStatementStudentId=studentId;
+    const records=fees.filter(f=>f.studentId===studentId);
+    const totalDue=records.reduce((a,f)=>a+Number(f.amount||0),0);
+    const totalPaid=records.reduce((a,f)=>a+Number(f.paid||0),0);
+    const balance=Math.max(0,totalDue-totalPaid);
+    const classRecord=records.length?getClass(records[0].classId):null;
+
+    document.getElementById("feeStatementSubtitle").textContent=`${student.name} (${student.id})${classRecord?" • "+classDisplay(classRecord):""}`;
+    document.getElementById("feeStatementContent").innerHTML=`
+        <div class="results-summary">
+            <div class="card"><strong>${records.length}</strong><span>Fee Records</span></div>
+            <div class="card"><strong>${totalDue.toFixed(2)}</strong><span>Total Charges</span></div>
+            <div class="card"><strong>${totalPaid.toFixed(2)}</strong><span>Total Paid</span></div>
+            <div class="card"><strong>${balance.toFixed(2)}</strong><span>Outstanding Balance</span></div>
+        </div>
+        ${records.length?`<div class="table-wrap"><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th><th>Receipt</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td><td><button class="small-btn" onclick="printFeeReceipt('${escapeHtml(f.id)}')">Receipt</button></td></tr>`).join("")}</tbody></table></div>`:'<p>No fee records found for this student.</p>'}
+    `;
+    document.getElementById("feeStatementPanel").style.display="block";
+    document.getElementById("feeStatementPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function closeFeeStatement(){
+    currentFeeStatementStudentId="";
+    document.getElementById("feeStatementPanel").style.display="none";
+}
+
+function printFeeStatement(){
+    if(!currentFeeStatementStudentId)return;
+    const student=getStudent(currentFeeStatementStudentId);
+    const records=fees.filter(f=>f.studentId===currentFeeStatementStudentId);
+    if(!student||!records.length){showMessage("feeMessage","No fee statement available to print.","error");return;}
+    const totalDue=records.reduce((a,f)=>a+Number(f.amount||0),0);
+    const totalPaid=records.reduce((a,f)=>a+Number(f.paid||0),0);
+    const balance=Math.max(0,totalDue-totalPaid);
+    const w=window.open("","_blank","width=900,height=750");
+    if(!w){showMessage("feeMessage","Please allow pop-ups to print the statement.","error");return;}
+    w.document.write(`<!doctype html><html><head><title>Student Fee Statement</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{text-align:center;margin:0}.sub{text-align:center;color:#555;margin:6px 0 25px}.info{display:flex;justify-content:space-between;border:1px solid #ccc;padding:15px;margin-bottom:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:9px;text-align:left}th{background:#f2f2f2}.summary{display:flex;gap:12px;margin:20px 0}.summary div{border:1px solid #ccc;padding:12px;flex:1}.total{font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>SWIFTSCHOOL</h1><div class="sub">STUDENT FEE STATEMENT</div><div class="info"><div><strong>Student:</strong> ${escapeHtml(student.name)}<br><strong>ID:</strong> ${escapeHtml(student.id)}</div><div><strong>Generated:</strong> ${new Date().toLocaleDateString()}</div></div><div class="summary"><div><strong>Total Charges</strong><br>${totalDue.toFixed(2)}</div><div><strong>Total Paid</strong><br>${totalPaid.toFixed(2)}</div><div><strong>Outstanding Balance</strong><br>${balance.toFixed(2)}</div></div><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td></tr>`).join("")}</tbody></table><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
+    w.document.close();
+}
+
 function printFeeReceipt(id){
     const f=fees.find(x=>x.id===id); if(!f)return;
     const st=getStudent(f.studentId), c=getClass(f.classId), bal=feeBalance(f.amount,f.paid);
@@ -4043,6 +4137,20 @@ document.getElementById("resultSearch").addEventListener("input",renderResults);
 document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
 document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
 document.getElementById("feeSearch")?.addEventListener("input",renderFees);
+document.getElementById("feeFilterYear")?.addEventListener("change",renderFees);
+document.getElementById("feeFilterClass")?.addEventListener("change",function(){
+    const studentSelect=document.getElementById("feeFilterStudent");
+    if(studentSelect){
+        const current=studentSelect.value;
+        const classId=this.value;
+        const c=getClass(classId);
+        const pool=classId?students.filter(s=>(c?.studentIds||[]).includes(s.id)||s.classId===classId||s.className===c?.name):students;
+        studentSelect.innerHTML='<option value="">All Students</option>'+pool.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
+        if(pool.some(s=>s.id===current))studentSelect.value=current;
+    }
+    renderFees();
+});
+document.getElementById("feeFilterStudent")?.addEventListener("change",renderFees);
 document.getElementById("feeFilterTerm")?.addEventListener("change",renderFees);
 document.getElementById("feeFilterStatus")?.addEventListener("change",renderFees);
 
