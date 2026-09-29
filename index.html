@@ -503,6 +503,12 @@ td{font-size:14px}
 .parent-password-box{margin-top:20px;padding:20px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;}
 .parent-password-box h3{margin-top:0;}
 .parent-password-notice{padding:14px 16px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-bottom:18px;}
+.forgot-password{display:block;text-align:center;margin:14px 0 4px;color:#2563eb;text-decoration:none;cursor:pointer;font-weight:600;}
+.forgot-password:hover{text-decoration:underline;}
+.password-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.password-modal-box{background:#fff;width:min(520px,100%);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.password-modal-box h2{margin-top:0;}
+.password-modal-actions{display:flex;gap:10px;margin-top:16px;}
 </style>
 </head>
 
@@ -536,12 +542,50 @@ td{font-size:14px}
         </div>
 
         <button class="primary-btn" style="width:100%" onclick="login()">Login</button>
+        <a class="forgot-password" onclick="openForgotPassword()">Forgot Password?</a>
 
         <div class="demo-box">
             <strong>Demo Accounts</strong><br><br>
             Parent: parent001 / 123456 <small>(set your own password after first login)</small><br>
-            Teacher: teacher001 / 123456<br>
+            Teacher: teacher001 / 123456 <small>(set your own password after first login)</small><br>
             Administrator: admin / admin123
+        </div>
+    </div>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div id="forgotPasswordModal" class="password-modal">
+    <div class="password-modal-box">
+        <h2>Reset Password</h2>
+        <p>Enter your account details to create a new password.</p>
+        <div id="forgotPasswordMessage" class="message"></div>
+        <div class="form-group">
+            <label>Account Type</label>
+            <select id="forgotRole">
+                <option value="Parent">Parent / Guardian</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Administrator">Administrator</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Username</label>
+            <input id="forgotUsername" type="text" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label>Account ID</label>
+            <input id="forgotAccountId" type="text" placeholder="e.g. TCH-001, PAR-001 or ADMIN-001">
+        </div>
+        <div class="form-group">
+            <label>New Password</label>
+            <input id="forgotNewPassword" type="password" minlength="6" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+            <label>Confirm New Password</label>
+            <input id="forgotConfirmPassword" type="password" minlength="6" autocomplete="new-password">
+        </div>
+        <div class="password-modal-actions">
+            <button class="primary-btn" type="button" onclick="resetForgottenPassword()">Reset Password</button>
+            <button class="secondary-btn" type="button" onclick="closeForgotPassword()">Cancel</button>
         </div>
     </div>
 </div>
@@ -838,7 +882,7 @@ td{font-size:14px}
                 <div class="form-group"><label>Qualification</label><input id="teacherQualification"></div>
                 <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects"></div>
                 <div class="form-group"><label>Username *</label><input id="teacherUsername" required></div>
-                <div class="form-group"><label>Password *</label><input id="teacherPassword" required></div>
+                <div class="form-group"><label>Password</label><input id="teacherPassword" type="password" placeholder="Set temporary password for new teachers">
             </div>
             <br>
             <button class="primary-btn" type="submit">Save Teacher</button>
@@ -1213,7 +1257,8 @@ let teachers = JSON.parse(localStorage.getItem("schoolPortalTeachers")) || [
         qualification:"B.Ed.",
         subjects:"Mathematics",
         username:"teacher001",
-        password:"123456"
+        password:"123456",
+        mustChangePassword:true
     }
 ];
 
@@ -1351,7 +1396,8 @@ function login(){
     let user=null;
 
     if(role==="Administrator"){
-        if(username==="admin" && password==="admin123"){
+        const adminPassword=localStorage.getItem("schoolPortalAdminPassword") || "admin123";
+        if(username==="admin" && password===adminPassword){
             user={
                 username:"admin",
                 name:"Administrator",
@@ -1384,7 +1430,8 @@ function login(){
                 name:found.name,
                 role:"Teacher",
                 id:found.id,
-                className:"Teacher Account"
+                className:"Teacher Account",
+                mustChangePassword:found.mustChangePassword !== false
             };
         }
     }
@@ -1421,16 +1468,17 @@ function showPortal(user){
     document.getElementById("adminNav").style.display =
         user.role==="Administrator" ? "block":"none";
 
-    // On a parent's first login, require a personal password before normal portal access.
+    // On first login, parents and teachers must create a personal password before normal portal access.
     document.querySelectorAll("#parentNav .nav-link[data-page]").forEach(link=>{
-        link.style.display = (user.role==="Parent" && user.mustChangePassword)
-            ? "none"
-            : "block";
+        link.style.display = (user.role==="Parent" && user.mustChangePassword) ? "none" : "block";
+    });
+    document.querySelectorAll("#teacherNav .nav-link[data-page]").forEach(link=>{
+        link.style.display = (user.role==="Teacher" && user.mustChangePassword) ? "none" : "block";
     });
 
     refreshDashboard();
 
-    if(user.role==="Parent" && user.mustChangePassword){
+    if((user.role==="Parent" || user.role==="Teacher") && user.mustChangePassword){
         showPage("profile");
     }else{
         showPage("dashboard");
@@ -1527,121 +1575,105 @@ function refreshPage(pageId){
 
 function renderProfile(){
     const u=currentUser;
-
     let passwordSection="";
 
-    if(u.role==="Parent"){
+    if(u.role==="Parent" || u.role==="Teacher") {
         const firstLogin=u.mustChangePassword===true;
+        const roleLabel=u.role==="Parent" ? "parent" : "teacher";
+        const fn=u.role==="Parent" ? "changeParentPassword" : "changeTeacherPassword";
+        const prefix=u.role.toLowerCase();
 
         passwordSection=`
             <div class="parent-password-box">
-                ${firstLogin ? `
-                    <div class="parent-password-notice">
-                        <strong>First login:</strong> Please create your own password before accessing the rest of the parent portal.
-                    </div>
-                ` : ""}
-
+                ${firstLogin ? `<div class="parent-password-notice"><strong>First login:</strong> Please create your own password before accessing the rest of the ${roleLabel} portal.</div>` : ""}
                 <h3>${firstLogin ? "Create Your Password" : "Change Password"}</h3>
-                <p>${firstLogin ? "Use your temporary password once, then choose a private password that you will use for future logins." : "You can change your parent portal password at any time."}</p>
-
+                <p>${firstLogin ? "Use your temporary password once, then choose a private password for future logins." : `You can change your ${roleLabel} portal password at any time.`}</p>
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>Current Password</label>
-                        <input id="parentCurrentPassword" type="password" autocomplete="current-password">
-                    </div>
-                    <div class="form-group">
-                        <label>New Password</label>
-                        <input id="parentNewPassword" type="password" minlength="6" autocomplete="new-password">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm New Password</label>
-                        <input id="parentConfirmPassword" type="password" minlength="6" autocomplete="new-password">
-                    </div>
+                    <div class="form-group"><label>Current Password</label><input id="${prefix}CurrentPassword" type="password" autocomplete="current-password"></div>
+                    <div class="form-group"><label>New Password</label><input id="${prefix}NewPassword" type="password" minlength="6" autocomplete="new-password"></div>
+                    <div class="form-group"><label>Confirm New Password</label><input id="${prefix}ConfirmPassword" type="password" minlength="6" autocomplete="new-password"></div>
                 </div>
                 <br>
-                <button class="primary-btn" onclick="changeParentPassword()">
-                    ${firstLogin ? "Set My Password" : "Change Password"}
-                </button>
-                <div id="parentPasswordMessage" class="message"></div>
-            </div>
-        `;
+                <button class="primary-btn" onclick="${fn}()">${firstLogin ? "Set My Password" : "Change Password"}</button>
+                <div id="${prefix}PasswordMessage" class="message"></div>
+            </div>`;
     }
 
     document.getElementById("profileContent").innerHTML=`
-        <h2>${escapeHtml(u.name)}</h2>
-        <br>
+        <h2>${escapeHtml(u.name)}</h2><br>
         <p><strong>Username:</strong> ${escapeHtml(u.username)}</p>
         <p><strong>Account Type:</strong> ${escapeHtml(u.role)}</p>
         <p><strong>ID:</strong> ${escapeHtml(u.id)}</p>
-        ${passwordSection}
-    `;
+        ${passwordSection}`;
 }
 
-function changeParentPassword(){
-    if(!currentUser || currentUser.role!=="Parent")return;
+function changeParentPassword(){ changePortalPassword("Parent"); }
+function changeTeacherPassword(){ changePortalPassword("Teacher"); }
 
-    const current=document.getElementById("parentCurrentPassword")?.value || "";
-    const newPassword=document.getElementById("parentNewPassword")?.value || "";
-    const confirmPassword=document.getElementById("parentConfirmPassword")?.value || "";
-    const message=document.getElementById("parentPasswordMessage");
-
-    const showError=(text)=>{
-        if(message){
-            message.className="message error";
-            message.textContent=text;
-        }
-    };
-
-    if(!current || !newPassword || !confirmPassword){
-        showError("Please complete all password fields.");
-        return;
-    }
-
-    const parent=parents.find(p=>p.id===currentUser.id);
-
-    if(!parent){
-        showError("Parent account could not be found.");
-        return;
-    }
-
-    if(parent.password!==current){
-        showError("Current password is incorrect.");
-        return;
-    }
-
-    if(newPassword.length<6){
-        showError("Your new password must be at least 6 characters.");
-        return;
-    }
-
-    if(newPassword===current){
-        showError("Your new password must be different from the current password.");
-        return;
-    }
-
-    if(newPassword!==confirmPassword){
-        showError("The new passwords do not match.");
-        return;
-    }
-
-    parent.password=newPassword;
-    parent.mustChangePassword=false;
+function changePortalPassword(role){
+    if(!currentUser || currentUser.role!==role)return;
+    const prefix=role.toLowerCase();
+    const current=document.getElementById(prefix+"CurrentPassword")?.value || "";
+    const newPassword=document.getElementById(prefix+"NewPassword")?.value || "";
+    const confirmPassword=document.getElementById(prefix+"ConfirmPassword")?.value || "";
+    const message=document.getElementById(prefix+"PasswordMessage");
+    const showError=(text)=>{ if(message){message.className="message error";message.textContent=text;} };
+    if(!current || !newPassword || !confirmPassword){showError("Please complete all password fields.");return;}
+    const records=role==="Parent" ? parents : teachers;
+    const account=records.find(x=>x.id===currentUser.id);
+    if(!account){showError(role+" account could not be found.");return;}
+    if(account.password!==current){showError("Current password is incorrect.");return;}
+    if(newPassword.length<6){showError("Your new password must be at least 6 characters.");return;}
+    if(newPassword===current){showError("Your new password must be different from the current password.");return;}
+    if(newPassword!==confirmPassword){showError("The new passwords do not match.");return;}
+    account.password=newPassword;
+    account.mustChangePassword=false;
     saveAll();
-
     currentUser.mustChangePassword=false;
     localStorage.setItem("schoolPortalUser",JSON.stringify(currentUser));
-
-    if(message){
-        message.className="message success";
-        message.textContent="Password updated successfully.";
-    }
-
-    setTimeout(()=>{
-        showPortal(currentUser);
-        showMessage("loginMessage","", "success");
-    },700);
+    if(message){message.className="message success";message.textContent="Password updated successfully.";}
+    setTimeout(()=>showPortal(currentUser),700);
 }
 
+function openForgotPassword(){
+    const modal=document.getElementById("forgotPasswordModal");
+    if(!modal)return;
+    document.getElementById("forgotPasswordMessage").className="message";
+    document.getElementById("forgotPasswordMessage").textContent="";
+    document.getElementById("forgotUsername").value="";
+    document.getElementById("forgotAccountId").value="";
+    document.getElementById("forgotNewPassword").value="";
+    document.getElementById("forgotConfirmPassword").value="";
+    modal.style.display="flex";
+}
+function closeForgotPassword(){ const modal=document.getElementById("forgotPasswordModal"); if(modal)modal.style.display="none"; }
+function resetForgottenPassword(){
+    const role=document.getElementById("forgotRole").value;
+    const username=document.getElementById("forgotUsername").value.trim();
+    const accountId=document.getElementById("forgotAccountId").value.trim();
+    const newPassword=document.getElementById("forgotNewPassword").value;
+    const confirmPassword=document.getElementById("forgotConfirmPassword").value;
+    const message=document.getElementById("forgotPasswordMessage");
+    const error=(text)=>{message.className="message error";message.textContent=text;};
+    if(!username || !accountId || !newPassword || !confirmPassword){error("Please complete all fields.");return;}
+    if(newPassword.length<6){error("Your new password must be at least 6 characters.");return;}
+    if(newPassword!==confirmPassword){error("The new passwords do not match.");return;}
+    if(role==="Administrator"){
+        const ok=username==="admin" && accountId==="ADMIN-001";
+        if(!ok){error("Administrator account details could not be verified.");return;}
+        localStorage.setItem("schoolPortalAdminPassword",newPassword);
+    }else{
+        const records=role==="Parent" ? parents : teachers;
+        const account=records.find(x=>x.username===username && x.id===accountId);
+        if(!account){error("The username and account ID do not match an account.");return;}
+        account.password=newPassword;
+        account.mustChangePassword=false;
+        saveAll();
+    }
+    message.className="message success";
+    message.textContent="Password reset successfully. You can now log in with your new password.";
+    setTimeout(closeForgotPassword,900);
+}
 
 
 /* =========================
@@ -1981,6 +2013,18 @@ document.getElementById("teacherForm").addEventListener("submit",function(e){
         username:document.getElementById("teacherUsername").value.trim(),
         password:document.getElementById("teacherPassword").value
     };
+
+    if(editingTeacherId){
+        const existing=teachers.find(t=>t.id===editingTeacherId);
+        if(existing && !data.password) data.password=existing.password;
+        if(existing) data.mustChangePassword=existing.mustChangePassword===true;
+    }else{
+        if(!data.password){
+            showMessage("teacherMessage","Please set a temporary password for the new teacher.","error");
+            return;
+        }
+        data.mustChangePassword=true;
+    }
 
     if(editingTeacherId){
         const index=teachers.findIndex(t=>t.id===editingTeacherId);
