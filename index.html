@@ -466,6 +466,34 @@ td{font-size:14px}
         visibility:visible !important;
     }
 
+    body.parent-report-printing *{
+        visibility:hidden !important;
+    }
+
+    body.parent-report-printing #parentReportPanel,
+    body.parent-report-printing #parentReportPanel *{
+        visibility:visible !important;
+    }
+
+    body.parent-report-printing #parentReportPanel{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        margin:0;
+        padding:0;
+        box-shadow:none;
+        background:#fff;
+    }
+
+    body.parent-report-printing #parentReportContainer{
+        max-width:none;
+        margin:0;
+        padding:20px;
+        box-shadow:none;
+        border-radius:0;
+    }
+
     body.report-printing #studentReportContainer{
         position:absolute;
         left:0;
@@ -732,6 +760,16 @@ td{font-size:14px}
     <div class="panel">
         <div id="parentResultsContent"></div>
     </div>
+    <div class="panel" id="parentReportPanel" style="display:none">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+            <div><h2>Student Report</h2><p style="color:#666">Generate your child's report for a selected term.</p></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="primary-btn" type="button" onclick="printParentReport()">Print / Save PDF</button>
+                <button class="secondary-btn" type="button" onclick="closeParentReport()">Close</button>
+            </div>
+        </div>
+        <div id="parentReportContainer" class="report-placeholder" style="margin-top:15px"></div>
+    </div>
 </section>
 
 <!-- TEACHER RESULTS -->
@@ -752,8 +790,6 @@ td{font-size:14px}
                 <label>Term *</label>
                 <select id="teacherBulkMarksTerm">
                     <option>Term 1</option>
-                    <option>Term 2</option>
-                    <option>Term 3</option>
                 </select>
             </div>
             <div class="form-group">
@@ -815,15 +851,6 @@ td{font-size:14px}
                     <label>Date of Birth</label>
                     <input id="studentDob" type="date">
                 </div>
-                <div class="form-group">
-                    <label>Term *</label>
-                    <select id="resultTerm" required>
-                        <option>Term 1</option>
-                        <option>Term 2</option>
-                        <option>Term 3</option>
-                    </select>
-                </div>
-
                 <div class="form-group">
                     <label>Class *</label>
                     <input id="studentClass" required>
@@ -1039,6 +1066,15 @@ td{font-size:14px}
                 </div>
 
                 <div class="form-group">
+                    <label>Term *</label>
+                    <select id="resultTerm" required>
+                        <option>Term 1</option>
+                        <option>Term 2</option>
+                        <option>Term 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Class *</label>
                     <select id="resultClass" required>
                         <option value="">Select Class</option>
@@ -1116,6 +1152,17 @@ td{font-size:14px}
     <div class="panel">
         <h2>Teacher Submission Monitor</h2>
         <div id="resultSubmissionMonitor"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Class Student Results</h2>
+        <p style="color:#666;margin:6px 0 14px">Select a class to display the complete student list for that class. Results are shown for the selected academic year and term.</p>
+        <div class="form-grid">
+            <div class="form-group"><label>Academic Year</label><input id="adminClassResultsYear" value="2026/2027"></div>
+            <div class="form-group"><label>Term</label><select id="adminClassResultsTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+            <div class="form-group"><label>Class</label><select id="adminClassResultsClass"><option value="">Select Class</option></select></div>
+        </div>
+        <div id="adminClassStudentResults" style="margin-top:15px"></div>
     </div>
 
     <div class="panel">
@@ -1241,6 +1288,15 @@ td{font-size:14px}
                 <label for="reportAcademicYear">Academic Year</label>
                 <input type="text" id="reportAcademicYear" value="2026/2027"
                        placeholder="e.g. 2026/2027">
+            </div>
+
+            <div class="form-group">
+                <label for="reportTerm">Term</label>
+                <select id="reportTerm">
+                    <option>Term 1</option>
+                    <option>Term 2</option>
+                    <option>Term 3</option>
+                </select>
             </div>
 
         </div>
@@ -1787,6 +1843,7 @@ function refreshPage(pageId){
     if(pageId==="adminResults"){
         populateResultClassSelect();
         populateResultDeadlineClassSelect();
+        populateAdminClassResultsSelect();
         renderResults();
     }
 
@@ -3091,6 +3148,43 @@ function renderResultSubmissionMonitor(){
     </div>`;
 }
 
+function populateAdminClassResultsSelect(selected=""){
+    const select=document.getElementById("adminClassResultsClass");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`).join("");
+    renderAdminClassStudentResults();
+}
+
+function renderAdminClassStudentResults(){
+    const box=document.getElementById("adminClassStudentResults");
+    const classId=document.getElementById("adminClassResultsClass")?.value||"";
+    const year=(document.getElementById("adminClassResultsYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("adminClassResultsTerm")?.value||"Term 1";
+    if(!box)return;
+    if(!classId){box.innerHTML='<div class="empty">Select a class to display the complete student list.</div>';return;}
+    const cls=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    if(!classStudents.length){box.innerHTML='<div class="empty">No students are linked to this class.</div>';return;}
+    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
+    box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Student ID</th><th>Student Name</th>${classSubjects.map(s=>`<th>${escapeHtml(s.name)}</th>`).join("")}<th>Average</th><th>Subjects Submitted</th><th>Action</th></tr></thead><tbody>
+    ${classStudents.map((student,i)=>{
+        const rows=classSubjects.map(subject=>results.find(r=>String(r.studentId||"").trim().toLowerCase()===String(student.id).trim().toLowerCase()&&r.classId===classId&&r.subjectId===subject.id&&String(r.academicYear||"").trim()===year&&String(r.term||"Term 1").trim()===term));
+        const scores=rows.filter(Boolean).map(r=>Number(r.total)).filter(n=>!isNaN(n));
+        const avg=scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:null;
+        return `<tr><td>${i+1}</td><td>${escapeHtml(student.id)}</td><td><strong>${escapeHtml(student.name)}</strong></td>${rows.map(r=>`<td>${r?Number(r.total||0).toFixed(2):"—"}</td>`).join("")}<td>${avg===null?"—":avg.toFixed(2)}</td><td>${scores.length}/${classSubjects.length}</td><td><button class="edit-btn" type="button" onclick="openResultFormForStudent('${escapeHtml(classId)}','${escapeHtml(student.id)}')">Add / Edit</button></td></tr>`;
+    }).join("")}
+    </tbody></table></div>`;
+}
+
+function openResultFormForStudent(classId,studentId){
+    openResultForm();
+    document.getElementById("resultClass").value=classId;
+    populateResultStudentSelect(classId,studentId);
+    populateResultSubjectSelect(classId);
+    document.getElementById("resultStudent").value=studentId;
+    document.getElementById("resultFormPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 function renderResults(){
     const table=document.getElementById("resultTable");
     if(!table)return;
@@ -3480,7 +3574,9 @@ function renderTeacherResults(){
         .map(s=>s.id);
 
     const teacherResults=results.filter(r=>
-        allowedClassIds.includes(r.classId) && teacherSubjectIds.includes(r.subjectId)
+        allowedClassIds.includes(r.classId) &&
+        teacherSubjectIds.includes(r.subjectId) &&
+        String(r.term||"Term 1").trim()==="Term 1"
     );
 
     if(!teacherResults.length){
@@ -3501,6 +3597,7 @@ function renderTeacherResults(){
                 <th>Exam Score</th>
                 <th>Total</th>
                 <th>Performance</th>
+                <th>Term</th>
                 <th>Academic Year</th>
             </tr>
         </thead>
@@ -3523,6 +3620,7 @@ function renderTeacherResults(){
                         ${escapeHtml(r.grade)}
                     </span>
                 </td>
+                <td>${escapeHtml(r.term||"Term 1")}</td>
                 <td>${escapeHtml(r.academicYear)}</td>
             </tr>`;
         }).join("")}
@@ -3647,27 +3745,15 @@ function renderChildren(){
 function renderParentResults(){
     const box=document.getElementById("parentResultsContent");
     if(!box)return;
-
     const parent=getParent(currentUser?.id);
-    if(!parent){
-        box.innerHTML='<div class="empty">Parent account not found.</div>';
-        return;
-    }
+    if(!parent){box.innerHTML='<div class="empty">Parent account not found.</div>';return;}
 
     const childIds=(parent.studentIds||[]).map(id=>String(id).trim()).filter(Boolean);
     const children=childIds.map(id=>getStudent(id)).filter(Boolean);
+    if(!children.length){box.innerHTML='<div class="empty">No children are linked to your account. Add a child using the Student ID from My Children.</div>';return;}
 
-    if(!children.length){
-        box.innerHTML='<div class="empty">No children are linked to your account. Add a child using the Student ID from My Children.</div>';
-        return;
-    }
-
-    // Match student IDs safely even if one record contains different casing or spaces.
     const normalizedChildIds=new Set(childIds.map(id=>id.toLowerCase()));
-    const childResults=results.filter(r=>
-        normalizedChildIds.has(String(r.studentId||"").trim().toLowerCase())
-    );
-
+    const childResults=results.filter(r=>normalizedChildIds.has(String(r.studentId||"").trim().toLowerCase()));
     if(!childResults.length){
         box.innerHTML=`<div class="empty">No results are available yet for ${children.length===1?'your child':'your children'}.</div>`;
         return;
@@ -3675,57 +3761,32 @@ function renderParentResults(){
 
     const grouped={};
     childResults.forEach(r=>{
-        // Older results may not have a term. Treat those as Term 1 so they remain visible.
-        const term=String(r.term||"Term 1").trim() || "Term 1";
-        const key=[String(r.studentId||"").trim().toLowerCase(),String(r.academicYear||"").trim(),term].join("|");
+        const term=String(r.term||"Term 1").trim()||"Term 1";
+        const year=String(r.academicYear||"").trim();
+        const key=[String(r.studentId||"").trim().toLowerCase(),year,term].join("|");
         if(!grouped[key])grouped[key]=[];
         grouped[key].push({...r,term});
     });
 
     const sections=Object.values(grouped).map(records=>{
         const first=records[0];
-        const student=children.find(s=>String(s.id).trim().toLowerCase()===String(first.studentId||"").trim().toLowerCase()) || getStudent(first.studentId);
-        const c=getClass(first.classId) || classes.find(x=>String(x.name||"").trim().toLowerCase()===String(student?.className||"").trim().toLowerCase());
+        const student=children.find(s=>String(s.id).trim().toLowerCase()===String(first.studentId||"").trim().toLowerCase())||getStudent(first.studentId);
+        const c=getClass(first.classId)||classes.find(x=>String(x.name||"").trim().toLowerCase()===String(student?.className||"").trim().toLowerCase());
         const total=records.reduce((sum,r)=>sum+Number(r.total||0),0);
-        const average=records.length ? total/records.length : 0;
-
-        return `
-        <div class="panel" style="background:#f8fafc;border:1px solid #e5e7eb">
-            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
-                <div>
-                    <h2 style="margin-bottom:4px">${escapeHtml(student?.name||"Unknown Student")}</h2>
-                    <p style="color:#6b7280">Student ID: ${escapeHtml(student?.id||"")} · Class: ${escapeHtml(c?classDisplay(c):(student?.className||""))}</p>
-                </div>
-                <div style="text-align:right">
-                    <strong>${escapeHtml(first.term)}</strong><br>
-                    <small>${escapeHtml(first.academicYear||"")}</small>
-                </div>
+        const average=records.length?total/records.length:0;
+        const year=first.academicYear||"";
+        const reportButton=c?`<button class="primary-btn" type="button" onclick="generateParentReport('${escapeHtml(student.id)}','${escapeHtml(c.id)}','${escapeHtml(year)}','${escapeHtml(first.term)}')">View Full Report</button>`:"";
+        return `<div class="panel" style="background:#f8fafc;border:1px solid #e5e7eb;margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+                <div><h2 style="margin-bottom:4px">${escapeHtml(student?.name||"Unknown Student")}</h2><p style="color:#6b7280">Student ID: ${escapeHtml(student?.id||"")} · Class: ${escapeHtml(c?classDisplay(c):(student?.className||""))}</p></div>
+                <div style="text-align:right"><strong>${escapeHtml(first.term)}</strong><br><small>${escapeHtml(year)}</small><br><div style="margin-top:8px">${reportButton}</div></div>
             </div>
-            <div class="cards" style="margin-bottom:15px">
-                <div class="card stat-card"><h3>${average.toFixed(2)}</h3><p>Average</p></div>
-                <div class="card stat-card"><h3>${records.length}</h3><p>Subjects</p></div>
-            </div>
-            <div class="table-wrap">
-            <table>
-                <thead><tr><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th></tr></thead>
-                <tbody>
-                ${records.map(r=>{
-                    const subject=getSubject(r.subjectId);
-                    const grade=r.grade||getPerformance(r.total);
-                    return `<tr>
-                        <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
-                        <td>${Number(r.classScore||0).toFixed(2)}</td>
-                        <td>${Number(r.examMark??(Number(r.examScore||0)*2)).toFixed(2)}</td>
-                        <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
-                        <td><span class="badge ${performanceClass(grade)}">${escapeHtml(grade)}</span></td>
-                    </tr>`;
-                }).join("")}
-                </tbody>
-            </table>
-            </div>
+            <div class="cards" style="margin-bottom:15px"><div class="card stat-card"><h3>${average.toFixed(2)}</h3><p>Average</p></div><div class="card stat-card"><h3>${records.length}</h3><p>Subjects</p></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th></tr></thead><tbody>
+            ${records.map(r=>{const subject=getSubject(r.subjectId);const grade=r.grade||getPerformance(r.total);return `<tr><td>${escapeHtml(subject?.name||"Unknown Subject")}</td><td>${Number(r.classScore||0).toFixed(2)}</td><td>${Number(r.examMark??(Number(r.examScore||0)*2)).toFixed(2)}</td><td><strong>${Number(r.total||0).toFixed(2)}</strong></td><td><span class="badge ${performanceClass(grade)}">${escapeHtml(grade)}</span></td></tr>`;}).join("")}
+            </tbody></table></div>
         </div>`;
     }).join("");
-
     box.innerHTML=sections;
 }
 
@@ -4330,6 +4391,7 @@ function deleteTeacherAttendance(id){
 let currentReportStudentId = "";
 let currentReportClassId = "";
 let currentReportAcademicYear = "";
+let currentReportTerm = "Term 1";
 
 function reportCommentsKey(studentId, academicYear){
     return `${studentId}_${academicYear}`;
@@ -4426,15 +4488,21 @@ function calculateReportAttendance(studentId,classId,academicYear){
     };
 }
 
-function reportSubjectList(classId,studentId,academicYear){
+function reportSubjectList(classId,studentId,academicYear,term="Term 1"){
     const classSubjects=subjects.filter(s=>
         (s.classIds||[]).includes(classId)
     );
 
+    const normalizedStudentId=String(studentId||"").trim().toLowerCase();
+    const normalizedClassId=String(classId||"").trim();
+    const normalizedYear=String(academicYear||"").trim();
+    const normalizedTerm=String(term||"Term 1").trim();
+
     const studentResults=results.filter(r=>
-        r.studentId===studentId &&
-        r.classId===classId &&
-        String(r.academicYear||"").trim()===String(academicYear||"").trim()
+        String(r.studentId||"").trim().toLowerCase()===normalizedStudentId &&
+        String(r.classId||"").trim()===normalizedClassId &&
+        String(r.academicYear||"").trim()===normalizedYear &&
+        String(r.term||"Term 1").trim()===normalizedTerm
     );
 
     const ids=new Set(classSubjects.map(s=>s.id));
@@ -4490,6 +4558,7 @@ function generateStudentReport(){
     const classId=document.getElementById("reportClassSelect")?.value || "";
     const studentId=document.getElementById("reportStudentSelect")?.value || "";
     const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
+    const term=document.getElementById("reportTerm")?.value || "Term 1";
 
     const container=document.getElementById("studentReportContainer");
 
@@ -4519,8 +4588,9 @@ function generateStudentReport(){
     currentReportStudentId=studentId;
     currentReportClassId=classId;
     currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
 
-    const subjectItems=reportSubjectList(classId,studentId,academicYear);
+    const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
     const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
     const comments=getReportComments(studentId,academicYear);
 
@@ -4573,7 +4643,7 @@ function generateStudentReport(){
         <div class="report-school-header">
             <h1>SWIFTSCHOOL</h1>
             <h2>STUDENT ACADEMIC REPORT</h2>
-            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong> · Term: <strong>${escapeHtml(term)}</strong></p>
         </div>
 
         <div class="report-student-info">
@@ -4752,6 +4822,10 @@ document.getElementById("reportStudentSelect")?.addEventListener("change",functi
     document.getElementById("studentReportContainer").innerHTML=
         '<p>Click <strong>Generate Report</strong> to create the student report.</p>';
 });
+
+document.getElementById("adminClassResultsClass")?.addEventListener("change",renderAdminClassStudentResults);
+document.getElementById("adminClassResultsYear")?.addEventListener("input",renderAdminClassStudentResults);
+document.getElementById("adminClassResultsTerm")?.addEventListener("change",renderAdminClassStudentResults);
 
 /* =========================
    SEARCH EVENTS
