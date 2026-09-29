@@ -1028,7 +1028,7 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
             <h1>Results Management</h1>
             <p>Review teacher-submitted results, monitor missing marks, and manage submission deadlines.</p>
         </div>
-        <button class="primary-btn" onclick="openResultForm()">+ Add Result</button>
+        <div style="font-size:13px;color:#64748b;background:#f8fafc;padding:10px 14px;border-radius:8px">Admin review only — marks are uploaded by teachers.</div>
     </div>
 
     <div id="resultMessage" class="message"></div>
@@ -1125,10 +1125,34 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
     </div>
 
     <div class="panel">
-        <input class="search-box" id="resultSearch"
+        <h2>Review Teacher-Uploaded Results</h2>
+        <p style="color:#666;margin-top:6px">Review marks submitted through the Teacher Excel upload. Blank Excel cells do not erase previously uploaded marks.</p>
+        <div class="form-grid" style="margin-top:15px">
+            <div class="form-group">
+                <label>Class</label>
+                <select id="resultReviewClass"><option value="">All Classes</option></select>
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="resultReviewSubject"><option value="">All Subjects</option></select>
+            </div>
+            <div class="form-group">
+                <label>Academic Year</label>
+                <select id="resultReviewYear"><option value="">All Years</option></select>
+            </div>
+            <div class="form-group">
+                <label>Term</label>
+                <select id="resultReviewTerm"><option value="">All Terms</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="resultReviewStatus"><option value="">All Statuses</option><option value="Complete">Complete</option><option value="Incomplete">Incomplete</option></select>
+            </div>
+        </div>
+        <input class="search-box" id="resultSearch" style="margin-top:12px"
                placeholder="Search by student, class, subject, teacher, year or performance level...">
-
-        <div id="resultTable"></div>
+        <div id="resultReviewSummary" style="margin-top:12px"></div>
+        <div id="resultTable" style="margin-top:12px"></div>
     </div>
 </section>
 
@@ -3029,43 +3053,100 @@ function renderResultSubmissionMonitor(){
     </div>`;
 }
 
+function getResultReviewStatus(r){
+    const hasClass=Number.isFinite(Number(r.classScore)) && r.classScore!=="" && r.classScore!==null && r.classScore!==undefined;
+    const hasExam=Number.isFinite(Number(r.examMark)) && r.examMark!=="" && r.examMark!==null && r.examMark!==undefined;
+    return hasClass && hasExam ? "Complete" : "Incomplete";
+}
+
+function populateResultReviewFilters(){
+    const classSelect=document.getElementById("resultReviewClass");
+    const subjectSelect=document.getElementById("resultReviewSubject");
+    const yearSelect=document.getElementById("resultReviewYear");
+    if(!classSelect || !subjectSelect || !yearSelect)return;
+
+    const currentClass=classSelect.value, currentSubject=subjectSelect.value, currentYear=yearSelect.value;
+    const classItems=[...classes].sort((a,b)=>classDisplay(a).localeCompare(classDisplay(b)));
+    const subjectItems=[...subjects].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||"")));
+    const years=[...new Set(results.map(r=>String(r.academicYear||"").trim()).filter(Boolean))].sort().reverse();
+
+    classSelect.innerHTML='<option value="">All Classes</option>'+classItems.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    subjectSelect.innerHTML='<option value="">All Subjects</option>'+subjectItems.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join("");
+    yearSelect.innerHTML='<option value="">All Years</option>'+years.map(y=>`<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
+
+    if([...classSelect.options].some(o=>o.value===currentClass))classSelect.value=currentClass;
+    if([...subjectSelect.options].some(o=>o.value===currentSubject))subjectSelect.value=currentSubject;
+    if([...yearSelect.options].some(o=>o.value===currentYear))yearSelect.value=currentYear;
+}
+
 function renderResults(){
     const table=document.getElementById("resultTable");
     if(!table)return;
-    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase();
+
+    populateResultReviewFilters();
+
+    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase().trim();
+    const classFilter=document.getElementById("resultReviewClass")?.value||"";
+    const subjectFilter=document.getElementById("resultReviewSubject")?.value||"";
+    const yearFilter=document.getElementById("resultReviewYear")?.value||"";
+    const termFilter=document.getElementById("resultReviewTerm")?.value||"";
+    const statusFilter=document.getElementById("resultReviewStatus")?.value||"";
 
     const filtered=results.filter(r=>{
         const student=getStudent(r.studentId);
         const subject=getSubject(r.subjectId);
         const c=getClass(r.classId);
         const uploader=r.uploadedByName || "";
-        const text=[student?.name||"",subject?.name||"",c?classDisplay(c):"",uploader,r.academicYear||"",r.term||"",r.grade||""].join(" ").toLowerCase();
-        return text.includes(search);
+        const status=getResultReviewStatus(r);
+        const text=[student?.name||r.studentName||"",subject?.name||"",c?classDisplay(c):"",uploader,r.academicYear||"",r.term||"",r.grade||"",status].join(" ").toLowerCase();
+        return (!classFilter || r.classId===classFilter) &&
+               (!subjectFilter || r.subjectId===subjectFilter) &&
+               (!yearFilter || String(r.academicYear||"").trim()===yearFilter) &&
+               (!termFilter || String(r.term||"").trim()===termFilter) &&
+               (!statusFilter || status===statusFilter) &&
+               text.includes(search);
     });
 
+    const complete=filtered.filter(r=>getResultReviewStatus(r)==="Complete").length;
+    const incomplete=filtered.length-complete;
+    const total=filtered.length;
+    const summary=document.getElementById("resultReviewSummary");
+    if(summary){
+        summary.innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap">
+            <span class="badge">Showing ${total}</span>
+            <span class="badge">Complete: ${complete}</span>
+            <span class="badge">Incomplete: ${incomplete}</span>
+        </div>`;
+    }
+
     if(!filtered.length){
-        table.innerHTML='<div class="empty">No results found.</div>';
+        table.innerHTML='<div class="empty">No teacher-uploaded results match the selected filters.</div>';
         renderResultSubmissionMonitor();
         return;
     }
 
     table.innerHTML=`<div class="table-wrap"><table>
-        <thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total</th><th>Performance</th><th>Submitted By</th><th>Submitted At</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th><th>Status</th><th>Uploaded By</th><th>Uploaded At</th></tr></thead>
         <tbody>${filtered.map(r=>{
             const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
-            const submitted=r.uploadedByName || "Administrator";
+            const submitted=r.uploadedByName || "Teacher";
             const when=r.uploadedAt ? new Date(r.uploadedAt).toLocaleString() : "—";
+            const status=getResultReviewStatus(r);
+            const classValue=(r.classScore!=="" && r.classScore!==null && r.classScore!==undefined) ? Number(r.classScore).toFixed(2) : "—";
+            const examValue=(r.examMark!=="" && r.examMark!==null && r.examMark!==undefined) ? Number(r.examMark).toFixed(2) : "—";
+            const totalValue=(status==="Complete" ? Number(r.total||0).toFixed(2) : "—");
+            const grade=status==="Complete" ? (r.grade||getPerformance(r.total)) : "Pending";
             return `<tr>
-                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(student?.name||r.studentName||"Unknown Student")}</td>
                 <td>${escapeHtml(c?classDisplay(c):"Unknown Class")}</td>
                 <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
-                <td>${Number(r.classScore||0).toFixed(2)}</td>
-                <td>${Number(r.examMark??r.examScore??0).toFixed(2)}</td>
-                <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
-                <td><span class="badge ${performanceClass(r.grade||getPerformance(r.total))}">${escapeHtml(r.grade||getPerformance(r.total))}</span></td>
+                <td>${classValue}</td>
+                <td>${examValue}</td>
+                <td><strong>${totalValue}</strong></td>
+                <td>${escapeHtml(grade)}</td>
+                <td><span class="badge ${status.toLowerCase()}">${status}</span></td>
                 <td>${escapeHtml(submitted)}</td>
                 <td>${escapeHtml(when)}</td>
-                <td><button class="edit-btn" onclick="editResult('${r.id}')">Edit</button><button class="danger-btn" onclick="deleteResult('${r.id}')">Delete</button></td>
             </tr>`;
         }).join("")}</tbody></table></div>`;
     renderResultSubmissionMonitor();
@@ -3188,83 +3269,134 @@ function importTeacherBulkMarksFromExcel(){
     const term=document.getElementById("teacherBulkMarksTerm")?.value||"Term 1";
     const input=document.getElementById("teacherBulkMarksExcelFile");
     const file=input?.files?.[0];
+
     if(!classId){showMessage("teacherBulkMarksMessage","Please select a class first.","error");return;}
     if(!file){showMessage("teacherBulkMarksMessage","Please select the Excel sheet you downloaded from SwiftSchool.","error");return;}
-    if(typeof XLSX==="undefined"){showMessage("teacherBulkMarksMessage","Excel support is not loaded. Refresh the portal and make sure you are online, then try again.","error");return;}
-    const schoolClass=getClass(classId), classStudents=getClassStudents(classId), classSubjects=getTeacherBulkSubjects(classId);
+    if(typeof XLSX==="undefined"){
+        showMessage("teacherBulkMarksMessage","Excel support is not loaded. Refresh the portal and make sure you are online, then try again.","error");
+        return;
+    }
+
+    const schoolClass=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=getTeacherBulkSubjects(classId);
     if(!schoolClass){showMessage("teacherBulkMarksMessage","The selected class could not be found.","error");return;}
     if(!classStudents.length){showMessage("teacherBulkMarksMessage","This class has no students.","error");return;}
     if(!classSubjects.length){showMessage("teacherBulkMarksMessage","No subjects are linked to this class.","error");return;}
+
     const reader=new FileReader();
     reader.onload=function(e){
         try{
             const data=e.target.result;
+            if(!data || !(data instanceof ArrayBuffer)) throw new Error("The browser did not return the Excel file data.");
+
             const wb=XLSX.read(new Uint8Array(data),{type:"array",cellDates:false,raw:true});
-            if(!wb.SheetNames?.length)throw new Error("No worksheet was found in the uploaded file.");
+            if(!wb.SheetNames?.length) throw new Error("No worksheet was found in the uploaded file.");
+
+            // Always use the first worksheet: this is the Marks sheet created by SwiftSchool.
             const sheet=wb.Sheets[wb.SheetNames[0]];
+            if(!sheet) throw new Error("The Marks worksheet could not be opened.");
+
             const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false});
-            if(!matrix.length)throw new Error("The Marks worksheet is empty.");
+            if(!matrix.length) throw new Error("The Marks worksheet is empty.");
+
             let headerRowIndex=-1;
             for(let i=0;i<Math.min(matrix.length,15);i++){
-                const normalized=(matrix[i]||[]).map(normalizeExcelHeader);
-                if(normalized.some(v=>v.replace(/[^a-z0-9]/g,"")==="studentid")&&normalized.some(v=>v.replace(/[^a-z0-9]/g,"")==="studentname")){headerRowIndex=i;break;}
+                const row=Array.isArray(matrix[i])?matrix[i]:[];
+                const normalized=row.map(normalizeExcelHeader);
+                if(normalized.some(v=>v.replace(/[^a-z0-9]/g,"")==="studentid") &&
+                   normalized.some(v=>v.replace(/[^a-z0-9]/g,"")==="studentname")){
+                    headerRowIndex=i; break;
+                }
             }
-            if(headerRowIndex<0)throw new Error("This is not a SwiftSchool class marks sheet. Please download a fresh Class Excel Sheet and upload that .xlsx file.");
+            if(headerRowIndex<0) throw new Error("This is not a SwiftSchool class marks sheet. Please download a fresh Class Excel Sheet and upload that .xlsx file.");
+
             const headers=matrix[headerRowIndex].map(v=>String(v??"").trim());
             const compact=v=>normalizeExcelHeader(v).replace(/[^a-z0-9]/g,"");
             const indexByCompact={};
-            headers.forEach((h,i)=>{const k=compact(h);if(k&&indexByCompact[k]===undefined)indexByCompact[k]=i;});
+            headers.forEach((h,i)=>{const k=compact(h);if(k && indexByCompact[k]===undefined)indexByCompact[k]=i;});
             const colFor=h=>indexByCompact[compact(h)];
-            const studentIdCol=colFor("Student ID"), studentNameCol=colFor("Student Name");
-            if(studentIdCol===undefined||studentNameCol===undefined)throw new Error("Student ID and Student Name columns are missing. Please download a fresh class sheet.");
-            const columns={},missing=[];
+
+            const studentIdCol=colFor("Student ID");
+            const studentNameCol=colFor("Student Name");
+            if(studentIdCol===undefined || studentNameCol===undefined) throw new Error("Student ID and Student Name columns are missing. Please download a fresh class sheet.");
+
+            const columns={};
+            const missing=[];
             classSubjects.forEach(subject=>{
-                const classCol=colFor(`${subject.name} Class Score /50`),examCol=colFor(`${subject.name} Exam Mark /100`);
-                if(classCol===undefined||examCol===undefined)missing.push(subject.name);
+                const classCol=colFor(`${subject.name} Class Score /50`);
+                const examCol=colFor(`${subject.name} Exam Mark /100`);
+                if(classCol===undefined || examCol===undefined) missing.push(subject.name);
                 columns[subject.id]={subject,classCol,examCol};
             });
-            if(missing.length)throw new Error(`The sheet is missing columns for: ${missing.join(", ")}. Download a fresh Class Excel Sheet.`);
+            if(missing.length) throw new Error(`The sheet is missing columns for: ${missing.join(", ")}. Download a fresh Class Excel Sheet.`);
+
             const studentMap=new Map(classStudents.map(st=>[String(st.id).trim().toLowerCase(),st]));
-            let created=0,updated=0,uploaded=0,skipped=0,partial=0,completeCount=0;
+            let created=0,updated=0,uploaded=0,skipped=0,incomplete=0;
             const errors=[];
+            const resultsBefore=results.length;
+
             for(let i=headerRowIndex+1;i<matrix.length;i++){
                 const row=Array.isArray(matrix[i])?matrix[i]:[];
                 const val=col=>col===undefined?"":String(row[col]??"").trim();
-                const studentId=val(studentIdCol),studentName=val(studentNameCol);
-                if(!studentId&&!studentName)continue;
-                const rowNumber=i+1,student=studentMap.get(studentId.toLowerCase());
+                const studentId=val(studentIdCol), studentName=val(studentNameCol);
+                if(!studentId && !studentName) continue;
+
+                const rowNumber=i+1;
+                const student=studentMap.get(studentId.toLowerCase());
                 if(!student){errors.push(`Row ${rowNumber}: Student ID ${studentId||"(blank)"} is not in this class.`);skipped++;continue;}
-                if(studentName&&studentName.toLowerCase()!==String(student.name).trim().toLowerCase()){errors.push(`Row ${rowNumber}: Student name does not match ${student.id}.`);skipped++;continue;}
+                if(studentName && studentName.toLowerCase()!==String(student.name).trim().toLowerCase()){
+                    errors.push(`Row ${rowNumber}: Student name does not match ${student.id}.`);skipped++;continue;
+                }
+
                 let rowUploaded=0;
                 Object.values(columns).forEach(({subject,classCol,examCol})=>{
-                    const rawClass=val(classCol),rawExam=val(examCol);
-                    if(rawClass===""&&rawExam==="")return;
+                    const rawClass=val(classCol), rawExam=val(examCol);
+                    // Blank cells are deliberately ignored so teachers can upload progressively.
+                    if(rawClass==="" && rawExam==="") return;
+                    if(rawClass==="" || rawExam===""){
+                        incomplete++;
+                        errors.push(`Row ${rowNumber}: ${subject.name} needs both Class Score and Exam Mark, or leave both blank.`);
+                        return;
+                    }
+                    const classScore=Number(rawClass), examMark=Number(rawExam);
+                    if(!Number.isFinite(classScore)||classScore<0||classScore>50){errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);return;}
+                    if(!Number.isFinite(examMark)||examMark<0||examMark>100){errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);return;}
+
+                    const examScore=examMark/2, total=classScore+examScore;
                     const existingIndex=results.findIndex(r=>r.studentId===student.id&&r.classId===classId&&r.subjectId===subject.id&&String(r.academicYear||"").trim()===year&&String(r.term||"").trim()===term);
-                    const existing=existingIndex!==-1?results[existingIndex]:null;
-                    let classScore=existing&&Number.isFinite(Number(existing.classScore))?Number(existing.classScore):null;
-                    let examMark=existing&&Number.isFinite(Number(existing.examMark))?Number(existing.examMark):null;
-                    if(rawClass!==""){const n=Number(rawClass);if(!Number.isFinite(n)||n<0||n>50){errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);return;}classScore=n;}
-                    if(rawExam!==""){const n=Number(rawExam);if(!Number.isFinite(n)||n<0||n>100){errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);return;}examMark=n;}
-                    const hasClass=Number.isFinite(classScore),hasExam=Number.isFinite(examMark),complete=hasClass&&hasExam;
-                    const examScore=hasExam?examMark/2:null,total=complete?classScore+examScore:null;
-                    const data={studentId:student.id,studentName:student.name,classId,subjectId:subject.id,academicYear:year,term,classScore:hasClass?classScore:null,examMark:hasExam?examMark:null,examScore,total,grade:complete?getPerformance(total):"Incomplete",uploadedBy:currentUser?.id||"",uploadedByName:currentUser?.name||"Teacher",uploadedAt:new Date().toISOString(),source:"Teacher Upload"};
-                    if(existingIndex!==-1){results[existingIndex]={...results[existingIndex],...data};updated++;}else{results.push({id:"RES-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),...data});created++;}
-                    uploaded++;rowUploaded++;if(complete)completeCount++;else partial++;
+                    const data={studentId:student.id,studentName:student.name,classId,subjectId:subject.id,academicYear:year,term,classScore,examMark,examScore,total,grade:getPerformance(total),uploadedBy:currentUser?.id||"",uploadedByName:currentUser?.name||"Teacher",uploadedAt:new Date().toISOString(),source:"Teacher Upload"};
+                    if(existingIndex!==-1){results[existingIndex]={...results[existingIndex],...data};updated++;}
+                    else{results.push({id:"RES-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),...data});created++;}
+                    uploaded++;rowUploaded++;
                 });
-                if(rowUploaded===0)skipped++;
+                if(rowUploaded===0) skipped++;
             }
-            saveAll();renderTeacherResults();refreshDashboard();
-            let message=`Upload complete: ${uploaded} mark entr${uploaded===1?"y":"ies"} saved (${created} new, ${updated} updated).`;
-            if(partial)message+=` ${partial} partial entries saved for progressive completion.`;
-            if(completeCount)message+=` ${completeCount} complete entries.`;
+
+            saveAll();
+            renderTeacherResults();
+            refreshDashboard();
+            let message=`Upload complete: ${uploaded} mark${uploaded===1?"":"s"} saved (${created} new, ${updated} updated).`;
+            if(incomplete)message+=` ${incomplete} incomplete entr${incomplete===1?"y":"ies"} skipped.`;
             if(errors.length)message+=` ${errors.length} issue${errors.length===1?"":"s"} found.`;
             showMessage("teacherBulkMarksMessage",message,errors.length?"error":"success");
-            if(errors.length){const box=document.getElementById("teacherBulkMarksMessage");box.innerHTML+=`<div style="margin-top:8px;font-size:13px">${errors.slice(0,8).join("<br>")}${errors.length>8?"<br>…and more.":""}</div>`;}
-        }catch(err){console.error("SwiftSchool teacher Excel import error:",err);const msg=document.getElementById("teacherBulkMarksMessage");if(msg){msg.className="message error";msg.textContent=`Excel upload failed: ${err?.message||"The workbook could not be read."}`;}}
+            if(errors.length){
+                const box=document.getElementById("teacherBulkMarksMessage");
+                box.innerHTML+=`<div style="margin-top:8px;font-size:13px">${errors.slice(0,8).join("<br>")}${errors.length>8?"<br>…and more.":""}</div>`;
+            }
+        }catch(err){
+            console.error("SwiftSchool teacher Excel import error:",err);
+            const msg=document.getElementById("teacherBulkMarksMessage");
+            if(msg){msg.className="message error";msg.textContent=`Excel upload failed: ${err?.message||"The workbook could not be read."}`;}
+        }
     };
-    reader.onerror=function(){const msg=document.getElementById("teacherBulkMarksMessage");if(msg){msg.className="message error";msg.textContent="Excel upload failed: your browser could not read the selected file. Please download the class sheet again and upload the .xlsx file.";}};
+    reader.onerror=function(){
+        const msg=document.getElementById("teacherBulkMarksMessage");
+        if(msg){msg.className="message error";msg.textContent="Excel upload failed: your browser could not read the selected file. Please download the class sheet again and upload the .xlsx file.";}
+    };
     reader.readAsArrayBuffer(file);
 }
+
 /* =========================
    TEACHER RESULT VIEW
 ========================= */
@@ -4380,6 +4512,11 @@ document.getElementById("teacherSearch").addEventListener("input",renderTeachers
 document.getElementById("classSearch").addEventListener("input",renderClasses);
 document.getElementById("subjectSearch").addEventListener("input",renderSubjects);
 document.getElementById("resultSearch").addEventListener("input",renderResults);
+document.getElementById("resultReviewClass")?.addEventListener("change",renderResults);
+document.getElementById("resultReviewSubject")?.addEventListener("change",renderResults);
+document.getElementById("resultReviewYear")?.addEventListener("change",renderResults);
+document.getElementById("resultReviewTerm")?.addEventListener("change",renderResults);
+document.getElementById("resultReviewStatus")?.addEventListener("change",renderResults);
 document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
 document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
 
