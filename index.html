@@ -1385,7 +1385,8 @@ function refreshDashboard(){
     document.getElementById("classCount").textContent=classes.length;
     document.getElementById("subjectCount").textContent=subjects.length;
     document.getElementById("resultCount").textContent=results.length;
-    document.getElementById("attendanceCount").textContent=attendance.length;
+    const attendanceCount=document.getElementById("attendanceCount");
+    if(attendanceCount) attendanceCount.textContent=attendance.length;
 }
 
 
