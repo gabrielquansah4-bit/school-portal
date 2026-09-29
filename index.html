@@ -3138,6 +3138,108 @@ function openParentChildAttendance(studentId){
 
 
 /* =========================
+   PARENT RESULTS
+========================= */
+
+function getParentChildClass(studentId){
+    const student=getStudent(studentId);
+    if(!student)return null;
+    return classes.find(c=>getReportClassStudents(c.id).some(s=>normalizeId(s.id)===normalizeId(studentId)))
+        || classes.find(c=>normalizeId(c.name)===normalizeId(student.className));
+}
+
+function populateParentResultStudent(selected=""){
+    const select=document.getElementById("parentResultStudent");
+    if(!select)return;
+    const children=getLinkedChildren();
+    select.innerHTML='<option value="">Select Child</option>'+children.map(s=>`
+        <option value="${escapeHtml(s.id)}" ${normalizeId(selected)===normalizeId(s.id)?"selected":""}>
+            ${escapeHtml(s.name||"Unnamed Student")} (${escapeHtml(s.id)})
+        </option>
+    `).join("");
+    select.disabled=!children.length;
+}
+
+function renderParentResults(){
+    const children=getLinkedChildren();
+    populateParentResultStudent(document.getElementById("parentResultStudent")?.value||children[0]?.id||"");
+    const content=document.getElementById("parentResultsContent");
+    if(!content)return;
+    if(!children.length){
+        content.innerHTML='<div class="empty">No children are linked to your account. Please add a child using the Student ID.</div>';
+        return;
+    }
+    renderSelectedParentResults();
+}
+
+function renderSelectedParentResults(){
+    const studentId=document.getElementById("parentResultStudent")?.value||"";
+    const academicYear=document.getElementById("parentResultYear")?.value.trim()||"";
+    const term=document.getElementById("parentResultTerm")?.value||"Term 1";
+    const content=document.getElementById("parentResultsContent");
+
+    if(!studentId){
+        if(content)content.innerHTML='<div class="empty">Please select a child.</div>';
+        return;
+    }
+    if(!academicYear){
+        showMessage("parentResultsMessage","Please enter the academic year.","error");
+        return;
+    }
+
+    const student=getStudent(studentId);
+    const schoolClass=getParentChildClass(studentId);
+    if(!student||!schoolClass){
+        showMessage("parentResultsMessage","The child or class could not be found.","error");
+        return;
+    }
+
+    currentReportStudentId=student.id;
+    currentReportClassId=schoolClass.id;
+    currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
+
+    if(content){
+        content.innerHTML=buildStudentReportCard(student,schoolClass.id,academicYear,term);
+    }
+    showMessage("parentResultsMessage",`Report for ${student.name} loaded successfully.`,"success");
+}
+
+function printParentReport(){
+    const studentId=document.getElementById("parentResultStudent")?.value||"";
+    const academicYear=document.getElementById("parentResultYear")?.value.trim()||"";
+    const term=document.getElementById("parentResultTerm")?.value||"Term 1";
+    const printContainer=document.getElementById("parentReportPrintContainer");
+
+    if(!studentId||!academicYear){
+        showMessage("parentResultsMessage","Select a child and academic year first.","error");
+        return;
+    }
+
+    const student=getStudent(studentId);
+    const schoolClass=getParentChildClass(studentId);
+    if(!student||!schoolClass){
+        showMessage("parentResultsMessage","The child's report could not be found.","error");
+        return;
+    }
+
+    if(printContainer){
+        printContainer.innerHTML=buildStudentReportCard(student,schoolClass.id,academicYear,term);
+        printContainer.style.display="block";
+    }
+
+    document.body.classList.add("report-printing");
+    setTimeout(()=>{
+        window.print();
+        setTimeout(()=>{
+            document.body.classList.remove("report-printing");
+            if(printContainer)printContainer.style.display="none";
+        },500);
+    },100);
+}
+
+
+/* =========================
    TEACHER SUBJECT VIEW
 ========================= */
 
