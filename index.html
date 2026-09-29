@@ -749,8 +749,46 @@ td{font-size:14px}
 <!-- TEACHER RESULTS -->
 <section id="teacherResults" class="page">
     <div class="page-header">
-        <div><h1>Student Results</h1><p>Results for students in your assigned subjects.</p></div>
+        <div><h1>Student Results</h1><p>View and upload results for your classes and subjects.</p></div>
     </div>
+
+    <div class="panel" id="teacherBulkMarksPanel">
+        <h2>Marks Upload (Excel)</h2>
+        <p style="margin:8px 0 14px;color:#666">Download your class Excel sheet, enter the marks that have been reviewed, and upload it. You can upload the sheet several times as marking continues. Blank cells are skipped, so unfinished subjects can be completed later.</p>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Academic Year *</label>
+                <input id="teacherBulkMarksYear" value="2026/2027">
+            </div>
+            <div class="form-group">
+                <label>Term *</label>
+                <select id="teacherBulkMarksTerm">
+                    <option>Term 1</option>
+                    <option>Term 2</option>
+                    <option>Term 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Class *</label>
+                <select id="teacherBulkMarksClass">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Excel File *</label>
+                <input type="file" id="teacherBulkMarksExcelFile" accept=".xlsx,.xls,.csv">
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+            <button class="secondary-btn" type="button" onclick="downloadTeacherBulkMarksTemplate()">Download Class Excel Sheet</button>
+            <button class="primary-btn" type="button" onclick="importTeacherBulkMarksFromExcel()">Upload Scores</button>
+        </div>
+        <div id="teacherBulkMarksMessage" class="message" style="margin-top:15px"></div>
+        <div class="import-note">
+            <strong>Scoring:</strong> Class Score is out of 50. Examination Mark is entered out of 100 and is automatically converted to 50.
+        </div>
+    </div>
+
     <div class="panel">
         <div id="teacherResultsContent"></div>
     </div>
@@ -1751,7 +1789,10 @@ function refreshPage(pageId){
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
     if(pageId==="teacherSubjects")renderTeacherSubjects();
-    if(pageId==="teacherResults")renderTeacherResults();
+    if(pageId==="teacherResults"){
+        populateTeacherBulkMarksClassSelect();
+        renderTeacherResults();
+    }
     if(pageId==="parentAttendance")renderParentAttendance();
     if(pageId==="teacherAttendance")renderTeacherAttendance();
     if(pageId==="adminAttendance"){
@@ -3347,6 +3388,266 @@ function renderParentResults(){
         </tbody>
     </table>
     </div>`;
+}
+
+
+/* =========================
+   TEACHER BULK MARKS UPLOAD
+========================= */
+
+function getTeacherBulkClasses(){
+    if(!currentUser)return [];
+    return classes.filter(c=>c.teacherId===currentUser.id);
+}
+
+function getTeacherBulkSubjects(classId){
+    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
+
+    // If subjects have teacher assignments, only show this teacher's subjects.
+    const assigned=classSubjects.filter(s=>s.teacherId===currentUser?.id);
+    if(assigned.length)return assigned;
+
+    // Supports schools where subjects are linked to classes only.
+    return classSubjects.filter(s=>!s.teacherId);
+}
+
+function populateTeacherBulkMarksClassSelect(selected=""){
+    const select=document.getElementById("teacherBulkMarksClass");
+    if(!select)return;
+
+    const available=getTeacherBulkClasses();
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        available.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+}
+
+function downloadTeacherBulkMarksTemplate(){
+    const classId=document.getElementById("teacherBulkMarksClass")?.value;
+    const year=(document.getElementById("teacherBulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("teacherBulkMarksTerm")?.value||"Term 1";
+
+    if(!classId){
+        showMessage("teacherBulkMarksMessage","Please select a class first.","error");
+        return;
+    }
+
+    if(typeof XLSX==="undefined"){
+        showMessage("teacherBulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const schoolClass=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=getTeacherBulkSubjects(classId);
+
+    if(!schoolClass){
+        showMessage("teacherBulkMarksMessage","The selected class could not be found.","error");
+        return;
+    }
+    if(!classStudents.length){
+        showMessage("teacherBulkMarksMessage","No students are allocated to this class.","error");
+        return;
+    }
+    if(!classSubjects.length){
+        showMessage("teacherBulkMarksMessage","No subjects available for this class and your teacher account.","error");
+        return;
+    }
+
+    const headers=["Student ID","Student Name"];
+    classSubjects.forEach(subject=>{
+        headers.push(`${subject.name} Class Score /50`);
+        headers.push(`${subject.name} Exam Mark /100`);
+    });
+
+    const rows=classStudents.map(student=>{
+        const row={"Student ID":student.id,"Student Name":student.name};
+        classSubjects.forEach(subject=>{
+            row[`${subject.name} Class Score /50`]='';
+            row[`${subject.name} Exam Mark /100`]='';
+        });
+        return row;
+    });
+
+    const ws=XLSX.utils.json_to_sheet(rows,{header:headers});
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Marks");
+
+    const instructions=[
+        ["SwiftSchool Teacher Marks Template"],
+        ["Teacher",currentUser?.name||""],
+        ["Class",classDisplay(schoolClass)],
+        ["Academic Year",year],
+        ["Term",term],
+        [],
+        ["Instructions"],
+        ["1","Enter Class Score from 0 to 50."],
+        ["2","Enter the full Examination Mark from 0 to 100."],
+        ["3","The system converts the Exam Mark to 50%."],
+        ["4","Example: 80/100 becomes 40/50."],
+        ["5","Leave unfinished marks blank. Blank cells will be skipped."],
+        ["6","You can upload the same sheet again after reviewing more marks."],
+        ["7","Do not change Student ID, Student Name, or subject column names."]
+    ];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(instructions),"Instructions");
+
+    const safe=classDisplay(schoolClass).replace(/[^A-Za-z0-9]+/g,"_");
+    XLSX.writeFile(wb,`SwiftSchool_${safe}_Teacher_Marks_${term.replace(/\s+/g,"_")}.xlsx`);
+    showMessage("teacherBulkMarksMessage","Your class Excel sheet has been downloaded.","success");
+}
+
+function importTeacherBulkMarksFromExcel(){
+    const classId=document.getElementById("teacherBulkMarksClass")?.value;
+    const year=(document.getElementById("teacherBulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("teacherBulkMarksTerm")?.value||"Term 1";
+    const file=document.getElementById("teacherBulkMarksExcelFile")?.files?.[0];
+
+    if(!classId){showMessage("teacherBulkMarksMessage","Please select a class first.","error");return;}
+    if(!file){showMessage("teacherBulkMarksMessage","Please select the completed Excel sheet.","error");return;}
+    if(typeof XLSX==="undefined"){
+        showMessage("teacherBulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const schoolClass=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=getTeacherBulkSubjects(classId);
+
+    if(!schoolClass || !getTeacherBulkClasses().some(c=>c.id===classId)){
+        showMessage("teacherBulkMarksMessage","You are not assigned to this class.","error");
+        return;
+    }
+    if(!classStudents.length){showMessage("teacherBulkMarksMessage","This class has no students.","error");return;}
+    if(!classSubjects.length){showMessage("teacherBulkMarksMessage","No subjects are available for this class and your teacher account.","error");return;}
+
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+            const sheet=wb.Sheets[wb.SheetNames[0]];
+            const rows=XLSX.utils.sheet_to_json(sheet,{defval:""});
+            if(!rows.length){showMessage("teacherBulkMarksMessage","The Excel sheet is empty.","error");return;}
+
+            const headers=Object.keys(rows[0]);
+            const findHeader=wanted=>headers.find(h=>normalizeExcelHeader(h)===normalizeExcelHeader(wanted));
+            const studentIdHeader=findHeader("Student ID");
+            const studentNameHeader=findHeader("Student Name");
+
+            if(!studentIdHeader || !studentNameHeader){
+                showMessage("teacherBulkMarksMessage","The sheet must contain Student ID and Student Name columns. Download a new class sheet if needed.","error");
+                return;
+            }
+
+            const columns={};
+            const missing=[];
+            classSubjects.forEach(subject=>{
+                const classHeader=findHeader(`${subject.name} Class Score /50`);
+                const examHeader=findHeader(`${subject.name} Exam Mark /100`);
+                if(!classHeader || !examHeader)missing.push(subject.name);
+                columns[subject.id]={subject,classHeader,examHeader};
+            });
+
+            if(missing.length){
+                showMessage("teacherBulkMarksMessage",`The sheet is missing columns for: ${missing.join(", ")}. Download a fresh class sheet.` ,"error");
+                return;
+            }
+
+            const studentMap=new Map(classStudents.map(s=>[String(s.id).trim().toLowerCase(),s]));
+            let created=0,updated=0,uploaded=0,skipped=0,incomplete=0;
+            const errors=[];
+
+            rows.forEach((row,index)=>{
+                const rowNumber=index+2;
+                const studentId=String(row[studentIdHeader]??"").trim();
+                const studentName=String(row[studentNameHeader]??"").trim();
+                if(!studentId && !studentName)return;
+
+                const student=studentMap.get(studentId.toLowerCase());
+                if(!student){errors.push(`Row ${rowNumber}: Student ID ${studentId||"(blank)"} is not in this class.`);skipped++;return;}
+                if(studentName && studentName.toLowerCase()!==String(student.name).trim().toLowerCase()){
+                    errors.push(`Row ${rowNumber}: Student name does not match Student ID ${student.id}.`);skipped++;return;
+                }
+
+                let rowUploaded=0;
+
+                Object.values(columns).forEach(({subject,classHeader,examHeader})=>{
+                    const rawClass=String(row[classHeader]??"").trim();
+                    const rawExam=String(row[examHeader]??"").trim();
+
+                    // Blank pair means this subject has not been reviewed yet. Skip it.
+                    if(rawClass==="" && rawExam==="")return;
+                    if(rawClass==="" || rawExam===""){
+                        incomplete++;
+                        errors.push(`Row ${rowNumber}: ${subject.name} needs both Class Score and Exam Mark, or leave both blank.`);
+                        return;
+                    }
+
+                    const classScore=Number(rawClass);
+                    const examMark=Number(rawExam);
+                    if(!Number.isFinite(classScore) || classScore<0 || classScore>50){errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);return;}
+                    if(!Number.isFinite(examMark) || examMark<0 || examMark>100){errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);return;}
+
+                    const examScore=(examMark*50)/100;
+                    const total=classScore+examScore;
+                    const existingIndex=results.findIndex(r=>
+                        r.studentId===student.id &&
+                        r.classId===classId &&
+                        r.subjectId===subject.id &&
+                        String(r.academicYear||"").trim()===year &&
+                        String(r.term||"").trim()===term
+                    );
+
+                    const data={
+                        studentId:student.id,
+                        studentName:student.name,
+                        classId,
+                        subjectId:subject.id,
+                        academicYear:year,
+                        term,
+                        classScore,
+                        examMark,
+                        examScore,
+                        total,
+                        grade:getPerformance(total)
+                    };
+
+                    if(existingIndex!==-1){
+                        results[existingIndex]={...results[existingIndex],...data};
+                        updated++;
+                    }else{
+                        results.push({id:"RES-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),...data});
+                        created++;
+                    }
+                    uploaded++;
+                    rowUploaded++;
+                });
+
+                if(rowUploaded===0)skipped++;
+            });
+
+            saveAll();
+            renderTeacherResults();
+            refreshDashboard();
+
+            let message=`Upload complete: ${uploaded} mark${uploaded===1?"":"s"} saved (${created} new, ${updated} updated).`;
+            if(incomplete)message+=` ${incomplete} incomplete subject entr${incomplete===1?"y":"ies"} skipped.`;
+            if(errors.length)message+=` ${errors.length} issue${errors.length===1?"":"s"} found.`;
+            showMessage("teacherBulkMarksMessage",message,errors.length?"error":"success");
+
+            if(errors.length){
+                const detail=errors.slice(0,8).join("<br>");
+                const box=document.getElementById("teacherBulkMarksMessage");
+                box.innerHTML+=`<div style="margin-top:8px;font-size:13px">${detail}${errors.length>8?"<br>…and more.":""}</div>`;
+            }
+        }catch(err){
+            console.error(err);
+            showMessage("teacherBulkMarksMessage","Could not read the Excel file. Please use the downloaded class template.","error");
+        }
+    };
+    reader.readAsArrayBuffer(file);
 }
 
 
