@@ -521,8 +521,27 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 <!-- PARENT CHILDREN -->
 <section id="children" class="page">
     <div class="page-header">
-        <div><h1>My Children</h1><p>Students linked to your account.</p></div>
+        <div><h1>My Children</h1><p>Add and view your children using the Student ID provided by the school.</p></div>
+        <button class="primary-btn" type="button" onclick="openAddChildForm()">+ Add Child</button>
     </div>
+
+    <div class="panel" id="addChildPanel" style="display:none">
+        <h2>Add Child</h2>
+        <p>Enter the Student ID provided by the school.</p>
+        <form id="addChildForm" onsubmit="addChildByStudentId(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Student ID *</label>
+                    <input id="parentAddStudentId" required placeholder="e.g. STU-001">
+                </div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Add Child</button>
+            <button class="secondary-btn" type="button" onclick="closeAddChildForm()">Cancel</button>
+        </form>
+        <div id="addChildMessage" class="message"></div>
+    </div>
+
     <div class="panel">
         <div id="childrenContent"></div>
     </div>
@@ -3028,6 +3047,69 @@ function renderStudentSubjects(){
 /* =========================
    PARENT CHILDREN
 ========================= */
+
+function getLinkedChildren(){
+    const parent=getParent(currentUser?.id);
+    if(!parent)return [];
+    const ids=Array.isArray(parent.studentIds) ? parent.studentIds : [];
+    return ids.map(id=>getStudent(id)).filter(Boolean);
+}
+
+function openAddChildForm(){
+    const panel=document.getElementById("addChildPanel");
+    const input=document.getElementById("parentAddStudentId");
+    const message=document.getElementById("addChildMessage");
+    if(panel)panel.style.display="block";
+    if(input){input.value="";input.focus();}
+    if(message){message.className="message";message.textContent="";}
+}
+
+function closeAddChildForm(){
+    const panel=document.getElementById("addChildPanel");
+    const form=document.getElementById("addChildForm");
+    const message=document.getElementById("addChildMessage");
+    if(panel)panel.style.display="none";
+    if(form)form.reset();
+    if(message){message.className="message";message.textContent="";}
+}
+
+function addChildByStudentId(event){
+    event.preventDefault();
+    const message=document.getElementById("addChildMessage");
+    const studentId=(document.getElementById("parentAddStudentId")?.value||"").trim();
+    const parent=getParent(currentUser?.id);
+
+    const showError=(text)=>{
+        if(message){message.className="message error";message.textContent=text;}
+    };
+
+    if(!parent){showError("Parent account could not be found.");return;}
+    if(!studentId){showError("Please enter the Student ID.");return;}
+
+    const student=students.find(s=>String(s.id||"").trim().toLowerCase()===studentId.toLowerCase());
+    if(!student){
+        showError("Student ID not found. Please check the ID provided by the school.");
+        return;
+    }
+
+    if(!Array.isArray(parent.studentIds))parent.studentIds=[];
+    const alreadyLinked=parent.studentIds.some(id=>String(id).trim().toLowerCase()===String(student.id).trim().toLowerCase());
+    if(alreadyLinked){
+        showError("This child is already linked to your account.");
+        return;
+    }
+
+    parent.studentIds.push(student.id);
+    saveAll();
+    renderChildren();
+
+    if(message){
+        message.className="message success";
+        message.textContent=`${student.name} has been added to your account.`;
+    }
+
+    document.getElementById("addChildForm")?.reset();
+}
 
 function renderChildren(){
     const parent=getParent(currentUser?.id);
