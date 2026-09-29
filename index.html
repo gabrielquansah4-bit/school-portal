@@ -536,6 +536,17 @@ td{font-size:14px}
 .import-actions input[type=file]{max-width:100%}
 .import-note{font-size:13px;color:#64748b;margin-top:10px;line-height:1.5}
 
+
+/* =========================
+   ALL-IN-ONE MODULES UPGRADE
+========================= */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.analytics-list{display:flex;flex-direction:column;gap:10px}.analytics-row{display:flex;justify-content:space-between;gap:12px;align-items:center}.bar-wrap{flex:1;background:#e5e7eb;border-radius:20px;height:10px;overflow:hidden}.bar-fill{height:100%;background:#2563eb}.analytics-value{min-width:55px;text-align:right;font-weight:700}
+.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.module-card{border:1px solid #e5e7eb;border-radius:10px;padding:15px;background:#fff}.module-card h3{margin-bottom:7px}.muted{color:#6b7280;font-size:13px}
+.logo-preview{width:90px;height:90px;border:1px dashed #cbd5e1;border-radius:8px;object-fit:contain;background:#f8fafc;display:block;margin-top:8px}.notice{border-left:4px solid #2563eb;background:#f8fafc;padding:15px;border-radius:8px;margin-bottom:12px}.notice h3{margin-bottom:5px}.notice small{color:#64748b}.timetable-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.day-column{border:1px solid #e5e7eb;border-radius:8px;padding:10px;min-height:160px;background:#fafafa}.slot{background:#fff;border:1px solid #dbeafe;border-radius:7px;padding:9px;margin-bottom:8px}.slot strong{display:block}.document-actions{display:flex;gap:10px;flex-wrap:wrap}.danger-outline{border:1px solid #dc2626;background:#fff;color:#dc2626;padding:9px 13px;border-radius:7px}.small-btn{background:#475569;color:#fff;border:0;padding:6px 9px;border-radius:6px}
+@media(max-width:900px){.analytics-grid,.module-grid{grid-template-columns:1fr 1fr}.timetable-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.analytics-grid,.module-grid,.timetable-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 
@@ -591,6 +602,8 @@ td{font-size:14px}
     <div class="nav-section">Main</div>
     <div class="nav-link" data-page="dashboard">Dashboard</div>
     <div class="nav-link" data-page="profile">My Profile</div>
+    <div class="nav-link" data-page="timetable">Timetable</div>
+    <div class="nav-link" data-page="notifications">Notifications</div>
 
     <div id="parentNav">
         <div class="nav-section">Parent</div>
@@ -618,7 +631,10 @@ td{font-size:14px}
         <div class="nav-link" data-page="adminAttendance">Attendance</div>
         <div class="nav-link" data-page="adminFees">Fees</div>
         <div class="nav-link" data-page="reports">Reports</div>
-        <div class="nav-link" data-page="settings">Settings</div>
+        <div class="nav-link" data-page="promotions">Promotions / Progression</div>
+        <div class="nav-link" data-page="accounts">User Accounts</div>
+        <div class="nav-link" data-page="documents">Printable Documents</div>
+        <div class="nav-link" data-page="settings">School Settings</div>
     </div>
 
     <div class="nav-link logout-link" onclick="logout()">Logout</div>
@@ -680,6 +696,12 @@ td{font-size:14px}
     <div class="panel">
         <h2>Performance Levels</h2>
         <p>Advanced • Approaching Advanced • Proficient • Approaching Proficiency • Developing • Beginning</p>
+    </div>
+    <div class="analytics-grid">
+        <div class="panel"><h2>Performance Distribution</h2><div id="dashboardPerformanceChart" class="analytics-list"></div></div>
+        <div class="panel"><h2>Attendance Overview</h2><div id="dashboardAttendanceChart" class="analytics-list"></div></div>
+        <div class="panel"><h2>Fees Overview</h2><div id="dashboardFeesChart" class="analytics-list"></div></div>
+        <div class="panel"><h2>Quick Actions</h2><div class="document-actions"><button class="primary-btn" onclick="showPage('students')">Students</button><button class="primary-btn" onclick="showPage('adminResults')">Results</button><button class="primary-btn" onclick="showPage('adminAttendance')">Attendance</button><button class="primary-btn" onclick="showPage('adminFees')">Fees</button><button class="primary-btn" onclick="showPage('reports')">Reports</button></div></div>
     </div>
 </section>
 
@@ -1331,7 +1353,83 @@ td{font-size:14px}
     </div>
 
 </section>
-<section id="settings" class="page"><div class="panel"><h1>Settings</h1><p>System settings will be added later.</p></div></section>
+<section id="timetable" class="page">
+    <div class="page-header"><div><h1>School Timetable</h1><p>View and manage the weekly class timetable.</p></div><button class="primary-btn" onclick="openTimetableForm()">+ Add Timetable Entry</button></div>
+    <div id="timetableMessage" class="message"></div>
+    <div class="panel" id="timetableFormPanel" style="display:none">
+        <h2 id="timetableFormTitle">Add Timetable Entry</h2>
+        <form id="timetableForm"><div class="form-grid">
+            <div class="form-group"><label>Academic Year *</label><input id="ttYear" value="2026/2027" required></div>
+            <div class="form-group"><label>Day *</label><select id="ttDay" required><option value="">Select Day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></div>
+            <div class="form-group"><label>Class *</label><select id="ttClass" required></select></div>
+            <div class="form-group"><label>Subject *</label><select id="ttSubject" required></select></div>
+            <div class="form-group"><label>Teacher</label><select id="ttTeacher"></select></div>
+            <div class="form-group"><label>Start Time *</label><input id="ttStart" type="time" required></div>
+            <div class="form-group"><label>End Time *</label><input id="ttEnd" type="time" required></div>
+            <div class="form-group"><label>Room</label><input id="ttRoom"></div>
+        </div><br><button class="primary-btn" type="submit">Save Entry</button> <button class="secondary-btn" type="button" onclick="closeTimetableForm()">Cancel</button></form>
+    </div>
+    <div class="panel"><div id="timetableTable"></div></div>
+</section>
+
+<section id="notifications" class="page">
+    <div class="page-header"><div><h1>Notifications</h1><p>School notices for parents and teachers.</p></div></div>
+    <div id="notificationAdminArea" class="panel" style="display:none">
+        <h2>Create Notice</h2><form id="notificationForm"><div class="form-grid">
+            <div class="form-group"><label>Audience *</label><select id="noticeAudience" required><option>All</option><option>Parents</option><option>Teachers</option></select></div>
+            <div class="form-group"><label>Title *</label><input id="noticeTitle" required></div>
+            <div class="form-group full"><label>Message *</label><textarea id="noticeMessage" rows="4" style="width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px" required></textarea></div>
+        </div><br><button class="primary-btn" type="submit">Publish Notice</button></form></div>
+    <div class="panel"><div id="notificationList"></div></div>
+</section>
+
+<section id="promotions" class="page">
+    <div class="page-header"><div><h1>Promotions / Student Progression</h1><p>Move students from one class to another for a new academic year.</p></div></div>
+    <div id="promotionMessage" class="message"></div>
+    <div class="panel"><form id="promotionForm"><div class="form-grid">
+        <div class="form-group"><label>Current Class *</label><select id="promotionFrom" required></select></div>
+        <div class="form-group"><label>New Class *</label><select id="promotionTo" required></select></div>
+        <div class="form-group"><label>New Academic Year *</label><input id="promotionYear" value="2027/2028" required></div>
+    </div><br><button class="primary-btn" type="submit">Promote Selected Students</button></form></div>
+    <div class="panel"><h2>Students in Selected Class</h2><div id="promotionStudents"></div></div>
+</section>
+
+<section id="accounts" class="page">
+    <div class="page-header"><div><h1>User Accounts</h1><p>Reset or update parent and teacher login credentials.</p></div></div>
+    <div id="accountMessage" class="message"></div>
+    <div class="panel"><div class="form-grid">
+        <div class="form-group"><label>Account Type</label><select id="accountType"><option>Teacher</option><option>Parent</option><option>Administrator</option></select></div>
+        <div class="form-group"><label>Account</label><select id="accountUser"></select></div>
+        <div class="form-group"><label>Username</label><input id="accountUsername"></div>
+        <div class="form-group"><label>New Password</label><input id="accountPassword" type="password"></div>
+    </div><br><button class="primary-btn" onclick="saveAccountChanges()">Save Account Changes</button></div>
+    <div class="panel"><div id="accountTable"></div></div>
+</section>
+
+<section id="documents" class="page">
+    <div class="page-header"><div><h1>Printable Documents</h1><p>Print common school documents directly from the portal.</p></div></div>
+    <div class="module-grid">
+        <div class="module-card"><h3>Student List</h3><p class="muted">Print all students and their classes.</p><br><button class="primary-btn" onclick="printStudentList()">Print</button></div>
+        <div class="module-card"><h3>Class List</h3><p class="muted">Print students grouped by class.</p><br><button class="primary-btn" onclick="printClassList()">Print</button></div>
+        <div class="module-card"><h3>Admission Form</h3><p class="muted">Print a blank student admission form.</p><br><button class="primary-btn" onclick="printAdmissionForm()">Print</button></div>
+        <div class="module-card"><h3>Teacher List</h3><p class="muted">Print teacher names and details.</p><br><button class="primary-btn" onclick="printTeacherList()">Print</button></div>
+        <div class="module-card"><h3>Attendance Summary</h3><p class="muted">Print attendance totals by student.</p><br><button class="primary-btn" onclick="printAttendanceSummary()">Print</button></div>
+    </div>
+</section>
+
+<section id="settings" class="page">
+    <div class="page-header"><div><h1>School Settings</h1><p>Configure the school identity used across reports and printable documents.</p></div></div>
+    <div id="settingsMessage" class="message"></div>
+    <div class="panel"><form id="settingsForm"><div class="form-grid">
+        <div class="form-group"><label>School Name *</label><input id="schoolName" required></div>
+        <div class="form-group"><label>Academic Year</label><input id="schoolAcademicYear" value="2026/2027"></div>
+        <div class="form-group"><label>Address</label><input id="schoolAddress"></div>
+        <div class="form-group"><label>Phone</label><input id="schoolPhone"></div>
+        <div class="form-group"><label>Email</label><input id="schoolEmail" type="email"></div>
+        <div class="form-group"><label>Headteacher / Principal</label><input id="schoolHead"></div>
+        <div class="form-group full"><label>School Logo</label><input id="schoolLogoFile" type="file" accept="image/*"><img id="schoolLogoPreview" class="logo-preview" alt="Logo preview"></div>
+    </div><br><button class="primary-btn" type="submit">Save School Settings</button></form></div>
+</section>
 
     </div>
 </main>
@@ -1409,6 +1507,9 @@ let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
 let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
 let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
 let fees = JSON.parse(localStorage.getItem("schoolPortalFees")) || [];
+let timetable = JSON.parse(localStorage.getItem("schoolPortalTimetable")) || [];
+let notifications = JSON.parse(localStorage.getItem("schoolPortalNotifications")) || [];
+let schoolSettings = JSON.parse(localStorage.getItem("schoolPortalSettings")) || {name:"SWIFTSCHOOL",academicYear:"2026/2027",address:"",phone:"",email:"",head:"",logo:""};
 
 let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
 
@@ -1739,6 +1840,9 @@ function saveAll(){
     localStorage.setItem("schoolPortalResults",JSON.stringify(results));
     localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
     localStorage.setItem("schoolPortalFees",JSON.stringify(fees));
+    localStorage.setItem("schoolPortalTimetable",JSON.stringify(timetable));
+    localStorage.setItem("schoolPortalNotifications",JSON.stringify(notifications));
+    localStorage.setItem("schoolPortalSettings",JSON.stringify(schoolSettings));
 }
 
 function escapeHtml(value){
@@ -1809,6 +1913,7 @@ function refreshDashboard(){
     document.getElementById("subjectCount").textContent=subjects.length;
     document.getElementById("resultCount").textContent=results.length;
     document.getElementById("attendanceCount").textContent=attendance.length;
+    renderDashboardAnalytics();
 }
 
 
@@ -1824,7 +1929,8 @@ function login(){
     let user=null;
 
     if(role==="Administrator"){
-        if(username==="admin" && password==="admin123"){
+        const adminCred=JSON.parse(localStorage.getItem("schoolPortalAdminCredentials")) || {username:"admin",password:"admin123"};
+        if(username===adminCred.username && password===adminCred.password){
             user={
                 username:"admin",
                 name:"Administrator",
@@ -1973,6 +2079,11 @@ function refreshPage(pageId){
             populateReportStudentSelect(classSelect.value);
         }
     }
+    if(pageId==="timetable")renderTimetable();
+    if(pageId==="notifications")renderNotifications();
+    if(pageId==="promotions")renderPromotionPage();
+    if(pageId==="accounts")renderAccountsPage();
+    if(pageId==="settings")loadSchoolSettings();
 }
 
 
@@ -4039,7 +4150,8 @@ function generateStudentReport(){
     container.className="report-card";
     container.innerHTML=`
         <div class="report-school-header">
-            <h1>SWIFTSCHOOL</h1>
+            ${schoolSettings.logo?`<img src="${schoolSettings.logo}" style="width:80px;height:80px;object-fit:contain"><br>`:""}<h1>${escapeHtml(schoolName())}</h1>
+            <p>${escapeHtml(schoolSettings.address||"")}</p><p>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}</p>
             <h2>STUDENT ACADEMIC REPORT</h2>
             <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong> &nbsp; | &nbsp; Term: <strong>${escapeHtml(term)}</strong></p>
         </div>
@@ -4392,7 +4504,7 @@ function printFeeStatement(){
     const balance=Math.max(0,totalDue-totalPaid);
     const w=window.open("","_blank","width=900,height=750");
     if(!w){showMessage("feeMessage","Please allow pop-ups to print the statement.","error");return;}
-    w.document.write(`<!doctype html><html><head><title>Student Fee Statement</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{text-align:center;margin:0}.sub{text-align:center;color:#555;margin:6px 0 25px}.info{display:flex;justify-content:space-between;border:1px solid #ccc;padding:15px;margin-bottom:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:9px;text-align:left}th{background:#f2f2f2}.summary{display:flex;gap:12px;margin:20px 0}.summary div{border:1px solid #ccc;padding:12px;flex:1}.total{font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>SWIFTSCHOOL</h1><div class="sub">STUDENT FEE STATEMENT</div><div class="info"><div><strong>Student:</strong> ${escapeHtml(student.name)}<br><strong>ID:</strong> ${escapeHtml(student.id)}</div><div><strong>Generated:</strong> ${new Date().toLocaleDateString()}</div></div><div class="summary"><div><strong>Total Charges</strong><br>${totalDue.toFixed(2)}</div><div><strong>Total Paid</strong><br>${totalPaid.toFixed(2)}</div><div><strong>Outstanding Balance</strong><br>${balance.toFixed(2)}</div></div><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td></tr>`).join("")}</tbody></table><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
+    w.document.write(`<!doctype html><html><head><title>Student Fee Statement</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{text-align:center;margin:0}.sub{text-align:center;color:#555;margin:6px 0 25px}.info{display:flex;justify-content:space-between;border:1px solid #ccc;padding:15px;margin-bottom:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:9px;text-align:left}th{background:#f2f2f2}.summary{display:flex;gap:12px;margin:20px 0}.summary div{border:1px solid #ccc;padding:12px;flex:1}.total{font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>${escapeHtml(schoolName())}</h1><div class="sub">${escapeHtml(schoolSettings.address||"")}<br>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}<br>STUDENT FEE STATEMENT</div><div class="info"><div><strong>Student:</strong> ${escapeHtml(student.name)}<br><strong>ID:</strong> ${escapeHtml(student.id)}</div><div><strong>Generated:</strong> ${new Date().toLocaleDateString()}</div></div><div class="summary"><div><strong>Total Charges</strong><br>${totalDue.toFixed(2)}</div><div><strong>Total Paid</strong><br>${totalPaid.toFixed(2)}</div><div><strong>Outstanding Balance</strong><br>${balance.toFixed(2)}</div></div><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td></tr>`).join("")}</tbody></table><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
     w.document.close();
 }
 
@@ -4400,9 +4512,133 @@ function printFeeReceipt(id){
     const f=fees.find(x=>x.id===id); if(!f)return;
     const st=getStudent(f.studentId), c=getClass(f.classId), bal=feeBalance(f.amount,f.paid);
     const w=window.open("","_blank","width=800,height=700");
-    w.document.write(`<!doctype html><html><head><title>Fee Receipt</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#111}h1{text-align:center;margin-bottom:4px}.sub{text-align:center;color:#555}.box{border:1px solid #222;padding:20px;margin-top:25px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border:1px solid #ccc;padding:10px;text-align:left}.total{font-size:18px;font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>SWIFTSCHOOL</h1><div class="sub">OFFICIAL FEE RECEIPT</div><div class="box"><p><strong>Receipt:</strong> ${escapeHtml(f.reference||f.id)}</p><p><strong>Student:</strong> ${escapeHtml(st?.name||f.studentName)}</p><p><strong>Class:</strong> ${escapeHtml(c?classDisplay(c):f.className)}</p><p><strong>Academic Year:</strong> ${escapeHtml(f.academicYear)} &nbsp; <strong>Term:</strong> ${escapeHtml(f.term)}</p><table><tr><th>Description</th><th>Amount</th></tr><tr><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td></tr><tr><td>Amount Paid</td><td>${Number(f.paid).toFixed(2)}</td></tr><tr class="total"><td>Balance</td><td>${bal.toFixed(2)}</td></tr></table><p><strong>Payment Date:</strong> ${escapeHtml(f.paymentDate||"—")}</p><p><strong>Payment Method:</strong> ${escapeHtml(f.paymentMethod||"—")}</p><p><strong>Remark:</strong> ${escapeHtml(f.remark||"—")}</p></div><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
+    w.document.write(`<!doctype html><html><head><title>Fee Receipt</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#111}h1{text-align:center;margin-bottom:4px}.sub{text-align:center;color:#555}.box{border:1px solid #222;padding:20px;margin-top:25px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border:1px solid #ccc;padding:10px;text-align:left}.total{font-size:18px;font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>${escapeHtml(schoolName())}</h1><div class="sub">${escapeHtml(schoolSettings.address||"")}<br>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}<br>OFFICIAL FEE RECEIPT</div><div class="box"><p><strong>Receipt:</strong> ${escapeHtml(f.reference||f.id)}</p><p><strong>Student:</strong> ${escapeHtml(st?.name||f.studentName)}</p><p><strong>Class:</strong> ${escapeHtml(c?classDisplay(c):f.className)}</p><p><strong>Academic Year:</strong> ${escapeHtml(f.academicYear)} &nbsp; <strong>Term:</strong> ${escapeHtml(f.term)}</p><table><tr><th>Description</th><th>Amount</th></tr><tr><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td></tr><tr><td>Amount Paid</td><td>${Number(f.paid).toFixed(2)}</td></tr><tr class="total"><td>Balance</td><td>${bal.toFixed(2)}</td></tr></table><p><strong>Payment Date:</strong> ${escapeHtml(f.paymentDate||"—")}</p><p><strong>Payment Method:</strong> ${escapeHtml(f.paymentMethod||"—")}</p><p><strong>Remark:</strong> ${escapeHtml(f.remark||"—")}</p></div><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
     w.document.close();
 }
+
+
+/* =========================
+   ALL-IN-ONE MODULES
+========================= */
+
+function schoolName(){return schoolSettings.name||"SWIFTSCHOOL";}
+function schoolHeaderHtml(){
+    return `<div style="text-align:center;border-bottom:2px solid #111;padding-bottom:15px;margin-bottom:20px">${schoolSettings.logo?`<img src="${schoolSettings.logo}" style="width:80px;height:80px;object-fit:contain"><br>`:""}<h1>${escapeHtml(schoolName())}</h1><p>${escapeHtml(schoolSettings.address||"")}</p><p>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}</p></div>`;
+}
+
+function renderDashboardAnalytics(){
+    const levels=["Advanced","Approaching Advanced","Proficient","Approaching Proficiency","Developing","Beginning"];
+    const counts=Object.fromEntries(levels.map(x=>[x,0]));
+    results.forEach(r=>{const l=getReportResultLevel(r);if(counts[l]!==undefined)counts[l]++;});
+    const total=results.length||1;
+    const pc=document.getElementById("dashboardPerformanceChart");
+    if(pc)pc.innerHTML=levels.map(l=>`<div class="analytics-row"><span style="width:150px">${escapeHtml(l)}</span><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(counts[l]/total*100)}%"></div></div><span class="analytics-value">${counts[l]}</span></div>`).join("");
+    const present=attendance.filter(a=>String(a.status).toLowerCase()==="present").length;
+    const late=attendance.filter(a=>String(a.status).toLowerCase()==="late").length;
+    const absent=attendance.filter(a=>String(a.status).toLowerCase()==="absent").length;
+    const excused=attendance.filter(a=>String(a.status).toLowerCase()==="excused").length;
+    const ac=document.getElementById("dashboardAttendanceChart");
+    if(ac)ac.innerHTML=[["Present",present],["Late",late],["Absent",absent],["Excused",excused]].map(([l,n])=>`<div class="analytics-row"><span style="width:90px">${l}</span><div class="bar-wrap"><div class="bar-fill" style="width:${attendance.length?Math.round(n/attendance.length*100):0}%"></div></div><span class="analytics-value">${n}</span></div>`).join("");
+    const due=fees.reduce((a,f)=>a+Number(f.amount||0),0), paid=fees.reduce((a,f)=>a+Number(f.paid||0),0), bal=Math.max(0,due-paid);
+    const fc=document.getElementById("dashboardFeesChart");
+    if(fc)fc.innerHTML=[["Charges",due],["Paid",paid],["Balance",bal]].map(([l,n])=>`<div class="analytics-row"><span style="width:90px">${l}</span><div class="bar-wrap"><div class="bar-fill" style="width:${due?Math.round(n/due*100):0}%"></div></div><span class="analytics-value">${n.toFixed(2)}</span></div>`).join("");
+}
+
+function populateTimetableSelectors(){
+    const cs=document.getElementById("ttClass"), ss=document.getElementById("ttSubject"), ts=document.getElementById("ttTeacher");
+    if(cs)cs.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    if(ss)ss.innerHTML='<option value="">Select Subject</option>'+subjects.map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.name)}</option>`).join("");
+    if(ts)ts.innerHTML='<option value="">Select Teacher</option>'+teachers.map(t=>`<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)}</option>`).join("");
+}
+function openTimetableForm(){populateTimetableSelectors();document.getElementById("timetableFormPanel").style.display="block";}
+function closeTimetableForm(){document.getElementById("timetableFormPanel").style.display="none";document.getElementById("timetableForm")?.reset();}
+function renderTimetable(){
+    populateTimetableSelectors();
+    const role=currentUser?.role;
+    let rows=timetable.slice();
+    if(role==="Teacher")rows=rows.filter(x=>x.teacherId===currentUser.id);
+    if(role==="Parent"){
+        const p=getParent(currentUser.id), ids=p?.studentIds||[]; const classIds=new Set(ids.flatMap(id=>classes.filter(c=>(c.studentIds||[]).includes(id)).map(c=>c.id))); rows=rows.filter(x=>classIds.has(x.classId));
+    }
+    rows.sort((a,b)=>(["Monday","Tuesday","Wednesday","Thursday","Friday"].indexOf(a.day)-["Monday","Tuesday","Wednesday","Thursday","Friday"].indexOf(b.day))||String(a.start).localeCompare(String(b.start)));
+    const el=document.getElementById("timetableTable");
+    if(!el)return;
+    if(!rows.length){el.innerHTML='<div class="empty">No timetable entries found.</div>';return;}
+    const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+    el.innerHTML=`<div class="timetable-grid">${days.map(day=>`<div class="day-column"><h3>${day}</h3>${rows.filter(x=>x.day===day).map(x=>{const c=getClass(x.classId),sub=getSubject(x.subjectId),t=getTeacher(x.teacherId);return `<div class="slot"><strong>${escapeHtml(sub?.name||x.subjectName||"Subject")}</strong><span>${escapeHtml(x.start)} - ${escapeHtml(x.end)}</span><br><span>${escapeHtml(c?classDisplay(c):x.className||"")}</span><br><span class="muted">${escapeHtml(t?.name||x.teacherName||"")}${x.room?" • Room "+escapeHtml(x.room):""}</span>${role==="Administrator"?`<br><button class="danger-btn" style="margin-top:7px" onclick="deleteTimetable('${escapeHtml(x.id)}')">Delete</button>`:""}</div>`}).join("")}</div>`).join("")}</div>`;
+}
+function deleteTimetable(id){if(!confirm("Delete this timetable entry?"))return;timetable=timetable.filter(x=>x.id!==id);saveAll();renderTimetable();}
+
+document.getElementById("timetableForm")?.addEventListener("submit",function(e){
+    e.preventDefault();
+    const x={id:"TT-"+Date.now(),academicYear:document.getElementById("ttYear").value.trim(),day:document.getElementById("ttDay").value,classId:document.getElementById("ttClass").value,subjectId:document.getElementById("ttSubject").value,teacherId:document.getElementById("ttTeacher").value,start:document.getElementById("ttStart").value,end:document.getElementById("ttEnd").value,room:document.getElementById("ttRoom").value.trim()};
+    timetable.push(x);saveAll();closeTimetableForm();renderTimetable();showMessage("timetableMessage","Timetable entry saved.","success");
+});
+
+function renderNotifications(){
+    const area=document.getElementById("notificationAdminArea"); if(area)area.style.display=currentUser?.role==="Administrator"?"block":"none";
+    let rows=notifications.slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+    if(currentUser?.role==="Parent")rows=rows.filter(n=>n.audience==="All"||n.audience==="Parents");
+    if(currentUser?.role==="Teacher")rows=rows.filter(n=>n.audience==="All"||n.audience==="Teachers");
+    const el=document.getElementById("notificationList");if(!el)return;
+    el.innerHTML=rows.length?rows.map(n=>`<div class="notice"><h3>${escapeHtml(n.title)}</h3><p>${escapeHtml(n.message).replace(/\n/g,"<br>")}</p><small>${escapeHtml(n.audience)} • ${escapeHtml(new Date(n.date).toLocaleString())}${currentUser?.role==="Administrator"?` <button class="danger-btn" style="float:right" onclick="deleteNotification('${escapeHtml(n.id)}')">Delete</button>`:""}</small></div>`).join(""):'<div class="empty">No notifications.</div>';
+}
+function deleteNotification(id){if(!confirm("Delete this notice?"))return;notifications=notifications.filter(n=>n.id!==id);saveAll();renderNotifications();}
+document.getElementById("notificationForm")?.addEventListener("submit",function(e){e.preventDefault();notifications.push({id:"N-"+Date.now(),audience:document.getElementById("noticeAudience").value,title:document.getElementById("noticeTitle").value.trim(),message:document.getElementById("noticeMessage").value.trim(),date:new Date().toISOString()});saveAll();this.reset();renderNotifications();});
+
+function renderPromotionPage(){
+    const from=document.getElementById("promotionFrom"),to=document.getElementById("promotionTo");if(!from||!to)return;
+    from.innerHTML='<option value="">Select Current Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    to.innerHTML='<option value="">Select New Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    renderPromotionStudents();
+}
+function renderPromotionStudents(){
+    const id=document.getElementById("promotionFrom")?.value, el=document.getElementById("promotionStudents");if(!el)return;
+    if(!id){el.innerHTML='<div class="empty">Select a current class to view students.</div>';return;}
+    const c=getClass(id), list=students.filter(s=>(c?.studentIds||[]).includes(s.id)||s.classId===id||s.className===c?.name);
+    el.innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="promotionSelectAll"></th><th>ID</th><th>Name</th><th>Current Class</th></tr></thead><tbody>${list.map(s=>`<tr><td><input type="checkbox" class="promotion-student" value="${escapeHtml(s.id)}"></td><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(c?classDisplay(c):s.className||"")}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">No students found.</div>';
+    document.getElementById("promotionSelectAll")?.addEventListener("change",function(){document.querySelectorAll(".promotion-student").forEach(x=>x.checked=this.checked);});
+}
+document.getElementById("promotionFrom")?.addEventListener("change",renderPromotionStudents);
+document.getElementById("promotionForm")?.addEventListener("submit",function(e){
+    e.preventDefault();const from=getClass(document.getElementById("promotionFrom").value),to=getClass(document.getElementById("promotionTo").value),year=document.getElementById("promotionYear").value.trim();const ids=[...document.querySelectorAll(".promotion-student:checked")].map(x=>x.value);
+    if(!from||!to||!year||!ids.length){showMessage("promotionMessage","Select the current class, new class, academic year and at least one student.","error");return;}
+    ids.forEach(id=>{const st=getStudent(id);if(st){st.classId=to.id;st.className=to.name;}});
+    from.studentIds=(from.studentIds||[]).filter(id=>!ids.includes(id));to.studentIds=Array.from(new Set([...(to.studentIds||[]),...ids]));to.academicYear=year;saveAll();renderPromotionPage();renderClasses();renderStudents();showMessage("promotionMessage",`${ids.length} student(s) moved to ${classDisplay(to)} for ${year}.`,"success");
+});
+
+function renderAccountsPage(){
+    const type=document.getElementById("accountType")?.value||"Teacher", sel=document.getElementById("accountUser");if(!sel)return;
+    let arr=type==="Teacher"?teachers:type==="Parent"?parents:[];
+    if(type==="Administrator"){sel.innerHTML='<option value="ADMIN-001">Administrator</option>';document.getElementById("accountUsername").value=(JSON.parse(localStorage.getItem("schoolPortalAdminCredentials"))||{username:"admin"}).username;document.getElementById("accountPassword").value="";}
+    else {sel.innerHTML=arr.map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.name)} (${escapeHtml(x.username||"")})</option>`).join("");loadSelectedAccount();}
+    renderAccountTable();
+}
+function loadSelectedAccount(){const type=document.getElementById("accountType")?.value,id=document.getElementById("accountUser")?.value;const arr=type==="Teacher"?teachers:parents,x=arr.find(a=>a.id===id);if(x){document.getElementById("accountUsername").value=x.username||"";document.getElementById("accountPassword").value="";}}
+function renderAccountTable(){const el=document.getElementById("accountTable");if(!el)return;el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Role</th><th>Name</th><th>Username</th><th>Password Status</th></tr></thead><tbody>${teachers.map(t=>`<tr><td>Teacher</td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(t.username||"")}</td><td>${t.password?"Set":"Not set"}</td></tr>`).join("")}${parents.map(p=>`<tr><td>Parent</td><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.username||"")}</td><td>${p.password?"Set":"Not set"}</td></tr>`).join("")}</tbody></table></div>`;}
+function saveAccountChanges(){
+    const type=document.getElementById("accountType").value,username=document.getElementById("accountUsername").value.trim(),password=document.getElementById("accountPassword").value;
+    if(!username){showMessage("accountMessage","Username is required.","error");return;}
+    if(type==="Administrator"){if(!password){showMessage("accountMessage","Enter a new administrator password.","error");return;}localStorage.setItem("schoolPortalAdminCredentials",JSON.stringify({username,password}));showMessage("accountMessage","Administrator credentials updated. You must use the new login details next time.","success");return;}
+    const arr=type==="Teacher"?teachers:parents,id=document.getElementById("accountUser").value,x=arr.find(a=>a.id===id);if(!x)return;x.username=username;if(password)x.password=password;saveAll();renderAccountsPage();showMessage("accountMessage","Account updated successfully.","success");
+}
+document.getElementById("accountType")?.addEventListener("change",renderAccountsPage);document.getElementById("accountUser")?.addEventListener("change",loadSelectedAccount);
+
+function loadSchoolSettings(){
+    document.getElementById("schoolName").value=schoolSettings.name||"";document.getElementById("schoolAcademicYear").value=schoolSettings.academicYear||"";document.getElementById("schoolAddress").value=schoolSettings.address||"";document.getElementById("schoolPhone").value=schoolSettings.phone||"";document.getElementById("schoolEmail").value=schoolSettings.email||"";document.getElementById("schoolHead").value=schoolSettings.head||"";document.getElementById("schoolLogoPreview").src=schoolSettings.logo||"";
+}
+document.getElementById("schoolLogoFile")?.addEventListener("change",function(){const f=this.files?.[0];if(!f)return;const r=new FileReader();r.onload=e=>document.getElementById("schoolLogoPreview").src=e.target.result;r.readAsDataURL(f);});
+document.getElementById("settingsForm")?.addEventListener("submit",function(e){
+    e.preventDefault();schoolSettings={...schoolSettings,name:document.getElementById("schoolName").value.trim(),academicYear:document.getElementById("schoolAcademicYear").value.trim(),address:document.getElementById("schoolAddress").value.trim(),phone:document.getElementById("schoolPhone").value.trim(),email:document.getElementById("schoolEmail").value.trim(),head:document.getElementById("schoolHead").value.trim()};
+    const logo=document.getElementById("schoolLogoPreview").src;if(logo&&logo.startsWith("data:"))schoolSettings.logo=logo;saveAll();showMessage("settingsMessage","School settings saved successfully.","success");
+});
+
+function printWindow(title,body){const w=window.open("","_blank","width=1000,height=800");if(!w){alert("Please allow pop-ups to print documents.");return;}w.document.write(`<!doctype html><html><head><title>${escapeHtml(title)}</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#111}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #bbb;padding:8px;text-align:left}th{background:#f1f5f9}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:7px}</style></head><body>${body}<script>window.print();<\/script></body></html>`);w.document.close();}
+function printStudentList(){const rows=students.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(s=>`<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.gender||"")}</td><td>${escapeHtml(s.className||getClass(s.classId)?.name||"")}</td><td>${escapeHtml(s.parent||"")}</td></tr>`).join("");printWindow("Student List",schoolHeaderHtml()+`<h2>STUDENT LIST</h2><table><thead><tr><th>ID</th><th>Name</th><th>Gender</th><th>Class</th><th>Parent/Guardian</th></tr></thead><tbody>${rows}</tbody></table>`);}
+function printTeacherList(){const rows=teachers.map(t=>`<tr><td>${escapeHtml(t.id)}</td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(t.phone||"")}</td><td>${escapeHtml(t.email||"")}</td><td>${escapeHtml(t.qualification||"")}</td></tr>`).join("");printWindow("Teacher List",schoolHeaderHtml()+`<h2>TEACHER LIST</h2><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Qualification</th></tr></thead><tbody>${rows}</tbody></table>`);}
+function printClassList(){const groups=classes.map(c=>`<h3>${escapeHtml(classDisplay(c))}</h3><table><thead><tr><th>ID</th><th>Student</th><th>Gender</th></tr></thead><tbody>${students.filter(s=>(c.studentIds||[]).includes(s.id)||s.classId===c.id||s.className===c.name).map(s=>`<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.gender||"")}</td></tr>`).join("")}</tbody></table>`).join("");printWindow("Class List",schoolHeaderHtml()+`<h2>CLASS LIST</h2>${groups}`);}
+function printAdmissionForm(){printWindow("Student Admission Form",schoolHeaderHtml()+`<h2>STUDENT ADMISSION FORM</h2><table>${["Student ID","First Name","Last Name","Date of Birth","Gender","Class","Parent / Guardian","Phone","Email","Address","Previous School","Medical / Special Notes"].map(x=>`<tr><th style="width:35%">${x}</th><td style="height:34px"></td></tr>`).join("")}</table><div class="sign"><div class="line">Parent / Guardian</div><div class="line">Admissions Officer</div></div>`);}
+function printAttendanceSummary(){const map={};attendance.forEach(a=>{if(!map[a.studentId])map[a.studentId]={p:0,l:0,a:0,e:0};const k=String(a.status||"").toLowerCase();if(k==="present")map[a.studentId].p++;if(k==="late")map[a.studentId].l++;if(k==="absent")map[a.studentId].a++;if(k==="excused")map[a.studentId].e++;});const rows=students.map(s=>{const x=map[s.id]||{p:0,l:0,a:0,e:0};const n=x.p+x.l+x.a;return `<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.className||"")}</td><td>${x.p}</td><td>${x.l}</td><td>${x.a}</td><td>${x.e}</td><td>${n?Math.round((x.p+x.l)/n*100):0}%</td></tr>`}).join("");printWindow("Attendance Summary",schoolHeaderHtml()+`<h2>ATTENDANCE SUMMARY</h2><table><thead><tr><th>ID</th><th>Student</th><th>Class</th><th>Present</th><th>Late</th><th>Absent</th><th>Excused</th><th>Attendance %</th></tr></thead><tbody>${rows}</tbody></table>`);}
 
 /* =========================
    SEARCH EVENTS
@@ -4441,6 +4677,7 @@ document.getElementById("feeFilterStatus")?.addEventListener("change",renderFees
 
 saveAll();
 refreshDashboard();
+if(document.getElementById("schoolLogoPreview")) loadSchoolSettings();
 
 </script>
 
