@@ -3832,56 +3832,88 @@ function renderParentResults(){
 ========================= */
 
 function generateParentReport(studentId,classId,academicYear,term){
-    const student=getStudent(studentId);
-    const schoolClass=getClass(classId);
+    try{
+        const student=getStudent(studentId);
+        const schoolClass=getClass(classId);
 
-    if(!student || !schoolClass){
-        alert("The student or class could not be found.");
-        return;
-    }
+        if(!student || !schoolClass){
+            alert("The student or class could not be found.");
+            return;
+        }
 
-    // Reuse the same report generator used by the Admin report page.
-    const classSelect=document.getElementById("reportClassSelect");
-    const studentSelect=document.getElementById("reportStudentSelect");
-    const yearInput=document.getElementById("reportAcademicYear");
-    const termSelect=document.getElementById("reportTerm");
+        const year=String(academicYear||"2026/2027").trim();
+        const reportTerm=String(term||"Term 1").trim() || "Term 1";
 
-    if(classSelect)classSelect.value=classId;
-    if(studentSelect){
-        populateReportStudentSelect(classId,studentId);
-        studentSelect.value=studentId;
-    }
-    if(yearInput)yearInput.value=academicYear || "2026/2027";
-    if(termSelect)termSelect.value=term || "Term 1";
+        const studentResults=results.filter(r=>
+            String(r.studentId||"").trim().toLowerCase()===String(studentId).trim().toLowerCase() &&
+            String(r.classId||"").trim()===String(classId).trim() &&
+            String(r.academicYear||"2026/2027").trim()===year &&
+            String(r.term||"Term 1").trim()===reportTerm
+        );
 
-    generateStudentReport();
+        const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
+        const subjectIds=[...new Set([...classSubjects.map(s=>s.id),...studentResults.map(r=>r.subjectId).filter(Boolean)])];
+        const items=subjectIds.map(id=>({subject:getSubject(id),result:studentResults.find(r=>r.subjectId===id)})).filter(x=>x.subject||x.result);
+        const scored=studentResults.filter(r=>r.total!==undefined && r.total!=="" && Number.isFinite(Number(r.total)));
+        const scores=scored.map(r=>Number(r.total));
+        const average=scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:0;
+        const highest=scores.length?Math.max(...scores):0;
+        const overall=scores.length?getPerformance(average):"No Result";
+        const attendanceSummary=calculateReportAttendance(studentId,classId,year);
+        const teacher=getTeacher(schoolClass.teacherId);
 
-    const source=document.getElementById("studentReportContainer");
-    if(!source || !source.classList.contains("report-card")){
-        alert("The report could not be generated. Please check that results have been entered.");
-        return;
-    }
+        const subjectRows=items.length?items.map(item=>{
+            const r=item.result;
+            const grade=r?(r.grade||getPerformance(r.total)):"No Result";
+            const classScore=r && r.classScore!==undefined ? Number(r.classScore).toFixed(2):"—";
+            const examMark=r && r.examMark!==undefined ? Number(r.examMark).toFixed(2):(r && r.examScore!==undefined ? Number(r.examScore*2).toFixed(2):"—");
+            const total=r && r.total!==undefined ? Number(r.total).toFixed(2):"—";
+            return `<tr><td>${escapeHtml(item.subject?.name||r?.subjectName||"Subject")}</td><td>${classScore}</td><td>${examMark}</td><td><strong>${total}</strong></td><td>${grade==="No Result"?"No Result":`<span class="badge ${performanceClass(grade)}">${escapeHtml(grade)}</span>`}</td></tr>`;
+        }).join(""):`<tr><td colspan="5" style="text-align:center">No subjects have been entered for this report.</td></tr>`;
 
-    let modal=document.getElementById("parentReportModal");
-    if(!modal){
-        modal=document.createElement("div");
-        modal.id="parentReportModal";
-        modal.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;overflow:auto;padding:25px;";
-        modal.innerHTML=`
-            <div id="parentReportModalBox" style="max-width:1050px;margin:0 auto;background:#fff;border-radius:12px;padding:18px;">
-                <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:15px;position:sticky;top:0;background:#fff;padding-bottom:10px;z-index:2;">
-                    <button class="primary-btn" type="button" onclick="printParentReport()">Print / Save PDF</button>
-                    <button class="secondary-btn" type="button" onclick="closeParentReport()">Close Report</button>
+        let modal=document.getElementById("parentReportModal");
+        if(!modal){
+            modal=document.createElement("div");
+            modal.id="parentReportModal";
+            modal.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;overflow:auto;padding:25px;";
+            document.body.appendChild(modal);
+        }
+
+        modal.innerHTML=`<div id="parentReportModalBox" style="max-width:1050px;margin:0 auto;background:#fff;border-radius:12px;padding:18px;">
+            <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:15px;position:sticky;top:0;background:#fff;padding-bottom:10px;z-index:2;">
+                <button class="primary-btn" type="button" onclick="printParentReport()">Print / Save PDF</button>
+                <button class="secondary-btn" type="button" onclick="closeParentReport()">Close Report</button>
+            </div>
+            <div id="parentReportModalContent" class="report-card">
+                <div class="report-school-header"><h1>SWIFTSCHOOL</h1><h2>STUDENT ACADEMIC REPORT</h2><p>Academic Year: <strong>${escapeHtml(year)}</strong> · <strong>${escapeHtml(reportTerm)}</strong></p></div>
+                <div class="report-student-info">
+                    <div class="report-info-box"><strong>Student Name</strong>${escapeHtml(student.name)}</div>
+                    <div class="report-info-box"><strong>Student ID</strong>${escapeHtml(student.id)}</div>
+                    <div class="report-info-box"><strong>Class</strong>${escapeHtml(classDisplay(schoolClass))}</div>
+                    <div class="report-info-box"><strong>Gender</strong>${escapeHtml(student.gender||"—")}</div>
+                    <div class="report-info-box"><strong>Class Teacher</strong>${escapeHtml(teacher?.name||"Class Teacher")}</div>
+                    <div class="report-info-box"><strong>Report Date</strong>${escapeHtml(new Date().toLocaleDateString())}</div>
                 </div>
-                <div id="parentReportModalContent"></div>
-            </div>`;
-        document.body.appendChild(modal);
-    }
+                <h3>Academic Performance</h3>
+                <div class="table-wrap"><table class="report-table"><thead><tr><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th></tr></thead><tbody>${subjectRows}</tbody></table></div>
+                <div class="report-summary">
+                    <div class="report-summary-box"><strong>${scores.length?average.toFixed(2):"—"}</strong><span>Average Score</span></div>
+                    <div class="report-summary-box"><strong>${scores.length?highest.toFixed(2):"—"}</strong><span>Highest Score</span></div>
+                    <div class="report-summary-box"><strong>${escapeHtml(overall)}</strong><span>Overall Performance</span></div>
+                    <div class="report-summary-box"><strong>${attendanceSummary.percentage}%</strong><span>Attendance</span></div>
+                </div>
+                <h3>Attendance Summary</h3>
+                <div class="table-wrap"><table class="report-table"><thead><tr><th>Present</th><th>Late</th><th>Absent</th><th>Excused</th><th>Attendance %</th></tr></thead><tbody><tr><td>${attendanceSummary.present}</td><td>${attendanceSummary.late}</td><td>${attendanceSummary.absent}</td><td>${attendanceSummary.excused}</td><td>${attendanceSummary.percentage}%</td></tr></tbody></table></div>
+                <div class="report-footer"><div><div class="signature-line">Class Teacher</div></div><div><div class="signature-line">Headteacher / Principal</div></div></div>
+            </div>
+        </div>`;
 
-    const content=document.getElementById("parentReportModalContent");
-    content.innerHTML=source.innerHTML;
-    modal.style.display="block";
-    document.body.style.overflow="hidden";
+        modal.style.display="block";
+        document.body.style.overflow="hidden";
+    }catch(error){
+        console.error("SwiftSchool parent report error:",error);
+        alert("The report could not be opened: " + (error?.message||"Unknown error"));
+    }
 }
 
 function closeParentReport(){
