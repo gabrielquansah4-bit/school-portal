@@ -509,7 +509,6 @@ td{font-size:14px}
 .password-modal-box{background:#fff;width:min(520px,100%);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
 .password-modal-box h2{margin-top:0;}
 .password-modal-actions{display:flex;gap:10px;margin-top:16px;}
-.subject-curriculum-list{padding:14px 16px;border-radius:10px;background:#f7f9fc;line-height:1.9;font-weight:600}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
@@ -610,15 +609,18 @@ td{font-size:14px}
         <div class="nav-link" data-page="children">My Children</div>
         <div class="nav-link" data-page="parentResults">Results</div>
         <div class="nav-link" data-page="parentAttendance">Attendance</div>
+        <div class="nav-link" data-page="parentAssignments">Assignments</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
         <div class="nav-link" data-page="parentAnnouncements">Announcements</div>
     </div>
 
     <div id="teacherNav">
         <div class="nav-section">Teacher</div>
+        <div class="nav-link" data-page="teacherSubjects">My Subjects</div>
         <div class="nav-link" data-page="teacherStudents">Students</div>
         <div class="nav-link" data-page="teacherResults">Results</div>
         <div class="nav-link" data-page="teacherAttendance">Attendance</div>
+        <div class="nav-link" data-page="teacherAssignments">Assignments</div>
         <div class="nav-link" data-page="teacherAnnouncements">Announcements</div>
     </div>
 
@@ -631,6 +633,7 @@ td{font-size:14px}
         <div class="nav-link" data-page="adminSubjects">Subjects</div>
         <div class="nav-link" data-page="adminResults">Results</div>
         <div class="nav-link" data-page="adminAttendance">Attendance</div>
+        <div class="nav-link" data-page="adminAssignments">Assignments</div>
         <div class="nav-link" data-page="adminFees">Fees</div>
         <div class="nav-link" data-page="adminAnnouncements">Announcements</div>
         <div class="nav-link" data-page="reports">Reports</div>
@@ -733,10 +736,20 @@ td{font-size:14px}
     </div>
 </section>
 
+<!-- TEACHER SUBJECTS -->
+<section id="teacherSubjects" class="page">
+    <div class="page-header">
+        <div><h1>My Subjects</h1><p>Subjects assigned to you.</p></div>
+    </div>
+    <div class="panel">
+        <div id="teacherSubjectsContent"></div>
+    </div>
+</section>
+
 <!-- TEACHER RESULTS -->
 <section id="teacherResults" class="page">
     <div class="page-header">
-        <div><h1>Student Results</h1><p>Results for students in your assigned classes.</p></div>
+        <div><h1>Student Results</h1><p>Results for students in your assigned subjects.</p></div>
     </div>
     <div class="panel">
         <div id="teacherResultsContent"></div>
@@ -936,27 +949,11 @@ td{font-size:14px}
 <!-- SUBJECTS -->
 <section id="adminSubjects" class="page">
     <div class="page-header">
-        <div><h1>Subjects</h1><p>Subjects are linked to classes only.</p></div>
+        <div><h1>Subject Management</h1><p>Manage subjects, classes and teachers.</p></div>
         <button class="primary-btn" onclick="openSubjectForm()">+ Add Subject</button>
     </div>
 
     <div id="subjectMessage" class="message"></div>
-
-    <div class="panel">
-        <h2>Basic School — Basic 1 to Basic 6</h2>
-        <p style="margin:8px 0 12px;color:#666">Default subjects for Basic 1–6.</p>
-        <div class="subject-curriculum-list">
-            English • Mathematics • Science • History • French • Ghanaian Language • Computing • Creative Arts • RME
-        </div>
-    </div>
-
-    <div class="panel">
-        <h2>JHS — JHS 1 to JHS 3</h2>
-        <p style="margin:8px 0 12px;color:#666">Default subjects for JHS 1–3.</p>
-        <div class="subject-curriculum-list">
-            English • Mathematics • Science • Creative Arts • Career Technology • French • Fante • ICT • Social Studies
-        </div>
-    </div>
 
     <div class="panel" id="subjectFormPanel" style="display:none">
         <h2 id="subjectFormTitle">Add Subject</h2>
@@ -965,11 +962,15 @@ td{font-size:14px}
                 <div class="form-group"><label>Subject ID *</label><input id="subjectId" required></div>
                 <div class="form-group"><label>Subject Name *</label><input id="subjectName" required></div>
                 <div class="form-group"><label>Subject Code</label><input id="subjectCode"></div>
-                <div class="form-group">
-                    <label>Class *</label>
-                    <select id="subjectClassSelect" required></select>
-                </div>
                 <div class="form-group"><label>Academic Year</label><input id="subjectYear" value="2026/2027"></div>
+                <div class="form-group">
+                    <label>Teacher</label>
+                    <select id="subjectTeacher"></select>
+                </div>
+                <div class="form-group full">
+                    <label>Assign Classes</label>
+                    <div id="subjectClassList" class="checkbox-list"></div>
+                </div>
             </div>
             <br>
             <button class="primary-btn" type="submit">Save Subject</button>
@@ -978,10 +979,6 @@ td{font-size:14px}
     </div>
 
     <div class="panel">
-        <div class="form-group">
-            <label>View Subjects for Class</label>
-            <select id="subjectClassFilter" onchange="renderSubjects()"></select>
-        </div>
         <input class="search-box" id="subjectSearch" placeholder="Search subjects...">
         <div id="subjectTable"></div>
     </div>
@@ -1037,8 +1034,8 @@ td{font-size:14px}
                 </div>
 
                 <div class="form-group">
-                    <label>Exam Score / 50 *</label>
-                    <input id="examScore" type="number" min="0" max="50" step="0.01" required>
+                    <label>Exam Mark / 100 *</label>
+                    <input id="examScore" type="number" min="0" max="100" step="0.01" required>
                 </div>
 
                 <div class="form-group">
@@ -1069,6 +1066,43 @@ td{font-size:14px}
         </form>
     </div>
 
+    <div class="panel" id="bulkMarksPanel">
+        <h2>Bulk Marks Upload (Excel)</h2>
+        <p style="margin:8px 0 14px;color:#666">Select a class and download its Excel template. Enter each student's <strong>Class Score out of 50</strong> and the full <strong>Exam Mark out of 100</strong>. After upload, SwiftSchool automatically converts the exam mark to 50% and calculates the final score out of 100.</p>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Academic Year *</label>
+                <input id="bulkMarksYear" value="2026/2027">
+            </div>
+            <div class="form-group">
+                <label>Term *</label>
+                <select id="bulkMarksTerm">
+                    <option>Term 1</option>
+                    <option>Term 2</option>
+                    <option>Term 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Class *</label>
+                <select id="bulkMarksClass">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Excel File *</label>
+                <input type="file" id="bulkMarksExcelFile" accept=".xlsx,.xls,.csv">
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+            <button class="secondary-btn" type="button" onclick="downloadBulkMarksTemplate()">Download Class Excel Template</button>
+            <button class="primary-btn" type="button" onclick="importBulkMarksFromExcel()">Upload Marks</button>
+        </div>
+        <div id="bulkMarksMessage" class="message" style="margin-top:15px"></div>
+        <div class="import-note">
+            <strong>Example:</strong> Class Score = 42/50, Exam Mark = 80/100 → Exam component = 40/50 → Final Total = 82/100.
+        </div>
+    </div>
+
     <div class="panel">
         <input class="search-box" id="resultSearch"
                placeholder="Search by student, class, subject, teacher, year or performance level...">
@@ -1091,6 +1125,7 @@ td{font-size:14px}
         <div id="parentAttendanceContent"></div>
     </div>
 </section>
+<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
 <section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
 <section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
@@ -1128,6 +1163,7 @@ td{font-size:14px}
         <div id="teacherAttendanceContent"></div>
     </div>
 </section>
+<section id="teacherAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Teacher assignment management will be added next.</p></div></section>
 <section id="teacherAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Teacher announcements will be added next.</p></div></section>
 
 <section id="adminAttendance" class="page">
@@ -1163,6 +1199,7 @@ td{font-size:14px}
         <div id="attendanceTable"></div>
     </div>
 </section>
+<section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
 <section id="adminFees" class="page"><div class="panel"><h1>Fees Management</h1><p>Fees module will be added next.</p></div></section>
 <section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
 <section id="reports" class="page">
@@ -1713,6 +1750,7 @@ function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
+    if(pageId==="teacherSubjects")renderTeacherSubjects();
     if(pageId==="teacherResults")renderTeacherResults();
     if(pageId==="parentAttendance")renderParentAttendance();
     if(pageId==="teacherAttendance")renderTeacherAttendance();
@@ -1728,6 +1766,7 @@ function refreshPage(pageId){
     if(pageId==="adminSubjects")renderSubjects();
     if(pageId==="adminResults"){
         populateResultClassSelect();
+        populateBulkMarksClassSelect();
         renderResults();
     }
 
@@ -2476,84 +2515,15 @@ function deleteClass(id){
    SUBJECT MANAGEMENT
 ========================= */
 
-const BASIC_SUBJECTS=[
-    "English","Mathematics","Science","History","French","Ghanaian Language","Computing","Creative Arts","RME"
-];
-const JHS_SUBJECTS=[
-    "English","Mathematics","Science","Creative Arts","Career Technology","French","Fante","ICT","Social Studies"
-];
-
-function classLevelKey(name){
-    const n=String(name||"").toLowerCase().replace(/\s+/g,"");
-    const m=n.match(/^(basic|jhs)([1-9]+)/);
-    return m ? (m[1]+m[2]) : "";
-}
-
-function defaultSubjectsForClass(c){
-    const key=classLevelKey(c?.name);
-    const m=key.match(/^(basic|jhs)(\d+)$/);
-    if(!m)return [];
-    const level=Number(m[2]);
-    if(m[1]==="basic" && level>=1 && level<=6)return BASIC_SUBJECTS;
-    if(m[1]==="jhs" && level>=1 && level<=3)return JHS_SUBJECTS;
-    return [];
-}
-
-function subjectIdFor(classId,name){
-    const slug=String(name).toUpperCase().replace(/[^A-Z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,24);
-    return `SUB-${slug}-${String(classId).replace(/[^A-Za-z0-9-]/g,"")}`;
-}
-
-function initializeDefaultSubjects(){
-    let changed=false;
-    subjects=subjects.map(s=>{
-        const copy={...s};
-        delete copy.teacherId;
-        if(!Array.isArray(copy.classIds)) copy.classIds=[];
-        return copy;
-    });
-
-    classes.forEach(c=>{
-        const defaults=defaultSubjectsForClass(c);
-        defaults.forEach(name=>{
-            let existing=subjects.find(s=>
-                String(s.name||"").trim().toLowerCase()===name.toLowerCase() &&
-                (s.classIds||[]).includes(c.id)
-            );
-            if(!existing){
-                let id=subjectIdFor(c.id,name);
-                let n=2;
-                while(subjects.some(s=>s.id===id)) id=subjectIdFor(c.id,name)+"-"+(n++);
-                subjects.push({id,name,code:"",classIds:[c.id],academicYear:c.academicYear||"2026/2027"});
-                changed=true;
-            }
-        });
-    });
-    if(changed)saveAll();
-}
-
-function populateSubjectClassSelect(selected=""){
-    const select=document.getElementById("subjectClassSelect");
-    if(!select)return;
-    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>
-        `<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`
-    ).join("");
-}
-
-function populateSubjectClassFilter(selected=""){
-    const select=document.getElementById("subjectClassFilter");
-    if(!select)return;
-    const current=selected||select.value||"";
-    select.innerHTML='<option value="">All Classes</option>'+classes.map(c=>
-        `<option value="${escapeHtml(c.id)}" ${current===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`
-    ).join("");
-}
-
 function openSubjectForm(){
     editingSubjectId=null;
+
     document.getElementById("subjectForm").reset();
     document.getElementById("subjectYear").value="2026/2027";
-    populateSubjectClassSelect("");
+
+    populateSubjectTeacherSelect("");
+    populateSubjectClassList([]);
+
     document.getElementById("subjectFormTitle").textContent="Add Subject";
     document.getElementById("subjectFormPanel").style.display="block";
 }
@@ -2562,26 +2532,49 @@ function closeSubjectForm(){
     document.getElementById("subjectFormPanel").style.display="none";
 }
 
+function populateSubjectTeacherSelect(selected=""){
+    const select=document.getElementById("subjectTeacher");
+
+    select.innerHTML='<option value="">Unassigned</option>'+
+        teachers.map(t=>`
+            <option value="${escapeHtml(t.id)}" ${selected===t.id?"selected":""}>
+                ${escapeHtml(t.name)}
+            </option>
+        `).join("");
+}
+
+function populateSubjectClassList(selected=[]){
+    const box=document.getElementById("subjectClassList");
+
+    box.innerHTML=classes.length
+        ? classes.map(c=>`
+            <label class="checkbox-item">
+                <input type="checkbox" value="${escapeHtml(c.id)}" ${selected.includes(c.id)?"checked":""}>
+                ${escapeHtml(classDisplay(c))}
+            </label>
+        `).join("")
+        : "No classes available.";
+}
+
 document.getElementById("subjectForm").addEventListener("submit",function(e){
     e.preventDefault();
+
     const id=document.getElementById("subjectId").value.trim();
-    const name=document.getElementById("subjectName").value.trim();
-    const classId=document.getElementById("subjectClassSelect").value;
 
     if(subjects.some(s=>s.id===id && s.id!==editingSubjectId)){
-        showMessage("subjectMessage","Subject ID already exists.","error"); return;
+        showMessage("subjectMessage","Subject ID already exists.","error");
+        return;
     }
-    if(!classId){showMessage("subjectMessage","Please select a class.","error");return;}
-    if(subjects.some(s=>s.id!==editingSubjectId && String(s.name||"").trim().toLowerCase()===name.toLowerCase() && (s.classIds||[]).includes(classId))){
-        showMessage("subjectMessage","This subject already exists for the selected class.","error"); return;
-    }
+
+    const classIds=[...document.querySelectorAll("#subjectClassList input:checked")].map(x=>x.value);
 
     const data={
         id,
-        name,
+        name:document.getElementById("subjectName").value.trim(),
         code:document.getElementById("subjectCode").value.trim(),
-        classIds:[classId],
-        academicYear:document.getElementById("subjectYear").value.trim()||"2026/2027"
+        classIds,
+        teacherId:document.getElementById("subjectTeacher").value,
+        academicYear:document.getElementById("subjectYear").value.trim()
     };
 
     if(editingSubjectId){
@@ -2592,47 +2585,107 @@ document.getElementById("subjectForm").addEventListener("submit",function(e){
         subjects.push(data);
         showMessage("subjectMessage","Subject added successfully.");
     }
-    saveAll(); closeSubjectForm(); renderSubjects(); refreshDashboard();
+
+    saveAll();
+    closeSubjectForm();
+    renderSubjects();
+    refreshDashboard();
 });
 
 function renderSubjects(){
-    initializeDefaultSubjects();
-    populateSubjectClassFilter();
     const search=(document.getElementById("subjectSearch")?.value||"").toLowerCase();
-    const classId=document.getElementById("subjectClassFilter")?.value||"";
 
     const filtered=subjects.filter(s=>{
-        if(classId && !(s.classIds||[]).includes(classId))return false;
-        const classNames=(s.classIds||[]).map(id=>classDisplay(getClass(id))).join(" ");
-        return [s.id,s.name,s.code,s.academicYear,classNames].join(" ").toLowerCase().includes(search);
+        const teacher=getTeacher(s.teacherId);
+        const classNames=(s.classIds||[])
+            .map(id=>classDisplay(getClass(id)))
+            .join(" ");
+
+        const text=[
+            s.id,s.name,s.code,s.academicYear,
+            teacher?.name||"",
+            classNames
+        ].join(" ").toLowerCase();
+
+        return text.includes(search);
     });
 
-    document.getElementById("subjectTable").innerHTML=!filtered.length
-        ? '<div class="empty">No subjects found for this class.</div>'
-        : `<div class="table-wrap"><table><thead><tr><th>Subject ID</th><th>Subject</th><th>Class</th><th>Academic Year</th><th>Actions</th></tr></thead><tbody>
+    if(!filtered.length){
+        document.getElementById("subjectTable").innerHTML='<div class="empty">No subjects found.</div>';
+        return;
+    }
+
+    document.getElementById("subjectTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Classes</th>
+                <th>Teacher</th>
+                <th>Academic Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
         ${filtered.map(s=>{
-            const c=getClass((s.classIds||[])[0]);
-            return `<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(c?classDisplay(c):"None")}</td><td>${escapeHtml(s.academicYear||"")}</td><td><button class="edit-btn" onclick="editSubject('${escapeHtml(s.id)}')">Edit</button> <button class="danger-btn" onclick="deleteSubject('${escapeHtml(s.id)}')">Delete</button></td></tr>`;
-        }).join("")}</tbody></table></div>`;
+            const classNames=(s.classIds||[])
+                .map(id=>{
+                    const c=getClass(id);
+                    return c ? classDisplay(c) : null;
+                })
+                .filter(Boolean)
+                .join(", ");
+
+            return `
+            <tr>
+                <td>${escapeHtml(s.id)}</td>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.code)}</td>
+                <td>${escapeHtml(classNames||"None")}</td>
+                <td>${escapeHtml(getTeacher(s.teacherId)?.name||"Unassigned")}</td>
+                <td>${escapeHtml(s.academicYear)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editSubject('${s.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteSubject('${s.id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
 }
 
 function editSubject(id){
-    const s=getSubject(id); if(!s)return;
+    const s=getSubject(id);
+    if(!s)return;
+
     editingSubjectId=id;
+
     document.getElementById("subjectId").value=s.id;
     document.getElementById("subjectName").value=s.name;
-    document.getElementById("subjectCode").value=s.code||"";
-    document.getElementById("subjectYear").value=s.academicYear||"2026/2027";
-    populateSubjectClassSelect((s.classIds||[])[0]||"");
+    document.getElementById("subjectCode").value=s.code;
+    document.getElementById("subjectYear").value=s.academicYear;
+
+    populateSubjectTeacherSelect(s.teacherId||"");
+    populateSubjectClassList(s.classIds||[]);
+
     document.getElementById("subjectFormTitle").textContent="Edit Subject";
     document.getElementById("subjectFormPanel").style.display="block";
 }
 
 function deleteSubject(id){
     if(!confirm("Delete this subject?"))return;
+
     subjects=subjects.filter(s=>s.id!==id);
+
     results=results.filter(r=>r.subjectId!==id);
-    saveAll(); renderSubjects(); refreshDashboard();
+
+    saveAll();
+    renderSubjects();
+    refreshDashboard();
 }
 
 
@@ -2733,9 +2786,10 @@ document.getElementById("resultClass").addEventListener("change",function(){
 
 function updateResultCalculation(){
     const classScore=parseFloat(document.getElementById("classScore").value)||0;
-    const examScore=parseFloat(document.getElementById("examScore").value)||0;
+    const examMark=parseFloat(document.getElementById("examScore").value)||0;
 
-    const total=classScore+examScore;
+    const examComponent=(examMark*50)/100;
+    const total=classScore+examComponent;
 
     document.getElementById("resultTotal").value=total.toFixed(2);
     document.getElementById("resultGrade").value=getPerformance(total);
@@ -2753,10 +2807,10 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
     const subjectId=document.getElementById("resultSubject").value;
 
     const classScore=parseFloat(document.getElementById("classScore").value);
-    const examScore=parseFloat(document.getElementById("examScore").value);
+    const examMark=parseFloat(document.getElementById("examScore").value);
 
-    if(classScore<0 || classScore>50 || examScore<0 || examScore>50){
-        showMessage("resultMessage","Scores must be between 0 and 50.","error");
+    if(classScore<0 || classScore>50 || examMark<0 || examMark>100){
+        showMessage("resultMessage","Class Score must be between 0 and 50, and Exam Mark must be between 0 and 100.","error");
         return;
     }
 
@@ -2776,6 +2830,7 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
         return;
     }
 
+    const examScore=(examMark*50)/100;
     const total=classScore+examScore;
 
     const data={
@@ -2785,6 +2840,7 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
         subjectId,
         academicYear:year,
         classScore,
+        examMark,
         examScore,
         total,
         grade:getPerformance(total)
@@ -2804,6 +2860,245 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
     renderResults();
     refreshDashboard();
 });
+
+function populateBulkMarksClassSelect(selected=""){
+    const select=document.getElementById("bulkMarksClass");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Class</option>'+
+        classes.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+}
+
+function getBulkClassSubjects(classId){
+    return subjects.filter(s=>(s.classIds||[]).includes(classId));
+}
+
+function getBulkClassStudents(classId){
+    const c=getClass(classId);
+    return (c?.studentIds||[]).map(id=>getStudent(id)).filter(Boolean);
+}
+
+function downloadBulkMarksTemplate(){
+    const classId=document.getElementById("bulkMarksClass")?.value;
+    const year=(document.getElementById("bulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("bulkMarksTerm")?.value||"Term 1";
+
+    if(!classId){
+        showMessage("bulkMarksMessage","Please select a class first.","error");
+        return;
+    }
+
+    if(typeof XLSX==="undefined"){
+        showMessage("bulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const classStudents=getBulkClassStudents(classId);
+    const classSubjects=getBulkClassSubjects(classId);
+
+    if(!classStudents.length){
+        showMessage("bulkMarksMessage","No students are allocated to this class.","error");
+        return;
+    }
+    if(!classSubjects.length){
+        showMessage("bulkMarksMessage","No subjects are linked to this class yet.","error");
+        return;
+    }
+
+    const headers=["Student ID","Student Name"];
+    classSubjects.forEach(s=>{
+        headers.push(`${s.name} Class Score /50`);
+        headers.push(`${s.name} Exam Mark /100`);
+    });
+
+    const rows=classStudents.map(student=>{
+        const row={"Student ID":student.id,"Student Name":student.name};
+        classSubjects.forEach(s=>{
+            row[`${s.name} Class Score /50`]="";
+            row[`${s.name} Exam Mark /100`]="";
+        });
+        return row;
+    });
+
+    const ws=XLSX.utils.json_to_sheet(rows,{header:headers});
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Marks");
+
+    const instructions=[
+        ["SwiftSchool Bulk Marks Template"],
+        ["Class",classDisplay(getClass(classId))],
+        ["Academic Year",year],
+        ["Term",term],
+        [],
+        ["Instructions"],
+        ["1","Enter Class Score from 0 to 50."],
+        ["2","Enter the full Examination Mark from 0 to 100."],
+        ["3","The system automatically converts the Exam Mark to 50%."],
+        ["4","Example: 80/100 Exam Mark becomes 40/50."],
+        ["5","Do not change Student ID or Student Name."],
+        ["6","Do not change the subject column names."]
+    ];
+    const wi=XLSX.utils.aoa_to_sheet(instructions);
+    XLSX.utils.book_append_sheet(wb,wi,"Instructions");
+
+    const safe=classDisplay(getClass(classId)).replace(/[^A-Za-z0-9]+/g,"_");
+    XLSX.writeFile(wb,`SwiftSchool_${safe}_Marks_${term.replace(/\s+/g,"_")}.xlsx`);
+    showMessage("bulkMarksMessage","Class-specific Excel template downloaded successfully.","success");
+}
+
+function normalizeExcelHeader(value){
+    return String(value??"").trim().toLowerCase().replace(/\s+/g," ");
+}
+
+function importBulkMarksFromExcel(){
+    const classId=document.getElementById("bulkMarksClass")?.value;
+    const year=(document.getElementById("bulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("bulkMarksTerm")?.value||"Term 1";
+    const file=document.getElementById("bulkMarksExcelFile")?.files?.[0];
+
+    if(!classId){showMessage("bulkMarksMessage","Please select a class first.","error");return;}
+    if(!file){showMessage("bulkMarksMessage","Please select the completed Excel file.","error");return;}
+    if(typeof XLSX==="undefined"){
+        showMessage("bulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const classStudents=getBulkClassStudents(classId);
+    const classSubjects=getBulkClassSubjects(classId);
+    if(!classStudents.length){showMessage("bulkMarksMessage","This class has no students.","error");return;}
+    if(!classSubjects.length){showMessage("bulkMarksMessage","This class has no subjects linked to it.","error");return;}
+
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+            const firstSheet=wb.Sheets[wb.SheetNames[0]];
+            const rows=XLSX.utils.sheet_to_json(firstSheet,{defval:""});
+
+            if(!rows.length){showMessage("bulkMarksMessage","The Excel sheet is empty.","error");return;}
+
+            const firstHeaders=Object.keys(rows[0]);
+            const findHeader=(wanted)=>firstHeaders.find(h=>normalizeExcelHeader(h)===normalizeExcelHeader(wanted));
+            const studentIdHeader=findHeader("Student ID");
+            const studentNameHeader=findHeader("Student Name");
+
+            if(!studentIdHeader || !studentNameHeader){
+                showMessage("bulkMarksMessage","The Excel file must contain Student ID and Student Name columns. Download the class template and use its column names.","error");
+                return;
+            }
+
+            const subjectColumns={};
+            const missingSubjects=[];
+            classSubjects.forEach(subject=>{
+                const classHeader=findHeader(`${subject.name} Class Score /50`);
+                const examHeader=findHeader(`${subject.name} Exam Mark /100`);
+                if(!classHeader || !examHeader) missingSubjects.push(subject.name);
+                subjectColumns[subject.id]={classHeader,examHeader,subject};
+            });
+
+            if(missingSubjects.length){
+                showMessage("bulkMarksMessage",`The Excel file is missing columns for: ${missingSubjects.join(", ")}. Please download the correct template for this class.`,"error");
+                return;
+            }
+
+            let uploadedMarks=0, updatedResults=0, createdResults=0, skippedRows=0;
+            const errors=[];
+            const studentMap=new Map(classStudents.map(s=>[String(s.id).trim().toLowerCase(),s]));
+
+            rows.forEach((row,index)=>{
+                const rowNumber=index+2;
+                const studentId=String(row[studentIdHeader]??"").trim();
+                const studentName=String(row[studentNameHeader]??"").trim();
+                if(!studentId && !studentName)return;
+
+                const student=studentMap.get(studentId.toLowerCase());
+                if(!student){
+                    errors.push(`Row ${rowNumber}: Student ID "${studentId}" is not in the selected class.`);
+                    skippedRows++;
+                    return;
+                }
+
+                if(studentName && student.name.trim().toLowerCase()!==studentName.toLowerCase()){
+                    errors.push(`Row ${rowNumber}: Student name does not match Student ID ${studentId}.`);
+                    skippedRows++;
+                    return;
+                }
+
+                let rowHasError=false;
+                classSubjects.forEach(subject=>{
+                    const cols=subjectColumns[subject.id];
+                    const classRaw=row[cols.classHeader];
+                    const examRaw=row[cols.examHeader];
+                    const classBlank=String(classRaw??"").trim()==="";
+                    const examBlank=String(examRaw??"").trim()==="";
+                    if(classBlank && examBlank)return;
+
+                    const classScore=Number(classRaw);
+                    const examMark=Number(examRaw);
+                    if(!Number.isFinite(classScore) || classScore<0 || classScore>50){
+                        errors.push(`Row ${rowNumber} (${studentId}): ${subject.name} Class Score must be 0–50.`);
+                        rowHasError=true; return;
+                    }
+                    if(!Number.isFinite(examMark) || examMark<0 || examMark>100){
+                        errors.push(`Row ${rowNumber} (${studentId}): ${subject.name} Exam Mark must be 0–100.`);
+                        rowHasError=true; return;
+                    }
+
+                    const examScore=(examMark*50)/100;
+                    const total=classScore+examScore;
+                    const existing=results.find(r=>
+                        r.studentId===student.id &&
+                        r.classId===classId &&
+                        r.subjectId===subject.id &&
+                        r.academicYear===year &&
+                        (r.term||"")===term
+                    );
+
+                    const data={
+                        id:existing?.id || ("RES-"+Date.now().toString().slice(-6)+Math.random().toString(36).slice(2,6)),
+                        studentId:student.id,
+                        classId,
+                        subjectId:subject.id,
+                        academicYear:year,
+                        term,
+                        classScore,
+                        examMark,
+                        examScore,
+                        total,
+                        grade:getPerformance(total)
+                    };
+
+                    if(existing){
+                        Object.assign(existing,data);
+                        updatedResults++;
+                    }else{
+                        results.push(data);
+                        createdResults++;
+                    }
+                    uploadedMarks++;
+                });
+
+                if(rowHasError)skippedRows++;
+            });
+
+            saveAll();
+            renderResults();
+            refreshDashboard();
+
+            let message=`Upload complete: ${uploadedMarks} subject mark(s) processed. ${createdResults} new result(s), ${updatedResults} updated.`;
+            if(skippedRows)message+=` ${skippedRows} row(s) had issues.`;
+            if(errors.length)message+=` First issue: ${errors.slice(0,3).join(" | ")}`;
+            showMessage("bulkMarksMessage",message,errors.length?"error":"success");
+        }catch(err){
+            console.error(err);
+            showMessage("bulkMarksMessage","Could not read the Excel file. Please use the downloaded SwiftSchool class template.","error");
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
 
 function renderResults(){
     const search=(document.getElementById("resultSearch")?.value||"").toLowerCase();
@@ -2844,7 +3139,7 @@ function renderResults(){
                 <th>Class</th>
                 <th>Subject</th>
                 <th>Class /50</th>
-                <th>Exam /50</th>
+                <th>Exam Component /50</th>
                 <th>Total</th>
                 <th>Performance</th>
                 <th>Academic Year</th>
@@ -2898,7 +3193,7 @@ function editResult(id){
     populateResultSubjectSelect(r.classId,r.subjectId);
 
     document.getElementById("classScore").value=r.classScore;
-    document.getElementById("examScore").value=r.examScore;
+    document.getElementById("examScore").value=(r.examMark!==undefined ? r.examMark : Number(r.examScore||0)*2).toFixed(2);
 
     updateResultCalculation();
 
@@ -3053,8 +3348,14 @@ function renderParentResults(){
 
 function renderTeacherResults(){
     const teacherId=currentUser?.id;
-    const teacherClassIds=classes.filter(c=>c.teacherId===teacherId).map(c=>c.id);
-    const teacherResults=results.filter(r=>teacherClassIds.includes(r.classId));
+
+    const teacherSubjectIds=subjects
+        .filter(s=>s.teacherId===teacherId)
+        .map(s=>s.id);
+
+    const teacherResults=results.filter(r=>
+        teacherSubjectIds.includes(r.subjectId)
+    );
 
     if(!teacherResults.length){
         document.getElementById("teacherResultsContent").innerHTML=
@@ -4165,7 +4466,6 @@ document.getElementById("teacherAttendanceSearch").addEventListener("input",rend
    INITIAL SAVE
 ========================= */
 
-initializeDefaultSubjects();
 saveAll();
 refreshDashboard();
 
