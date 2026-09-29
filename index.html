@@ -816,6 +816,15 @@ td{font-size:14px}
                     <input id="studentDob" type="date">
                 </div>
                 <div class="form-group">
+                    <label>Term *</label>
+                    <select id="resultTerm" required>
+                        <option>Term 1</option>
+                        <option>Term 2</option>
+                        <option>Term 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Class *</label>
                     <input id="studentClass" required>
                 </div>
@@ -2759,6 +2768,7 @@ function openResultForm(){
 
     document.getElementById("resultForm").reset();
     document.getElementById("resultYear").value="2026/2027";
+    document.getElementById("resultTerm").value="Term 1";
 
     populateResultClassSelect();
 
@@ -2863,6 +2873,7 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
     e.preventDefault();
 
     const year=document.getElementById("resultYear").value.trim();
+    const term=document.getElementById("resultTerm").value;
     const classId=document.getElementById("resultClass").value;
     const studentId=document.getElementById("resultStudent").value;
     const subjectId=document.getElementById("resultSubject").value;
@@ -2879,13 +2890,14 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
         r.studentId===studentId &&
         r.subjectId===subjectId &&
         r.academicYear===year &&
+        String(r.term||"Term 1")===term &&
         r.id!==editingResultId
     );
 
     if(duplicate){
         showMessage(
             "resultMessage",
-            "A result already exists for this student, subject and academic year.",
+            "A result already exists for this student, subject, academic year and term.",
             "error"
         );
         return;
@@ -2900,6 +2912,7 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
         classId,
         subjectId,
         academicYear:year,
+        term,
         classScore,
         examMark,
         examScore,
@@ -2936,6 +2949,7 @@ function editResult(id){
     editingResultId=id;
 
     document.getElementById("resultYear").value=r.academicYear||"2026/2027";
+    document.getElementById("resultTerm").value=r.term||"Term 1";
     populateResultClassSelect(r.classId);
     populateResultStudentSelect(r.classId,r.studentId);
     populateResultSubjectSelect(r.classId,r.subjectId);
@@ -3640,14 +3654,20 @@ function renderParentResults(){
         return;
     }
 
-    const childIds=parent.studentIds||[];
+    const childIds=(parent.studentIds||[]).map(id=>String(id).trim()).filter(Boolean);
     const children=childIds.map(id=>getStudent(id)).filter(Boolean);
+
     if(!children.length){
         box.innerHTML='<div class="empty">No children are linked to your account. Add a child using the Student ID from My Children.</div>';
         return;
     }
 
-    const childResults=results.filter(r=>childIds.includes(r.studentId));
+    // Match student IDs safely even if one record contains different casing or spaces.
+    const normalizedChildIds=new Set(childIds.map(id=>id.toLowerCase()));
+    const childResults=results.filter(r=>
+        normalizedChildIds.has(String(r.studentId||"").trim().toLowerCase())
+    );
+
     if(!childResults.length){
         box.innerHTML=`<div class="empty">No results are available yet for ${children.length===1?'your child':'your children'}.</div>`;
         return;
@@ -3655,15 +3675,17 @@ function renderParentResults(){
 
     const grouped={};
     childResults.forEach(r=>{
-        const key=[r.studentId,r.academicYear||"",r.term||""].join("|");
+        // Older results may not have a term. Treat those as Term 1 so they remain visible.
+        const term=String(r.term||"Term 1").trim() || "Term 1";
+        const key=[String(r.studentId||"").trim().toLowerCase(),String(r.academicYear||"").trim(),term].join("|");
         if(!grouped[key])grouped[key]=[];
-        grouped[key].push(r);
+        grouped[key].push({...r,term});
     });
 
     const sections=Object.values(grouped).map(records=>{
         const first=records[0];
-        const student=getStudent(first.studentId);
-        const c=getClass(first.classId) || classes.find(x=>String(x.name||"")===String(student?.className||""));
+        const student=children.find(s=>String(s.id).trim().toLowerCase()===String(first.studentId||"").trim().toLowerCase()) || getStudent(first.studentId);
+        const c=getClass(first.classId) || classes.find(x=>String(x.name||"").trim().toLowerCase()===String(student?.className||"").trim().toLowerCase());
         const total=records.reduce((sum,r)=>sum+Number(r.total||0),0);
         const average=records.length ? total/records.length : 0;
 
@@ -3675,7 +3697,7 @@ function renderParentResults(){
                     <p style="color:#6b7280">Student ID: ${escapeHtml(student?.id||"")} · Class: ${escapeHtml(c?classDisplay(c):(student?.className||""))}</p>
                 </div>
                 <div style="text-align:right">
-                    <strong>${escapeHtml(first.term||"Term")}</strong><br>
+                    <strong>${escapeHtml(first.term)}</strong><br>
                     <small>${escapeHtml(first.academicYear||"")}</small>
                 </div>
             </div>
@@ -3693,7 +3715,7 @@ function renderParentResults(){
                     return `<tr>
                         <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
                         <td>${Number(r.classScore||0).toFixed(2)}</td>
-                        <td>${Number(r.examMark??r.examScore??0).toFixed(2)}</td>
+                        <td>${Number(r.examMark??(Number(r.examScore||0)*2)).toFixed(2)}</td>
                         <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
                         <td><span class="badge ${performanceClass(grade)}">${escapeHtml(grade)}</span></td>
                     </tr>`;
