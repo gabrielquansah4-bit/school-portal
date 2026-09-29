@@ -1240,6 +1240,15 @@ td{font-size:14px}
                        placeholder="e.g. 2026/2027">
             </div>
 
+            <div class="form-group">
+                <label for="reportTerm">Term</label>
+                <select id="reportTerm">
+                    <option value="Term 1">Term 1</option>
+                    <option value="Term 2">Term 2</option>
+                    <option value="Term 3">Term 3</option>
+                </select>
+            </div>
+
         </div>
 
         <div class="report-actions">
@@ -3391,27 +3400,31 @@ function deleteTeacherAttendance(id){
 let currentReportStudentId = "";
 let currentReportClassId = "";
 let currentReportAcademicYear = "";
+let currentReportTerm = "Term 1";
 
 function reportCommentsKey(studentId, academicYear){
     return `${studentId}_${academicYear}`;
 }
 
-function getReportComments(studentId, academicYear){
-    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
-    return all[reportCommentsKey(studentId,academicYear)] || {
-        teacher:"",
-        headteacher:""
-    };
+function reportCommentsKey(studentId,academicYear,term="") {
+    return `${studentId}__${academicYear}__${term||"All Terms"}`;
 }
 
-function saveReportComments(studentId, academicYear, teacher, headteacher){
+function getReportComments(studentId, academicYear, term="") {
     const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+    const current=all[reportCommentsKey(studentId,academicYear,term)];
+    if(current) return current;
 
-    all[reportCommentsKey(studentId,academicYear)]={
+    // Keep older saved comments working if they were created before terms were added.
+    return all[`${studentId}__${academicYear}`] || {teacher:"",headteacher:""};
+}
+
+function saveReportComments(studentId, academicYear, term, teacher, headteacher) {
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+    all[reportCommentsKey(studentId,academicYear,term)]= {
         teacher:String(teacher||"").trim(),
         headteacher:String(headteacher||"").trim()
     };
-
     localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
 }
 
@@ -3487,7 +3500,7 @@ function calculateReportAttendance(studentId,classId,academicYear){
     };
 }
 
-function reportSubjectList(classId,studentId,academicYear){
+function reportSubjectList(classId,studentId,academicYear,term=""){
     const classSubjects=subjects.filter(s=>
         (s.classIds||[]).includes(classId)
     );
@@ -3495,7 +3508,8 @@ function reportSubjectList(classId,studentId,academicYear){
     const studentResults=results.filter(r=>
         r.studentId===studentId &&
         r.classId===classId &&
-        String(r.academicYear||"").trim()===String(academicYear||"").trim()
+        String(r.academicYear||"").trim()===String(academicYear||"").trim() &&
+        (!term || String(r.term||"").trim()===String(term).trim())
     );
 
     const ids=new Set(classSubjects.map(s=>s.id));
@@ -3529,7 +3543,7 @@ function getReportResultLevel(result){
 }
 
 function saveCurrentReportComments(){
-    if(!currentReportStudentId || !currentReportAcademicYear){
+    if(!currentReportStudentId || !currentReportAcademicYear || !currentReportTerm){
         showMessage("reportMessage","Generate a report before saving comments.","error");
         return;
     }
@@ -3540,6 +3554,7 @@ function saveCurrentReportComments(){
     saveReportComments(
         currentReportStudentId,
         currentReportAcademicYear,
+        currentReportTerm,
         teacher,
         headteacher
     );
@@ -3551,6 +3566,7 @@ function generateStudentReport(){
     const classId=document.getElementById("reportClassSelect")?.value || "";
     const studentId=document.getElementById("reportStudentSelect")?.value || "";
     const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
+    const term=document.getElementById("reportTerm")?.value || "Term 1";
 
     const container=document.getElementById("studentReportContainer");
 
@@ -3580,10 +3596,11 @@ function generateStudentReport(){
     currentReportStudentId=studentId;
     currentReportClassId=classId;
     currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
 
-    const subjectItems=reportSubjectList(classId,studentId,academicYear);
+    const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
     const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
-    const comments=getReportComments(studentId,academicYear);
+    const comments=getReportComments(studentId,academicYear,term);
 
     const scoredResults=subjectItems
         .map(x=>x.result)
@@ -3634,7 +3651,7 @@ function generateStudentReport(){
         <div class="report-school-header">
             <h1>SWIFTSCHOOL</h1>
             <h2>STUDENT ACADEMIC REPORT</h2>
-            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong> &nbsp; | &nbsp; Term: <strong>${escapeHtml(term)}</strong></p>
         </div>
 
         <div class="report-student-info">
@@ -3785,6 +3802,7 @@ function printStudentReport(){
         saveReportComments(
             currentReportStudentId,
             currentReportAcademicYear,
+            currentReportTerm,
             teacher,
             headteacher
         );
