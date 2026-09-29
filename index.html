@@ -1,17 +1,18 @@
 <!-- =========================================================
-     SWIFTSCHOOL - REPORT CARDS MODULE
+     SWIFTSCHOOL - RESULTS / ASSESSMENT MODULE
      ========================================================= -->
 
-<section id="reportCardsSection" class="portal-section">
+<section id="resultsSection" class="portal-section">
 
 <style>
-/* ================= REPORT CARD DASHBOARD ================= */
 
-.report-card-container {
+/* ================= RESULTS MODULE ================= */
+
+.results-container {
     padding: 20px;
 }
 
-.report-card-controls {
+.results-panel {
     background: #ffffff;
     padding: 20px;
     border-radius: 12px;
@@ -19,39 +20,61 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.report-card-controls h2 {
+.results-panel h2 {
     margin-top: 0;
 }
 
-.report-control-grid {
+.results-form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
 }
 
-.report-control-grid label {
+.results-form-group label {
     display: block;
     font-weight: 600;
     margin-bottom: 6px;
 }
 
-.report-control-grid input,
-.report-control-grid select {
+.results-form-group input,
+.results-form-group select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-size: 14px;
 }
 
-.report-buttons {
+.results-form-group input:focus,
+.results-form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.result-total-display {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.result-grade-display {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.results-buttons {
     margin-top: 18px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.report-buttons button {
+.results-buttons button {
     border: none;
     padding: 11px 18px;
     border-radius: 7px;
@@ -59,435 +82,359 @@
     font-weight: 600;
 }
 
-.generate-report-btn {
+.save-result-btn {
     background: #2563eb;
     color: white;
 }
 
-.print-report-btn {
+.update-result-btn {
     background: #16a34a;
     color: white;
+    display: none;
 }
 
-.clear-report-btn {
+.clear-result-btn {
     background: #64748b;
     color: white;
 }
 
-.report-buttons button:hover {
-    opacity: 0.9;
+.results-search {
+    margin-bottom: 15px;
 }
 
-/* ================= A4 REPORT ================= */
-
-.report-paper {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 20px auto;
-    background: white;
-    padding: 12mm;
-    box-sizing: border-box;
-    color: #111827;
-    font-family: Arial, Helvetica, sans-serif;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+.results-search input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
 }
 
-/* Header */
-
-.report-header {
-    text-align: center;
-    border-bottom: 3px solid #1e3a8a;
-    padding-bottom: 12px;
+.results-table-wrapper {
+    overflow-x: auto;
 }
 
-.school-logo {
-    width: 75px;
-    height: 75px;
-    object-fit: contain;
-    margin-bottom: 5px;
-}
-
-.school-name {
-    font-size: 25px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #1e3a8a;
-}
-
-.school-address {
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-.report-title {
-    margin-top: 12px;
-    font-size: 23px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: #111827;
-}
-
-/* Academic year */
-
-.report-period {
-    display: flex;
-    justify-content: center;
-    gap: 35px;
-    margin-top: 8px;
-    font-size: 13px;
-}
-
-/* Student information */
-
-.student-info {
-    margin-top: 18px;
-    border: 1px solid #9ca3af;
-}
-
-.student-info-title {
-    background: #1e3a8a;
-    color: white;
-    padding: 7px 10px;
-    font-weight: bold;
-    font-size: 13px;
-}
-
-.student-info-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.student-info-item {
-    padding: 8px 10px;
-    border-right: 1px solid #d1d5db;
-    border-bottom: 1px solid #d1d5db;
-    min-height: 42px;
-}
-
-.student-info-item:nth-child(3n) {
-    border-right: none;
-}
-
-.student-info-label {
-    font-size: 10px;
-    color: #6b7280;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.student-info-value {
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 3px;
-}
-
-/* Results */
-
-.results-title {
-    margin-top: 18px;
-    background: #1e3a8a;
-    color: white;
-    padding: 7px 10px;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.results-table {
+.results-data-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
+    font-size: 13px;
 }
 
-.results-table th {
-    background: #e5e7eb;
-    font-weight: 700;
-    text-align: center;
-    padding: 7px 4px;
-    border: 1px solid #9ca3af;
-}
-
-.results-table td {
-    padding: 7px 4px;
-    border: 1px solid #9ca3af;
-    text-align: center;
-}
-
-.results-table td:first-child {
-    text-align: left;
-    font-weight: 600;
-}
-
-/* Summary */
-
-.summary-section {
-    margin-top: 18px;
-}
-
-.summary-title {
+.results-data-table th {
     background: #1e3a8a;
     color: white;
-    padding: 7px 10px;
-    font-size: 13px;
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.results-data-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.results-data-table td:first-child {
+    text-align: left;
+}
+
+.results-data-table tr:hover {
+    background: #f8fafc;
+}
+
+.result-grade {
     font-weight: bold;
 }
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border: 1px solid #9ca3af;
+.result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
 }
 
-.summary-item {
-    text-align: center;
-    padding: 10px;
-    border-right: 1px solid #9ca3af;
-}
-
-.summary-item:last-child {
-    border-right: none;
-}
-
-.summary-label {
-    font-size: 10px;
-    color: #6b7280;
-    font-weight: bold;
-}
-
-.summary-value {
-    font-size: 17px;
-    font-weight: 800;
-    margin-top: 4px;
-}
-
-/* Attendance */
-
-.attendance-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border: 1px solid #9ca3af;
-    margin-top: 8px;
-}
-
-.attendance-item {
-    text-align: center;
-    padding: 9px;
-    border-right: 1px solid #9ca3af;
-}
-
-.attendance-item:last-child {
-    border-right: none;
-}
-
-/* Comments */
-
-.comments-section {
-    margin-top: 18px;
-}
-
-.comment-box {
-    border: 1px solid #9ca3af;
-    padding: 10px;
-    min-height: 45px;
-    margin-top: 6px;
+.result-actions button {
+    border: none;
+    padding: 6px 9px;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 12px;
 }
 
-/* Signatures */
-
-.signatures {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 50px;
-    margin-top: 38px;
+.edit-result {
+    background: #f59e0b;
+    color: white;
 }
 
-.signature-box {
+.delete-result {
+    background: #dc2626;
+    color: white;
+}
+
+.no-results {
     text-align: center;
+    padding: 30px;
+    color: #64748b;
 }
 
-.signature-line {
-    border-top: 1px solid #111827;
-    padding-top: 5px;
-    font-size: 11px;
-}
+/* ================= MOBILE ================= */
 
-/* Footer */
+@media (max-width: 700px) {
 
-.report-footer {
-    margin-top: 25px;
-    padding-top: 8px;
-    border-top: 1px solid #9ca3af;
-    text-align: center;
-    font-size: 9px;
-    color: #6b7280;
-}
+    .results-container {
+        padding: 10px;
+    }
 
-/* Empty state */
-
-.report-empty {
-    padding: 60px;
-    text-align: center;
-    color: #6b7280;
-    background: white;
-    border-radius: 10px;
-}
-
-/* Responsive */
-
-@media (max-width: 800px) {
-
-    .report-paper {
-        width: 100%;
-        min-height: auto;
+    .results-panel {
         padding: 15px;
     }
 
-    .student-info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .student-info-item {
-        border-right: none;
-    }
-
-    .summary-grid,
-    .attendance-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .signatures {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
 }
 
-/* ================= PRINT ================= */
-
-@media print {
-
-    body * {
-        visibility: hidden !important;
-    }
-
-    #reportCardsSection,
-    #reportCardsSection * {
-        visibility: visible !important;
-    }
-
-    #reportCardsSection {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-
-    .report-card-controls {
-        display: none !important;
-    }
-
-    .report-paper {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0;
-        padding: 12mm;
-        box-shadow: none;
-    }
-
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
-}
 </style>
 
 
-<div class="report-card-container">
+<div class="results-container">
 
-    <!-- CONTROL PANEL -->
+    <!-- ================= FORM ================= -->
 
-    <div class="report-card-controls">
+    <div class="results-panel">
 
-        <h2>📄 Report Cards</h2>
+        <h2>📝 Results / Assessment</h2>
 
         <p>
-            Select a student and generate an official school report card.
+            Enter and manage student academic results.
+            Total, grade and interpretation are calculated automatically.
         </p>
 
-        <div class="report-control-grid">
+        <div class="results-form-grid">
 
-            <div>
-                <label>Student</label>
-                <select id="reportStudentSelect">
-                    <option value="">Select Student</option>
-                </select>
-            </div>
+            <!-- Academic Year -->
 
-            <div>
-                <label>Academic Year</label>
+            <div class="results-form-group">
+
+                <label>
+                    Academic Year
+                </label>
+
                 <input
                     type="text"
-                    id="reportAcademicYear"
+                    id="resultAcademicYear"
                     value="2026/2027"
                     placeholder="2026/2027"
                 >
+
             </div>
 
-            <div>
-                <label>Term</label>
-                <select id="reportTerm">
-                    <option value="First Term">First Term</option>
-                    <option value="Second Term">Second Term</option>
-                    <option value="Third Term">Third Term</option>
+
+            <!-- Term -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Term
+                </label>
+
+                <select id="resultTerm">
+
+                    <option value="First Term">
+                        First Term
+                    </option>
+
+                    <option value="Second Term">
+                        Second Term
+                    </option>
+
+                    <option value="Third Term">
+                        Third Term
+                    </option>
+
                 </select>
+
             </div>
 
-            <div>
-                <label>Reopening Date</label>
-                <input
-                    type="date"
-                    id="reportReopeningDate"
+
+            <!-- Class -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Class
+                </label>
+
+                <select
+                    id="resultClass"
+                    onchange="loadResultStudents()"
                 >
+
+                    <option value="">
+                        Select Class
+                    </option>
+
+                </select>
+
             </div>
 
-            <div>
-                <label>Class Teacher Comment</label>
-                <input
-                    type="text"
-                    id="reportTeacherComment"
-                    placeholder="Enter teacher's comment"
+
+            <!-- Student -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Student
+                </label>
+
+                <select
+                    id="resultStudent"
+                    onchange="loadResultSubjects()"
                 >
+
+                    <option value="">
+                        Select Student
+                    </option>
+
+                </select>
+
             </div>
 
-            <div>
-                <label>Headteacher Comment</label>
+
+            <!-- Subject -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Subject
+                </label>
+
+                <select id="resultSubject">
+
+                    <option value="">
+                        Select Subject
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Class Score -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Class Score
+                </label>
+
                 <input
-                    type="text"
-                    id="reportHeadComment"
-                    placeholder="Enter headteacher's comment"
+                    type="number"
+                    id="resultClassScore"
+                    min="0"
+                    max="50"
+                    step="0.01"
+                    placeholder="0 - 50"
+                    oninput="calculateResultTotal()"
                 >
+
+            </div>
+
+
+            <!-- Exam Score -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Exam Score
+                </label>
+
+                <input
+                    type="number"
+                    id="resultExamScore"
+                    min="0"
+                    max="50"
+                    step="0.01"
+                    placeholder="0 - 50"
+                    oninput="calculateResultTotal()"
+                >
+
+            </div>
+
+
+            <!-- Total -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Total Score
+                </label>
+
+                <div
+                    class="result-total-display"
+                    id="resultTotal"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- Grade -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Grade
+                </label>
+
+                <div
+                    class="result-grade-display"
+                    id="resultGrade"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <!-- Interpretation -->
+
+            <div class="results-form-group">
+
+                <label>
+                    Interpretation
+                </label>
+
+                <div
+                    class="result-grade-display"
+                    id="resultInterpretation"
+                >
+                    -
+                </div>
+
             </div>
 
         </div>
 
-        <div class="report-buttons">
+
+        <div class="results-buttons">
 
             <button
-                class="generate-report-btn"
-                onclick="generateSwiftSchoolReport()"
+                class="save-result-btn"
+                id="saveResultBtn"
+                onclick="saveSwiftSchoolResult()"
             >
-                Generate Report
+                💾 Save Result
             </button>
 
-            <button
-                class="print-report-btn"
-                onclick="printSwiftSchoolReport()"
-            >
-                🖨 Print / Save PDF
-            </button>
 
             <button
-                class="clear-report-btn"
-                onclick="clearSwiftSchoolReport()"
+                class="update-result-btn"
+                id="updateResultBtn"
+                onclick="updateSwiftSchoolResult()"
+            >
+                ✏️ Update Result
+            </button>
+
+
+            <button
+                class="clear-result-btn"
+                onclick="clearResultForm()"
             >
                 Clear
             </button>
@@ -497,17 +444,83 @@
     </div>
 
 
-    <!-- REPORT OUTPUT -->
+    <!-- ================= SAVED RESULTS ================= -->
 
-    <div id="swiftSchoolReportOutput">
+    <div class="results-panel">
 
-        <div class="report-empty">
-            <h3>Report Card Preview</h3>
-            <p>
-                Select a student and click
-                <strong>Generate Report</strong>
-                to create the report card.
-            </p>
+        <h2>📊 Saved Results</h2>
+
+        <div class="results-search">
+
+            <input
+                type="text"
+                id="resultsSearch"
+                placeholder="Search by student, class or subject..."
+                oninput="displaySwiftSchoolResults()"
+            >
+
+        </div>
+
+
+        <div class="results-table-wrapper">
+
+            <table class="results-data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            Class
+                        </th>
+
+                        <th>
+                            Subject
+                        </th>
+
+                        <th>
+                            Class Score
+                        </th>
+
+                        <th>
+                            Exam Score
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Grade
+                        </th>
+
+                        <th>
+                            Interpretation
+                        </th>
+
+                        <th>
+                            Term
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="resultsTableBody"
+                >
+                </tbody>
+
+            </table>
+
         </div>
 
     </div>
@@ -518,19 +531,26 @@
 <script>
 
 /* =========================================================
-   SWIFTSCHOOL REPORT CARD ENGINE
+   SWIFTSCHOOL RESULTS ENGINE
    ========================================================= */
 
 (function () {
 
-    /* ---------- STORAGE HELPERS ---------- */
+    let editingResultId = null;
+
+
+    /* =====================================================
+       STORAGE
+       ===================================================== */
 
     function getStudents() {
 
         try {
 
             return JSON.parse(
-                localStorage.getItem("swiftSchoolStudents")
+                localStorage.getItem(
+                    "swiftSchoolStudents"
+                )
             ) || [];
 
         } catch (error) {
@@ -542,64 +562,47 @@
     }
 
 
-    function getAttendance() {
+    function getResults() {
 
-        const possibleKeys = [
-            "swiftSchoolAttendance",
-            "swiftSchoolAttendances",
-            "attendanceRecords"
-        ];
+        try {
 
-        for (let key of possibleKeys) {
+            return JSON.parse(
+                localStorage.getItem(
+                    "swiftSchoolResults"
+                )
+            ) || [];
 
-            try {
+        } catch (error) {
 
-                const data = JSON.parse(
-                    localStorage.getItem(key)
-                );
-
-                if (Array.isArray(data)) {
-                    return data;
-                }
-
-            } catch (error) {}
+            return [];
 
         }
-
-        return [];
 
     }
 
 
-    /* ---------- SAFE TEXT ---------- */
+    function saveResults(results) {
 
-    function safe(value) {
-
-        if (
-            value === undefined ||
-            value === null ||
-            value === ""
-        ) {
-            return "-";
-        }
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        localStorage.setItem(
+            "swiftSchoolResults",
+            JSON.stringify(results)
+        );
 
     }
 
 
-    /* ---------- FIND STUDENT NAME ---------- */
+    /* =====================================================
+       STUDENT HELPERS
+       ===================================================== */
 
     function getStudentName(student) {
 
         return (
+
             student.name ||
+
             student.studentName ||
+
             (
                 (student.firstName || "") +
                 " " +
@@ -607,201 +610,737 @@
                 " " +
                 (student.lastName || "")
             ).trim() ||
+
             "Student"
+
         );
 
     }
 
-
-    /* ---------- FIND STUDENT ID ---------- */
 
     function getStudentId(student) {
 
         return (
+
             student.id ||
+
             student.studentId ||
+
             student.studentID ||
+
             student.admissionNumber ||
+
             student.admissionNo ||
-            "-"
+
+            ""
+
         );
 
     }
 
-
-    /* ---------- FIND CLASS ---------- */
 
     function getStudentClass(student) {
 
         return (
+
             student.className ||
+
             student.class ||
+
             student.grade ||
+
             student.level ||
-            "-"
+
+            ""
+
         );
 
     }
 
 
-    /* ---------- LOAD STUDENTS ---------- */
-
-    function loadReportStudents() {
-
-        const select =
-            document.getElementById(
-                "reportStudentSelect"
-            );
-
-        if (!select) return;
-
-        const students = getStudents();
-
-        select.innerHTML =
-            '<option value="">Select Student</option>';
-
-        students.forEach(function (student, index) {
-
-            const option =
-                document.createElement("option");
-
-            option.value = index;
-
-            option.textContent =
-                getStudentName(student) +
-                " — " +
-                getStudentClass(student);
-
-            select.appendChild(option);
-
-        });
-
-    }
-
-
-    /* ---------- GRADE SYSTEM ---------- */
-
-    function getGrade(score) {
-
-        score = Number(score) || 0;
-
-        if (score >= 80) return "A";
-        if (score >= 70) return "B";
-        if (score >= 60) return "C";
-        if (score >= 50) return "D";
-        if (score >= 40) return "E";
-
-        return "F";
-
-    }
-
-
-    function getInterpretation(score) {
-
-        score = Number(score) || 0;
-
-        if (score >= 80)
-            return "Excellent";
-
-        if (score >= 70)
-            return "Very Good";
-
-        if (score >= 60)
-            return "Good";
-
-        if (score >= 50)
-            return "Satisfactory";
-
-        if (score >= 40)
-            return "Needs Improvement";
-
-        return "Below Expectations";
-
-    }
-
-
-    /* ---------- GET SUBJECTS ---------- */
+    /* =====================================================
+       SUBJECT HELPERS
+       ===================================================== */
 
     function getSubjects(student) {
 
         let subjects = [];
 
-        if (Array.isArray(student.subjects)) {
 
-            subjects = student.subjects;
+        if (
+            Array.isArray(
+                student.subjects
+            )
+        ) {
 
-        } else if (Array.isArray(student.selectedSubjects)) {
-
-            subjects = student.selectedSubjects;
-
-        } else if (Array.isArray(student.enrolledSubjects)) {
-
-            subjects = student.enrolledSubjects;
+            subjects =
+                student.subjects;
 
         }
+
+        else if (
+            Array.isArray(
+                student.selectedSubjects
+            )
+        ) {
+
+            subjects =
+                student.selectedSubjects;
+
+        }
+
+        else if (
+            Array.isArray(
+                student.enrolledSubjects
+            )
+        ) {
+
+            subjects =
+                student.enrolledSubjects;
+
+        }
+
 
         return subjects;
 
     }
 
 
-    /* ---------- NORMALIZE SUBJECT ---------- */
+    function getSubjectName(subject) {
 
-    function normalizeSubject(subject) {
+        if (
+            typeof subject ===
+            "string"
+        ) {
 
-        if (typeof subject === "string") {
-
-            return {
-                name: subject,
-                classScore: 0,
-                examScore: 0,
-                total: 0,
-                position: "-"
-            };
+            return subject;
 
         }
+
+
+        return (
+
+            subject.name ||
+
+            subject.subjectName ||
+
+            subject.title ||
+
+            ""
+
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD CLASSES
+       ===================================================== */
+
+    function loadResultClasses() {
+
+        const classSelect =
+            document.getElementById(
+                "resultClass"
+            );
+
+        if (!classSelect) return;
+
+
+        const students =
+            getStudents();
+
+
+        const classes = [];
+
+
+        students.forEach(
+            function (student) {
+
+                const className =
+                    getStudentClass(student);
+
+                if (
+                    className &&
+                    !classes.includes(
+                        className
+                    )
+                ) {
+
+                    classes.push(
+                        className
+                    );
+
+                }
+
+            }
+        );
+
+
+        classSelect.innerHTML =
+            '<option value="">Select Class</option>';
+
+
+        classes.sort().forEach(
+            function (className) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    className;
+
+                option.textContent =
+                    className;
+
+                classSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD STUDENTS
+       ===================================================== */
+
+    window.loadResultStudents =
+    function () {
+
+        const className =
+            document.getElementById(
+                "resultClass"
+            ).value;
+
+
+        const studentSelect =
+            document.getElementById(
+                "resultStudent"
+            );
+
+
+        studentSelect.innerHTML =
+            '<option value="">Select Student</option>';
+
+
+        if (!className) {
+
+            return;
+
+        }
+
+
+        const students =
+            getStudents();
+
+
+        students.forEach(
+            function (student, index) {
+
+                if (
+                    getStudentClass(
+                        student
+                    ) === className
+                ) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        index;
+
+                    option.textContent =
+                        getStudentName(
+                            student
+                        );
+
+                    studentSelect.appendChild(
+                        option
+                    );
+
+                }
+
+            }
+        );
+
+
+        loadResultSubjects();
+
+    };
+
+
+    /* =====================================================
+       LOAD SUBJECTS
+       ===================================================== */
+
+    window.loadResultSubjects =
+    function () {
+
+        const studentSelect =
+            document.getElementById(
+                "resultStudent"
+            );
+
+
+        const subjectSelect =
+            document.getElementById(
+                "resultSubject"
+            );
+
+
+        subjectSelect.innerHTML =
+            '<option value="">Select Subject</option>';
+
+
+        if (
+            !studentSelect.value
+        ) {
+
+            return;
+
+        }
+
+
+        const students =
+            getStudents();
+
+
+        const student =
+            students[
+                Number(
+                    studentSelect.value
+                )
+            ];
+
+
+        if (!student) return;
+
+
+        const subjects =
+            getSubjects(student);
+
+
+        subjects.forEach(
+            function (subject) {
+
+                const subjectName =
+                    getSubjectName(
+                        subject
+                    );
+
+
+                if (!subjectName)
+                    return;
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    subjectName;
+
+                option.textContent =
+                    subjectName;
+
+                subjectSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    };
+
+
+    /* =====================================================
+       GRADE
+       ===================================================== */
+
+    function getGrade(score) {
+
+        score =
+            Number(score) || 0;
+
+
+        if (score >= 80)
+            return "A";
+
+
+        if (score >= 70)
+            return "B";
+
+
+        if (score >= 60)
+            return "C";
+
+
+        if (score >= 50)
+            return "D";
+
+
+        if (score >= 40)
+            return "E";
+
+
+        return "F";
+
+    }
+
+
+    /* =====================================================
+       INTERPRETATION
+       ===================================================== */
+
+    function getInterpretation(score) {
+
+        score =
+            Number(score) || 0;
+
+
+        if (score >= 80)
+            return "Excellent";
+
+
+        if (score >= 70)
+            return "Very Good";
+
+
+        if (score >= 60)
+            return "Good";
+
+
+        if (score >= 50)
+            return "Satisfactory";
+
+
+        if (score >= 40)
+            return "Needs Improvement";
+
+
+        return "Below Expectations";
+
+    }
+
+
+    /* =====================================================
+       CALCULATE TOTAL
+       ===================================================== */
+
+    window.calculateResultTotal =
+    function () {
+
+        let classScore =
+            Number(
+                document.getElementById(
+                    "resultClassScore"
+                ).value
+            ) || 0;
+
+
+        let examScore =
+            Number(
+                document.getElementById(
+                    "resultExamScore"
+                ).value
+            ) || 0;
+
+
+        /* Limit values */
+
+        if (classScore > 50) {
+
+            classScore = 50;
+
+            document.getElementById(
+                "resultClassScore"
+            ).value = 50;
+
+        }
+
+
+        if (examScore > 50) {
+
+            examScore = 50;
+
+            document.getElementById(
+                "resultExamScore"
+            ).value = 50;
+
+        }
+
+
+        if (classScore < 0)
+            classScore = 0;
+
+
+        if (examScore < 0)
+            examScore = 0;
+
+
+        const total =
+            classScore +
+            examScore;
+
+
+        document.getElementById(
+            "resultTotal"
+        ).textContent =
+            total.toFixed(2);
+
+
+        document.getElementById(
+            "resultGrade"
+        ).textContent =
+            getGrade(total);
+
+
+        document.getElementById(
+            "resultInterpretation"
+        ).textContent =
+            getInterpretation(total);
+
+    };
+
+
+    /* =====================================================
+       SAVE RESULT
+       ===================================================== */
+
+    window.saveSwiftSchoolResult =
+    function () {
+
+        const academicYear =
+            document.getElementById(
+                "resultAcademicYear"
+            ).value.trim();
+
+
+        const term =
+            document.getElementById(
+                "resultTerm"
+            ).value;
+
+
+        const className =
+            document.getElementById(
+                "resultClass"
+            ).value;
+
+
+        const studentSelect =
+            document.getElementById(
+                "resultStudent"
+            );
+
+
+        const subject =
+            document.getElementById(
+                "resultSubject"
+            ).value;
+
 
         const classScore =
             Number(
-                subject.classScore ??
-                subject.class ??
-                subject.ca ??
-                subject.continuousAssessment ??
-                0
-            );
+                document.getElementById(
+                    "resultClassScore"
+                ).value
+            ) || 0;
+
 
         const examScore =
             Number(
-                subject.examScore ??
-                subject.exam ??
-                subject.examMark ??
-                0
+                document.getElementById(
+                    "resultExamScore"
+                ).value
+            ) || 0;
+
+
+        /* Validation */
+
+        if (!academicYear) {
+
+            alert(
+                "Please enter the academic year."
             );
 
-        let total =
-            Number(
-                subject.total ??
-                subject.totalScore
-            );
-
-        if (
-            isNaN(total) ||
-            total === 0
-        ) {
-
-            total =
-                classScore +
-                examScore;
+            return;
 
         }
 
-        return {
 
-            name:
-                subject.name ||
-                subject.subjectName ||
-                subject.title ||
-                "Subject",
+        if (!className) {
+
+            alert(
+                "Please select a class."
+            );
+
+            return;
+
+        }
+
+
+        if (!studentSelect.value) {
+
+            alert(
+                "Please select a student."
+            );
+
+            return;
+
+        }
+
+
+        if (!subject) {
+
+            alert(
+                "Please select a subject."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            classScore < 0 ||
+            classScore > 50
+        ) {
+
+            alert(
+                "Class Score must be between 0 and 50."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            examScore < 0 ||
+            examScore > 50
+        ) {
+
+            alert(
+                "Exam Score must be between 0 and 50."
+            );
+
+            return;
+
+        }
+
+
+        const students =
+            getStudents();
+
+
+        const student =
+            students[
+                Number(
+                    studentSelect.value
+                )
+            ];
+
+
+        if (!student) {
+
+            alert(
+                "Student record not found."
+            );
+
+            return;
+
+        }
+
+
+        const studentName =
+            getStudentName(
+                student
+            );
+
+
+        const studentId =
+            getStudentId(
+                student
+            );
+
+
+        const total =
+            classScore +
+            examScore;
+
+
+        const results =
+            getResults();
+
+
+        /* Prevent duplicate */
+
+        const duplicate =
+            results.find(
+                function (result) {
+
+                    return (
+
+                        result.studentId ===
+                        studentId &&
+
+                        result.subject ===
+                        subject &&
+
+                        result.academicYear ===
+                        academicYear &&
+
+                        result.term ===
+                        term
+
+                    );
+
+                }
+            );
+
+
+        if (duplicate) {
+
+            alert(
+                "A result for this student, subject and term already exists. Use Edit to change it."
+            );
+
+            return;
+
+        }
+
+
+        const result = {
+
+            id:
+                Date.now().toString(),
+
+            academicYear:
+                academicYear,
+
+            term:
+                term,
+
+            className:
+                className,
+
+            studentId:
+                studentId,
+
+            studentName:
+                studentName,
+
+            subject:
+                subject,
 
             classScore:
                 classScore,
@@ -812,139 +1351,416 @@
             total:
                 total,
 
-            position:
-                subject.position ||
-                subject.rank ||
-                "-"
+            grade:
+                getGrade(total),
+
+            interpretation:
+                getInterpretation(total),
+
+            dateCreated:
+                new Date().toISOString()
 
         };
 
-    }
+
+        results.push(result);
 
 
-    /* ---------- ATTENDANCE ---------- */
-
-    function calculateAttendance(student) {
-
-        const records = getAttendance();
-
-        let present = 0;
-        let absent = 0;
-        let late = 0;
-        let excused = 0;
-
-        const studentId =
-            getStudentId(student);
-
-        const studentName =
-            getStudentName(student);
-
-        records.forEach(function (record) {
-
-            const recordStudentId =
-                record.studentId ||
-                record.studentID ||
-                record.student_id;
-
-            const recordStudentName =
-                record.studentName ||
-                record.name;
-
-            const matchesId =
-                recordStudentId &&
-                String(recordStudentId) ===
-                String(studentId);
-
-            const matchesName =
-                recordStudentName &&
-                String(recordStudentName).toLowerCase() ===
-                String(studentName).toLowerCase();
-
-            if (
-                !matchesId &&
-                !matchesName
-            ) {
-                return;
-            }
-
-            const status =
-                String(
-                    record.status ||
-                    ""
-                ).toLowerCase();
-
-            if (status === "present") {
-
-                present++;
-
-            } else if (status === "absent") {
-
-                absent++;
-
-            } else if (status === "late") {
-
-                late++;
-
-            } else if (status === "excused") {
-
-                excused++;
-
-            }
-
-        });
-
-        return {
-
-            present,
-            absent,
-            late,
-            excused,
-            total:
-                present +
-                absent +
-                late +
-                excused
-
-        };
-
-    }
+        saveResults(results);
 
 
-    /* ---------- GENERATE REPORT ---------- */
+        alert(
+            "Result saved successfully."
+        );
 
-    window.generateSwiftSchoolReport =
+
+        clearResultForm();
+
+
+        displaySwiftSchoolResults();
+
+    };
+
+
+    /* =====================================================
+       DISPLAY RESULTS
+       ===================================================== */
+
+    window.displaySwiftSchoolResults =
     function () {
 
-        const select =
+        const tbody =
             document.getElementById(
-                "reportStudentSelect"
+                "resultsTableBody"
             );
 
-        const students =
-            getStudents();
+
+        if (!tbody) return;
+
+
+        const results =
+            getResults();
+
+
+        const search =
+            (
+                document.getElementById(
+                    "resultsSearch"
+                ).value || ""
+            )
+            .toLowerCase()
+            .trim();
+
+
+        let filtered =
+            results.filter(
+                function (result) {
+
+                    const text = (
+
+                        result.studentName +
+                        " " +
+                        result.className +
+                        " " +
+                        result.subject +
+                        " " +
+                        result.term
+
+                    ).toLowerCase();
+
+
+                    return text.includes(
+                        search
+                    );
+
+                }
+            );
+
+
+        tbody.innerHTML = "";
+
 
         if (
-            !select ||
-            select.value === ""
+            filtered.length === 0
         ) {
 
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="no-results"
+                    >
+
+                        No results found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        filtered.forEach(
+            function (result) {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(
+                            result.studentName
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            result.className
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            result.subject
+                        )}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            result.classScore
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            result.examScore
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${Number(
+                                result.total
+                            ).toFixed(2)}
+                        </strong>
+                    </td>
+
+                    <td class="result-grade">
+                        ${escapeHTML(
+                            result.grade
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            result.interpretation
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            result.term
+                        )}
+                    </td>
+
+                    <td>
+
+                        <div
+                            class="result-actions"
+                        >
+
+                            <button
+                                class="edit-result"
+                                onclick="editSwiftSchoolResult('${result.id}')"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="delete-result"
+                                onclick="deleteSwiftSchoolResult('${result.id}')"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    };
+
+
+    /* =====================================================
+       EDIT RESULT
+       ===================================================== */
+
+    window.editSwiftSchoolResult =
+    function (id) {
+
+        const results =
+            getResults();
+
+
+        const result =
+            results.find(
+                function (item) {
+
+                    return item.id === id;
+
+                }
+            );
+
+
+        if (!result) {
+
             alert(
-                "Please select a student first."
+                "Result not found."
             );
 
             return;
 
         }
 
-        const student =
-            students[
-                Number(select.value)
-            ];
 
-        if (!student) {
+        document.getElementById(
+            "resultAcademicYear"
+        ).value =
+            result.academicYear;
+
+
+        document.getElementById(
+            "resultTerm"
+        ).value =
+            result.term;
+
+
+        const classSelect =
+            document.getElementById(
+                "resultClass"
+            );
+
+
+        classSelect.value =
+            result.className;
+
+
+        loadResultStudents();
+
+
+        const students =
+            getStudents();
+
+
+        let studentIndex = -1;
+
+
+        students.forEach(
+            function (student, index) {
+
+                if (
+                    String(
+                        getStudentId(student)
+                    ) ===
+                    String(
+                        result.studentId
+                    )
+                ) {
+
+                    studentIndex =
+                        index;
+
+                }
+
+            }
+        );
+
+
+        const studentSelect =
+            document.getElementById(
+                "resultStudent"
+            );
+
+
+        if (studentIndex >= 0) {
+
+            studentSelect.value =
+                studentIndex;
+
+        }
+
+
+        loadResultSubjects();
+
+
+        document.getElementById(
+            "resultSubject"
+        ).value =
+            result.subject;
+
+
+        document.getElementById(
+            "resultClassScore"
+        ).value =
+            result.classScore;
+
+
+        document.getElementById(
+            "resultExamScore"
+        ).value =
+            result.examScore;
+
+
+        calculateResultTotal();
+
+
+        editingResultId =
+            id;
+
+
+        document.getElementById(
+            "saveResultBtn"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "updateResultBtn"
+        ).style.display =
+            "inline-block";
+
+
+        const section =
+            document.getElementById(
+                "resultsSection"
+            );
+
+
+        if (section) {
+
+            section.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+    };
+
+
+    /* =====================================================
+       UPDATE RESULT
+       ===================================================== */
+
+    window.updateSwiftSchoolResult =
+    function () {
+
+        if (!editingResultId) {
+
+            return;
+
+        }
+
+
+        const results =
+            getResults();
+
+
+        const index =
+            results.findIndex(
+                function (result) {
+
+                    return (
+                        result.id ===
+                        editingResultId
+                    );
+
+                }
+            );
+
+
+        if (index === -1) {
 
             alert(
-                "Student record could not be found."
+                "Result could not be found."
             );
 
             return;
@@ -954,703 +1770,319 @@
 
         const academicYear =
             document.getElementById(
-                "reportAcademicYear"
-            ).value ||
-            "2026/2027";
+                "resultAcademicYear"
+            ).value.trim();
+
 
         const term =
             document.getElementById(
-                "reportTerm"
-            ).value ||
-            "First Term";
-
-        const reopeningDate =
-            document.getElementById(
-                "reportReopeningDate"
+                "resultTerm"
             ).value;
 
-        const teacherComment =
+
+        const className =
             document.getElementById(
-                "reportTeacherComment"
-            ).value ||
-            "Shows good effort and should continue to work hard.";
+                "resultClass"
+            ).value;
 
-        const headComment =
+
+        const studentSelect =
             document.getElementById(
-                "reportHeadComment"
-            ).value ||
-            "We congratulate the learner and encourage continued improvement.";
-
-
-        const subjects =
-            getSubjects(student)
-            .map(normalizeSubject);
-
-
-        /* ---------- CALCULATE SCORES ---------- */
-
-        let overall =
-            0;
-
-        subjects.forEach(function (subject) {
-
-            overall +=
-                Number(subject.total) || 0;
-
-        });
-
-
-        const overallScore =
-            subjects.length
-                ? overall / subjects.length
-                : 0;
-
-
-        const grade =
-            getGrade(overallScore);
-
-
-        /* ---------- AGGREGATE ---------- */
-
-        const aggregate =
-            subjects.reduce(
-                function (sum, subject) {
-
-                    const score =
-                        Number(subject.total) || 0;
-
-                    let points = 5;
-
-                    if (score >= 80)
-                        points = 1;
-                    else if (score >= 70)
-                        points = 2;
-                    else if (score >= 60)
-                        points = 3;
-                    else if (score >= 50)
-                        points = 4;
-
-                    return sum + points;
-
-                },
-                0
+                "resultStudent"
             );
 
 
-        /* ---------- ATTENDANCE ---------- */
-
-        const attendance =
-            calculateAttendance(student);
-
-
-        /* ---------- POSITION ---------- */
-
-        const classPosition =
-            student.position ||
-            student.classPosition ||
-            "-";
-
-
-        /* ---------- ENROLLMENT ---------- */
-
-        const classEnrollment =
-            student.classEnrollment ||
-            student.enrollment ||
-            student.classSize ||
-            "-";
-
-
-        /* ---------- SCHOOL SETTINGS ---------- */
-
-        const schoolName =
-            localStorage.getItem(
-                "swiftSchoolName"
-            ) ||
-            "SWIFTSCHOOL";
-
-        const schoolAddress =
-            localStorage.getItem(
-                "swiftSchoolAddress"
-            ) ||
-            "School Address";
-
-        const schoolPhone =
-            localStorage.getItem(
-                "swiftSchoolPhone"
-            ) ||
-            "Phone: __________________";
-
-        const schoolEmail =
-            localStorage.getItem(
-                "swiftSchoolEmail"
-            ) ||
-            "Email: __________________";
-
-        const schoolLogo =
-            localStorage.getItem(
-                "swiftSchoolLogo"
-            );
-
-
-        /* ---------- LOGO ---------- */
-
-        const logoHTML =
-            schoolLogo
-                ? `
-                    <img
-                        src="${schoolLogo}"
-                        class="school-logo"
-                    >
-                  `
-                : `
-                    <div
-                        style="
-                        font-size:50px;
-                        margin-bottom:5px;
-                        "
-                    >
-                        🏫
-                    </div>
-                  `;
-
-
-        /* ---------- SUBJECT ROWS ---------- */
-
-        let subjectRows = "";
-
-        if (subjects.length === 0) {
-
-            subjectRows = `
-                <tr>
-                    <td colspan="7">
-                        No subject results have been entered yet.
-                    </td>
-                </tr>
-            `;
-
-        } else {
-
-            subjects.forEach(function (subject) {
-
-                subjectRows += `
-                    <tr>
-
-                        <td>
-                            ${safe(subject.name)}
-                        </td>
-
-                        <td>
-                            ${safe(subject.classScore)}
-                        </td>
-
-                        <td>
-                            ${safe(subject.examScore)}
-                        </td>
-
-                        <td>
-                            ${safe(subject.total)}
-                        </td>
-
-                        <td>
-                            ${safe(subject.position)}
-                        </td>
-
-                        <td>
-                            ${getGrade(subject.total)}
-                        </td>
-
-                        <td>
-                            ${getInterpretation(subject.total)}
-                        </td>
-
-                    </tr>
-                `;
-
-            });
-
-        }
-
-
-        /* ---------- REPORT HTML ---------- */
-
-        const reportHTML = `
-
-        <div class="report-paper">
-
-            <!-- HEADER -->
-
-            <div class="report-header">
-
-                ${logoHTML}
-
-                <div class="school-name">
-                    ${safe(schoolName)}
-                </div>
-
-                <div class="school-address">
-                    ${safe(schoolAddress)}
-                </div>
-
-                <div class="school-address">
-                    ${safe(schoolPhone)}
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    ${safe(schoolEmail)}
-                </div>
-
-                <div class="report-title">
-                    REPORT CARD
-                </div>
-
-                <div class="report-period">
-
-                    <span>
-                        <strong>Academic Year:</strong>
-                        ${safe(academicYear)}
-                    </span>
-
-                    <span>
-                        <strong>Term:</strong>
-                        ${safe(term)}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- STUDENT INFORMATION -->
-
-            <div class="student-info">
-
-                <div class="student-info-title">
-                    STUDENT INFORMATION
-                </div>
-
-                <div class="student-info-grid">
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Student Name
-                        </div>
-
-                        <div class="student-info-value">
-                            ${safe(getStudentName(student))}
-                        </div>
-
-                    </div>
-
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Student ID
-                        </div>
-
-                        <div class="student-info-value">
-                            ${safe(getStudentId(student))}
-                        </div>
-
-                    </div>
-
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Class
-                        </div>
-
-                        <div class="student-info-value">
-                            ${safe(getStudentClass(student))}
-                        </div>
-
-                    </div>
-
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Reopening Date
-                        </div>
-
-                        <div class="student-info-value">
-
-                            ${
-                                reopeningDate
-                                ? new Date(
-                                    reopeningDate
-                                  ).toLocaleDateString()
-                                : "-"
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Class Position
-                        </div>
-
-                        <div class="student-info-value">
-                            ${safe(classPosition)}
-                        </div>
-
-                    </div>
-
-
-                    <div class="student-info-item">
-
-                        <div class="student-info-label">
-                            Class Enrollment
-                        </div>
-
-                        <div class="student-info-value">
-                            ${safe(classEnrollment)}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- RESULTS -->
-
-            <div class="results-title">
-                ACADEMIC PERFORMANCE
-            </div>
-
-            <table class="results-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Subject</th>
-
-                        <th>Class Score</th>
-
-                        <th>Exam Score</th>
-
-                        <th>Total Score</th>
-
-                        <th>Position</th>
-
-                        <th>Grade</th>
-
-                        <th>Interpretation</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    ${subjectRows}
-
-                </tbody>
-
-            </table>
-
-
-            <!-- SUMMARY -->
-
-            <div class="summary-section">
-
-                <div class="summary-title">
-                    ACADEMIC SUMMARY
-                </div>
-
-                <div class="summary-grid">
-
-                    <div class="summary-item">
-
-                        <div class="summary-label">
-                            OVERALL SCORE
-                        </div>
-
-                        <div class="summary-value">
-                            ${overallScore.toFixed(1)}%
-                        </div>
-
-                    </div>
-
-
-                    <div class="summary-item">
-
-                        <div class="summary-label">
-                            GRADE
-                        </div>
-
-                        <div class="summary-value">
-                            ${grade}
-                        </div>
-
-                    </div>
-
-
-                    <div class="summary-item">
-
-                        <div class="summary-label">
-                            AGGREGATE
-                        </div>
-
-                        <div class="summary-value">
-                            ${aggregate || "-"}
-                        </div>
-
-                    </div>
-
-
-                    <div class="summary-item">
-
-                        <div class="summary-label">
-                            SUBJECTS
-                        </div>
-
-                        <div class="summary-value">
-                            ${subjects.length}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ATTENDANCE -->
-
-            <div class="summary-section">
-
-                <div class="summary-title">
-                    ATTENDANCE RECORD
-                </div>
-
-                <div class="attendance-grid">
-
-                    <div class="attendance-item">
-
-                        <div class="summary-label">
-                            PRESENT
-                        </div>
-
-                        <div class="summary-value">
-                            ${attendance.present}
-                        </div>
-
-                    </div>
-
-
-                    <div class="attendance-item">
-
-                        <div class="summary-label">
-                            ABSENT
-                        </div>
-
-                        <div class="summary-value">
-                            ${attendance.absent}
-                        </div>
-
-                    </div>
-
-
-                    <div class="attendance-item">
-
-                        <div class="summary-label">
-                            LATE
-                        </div>
-
-                        <div class="summary-value">
-                            ${attendance.late}
-                        </div>
-
-                    </div>
-
-
-                    <div class="attendance-item">
-
-                        <div class="summary-label">
-                            TOTAL RECORDS
-                        </div>
-
-                        <div class="summary-value">
-                            ${attendance.total}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- COMMENTS -->
-
-            <div class="comments-section">
-
-                <div class="summary-title">
-                    CLASS TEACHER'S COMMENT
-                </div>
-
-                <div class="comment-box">
-                    ${safe(teacherComment)}
-                </div>
-
-            </div>
-
-
-            <div class="comments-section">
-
-                <div class="summary-title">
-                    HEADTEACHER'S COMMENT
-                </div>
-
-                <div class="comment-box">
-                    ${safe(headComment)}
-                </div>
-
-            </div>
-
-
-            <!-- SIGNATURES -->
-
-            <div class="signatures">
-
-                <div class="signature-box">
-
-                    <div style="height:35px;"></div>
-
-                    <div class="signature-line">
-                        Class Teacher's Signature
-                    </div>
-
-                </div>
-
-
-                <div class="signature-box">
-
-                    <div style="height:35px;"></div>
-
-                    <div class="signature-line">
-                        Headteacher's Signature
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- FOOTER -->
-
-            <div class="report-footer">
-
-                Printed on:
-                ${new Date().toLocaleDateString()}
-
-                &nbsp;&nbsp; | &nbsp;&nbsp;
-
-                ${safe(schoolName)}
-
-                <br>
-
-                This report card is an official academic record
-                of the student.
-
-            </div>
-
-        </div>
-
-        `;
-
-
-        document.getElementById(
-            "swiftSchoolReportOutput"
-        ).innerHTML = reportHTML;
-
-    };
-
-
-    /* ---------- PRINT ---------- */
-
-    window.printSwiftSchoolReport =
-    function () {
-
-        const report =
-            document.querySelector(
-                ".report-paper"
-            );
-
-        if (!report) {
+        const subject =
+            document.getElementById(
+                "resultSubject"
+            ).value;
+
+
+        const classScore =
+            Number(
+                document.getElementById(
+                    "resultClassScore"
+                ).value
+            ) || 0;
+
+
+        const examScore =
+            Number(
+                document.getElementById(
+                    "resultExamScore"
+                ).value
+            ) || 0;
+
+
+        if (
+            !academicYear ||
+            !className ||
+            !studentSelect.value ||
+            !subject
+        ) {
 
             alert(
-                "Please generate a report card first."
+                "Please complete all required fields."
             );
 
             return;
 
         }
 
-        window.print();
+
+        if (
+            classScore < 0 ||
+            classScore > 50 ||
+            examScore < 0 ||
+            examScore > 50
+        ) {
+
+            alert(
+                "Scores must be between 0 and 50."
+            );
+
+            return;
+
+        }
+
+
+        const students =
+            getStudents();
+
+
+        const student =
+            students[
+                Number(
+                    studentSelect.value
+                )
+            ];
+
+
+        const total =
+            classScore +
+            examScore;
+
+
+        results[index] = {
+
+            ...results[index],
+
+            academicYear:
+                academicYear,
+
+            term:
+                term,
+
+            className:
+                className,
+
+            studentId:
+                getStudentId(student),
+
+            studentName:
+                getStudentName(student),
+
+            subject:
+                subject,
+
+            classScore:
+                classScore,
+
+            examScore:
+                examScore,
+
+            total:
+                total,
+
+            grade:
+                getGrade(total),
+
+            interpretation:
+                getInterpretation(total),
+
+            lastUpdated:
+                new Date().toISOString()
+
+        };
+
+
+        saveResults(results);
+
+
+        alert(
+            "Result updated successfully."
+        );
+
+
+        clearResultForm();
+
+
+        displaySwiftSchoolResults();
 
     };
 
 
-    /* ---------- CLEAR ---------- */
+    /* =====================================================
+       DELETE RESULT
+       ===================================================== */
 
-    window.clearSwiftSchoolReport =
+    window.deleteSwiftSchoolResult =
+    function (id) {
+
+        const results =
+            getResults();
+
+
+        const result =
+            results.find(
+                function (item) {
+
+                    return item.id === id;
+
+                }
+            );
+
+
+        if (!result) return;
+
+
+        const confirmed =
+            confirm(
+                "Delete the result for " +
+                result.studentName +
+                " — " +
+                result.subject +
+                "?"
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        const updated =
+            results.filter(
+                function (item) {
+
+                    return item.id !== id;
+
+                }
+            );
+
+
+        saveResults(updated);
+
+
+        displaySwiftSchoolResults();
+
+    };
+
+
+    /* =====================================================
+       CLEAR FORM
+       ===================================================== */
+
+    window.clearResultForm =
     function () {
 
         document.getElementById(
-            "reportStudentSelect"
+            "resultStudent"
         ).value = "";
 
+
         document.getElementById(
-            "reportTeacherComment"
+            "resultSubject"
+        ).innerHTML =
+            '<option value="">Select Subject</option>';
+
+
+        document.getElementById(
+            "resultClassScore"
         ).value = "";
 
+
         document.getElementById(
-            "reportHeadComment"
+            "resultExamScore"
         ).value = "";
 
-        document.getElementById(
-            "reportReopeningDate"
-        ).value = "";
 
         document.getElementById(
-            "swiftSchoolReportOutput"
-        ).innerHTML = `
+            "resultTotal"
+        ).textContent = "0";
 
-            <div class="report-empty">
 
-                <h3>
-                    Report Card Preview
-                </h3>
+        document.getElementById(
+            "resultGrade"
+        ).textContent = "-";
 
-                <p>
-                    Select a student and click
-                    <strong>
-                        Generate Report
-                    </strong>
-                    to create the report card.
-                </p>
 
-            </div>
+        document.getElementById(
+            "resultInterpretation"
+        ).textContent = "-";
 
-        `;
+
+        editingResultId = null;
+
+
+        document.getElementById(
+            "saveResultBtn"
+        ).style.display =
+            "inline-block";
+
+
+        document.getElementById(
+            "updateResultBtn"
+        ).style.display =
+            "none";
 
     };
 
 
-    /* ---------- INITIALIZE ---------- */
+    /* =====================================================
+       ESCAPE HTML
+       ===================================================== */
 
-    function initializeReportCards() {
+    function escapeHTML(value) {
 
-        loadReportStudents();
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
+
+    function initializeResults() {
+
+        loadResultClasses();
+
+        displaySwiftSchoolResults();
 
     }
 
@@ -1662,22 +2094,26 @@
 
         document.addEventListener(
             "DOMContentLoaded",
-            initializeReportCards
+            initializeResults
         );
 
     } else {
 
-        initializeReportCards();
+        initializeResults();
 
     }
 
 
-    /* ---------- REFRESH WHEN NEEDED ---------- */
+    /* =====================================================
+       REFRESH FUNCTION
+       ===================================================== */
 
-    window.refreshSwiftSchoolReports =
+    window.refreshSwiftSchoolResults =
     function () {
 
-        loadReportStudents();
+        loadResultClasses();
+
+        displaySwiftSchoolResults();
 
     };
 
