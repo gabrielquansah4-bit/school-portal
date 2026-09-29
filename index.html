@@ -3004,7 +3004,7 @@ function importBulkMarksFromExcel(){
                 return;
             }
 
-            let uploadedMarks=0, updatedResults=0, createdResults=0, skippedRows=0;
+            let uploadedMarks=0, updatedResults=0, createdResults=0, skippedRows=0, incompleteMarks=0;
             const errors=[];
             const studentMap=new Map(classStudents.map(s=>[String(s.id).trim().toLowerCase(),s]));
 
@@ -3034,7 +3034,14 @@ function importBulkMarksFromExcel(){
                     const examRaw=row[cols.examHeader];
                     const classBlank=String(classRaw??"").trim()==="";
                     const examBlank=String(examRaw??"").trim()==="";
-                    if(classBlank && examBlank)return;
+
+                    // Teachers may upload the workbook progressively.
+                    // If either component is still blank, leave the existing result
+                    // untouched and wait until both scores are available.
+                    if(classBlank || examBlank){
+                        if(!classBlank || !examBlank) incompleteMarks++;
+                        return;
+                    }
 
                     const classScore=Number(classRaw);
                     const examMark=Number(examRaw);
@@ -3089,6 +3096,7 @@ function importBulkMarksFromExcel(){
             refreshDashboard();
 
             let message=`Upload complete: ${uploadedMarks} subject mark(s) processed. ${createdResults} new result(s), ${updatedResults} updated.`;
+            if(incompleteMarks)message+=` ${incompleteMarks} subject(s) were left incomplete and skipped; you can upload them later.`;
             if(skippedRows)message+=` ${skippedRows} row(s) had issues.`;
             if(errors.length)message+=` First issue: ${errors.slice(0,3).join(" | ")}`;
             showMessage("bulkMarksMessage",message,errors.length?"error":"success");
