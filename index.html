@@ -1131,8 +1131,8 @@ td{font-size:14px}
         <div id="parentAttendanceContent"></div>
     </div>
 </section>
-<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
-<section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
+<section id="parentAssignments" class="page"><div class="page-header"><div><h1>Assignments</h1><p>Assignments for your children.</p></div></div><div class="panel"><div id="parentAssignmentsContent"></div></div></section>
+<section id="parentFees" class="page"><div class="page-header"><div><h1>Fees</h1><p>Fee information for your children.</p></div></div><div class="panel"><div id="parentFeesContent"></div></div></section>
 <section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
 <section id="teacherAttendance" class="page">
@@ -1756,11 +1756,14 @@ function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
+    if(pageId==="parentAttendance")renderParentAttendance();
+    if(pageId==="parentAssignments")renderParentAssignments();
+    if(pageId==="parentFees")renderParentFees();
+    if(pageId==="parentAnnouncements")renderParentAnnouncements();
     if(pageId==="teacherResults"){
         populateTeacherBulkMarksClassSelect();
         renderTeacherResults();
     }
-    if(pageId==="parentAttendance")renderParentAttendance();
     if(pageId==="teacherAttendance")renderTeacherAttendance();
     if(pageId==="adminAttendance"){
         populateAttendanceClassSelect("Admin");
@@ -3577,6 +3580,113 @@ function renderChildren(){
     </div>`;
 }
 
+
+/* =========================
+   PARENT PORTAL VIEWS
+========================= */
+
+function renderParentResults(){
+    const box=document.getElementById("parentResultsContent");
+    if(!box)return;
+
+    const parent=getParent(currentUser?.id);
+    if(!parent){
+        box.innerHTML='<div class="empty">Parent account not found.</div>';
+        return;
+    }
+
+    const childIds=parent.studentIds||[];
+    const children=childIds.map(id=>getStudent(id)).filter(Boolean);
+    if(!children.length){
+        box.innerHTML='<div class="empty">No children are linked to your account. Add a child using the Student ID from My Children.</div>';
+        return;
+    }
+
+    const childResults=results.filter(r=>childIds.includes(r.studentId));
+    if(!childResults.length){
+        box.innerHTML=`<div class="empty">No results are available yet for ${children.length===1?'your child':'your children'}.</div>`;
+        return;
+    }
+
+    const grouped={};
+    childResults.forEach(r=>{
+        const key=[r.studentId,r.academicYear||"",r.term||""].join("|");
+        if(!grouped[key])grouped[key]=[];
+        grouped[key].push(r);
+    });
+
+    const sections=Object.values(grouped).map(records=>{
+        const first=records[0];
+        const student=getStudent(first.studentId);
+        const c=getClass(first.classId) || classes.find(x=>String(x.name||"")===String(student?.className||""));
+        const total=records.reduce((sum,r)=>sum+Number(r.total||0),0);
+        const average=records.length ? total/records.length : 0;
+
+        return `
+        <div class="panel" style="background:#f8fafc;border:1px solid #e5e7eb">
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+                <div>
+                    <h2 style="margin-bottom:4px">${escapeHtml(student?.name||"Unknown Student")}</h2>
+                    <p style="color:#6b7280">Student ID: ${escapeHtml(student?.id||"")} · Class: ${escapeHtml(c?classDisplay(c):(student?.className||""))}</p>
+                </div>
+                <div style="text-align:right">
+                    <strong>${escapeHtml(first.term||"Term")}</strong><br>
+                    <small>${escapeHtml(first.academicYear||"")}</small>
+                </div>
+            </div>
+            <div class="cards" style="margin-bottom:15px">
+                <div class="card stat-card"><h3>${average.toFixed(2)}</h3><p>Average</p></div>
+                <div class="card stat-card"><h3>${records.length}</h3><p>Subjects</p></div>
+            </div>
+            <div class="table-wrap">
+            <table>
+                <thead><tr><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th></tr></thead>
+                <tbody>
+                ${records.map(r=>{
+                    const subject=getSubject(r.subjectId);
+                    const grade=r.grade||getPerformance(r.total);
+                    return `<tr>
+                        <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
+                        <td>${Number(r.classScore||0).toFixed(2)}</td>
+                        <td>${Number(r.examMark??r.examScore??0).toFixed(2)}</td>
+                        <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
+                        <td><span class="badge ${performanceClass(grade)}">${escapeHtml(grade)}</span></td>
+                    </tr>`;
+                }).join("")}
+                </tbody>
+            </table>
+            </div>
+        </div>`;
+    }).join("");
+
+    box.innerHTML=sections;
+}
+
+function renderParentAssignments(){
+    const box=document.getElementById("parentAssignmentsContent");
+    if(!box)return;
+    const parent=getParent(currentUser?.id);
+    const childIds=parent?.studentIds||[];
+    box.innerHTML=childIds.length
+        ? '<div class="empty">No assignments have been published for your children yet.</div>'
+        : '<div class="empty">No children are linked to your account.</div>';
+}
+
+function renderParentFees(){
+    const box=document.getElementById("parentFeesContent");
+    if(!box)return;
+    const parent=getParent(currentUser?.id);
+    const childIds=parent?.studentIds||[];
+    box.innerHTML=childIds.length
+        ? '<div class="empty">No fee records have been entered by the school yet.</div>'
+        : '<div class="empty">No children are linked to your account.</div>';
+}
+
+function renderParentAnnouncements(){
+    const box=document.getElementById("parentAnnouncementsContent");
+    if(!box)return;
+    box.innerHTML='<div class="empty">No announcements have been published yet.</div>';
+}
 
 /* =========================
    TEACHER SUBJECT VIEW
