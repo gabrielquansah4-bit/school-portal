@@ -2,198 +2,189 @@
      SWIFTSCHOOL - RESULTS / ASSESSMENT MODULE
      ========================================================= -->
 
-<section id="resultsSection" class="portal-section">
+<section id="resultsSection" class="portal-section" style="display:none;">
 
 <style>
-
-/* ================= RESULTS MODULE ================= */
-
-.results-container {
-    padding: 20px;
+.results-container{
+    padding:20px;
 }
 
-.results-panel {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+.results-panel{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.results-panel h2 {
-    margin-top: 0;
+.results-panel h2{
+    margin-top:0;
+    color:#1e3a8a;
 }
 
-.results-form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+.results-form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
 }
 
-.results-form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
+.results-form-group label{
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
 }
 
 .results-form-group input,
-.results-form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 14px;
+.results-form-group select{
+    width:100%;
+    padding:10px;
+    border:1px solid #cbd5e1;
+    border-radius:6px;
+    font-size:14px;
 }
 
 .results-form-group input:focus,
-.results-form-group select:focus {
-    outline: none;
-    border-color: #2563eb;
+.results-form-group select:focus{
+    outline:none;
+    border-color:#2563eb;
 }
 
-.result-total-display {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
+.result-total-display,
+.result-grade-display{
+    padding:10px;
+    border-radius:6px;
+    font-weight:bold;
 }
 
-.result-grade-display {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
+.result-total-display{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
 }
 
-.results-buttons {
-    margin-top: 18px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+.result-grade-display{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
 }
 
-.results-buttons button {
-    border: none;
-    padding: 11px 18px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-weight: 600;
+.results-buttons{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
-.save-result-btn {
-    background: #2563eb;
-    color: white;
+.results-buttons button{
+    border:none;
+    padding:11px 18px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:600;
 }
 
-.update-result-btn {
-    background: #16a34a;
-    color: white;
-    display: none;
+.save-result-btn{
+    background:#2563eb;
+    color:white;
 }
 
-.clear-result-btn {
-    background: #64748b;
-    color: white;
+.update-result-btn{
+    background:#16a34a;
+    color:white;
+    display:none;
 }
 
-.results-search {
-    margin-bottom: 15px;
+.clear-result-btn{
+    background:#64748b;
+    color:white;
 }
 
-.results-search input {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid #cbd5e1;
-    border-radius: 7px;
+.results-search{
+    margin-bottom:15px;
 }
 
-.results-table-wrapper {
-    overflow-x: auto;
+.results-search input{
+    width:100%;
+    padding:11px;
+    border:1px solid #cbd5e1;
+    border-radius:7px;
 }
 
-.results-data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
+.results-table-wrapper{
+    overflow-x:auto;
 }
 
-.results-data-table th {
-    background: #1e3a8a;
-    color: white;
-    padding: 10px 8px;
-    text-align: center;
+.results-data-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
 }
 
-.results-data-table td {
-    padding: 9px 8px;
-    border-bottom: 1px solid #e5e7eb;
-    text-align: center;
+.results-data-table th{
+    background:#1e3a8a;
+    color:white;
+    padding:10px 8px;
+    text-align:center;
 }
 
-.results-data-table td:first-child {
-    text-align: left;
+.results-data-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:center;
 }
 
-.results-data-table tr:hover {
-    background: #f8fafc;
+.results-data-table td:first-child{
+    text-align:left;
 }
 
-.result-grade {
-    font-weight: bold;
+.results-data-table tr:hover{
+    background:#f8fafc;
 }
 
-.result-actions {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
+.result-grade{
+    font-weight:bold;
 }
 
-.result-actions button {
-    border: none;
-    padding: 6px 9px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
+.result-actions{
+    display:flex;
+    justify-content:center;
+    gap:6px;
 }
 
-.edit-result {
-    background: #f59e0b;
-    color: white;
+.result-actions button{
+    border:none;
+    padding:6px 9px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:12px;
 }
 
-.delete-result {
-    background: #dc2626;
-    color: white;
+.edit-result{
+    background:#f59e0b;
+    color:white;
 }
 
-.no-results {
-    text-align: center;
-    padding: 30px;
-    color: #64748b;
+.delete-result{
+    background:#dc2626;
+    color:white;
 }
 
-/* ================= MOBILE ================= */
+.no-results{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+}
 
-@media (max-width: 700px) {
-
-    .results-container {
-        padding: 10px;
+@media(max-width:700px){
+    .results-container{
+        padding:10px;
     }
 
-    .results-panel {
-        padding: 15px;
+    .results-panel{
+        padding:15px;
     }
-
 }
-
 </style>
 
-
 <div class="results-container">
-
-    <!-- ================= FORM ================= -->
 
     <div class="results-panel">
 
@@ -206,121 +197,52 @@
 
         <div class="results-form-grid">
 
-            <!-- Academic Year -->
-
             <div class="results-form-group">
-
-                <label>
-                    Academic Year
-                </label>
-
+                <label>Academic Year</label>
                 <input
                     type="text"
                     id="resultAcademicYear"
                     value="2026/2027"
                     placeholder="2026/2027"
                 >
-
             </div>
 
-
-            <!-- Term -->
-
             <div class="results-form-group">
-
-                <label>
-                    Term
-                </label>
+                <label>Term</label>
 
                 <select id="resultTerm">
-
-                    <option value="First Term">
-                        First Term
-                    </option>
-
-                    <option value="Second Term">
-                        Second Term
-                    </option>
-
-                    <option value="Third Term">
-                        Third Term
-                    </option>
-
+                    <option value="First Term">First Term</option>
+                    <option value="Second Term">Second Term</option>
+                    <option value="Third Term">Third Term</option>
                 </select>
-
             </div>
 
-
-            <!-- Class -->
-
             <div class="results-form-group">
+                <label>Class</label>
 
-                <label>
-                    Class
-                </label>
-
-                <select
-                    id="resultClass"
-                    onchange="loadResultStudents()"
-                >
-
-                    <option value="">
-                        Select Class
-                    </option>
-
+                <select id="resultClass">
+                    <option value="">Select Class</option>
                 </select>
-
             </div>
 
-
-            <!-- Student -->
-
             <div class="results-form-group">
+                <label>Student</label>
 
-                <label>
-                    Student
-                </label>
-
-                <select
-                    id="resultStudent"
-                    onchange="loadResultSubjects()"
-                >
-
-                    <option value="">
-                        Select Student
-                    </option>
-
+                <select id="resultStudent">
+                    <option value="">Select Student</option>
                 </select>
-
             </div>
 
-
-            <!-- Subject -->
-
             <div class="results-form-group">
-
-                <label>
-                    Subject
-                </label>
+                <label>Subject</label>
 
                 <select id="resultSubject">
-
-                    <option value="">
-                        Select Subject
-                    </option>
-
+                    <option value="">Select Subject</option>
                 </select>
-
             </div>
 
-
-            <!-- Class Score -->
-
             <div class="results-form-group">
-
-                <label>
-                    Class Score
-                </label>
+                <label>Class Score</label>
 
                 <input
                     type="number"
@@ -329,19 +251,11 @@
                     max="50"
                     step="0.01"
                     placeholder="0 - 50"
-                    oninput="calculateResultTotal()"
                 >
-
             </div>
 
-
-            <!-- Exam Score -->
-
             <div class="results-form-group">
-
-                <label>
-                    Exam Score
-                </label>
+                <label>Exam Score</label>
 
                 <input
                     type="number"
@@ -350,37 +264,22 @@
                     max="50"
                     step="0.01"
                     placeholder="0 - 50"
-                    oninput="calculateResultTotal()"
                 >
-
             </div>
 
-
-            <!-- Total -->
-
             <div class="results-form-group">
-
-                <label>
-                    Total Score
-                </label>
+                <label>Total Score</label>
 
                 <div
                     class="result-total-display"
                     id="resultTotal"
                 >
-                    0
+                    0.00
                 </div>
-
             </div>
 
-
-            <!-- Grade -->
-
             <div class="results-form-group">
-
-                <label>
-                    Grade
-                </label>
+                <label>Grade</label>
 
                 <div
                     class="result-grade-display"
@@ -388,17 +287,10 @@
                 >
                     -
                 </div>
-
             </div>
 
-
-            <!-- Interpretation -->
-
             <div class="results-form-group">
-
-                <label>
-                    Interpretation
-                </label>
+                <label>Interpretation</label>
 
                 <div
                     class="result-grade-display"
@@ -406,35 +298,32 @@
                 >
                     -
                 </div>
-
             </div>
 
         </div>
-
 
         <div class="results-buttons">
 
             <button
                 class="save-result-btn"
                 id="saveResultBtn"
-                onclick="saveSwiftSchoolResult()"
+                type="button"
             >
                 💾 Save Result
             </button>
 
-
             <button
                 class="update-result-btn"
                 id="updateResultBtn"
-                onclick="updateSwiftSchoolResult()"
+                type="button"
             >
                 ✏️ Update Result
             </button>
 
-
             <button
                 class="clear-result-btn"
-                onclick="clearResultForm()"
+                id="clearResultBtn"
+                type="button"
             >
                 Clear
             </button>
@@ -443,8 +332,6 @@
 
     </div>
 
-
-    <!-- ================= SAVED RESULTS ================= -->
 
     <div class="results-panel">
 
@@ -456,68 +343,30 @@
                 type="text"
                 id="resultsSearch"
                 placeholder="Search by student, class or subject..."
-                oninput="displaySwiftSchoolResults()"
             >
 
         </div>
-
 
         <div class="results-table-wrapper">
 
             <table class="results-data-table">
 
                 <thead>
-
                     <tr>
-
-                        <th>
-                            Student
-                        </th>
-
-                        <th>
-                            Class
-                        </th>
-
-                        <th>
-                            Subject
-                        </th>
-
-                        <th>
-                            Class Score
-                        </th>
-
-                        <th>
-                            Exam Score
-                        </th>
-
-                        <th>
-                            Total
-                        </th>
-
-                        <th>
-                            Grade
-                        </th>
-
-                        <th>
-                            Interpretation
-                        </th>
-
-                        <th>
-                            Term
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Class Score</th>
+                        <th>Exam Score</th>
+                        <th>Total</th>
+                        <th>Grade</th>
+                        <th>Interpretation</th>
+                        <th>Term</th>
+                        <th>Actions</th>
                     </tr>
-
                 </thead>
 
-                <tbody
-                    id="resultsTableBody"
-                >
-                </tbody>
+                <tbody id="resultsTableBody"></tbody>
 
             </table>
 
@@ -527,626 +376,444 @@
 
 </div>
 
+</section>
+
+
+<!-- =========================================================
+     SWIFTSCHOOL RESULTS JAVASCRIPT
+     
+     IMPORTANT:
+     Put this script OUTSIDE any other <script> block.
+     Ideally place it immediately before </body>.
+     ========================================================= -->
 
 <script>
-
-/* =========================================================
-   SWIFTSCHOOL RESULTS ENGINE
-   ========================================================= */
-
-(function () {
+(function(){
 
     let editingResultId = null;
 
+    const STUDENT_KEY = "swiftSchoolStudents";
+    const RESULT_KEY = "swiftSchoolResults";
 
-    /* =====================================================
-       STORAGE
-       ===================================================== */
 
-    function getStudents() {
+    function getStudents(){
 
-        try {
-
+        try{
             return JSON.parse(
-                localStorage.getItem(
-                    "swiftSchoolStudents"
-                )
+                localStorage.getItem(STUDENT_KEY)
             ) || [];
-
-        } catch (error) {
-
+        }
+        catch(error){
             return [];
-
         }
 
     }
 
 
-    function getResults() {
+    function getResults(){
 
-        try {
-
+        try{
             return JSON.parse(
-                localStorage.getItem(
-                    "swiftSchoolResults"
-                )
+                localStorage.getItem(RESULT_KEY)
             ) || [];
-
-        } catch (error) {
-
+        }
+        catch(error){
             return [];
-
         }
 
     }
 
 
-    function saveResults(results) {
+    function saveResults(results){
 
         localStorage.setItem(
-            "swiftSchoolResults",
+            RESULT_KEY,
             JSON.stringify(results)
         );
 
     }
 
 
-    /* =====================================================
-       STUDENT HELPERS
-       ===================================================== */
+    function studentName(student){
 
-    function getStudentName(student) {
+        if(!student) return "Student";
+
+        if(student.name)
+            return student.name;
+
+        if(student.studentName)
+            return student.studentName;
 
         return (
-
-            student.name ||
-
-            student.studentName ||
-
-            (
-                (student.firstName || "") +
-                " " +
-                (student.middleName || "") +
-                " " +
-                (student.lastName || "")
-            ).trim() ||
-
-            "Student"
-
-        );
+            (student.firstName || "") +
+            " " +
+            (student.middleName || "") +
+            " " +
+            (student.lastName || "")
+        ).trim() || "Student";
 
     }
 
 
-    function getStudentId(student) {
+    function studentId(student){
 
-        return (
+        if(!student) return "";
 
+        return String(
             student.id ||
-
             student.studentId ||
-
             student.studentID ||
-
             student.admissionNumber ||
-
             student.admissionNo ||
-
             ""
-
         );
 
     }
 
 
-    function getStudentClass(student) {
+    function studentClass(student){
+
+        if(!student) return "";
 
         return (
-
             student.className ||
-
             student.class ||
-
             student.grade ||
-
             student.level ||
-
             ""
-
         );
 
     }
 
 
-    /* =====================================================
-       SUBJECT HELPERS
-       ===================================================== */
+    function getSubjects(student){
 
-    function getSubjects(student) {
+        if(!student) return [];
 
-        let subjects = [];
+        if(Array.isArray(student.subjects))
+            return student.subjects;
 
+        if(Array.isArray(student.selectedSubjects))
+            return student.selectedSubjects;
 
-        if (
-            Array.isArray(
-                student.subjects
-            )
-        ) {
+        if(Array.isArray(student.enrolledSubjects))
+            return student.enrolledSubjects;
 
-            subjects =
-                student.subjects;
-
-        }
-
-        else if (
-            Array.isArray(
-                student.selectedSubjects
-            )
-        ) {
-
-            subjects =
-                student.selectedSubjects;
-
-        }
-
-        else if (
-            Array.isArray(
-                student.enrolledSubjects
-            )
-        ) {
-
-            subjects =
-                student.enrolledSubjects;
-
-        }
-
-
-        return subjects;
+        return [];
 
     }
 
 
-    function getSubjectName(subject) {
+    function subjectName(subject){
 
-        if (
-            typeof subject ===
-            "string"
-        ) {
-
+        if(typeof subject === "string")
             return subject;
 
-        }
-
+        if(!subject)
+            return "";
 
         return (
-
             subject.name ||
-
             subject.subjectName ||
-
             subject.title ||
-
             ""
-
         );
 
     }
 
 
-    /* =====================================================
-       LOAD CLASSES
-       ===================================================== */
-
-    function loadResultClasses() {
-
-        const classSelect =
-            document.getElementById(
-                "resultClass"
-            );
-
-        if (!classSelect) return;
-
-
-        const students =
-            getStudents();
-
-
-        const classes = [];
-
-
-        students.forEach(
-            function (student) {
-
-                const className =
-                    getStudentClass(student);
-
-                if (
-                    className &&
-                    !classes.includes(
-                        className
-                    )
-                ) {
-
-                    classes.push(
-                        className
-                    );
-
-                }
-
-            }
-        );
-
-
-        classSelect.innerHTML =
-            '<option value="">Select Class</option>';
-
-
-        classes.sort().forEach(
-            function (className) {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    className;
-
-                option.textContent =
-                    className;
-
-                classSelect.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       LOAD STUDENTS
-       ===================================================== */
-
-    window.loadResultStudents =
-    function () {
-
-        const className =
-            document.getElementById(
-                "resultClass"
-            ).value;
-
-
-        const studentSelect =
-            document.getElementById(
-                "resultStudent"
-            );
-
-
-        studentSelect.innerHTML =
-            '<option value="">Select Student</option>';
-
-
-        if (!className) {
-
-            return;
-
-        }
-
-
-        const students =
-            getStudents();
-
-
-        students.forEach(
-            function (student, index) {
-
-                if (
-                    getStudentClass(
-                        student
-                    ) === className
-                ) {
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
-
-                    option.value =
-                        index;
-
-                    option.textContent =
-                        getStudentName(
-                            student
-                        );
-
-                    studentSelect.appendChild(
-                        option
-                    );
-
-                }
-
-            }
-        );
-
-
-        loadResultSubjects();
-
-    };
-
-
-    /* =====================================================
-       LOAD SUBJECTS
-       ===================================================== */
-
-    window.loadResultSubjects =
-    function () {
-
-        const studentSelect =
-            document.getElementById(
-                "resultStudent"
-            );
-
-
-        const subjectSelect =
-            document.getElementById(
-                "resultSubject"
-            );
-
-
-        subjectSelect.innerHTML =
-            '<option value="">Select Subject</option>';
-
-
-        if (
-            !studentSelect.value
-        ) {
-
-            return;
-
-        }
-
-
-        const students =
-            getStudents();
-
-
-        const student =
-            students[
-                Number(
-                    studentSelect.value
-                )
-            ];
-
-
-        if (!student) return;
-
-
-        const subjects =
-            getSubjects(student);
-
-
-        subjects.forEach(
-            function (subject) {
-
-                const subjectName =
-                    getSubjectName(
-                        subject
-                    );
-
-
-                if (!subjectName)
-                    return;
-
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    subjectName;
-
-                option.textContent =
-                    subjectName;
-
-                subjectSelect.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    };
-
-
-    /* =====================================================
-       GRADE
-       ===================================================== */
-
-    function getGrade(score) {
-
-        score =
-            Number(score) || 0;
-
-
-        if (score >= 80)
-            return "A";
-
-
-        if (score >= 70)
-            return "B";
-
-
-        if (score >= 60)
-            return "C";
-
-
-        if (score >= 50)
-            return "D";
-
-
-        if (score >= 40)
-            return "E";
-
+    function grade(score){
+
+        score = Number(score) || 0;
+
+        if(score >= 80) return "A";
+        if(score >= 70) return "B";
+        if(score >= 60) return "C";
+        if(score >= 50) return "D";
+        if(score >= 40) return "E";
 
         return "F";
 
     }
 
 
-    /* =====================================================
-       INTERPRETATION
-       ===================================================== */
+    function interpretation(score){
 
-    function getInterpretation(score) {
+        score = Number(score) || 0;
 
-        score =
-            Number(score) || 0;
-
-
-        if (score >= 80)
-            return "Excellent";
-
-
-        if (score >= 70)
-            return "Very Good";
-
-
-        if (score >= 60)
-            return "Good";
-
-
-        if (score >= 50)
-            return "Satisfactory";
-
-
-        if (score >= 40)
-            return "Needs Improvement";
-
+        if(score >= 80) return "Excellent";
+        if(score >= 70) return "Very Good";
+        if(score >= 60) return "Good";
+        if(score >= 50) return "Satisfactory";
+        if(score >= 40) return "Needs Improvement";
 
         return "Below Expectations";
 
     }
 
 
-    /* =====================================================
-       CALCULATE TOTAL
-       ===================================================== */
+    function escapeHTML(value){
 
-    window.calculateResultTotal =
-    function () {
+        return String(value ?? "")
+            .replace(/&/g,"&amp;")
+            .replace(/</g,"&lt;")
+            .replace(/>/g,"&gt;")
+            .replace(/"/g,"&quot;")
+            .replace(/'/g,"&#039;");
+
+    }
+
+
+    function calculate(){
+
+        const classInput =
+            document.getElementById("resultClassScore");
+
+        const examInput =
+            document.getElementById("resultExamScore");
+
+        if(!classInput || !examInput)
+            return;
 
         let classScore =
-            Number(
-                document.getElementById(
-                    "resultClassScore"
-                ).value
-            ) || 0;
-
+            Number(classInput.value) || 0;
 
         let examScore =
-            Number(
-                document.getElementById(
-                    "resultExamScore"
-                ).value
-            ) || 0;
+            Number(examInput.value) || 0;
 
-
-        /* Limit values */
-
-        if (classScore > 50) {
-
+        if(classScore > 50){
             classScore = 50;
-
-            document.getElementById(
-                "resultClassScore"
-            ).value = 50;
-
+            classInput.value = 50;
         }
 
-
-        if (examScore > 50) {
-
-            examScore = 50;
-
-            document.getElementById(
-                "resultExamScore"
-            ).value = 50;
-
-        }
-
-
-        if (classScore < 0)
+        if(classScore < 0){
             classScore = 0;
+            classInput.value = 0;
+        }
 
+        if(examScore > 50){
+            examScore = 50;
+            examInput.value = 50;
+        }
 
-        if (examScore < 0)
+        if(examScore < 0){
             examScore = 0;
-
+            examInput.value = 0;
+        }
 
         const total =
-            classScore +
-            examScore;
+            classScore + examScore;
+
+        document.getElementById("resultTotal")
+            .textContent = total.toFixed(2);
+
+        document.getElementById("resultGrade")
+            .textContent = grade(total);
+
+        document.getElementById("resultInterpretation")
+            .textContent = interpretation(total);
+
+    }
 
 
-        document.getElementById(
-            "resultTotal"
-        ).textContent =
-            total.toFixed(2);
+    function loadClasses(){
+
+        const select =
+            document.getElementById("resultClass");
+
+        if(!select) return;
+
+        const students = getStudents();
+
+        const classes = [];
+
+        students.forEach(function(student){
+
+            const className =
+                studentClass(student);
+
+            if(
+                className &&
+                !classes.includes(className)
+            ){
+                classes.push(className);
+            }
+
+        });
+
+        select.innerHTML =
+            '<option value="">Select Class</option>';
+
+        classes.sort().forEach(function(className){
+
+            const option =
+                document.createElement("option");
+
+            option.value = className;
+            option.textContent = className;
+
+            select.appendChild(option);
+
+        });
+
+    }
 
 
-        document.getElementById(
-            "resultGrade"
-        ).textContent =
-            getGrade(total);
+    function loadStudents(){
+
+        const className =
+            document.getElementById("resultClass").value;
+
+        const studentSelect =
+            document.getElementById("resultStudent");
+
+        const subjectSelect =
+            document.getElementById("resultSubject");
+
+        studentSelect.innerHTML =
+            '<option value="">Select Student</option>';
+
+        subjectSelect.innerHTML =
+            '<option value="">Select Subject</option>';
+
+        if(!className)
+            return;
+
+        const students = getStudents();
+
+        students.forEach(function(student,index){
+
+            if(
+                studentClass(student) ===
+                className
+            ){
+
+                const option =
+                    document.createElement("option");
+
+                option.value = index;
+
+                option.textContent =
+                    studentName(student);
+
+                studentSelect.appendChild(option);
+
+            }
+
+        });
+
+    }
 
 
-        document.getElementById(
-            "resultInterpretation"
-        ).textContent =
-            getInterpretation(total);
+    function loadSubjects(){
 
-    };
+        const studentSelect =
+            document.getElementById("resultStudent");
+
+        const subjectSelect =
+            document.getElementById("resultSubject");
+
+        subjectSelect.innerHTML =
+            '<option value="">Select Subject</option>';
+
+        if(studentSelect.value === "")
+            return;
+
+        const students = getStudents();
+
+        const student =
+            students[
+                Number(studentSelect.value)
+            ];
+
+        if(!student)
+            return;
+
+        const subjects =
+            getSubjects(student);
+
+        subjects.forEach(function(subject){
+
+            const name =
+                subjectName(subject);
+
+            if(!name)
+                return;
+
+            const option =
+                document.createElement("option");
+
+            option.value = name;
+            option.textContent = name;
+
+            subjectSelect.appendChild(option);
+
+        });
+
+    }
 
 
-    /* =====================================================
-       SAVE RESULT
-       ===================================================== */
+    function clearForm(){
 
-    window.saveSwiftSchoolResult =
-    function () {
+        document.getElementById("resultStudent")
+            .value = "";
+
+        document.getElementById("resultSubject")
+            .innerHTML =
+            '<option value="">Select Subject</option>';
+
+        document.getElementById("resultClassScore")
+            .value = "";
+
+        document.getElementById("resultExamScore")
+            .value = "";
+
+        document.getElementById("resultTotal")
+            .textContent = "0.00";
+
+        document.getElementById("resultGrade")
+            .textContent = "-";
+
+        document.getElementById("resultInterpretation")
+            .textContent = "-";
+
+        editingResultId = null;
+
+        document.getElementById("saveResultBtn")
+            .style.display = "inline-block";
+
+        document.getElementById("updateResultBtn")
+            .style.display = "none";
+
+    }
+
+
+    function saveResult(){
 
         const academicYear =
             document.getElementById(
                 "resultAcademicYear"
             ).value.trim();
 
-
         const term =
             document.getElementById(
                 "resultTerm"
             ).value;
-
 
         const className =
             document.getElementById(
                 "resultClass"
             ).value;
 
-
-        const studentSelect =
+        const studentIndex =
             document.getElementById(
                 "resultStudent"
-            );
-
+            ).value;
 
         const subject =
             document.getElementById(
                 "resultSubject"
             ).value;
-
 
         const classScore =
             Number(
@@ -1154,7 +821,6 @@
                     "resultClassScore"
                 ).value
             ) || 0;
-
 
         const examScore =
             Number(
@@ -1164,165 +830,90 @@
             ) || 0;
 
 
-        /* Validation */
-
-        if (!academicYear) {
-
-            alert(
-                "Please enter the academic year."
-            );
-
+        if(!academicYear){
+            alert("Please enter the academic year.");
             return;
-
         }
 
-
-        if (!className) {
-
-            alert(
-                "Please select a class."
-            );
-
+        if(!className){
+            alert("Please select a class.");
             return;
-
         }
 
-
-        if (!studentSelect.value) {
-
-            alert(
-                "Please select a student."
-            );
-
+        if(studentIndex === ""){
+            alert("Please select a student.");
             return;
-
         }
 
-
-        if (!subject) {
-
-            alert(
-                "Please select a subject."
-            );
-
+        if(!subject){
+            alert("Please select a subject.");
             return;
-
         }
 
-
-        if (
+        if(
             classScore < 0 ||
-            classScore > 50
-        ) {
-
-            alert(
-                "Class Score must be between 0 and 50."
-            );
-
-            return;
-
-        }
-
-
-        if (
+            classScore > 50 ||
             examScore < 0 ||
             examScore > 50
-        ) {
-
+        ){
             alert(
-                "Exam Score must be between 0 and 50."
+                "Scores must be between 0 and 50."
             );
-
             return;
-
         }
 
 
-        const students =
-            getStudents();
-
+        const students = getStudents();
 
         const student =
-            students[
-                Number(
-                    studentSelect.value
-                )
-            ];
+            students[Number(studentIndex)];
 
-
-        if (!student) {
-
-            alert(
-                "Student record not found."
-            );
-
+        if(!student){
+            alert("Student record not found.");
             return;
-
         }
 
 
-        const studentName =
-            getStudentName(
-                student
-            );
-
-
-        const studentId =
-            getStudentId(
-                student
-            );
-
-
-        const total =
-            classScore +
-            examScore;
-
+        const id =
+            studentId(student);
 
         const results =
             getResults();
 
 
-        /* Prevent duplicate */
-
         const duplicate =
-            results.find(
-                function (result) {
+            results.find(function(result){
 
-                    return (
+                return (
+                    String(result.studentId) ===
+                    String(id) &&
 
-                        result.studentId ===
-                        studentId &&
+                    result.subject === subject &&
 
-                        result.subject ===
-                        subject &&
+                    result.academicYear ===
+                    academicYear &&
 
-                        result.academicYear ===
-                        academicYear &&
+                    result.term === term
+                );
 
-                        result.term ===
-                        term
-
-                    );
-
-                }
-            );
+            });
 
 
-        if (duplicate) {
-
+        if(duplicate){
             alert(
-                "A result for this student, subject and term already exists. Use Edit to change it."
+                "A result already exists for this student, subject and term. Use Edit to change it."
             );
-
             return;
-
         }
 
 
-        const result = {
+        const total =
+            classScore + examScore;
 
-            id:
-                Date.now().toString(),
+
+        results.push({
+
+            id: Date.now().toString(),
 
             academicYear:
                 academicYear,
@@ -1334,10 +925,10 @@
                 className,
 
             studentId:
-                studentId,
+                id,
 
             studentName:
-                studentName,
+                studentName(student),
 
             subject:
                 subject,
@@ -1352,55 +943,37 @@
                 total,
 
             grade:
-                getGrade(total),
+                grade(total),
 
             interpretation:
-                getInterpretation(total),
+                interpretation(total),
 
             dateCreated:
                 new Date().toISOString()
 
-        };
-
-
-        results.push(result);
+        });
 
 
         saveResults(results);
 
+        alert("Result saved successfully.");
 
-        alert(
-            "Result saved successfully."
-        );
+        clearForm();
 
+        displayResults();
 
-        clearResultForm();
-
-
-        displaySwiftSchoolResults();
-
-    };
+    }
 
 
-    /* =====================================================
-       DISPLAY RESULTS
-       ===================================================== */
-
-    window.displaySwiftSchoolResults =
-    function () {
+    function displayResults(){
 
         const tbody =
             document.getElementById(
                 "resultsTableBody"
             );
 
-
-        if (!tbody) return;
-
-
-        const results =
-            getResults();
-
+        if(!tbody)
+            return;
 
         const search =
             (
@@ -1412,12 +985,15 @@
             .trim();
 
 
-        let filtered =
-            results.filter(
-                function (result) {
+        const results =
+            getResults();
 
-                    const text = (
 
+        const filtered =
+            results.filter(function(result){
+
+                const text =
+                    (
                         result.studentName +
                         " " +
                         result.className +
@@ -1425,40 +1001,27 @@
                         result.subject +
                         " " +
                         result.term
-
                     ).toLowerCase();
 
+                return text.includes(search);
 
-                    return text.includes(
-                        search
-                    );
-
-                }
-            );
+            });
 
 
         tbody.innerHTML = "";
 
 
-        if (
-            filtered.length === 0
-        ) {
+        if(filtered.length === 0){
 
             tbody.innerHTML = `
-
                 <tr>
-
                     <td
                         colspan="10"
                         class="no-results"
                     >
-
                         No results found.
-
                     </td>
-
                 </tr>
-
             `;
 
             return;
@@ -1466,139 +1029,99 @@
         }
 
 
-        filtered.forEach(
-            function (result) {
+        filtered.forEach(function(result){
 
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
+            const row =
+                document.createElement("tr");
 
 
-                row.innerHTML = `
+            row.innerHTML = `
 
-                    <td>
-                        ${escapeHTML(
-                            result.studentName
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(result.studentName)}
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            result.className
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(result.className)}
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            result.subject
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(result.subject)}
+                </td>
 
-                    <td>
-                        ${Number(
-                            result.classScore
-                        ).toFixed(2)}
-                    </td>
+                <td>
+                    ${Number(result.classScore).toFixed(2)}
+                </td>
 
-                    <td>
-                        ${Number(
-                            result.examScore
-                        ).toFixed(2)}
-                    </td>
+                <td>
+                    ${Number(result.examScore).toFixed(2)}
+                </td>
 
-                    <td>
-                        <strong>
-                            ${Number(
-                                result.total
-                            ).toFixed(2)}
-                        </strong>
-                    </td>
+                <td>
+                    <strong>
+                        ${Number(result.total).toFixed(2)}
+                    </strong>
+                </td>
 
-                    <td class="result-grade">
-                        ${escapeHTML(
-                            result.grade
-                        )}
-                    </td>
+                <td class="result-grade">
+                    ${escapeHTML(result.grade)}
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            result.interpretation
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(result.interpretation)}
+                </td>
 
-                    <td>
-                        ${escapeHTML(
-                            result.term
-                        )}
-                    </td>
+                <td>
+                    ${escapeHTML(result.term)}
+                </td>
 
-                    <td>
+                <td>
 
-                        <div
-                            class="result-actions"
+                    <div class="result-actions">
+
+                        <button
+                            type="button"
+                            class="edit-result"
+                            data-edit-id="${result.id}"
                         >
+                            Edit
+                        </button>
 
-                            <button
-                                class="edit-result"
-                                onclick="editSwiftSchoolResult('${result.id}')"
-                            >
-                                Edit
-                            </button>
+                        <button
+                            type="button"
+                            class="delete-result"
+                            data-delete-id="${result.id}"
+                        >
+                            Delete
+                        </button>
 
-                            <button
-                                class="delete-result"
-                                onclick="deleteSwiftSchoolResult('${result.id}')"
-                            >
-                                Delete
-                            </button>
+                    </div>
 
-                        </div>
+                </td>
+            `;
 
-                    </td>
+            tbody.appendChild(row);
 
-                `;
+        });
 
-
-                tbody.appendChild(
-                    row
-                );
-
-            }
-        );
-
-    };
+    }
 
 
-    /* =====================================================
-       EDIT RESULT
-       ===================================================== */
+    function editResult(id){
 
-    window.editSwiftSchoolResult =
-    function (id) {
-
-        const results =
-            getResults();
-
+        const results = getResults();
 
         const result =
-            results.find(
-                function (item) {
+            results.find(function(item){
 
-                    return item.id === id;
+                return item.id === id;
 
-                }
-            );
+            });
 
 
-        if (!result) {
-
-            alert(
-                "Result not found."
-            );
-
+        if(!result){
+            alert("Result not found.");
             return;
-
         }
 
 
@@ -1614,62 +1137,41 @@
             result.term;
 
 
-        const classSelect =
-            document.getElementById(
-                "resultClass"
-            );
-
-
-        classSelect.value =
+        document.getElementById(
+            "resultClass"
+        ).value =
             result.className;
 
 
-        loadResultStudents();
+        loadStudents();
 
 
-        const students =
-            getStudents();
+        const students = getStudents();
+
+        let index = -1;
 
 
-        let studentIndex = -1;
+        students.forEach(function(student,i){
 
-
-        students.forEach(
-            function (student, index) {
-
-                if (
-                    String(
-                        getStudentId(student)
-                    ) ===
-                    String(
-                        result.studentId
-                    )
-                ) {
-
-                    studentIndex =
-                        index;
-
-                }
-
+            if(
+                String(studentId(student)) ===
+                String(result.studentId)
+            ){
+                index = i;
             }
-        );
+
+        });
 
 
-        const studentSelect =
+        if(index >= 0){
+
             document.getElementById(
                 "resultStudent"
-            );
+            ).value = index;
 
-
-        if (studentIndex >= 0) {
-
-            studentSelect.value =
-                studentIndex;
+            loadSubjects();
 
         }
-
-
-        loadResultSubjects();
 
 
         document.getElementById(
@@ -1690,11 +1192,10 @@
             result.examScore;
 
 
-        calculateResultTotal();
+        calculate();
 
 
-        editingResultId =
-            id;
+        editingResultId = id;
 
 
         document.getElementById(
@@ -1708,36 +1209,13 @@
         ).style.display =
             "inline-block";
 
-
-        const section =
-            document.getElementById(
-                "resultsSection"
-            );
+    }
 
 
-        if (section) {
+    function updateResult(){
 
-            section.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        }
-
-    };
-
-
-    /* =====================================================
-       UPDATE RESULT
-       ===================================================== */
-
-    window.updateSwiftSchoolResult =
-    function () {
-
-        if (!editingResultId) {
-
+        if(!editingResultId)
             return;
-
-        }
 
 
         const results =
@@ -1745,26 +1223,19 @@
 
 
         const index =
-            results.findIndex(
-                function (result) {
+            results.findIndex(function(result){
 
-                    return (
-                        result.id ===
-                        editingResultId
-                    );
+                return (
+                    result.id ===
+                    editingResultId
+                );
 
-                }
-            );
+            });
 
 
-        if (index === -1) {
-
-            alert(
-                "Result could not be found."
-            );
-
+        if(index === -1){
+            alert("Result could not be found.");
             return;
-
         }
 
 
@@ -1773,30 +1244,25 @@
                 "resultAcademicYear"
             ).value.trim();
 
-
         const term =
             document.getElementById(
                 "resultTerm"
             ).value;
-
 
         const className =
             document.getElementById(
                 "resultClass"
             ).value;
 
-
-        const studentSelect =
+        const studentIndex =
             document.getElementById(
                 "resultStudent"
-            );
-
+            ).value;
 
         const subject =
             document.getElementById(
                 "resultSubject"
             ).value;
-
 
         const classScore =
             Number(
@@ -1804,7 +1270,6 @@
                     "resultClassScore"
                 ).value
             ) || 0;
-
 
         const examScore =
             Number(
@@ -1814,53 +1279,46 @@
             ) || 0;
 
 
-        if (
+        if(
             !academicYear ||
             !className ||
-            !studentSelect.value ||
+            studentIndex === "" ||
             !subject
-        ) {
-
+        ){
             alert(
                 "Please complete all required fields."
             );
-
             return;
-
         }
 
 
-        if (
+        if(
             classScore < 0 ||
             classScore > 50 ||
             examScore < 0 ||
             examScore > 50
-        ) {
-
+        ){
             alert(
                 "Scores must be between 0 and 50."
             );
-
             return;
-
         }
 
 
-        const students =
-            getStudents();
-
+        const students = getStudents();
 
         const student =
-            students[
-                Number(
-                    studentSelect.value
-                )
-            ];
+            students[Number(studentIndex)];
+
+
+        if(!student){
+            alert("Student record not found.");
+            return;
+        }
 
 
         const total =
-            classScore +
-            examScore;
+            classScore + examScore;
 
 
         results[index] = {
@@ -1877,10 +1335,10 @@
                 className,
 
             studentId:
-                getStudentId(student),
+                studentId(student),
 
             studentName:
-                getStudentName(student),
+                studentName(student),
 
             subject:
                 subject,
@@ -1895,10 +1353,10 @@
                 total,
 
             grade:
-                getGrade(total),
+                grade(total),
 
             interpretation:
-                getInterpretation(total),
+                interpretation(total),
 
             lastUpdated:
                 new Date().toISOString()
@@ -1908,217 +1366,243 @@
 
         saveResults(results);
 
+        alert("Result updated successfully.");
 
-        alert(
-            "Result updated successfully."
-        );
+        clearForm();
 
+        displayResults();
 
-        clearResultForm();
-
-
-        displaySwiftSchoolResults();
-
-    };
+    }
 
 
-    /* =====================================================
-       DELETE RESULT
-       ===================================================== */
-
-    window.deleteSwiftSchoolResult =
-    function (id) {
+    function deleteResult(id){
 
         const results =
             getResults();
 
 
         const result =
-            results.find(
-                function (item) {
+            results.find(function(item){
 
-                    return item.id === id;
+                return item.id === id;
 
-                }
-            );
+            });
 
 
-        if (!result) return;
+        if(!result)
+            return;
 
 
-        const confirmed =
-            confirm(
+        if(
+            !confirm(
                 "Delete the result for " +
                 result.studentName +
                 " — " +
                 result.subject +
                 "?"
-            );
-
-
-        if (!confirmed) {
-
+            )
+        ){
             return;
-
         }
 
 
         const updated =
-            results.filter(
-                function (item) {
+            results.filter(function(item){
 
-                    return item.id !== id;
+                return item.id !== id;
 
-                }
-            );
+            });
 
 
         saveResults(updated);
 
+        displayResults();
 
-        displaySwiftSchoolResults();
-
-    };
-
-
-    /* =====================================================
-       CLEAR FORM
-       ===================================================== */
-
-    window.clearResultForm =
-    function () {
-
-        document.getElementById(
-            "resultStudent"
-        ).value = "";
-
-
-        document.getElementById(
-            "resultSubject"
-        ).innerHTML =
-            '<option value="">Select Subject</option>';
-
-
-        document.getElementById(
-            "resultClassScore"
-        ).value = "";
-
-
-        document.getElementById(
-            "resultExamScore"
-        ).value = "";
-
-
-        document.getElementById(
-            "resultTotal"
-        ).textContent = "0";
-
-
-        document.getElementById(
-            "resultGrade"
-        ).textContent = "-";
-
-
-        document.getElementById(
-            "resultInterpretation"
-        ).textContent = "-";
-
-
-        editingResultId = null;
-
-
-        document.getElementById(
-            "saveResultBtn"
-        ).style.display =
-            "inline-block";
-
-
-        document.getElementById(
-            "updateResultBtn"
-        ).style.display =
-            "none";
-
-    };
+    }
 
 
     /* =====================================================
-       ESCAPE HTML
+       EVENT LISTENERS
        ===================================================== */
 
-    function escapeHTML(value) {
+    function initializeResults(){
 
-        return String(
-            value ?? ""
-        )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+        const classSelect =
+            document.getElementById(
+                "resultClass"
+            );
+
+        const studentSelect =
+            document.getElementById(
+                "resultStudent"
+            );
+
+        const classScore =
+            document.getElementById(
+                "resultClassScore"
+            );
+
+        const examScore =
+            document.getElementById(
+                "resultExamScore"
+            );
+
+        const saveButton =
+            document.getElementById(
+                "saveResultBtn"
+            );
+
+        const updateButton =
+            document.getElementById(
+                "updateResultBtn"
+            );
+
+        const clearButton =
+            document.getElementById(
+                "clearResultBtn"
+            );
+
+        const searchInput =
+            document.getElementById(
+                "resultsSearch"
+            );
+
+
+        if(!classSelect)
+            return;
+
+
+        loadClasses();
+
+        displayResults();
+
+
+        classSelect.addEventListener(
+            "change",
+            loadStudents
         );
 
+
+        studentSelect.addEventListener(
+            "change",
+            loadSubjects
+        );
+
+
+        classScore.addEventListener(
+            "input",
+            calculate
+        );
+
+
+        examScore.addEventListener(
+            "input",
+            calculate
+        );
+
+
+        saveButton.addEventListener(
+            "click",
+            saveResult
+        );
+
+
+        updateButton.addEventListener(
+            "click",
+            updateResult
+        );
+
+
+        clearButton.addEventListener(
+            "click",
+            clearForm
+        );
+
+
+        searchInput.addEventListener(
+            "input",
+            displayResults
+        );
+
+
+        document
+            .getElementById("resultsTableBody")
+            .addEventListener(
+                "click",
+                function(event){
+
+                    const editButton =
+                        event.target.closest(
+                            "[data-edit-id]"
+                        );
+
+                    const deleteButton =
+                        event.target.closest(
+                            "[data-delete-id]"
+                        );
+
+
+                    if(editButton){
+
+                        editResult(
+                            editButton
+                                .dataset
+                                .editId
+                        );
+
+                    }
+
+
+                    if(deleteButton){
+
+                        deleteResult(
+                            deleteButton
+                                .dataset
+                                .deleteId
+                        );
+
+                    }
+
+                }
+            );
+
     }
 
 
     /* =====================================================
-       INITIALIZE
+       PUBLIC REFRESH FUNCTION
        ===================================================== */
 
-    function initializeResults() {
+    window.refreshSwiftSchoolResults =
+    function(){
 
-        loadResultClasses();
+        loadClasses();
 
-        displaySwiftSchoolResults();
+        displayResults();
 
-    }
+    };
 
 
-    if (
+    /* =====================================================
+       START
+       ===================================================== */
+
+    if(
         document.readyState ===
         "loading"
-    ) {
+    ){
 
         document.addEventListener(
             "DOMContentLoaded",
             initializeResults
         );
 
-    } else {
+    }
+    else{
 
         initializeResults();
 
     }
 
-
-    /* =====================================================
-       REFRESH FUNCTION
-       ===================================================== */
-
-    window.refreshSwiftSchoolResults =
-    function () {
-
-        loadResultClasses();
-
-        displaySwiftSchoolResults();
-
-    };
-
 })();
-
 </script>
-
-</section>
