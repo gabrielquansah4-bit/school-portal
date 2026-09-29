@@ -3289,15 +3289,22 @@ function getClassStudents(classId){
     const c=getClass(classId);
     if(!c)return [];
 
-    const ids=c.studentIds||[];
+    const ids=Array.isArray(c.studentIds)?c.studentIds:[];
     const listed=ids.map(id=>getStudent(id)).filter(Boolean);
+    const listedIds=new Set(listed.map(s=>String(s.id)));
 
-    // Fallback to the student's class name in case an older record
-    // was saved without the class studentIds relationship.
-    const className=c.name;
+    // Match students by both the class studentIds list and their own class
+    // assignment. This handles classes created before students were imported.
+    const className=String(c.name||"").trim().toLowerCase();
+    const classSection=String(c.section||"").trim().toLowerCase();
+
     const fallback=students.filter(s=>{
-        if(listed.some(x=>x.id===s.id))return false;
-        return String(s.className||"").trim()===String(className||"").trim();
+        if(listedIds.has(String(s.id)))return false;
+        const studentClass=String(s.className||s.class||"").trim().toLowerCase();
+        if(studentClass===className)return true;
+        if(classSection && studentClass===`${className} - ${classSection}`)return true;
+        if(classSection && studentClass===`${className} ${classSection}`)return true;
+        return false;
     });
 
     return [...listed,...fallback];
