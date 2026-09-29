@@ -1811,7 +1811,7 @@ function renderProfile(){
                 <h3>${firstLogin ? "Create Your Password" : "Change Password"}</h3>
                 <p>${firstLogin ? "Use your temporary password once, then choose a private password for future logins." : `You can change your ${roleLabel} portal password at any time.`}</p>
                 <div class="form-grid">
-                    ${role==="Parent" ? `<div class="form-group"><label>New Username</label><input id="parentNewUsername" type="text" value="${escapeHtml(u.username)}" autocomplete="username"></div>` : ""}
+                    ${u.role==="Parent" ? `<div class="form-group"><label>New Username</label><input id="parentNewUsername" type="text" value="${escapeHtml(u.username)}" autocomplete="username"></div>` : ""}
                     <div class="form-group"><label>Current Password</label><input id="${prefix}CurrentPassword" type="password" autocomplete="current-password"></div>
                     <div class="form-group"><label>New Password ${firstLogin ? "*" : "(leave blank to keep current)"}</label><input id="${prefix}NewPassword" type="password" minlength="6" autocomplete="new-password"></div>
                     <div class="form-group"><label>Confirm New Password</label><input id="${prefix}ConfirmPassword" type="password" minlength="6" autocomplete="new-password"></div>
