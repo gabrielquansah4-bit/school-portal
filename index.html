@@ -614,7 +614,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div class="nav-link" data-page="parentAttendance">Attendance</div>
         <div class="nav-link" data-page="parentAssignments">Assignments</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
-        <div class="nav-link" data-page="parentAnnouncements">Announcements</div>
     </div>
 
     <div id="teacherNav">
@@ -624,7 +623,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div class="nav-link" data-page="teacherResults">Results</div>
         <div class="nav-link" data-page="teacherAttendance">Attendance</div>
         <div class="nav-link" data-page="teacherAssignments">Assignments</div>
-        <div class="nav-link" data-page="teacherAnnouncements">Announcements</div>
     </div>
 
     <div id="adminNav">
@@ -636,7 +634,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div class="nav-link" data-page="adminResults">Results</div>
         <div class="nav-link" data-page="adminAttendance">Attendance</div>
         <div class="nav-link" data-page="adminFees">Fees</div>
-        <div class="nav-link" data-page="adminAnnouncements">Announcements</div>
         <div class="nav-link" data-page="reports">Reports</div>
         <div class="nav-link" data-page="settings">Settings</div>
     </div>
@@ -1115,7 +1112,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 </section>
 <section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
 <section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
-<section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
 <section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
 <section id="teacherAttendance" class="page">
@@ -1156,7 +1152,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 </section>
 <section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
 <section id="adminFees" class="page"><div class="panel"><h1>Fees Management</h1><p>Fees module will be added next.</p></div></section>
-<section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
 <section id="reports" class="page">
 
     <div class="page-header">
@@ -3727,11 +3722,8 @@ function renderTeacherAttendanceStudents(classId){
 }
 
 function renderTeacherAttendance(){
-    const teacherId=currentUser?.id;
-
-    const classIds=classes
-        .filter(c=>c.teacherId===teacherId)
-        .map(c=>c.id);
+    // Teachers can review attendance for any class in the school.
+    const classIds=classes.map(c=>c.id);
 
     const search=(document.getElementById("teacherAttendanceSearch")?.value||"").toLowerCase();
 
@@ -3752,7 +3744,7 @@ function renderTeacherAttendance(){
 
     if(!records.length){
         document.getElementById("teacherAttendanceContent").innerHTML=
-            '<div class="empty">No attendance records found for your assigned classes.</div>';
+            '<div class="empty">No attendance records found.</div>';
         return;
     }
 
