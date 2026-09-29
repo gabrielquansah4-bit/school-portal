@@ -1441,18 +1441,26 @@ function syncClassesFromStudents(){
     students.forEach(s=>{
         const className=String(s.className||"").trim();
         if(!className) return;
-        if(!grouped[className]) grouped[className]=[];
-        if(!grouped[className].includes(s.id)) grouped[className].push(s.id);
+        const key=className.toLowerCase();
+        if(!grouped[key]) grouped[key]={name:className,studentIds:[]};
+        if(!grouped[key].studentIds.includes(s.id)) grouped[key].studentIds.push(s.id);
     });
 
     let classesAdded=0, classesUpdated=0;
-    Object.entries(grouped).forEach(([className,studentIds])=>{
-        // Match classes by exact class name. This preserves an existing section/teacher/year.
-        let c=classes.find(x=>String(x.name||"").trim().toLowerCase()===className.toLowerCase());
+
+    Object.values(grouped).forEach(group=>{
+        let c=classes.find(x=>String(x.name||"").trim().toLowerCase()===group.name.toLowerCase());
+
         if(!c){
+            const safeName=group.name.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"").toUpperCase().slice(0,24);
+            let id="CLS-"+(safeName||"CLASS");
+            let n=2;
+            while(classes.some(x=>x.id===id)){
+                id="CLS-"+(safeName||"CLASS")+"-"+n++;
+            }
             c={
-                id:"CLS-"+Date.now().toString().slice(-6)+Math.floor(Math.random()*90+10),
-                name:className,
+                id,
+                name:group.name,
                 section:"",
                 academicYear:"2026/2027",
                 teacherId:"",
@@ -1461,8 +1469,19 @@ function syncClassesFromStudents(){
             classes.push(c);
             classesAdded++;
         }
-        c.studentIds=studentIds;
+
+        c.studentIds=group.studentIds.slice();
         classesUpdated++;
+    });
+
+    // Remove students from old classes when their current student record
+    // now points to another class.
+    classes.forEach(c=>{
+        c.studentIds=(c.studentIds||[]).filter(studentId=>{
+            const student=students.find(s=>s.id===studentId);
+            if(!student) return false;
+            return String(student.className||"").trim().toLowerCase()===String(c.name||"").trim().toLowerCase();
+        });
     });
 
     return {classesAdded,classesUpdated};
@@ -2373,6 +2392,8 @@ document.getElementById("classForm").addEventListener("submit",function(e){
 });
 
 function renderClasses(){
+    const sync=syncClassesFromStudents();
+    if(sync.classesAdded || sync.classesUpdated) saveAll();
     const search=(document.getElementById("classSearch")?.value||"").toLowerCase();
 
     const filtered=classes.filter(c=>{
