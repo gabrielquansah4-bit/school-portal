@@ -991,6 +991,14 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
             </div>
 
             <div class="form-group">
+                <label for="reportType">Report Type</label>
+                <select id="reportType">
+                    <option value="individual">Individual Student</option>
+                    <option value="bulk">Entire Class</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="reportStudentGroup">
                 <label for="reportStudentSelect">Student</label>
                 <select id="reportStudentSelect" disabled>
                     <option value="">Select Student</option>
@@ -1015,7 +1023,7 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         </div>
 
         <div class="report-actions">
-            <button class="primary-btn" onclick="generateStudentReport()">
+            <button class="primary-btn" onclick="generateSelectedReport()">
                 Generate Report
             </button>
 
@@ -1029,7 +1037,7 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
     </div>
 
     <div id="studentReportContainer" class="report-placeholder">
-        <p>Select a class and student, then click <strong>Generate Report</strong>.</p>
+        <p>Select a class and report type, then click <strong>Generate Report</strong>.</p>
     </div>
 
 </section>
@@ -1557,6 +1565,7 @@ function refreshPage(pageId){
 
     if(pageId==="reports"){
         populateReportClassSelect();
+        updateReportTypeUI();
         const classSelect=document.getElementById("reportClassSelect");
         if(classSelect?.value){
             populateReportStudentSelect(classSelect.value);
@@ -3540,6 +3549,33 @@ let currentReportClassId="";
 let currentReportAcademicYear="";
 let currentReportTerm="Term 1";
 
+function normalizeId(value){
+    return String(value ?? "").trim();
+}
+
+function getReportClassStudents(classId){
+    const c=getClass(classId);
+    if(!c)return [];
+
+    const classIdText=normalizeId(classId);
+    const className=normalizeId(c.name);
+    const ids=new Set((c.studentIds||[]).map(normalizeId));
+
+    const matched=[];
+    students.forEach(s=>{
+        const sid=normalizeId(s.id);
+        const studentClassId=normalizeId(s.classId);
+        const studentClassName=normalizeId(s.className);
+
+        if(ids.has(sid) || studentClassId===classIdText ||
+           (className && studentClassName===className)){
+            if(!matched.some(x=>normalizeId(x.id)===sid)) matched.push(s);
+        }
+    });
+
+    return matched.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||"")));
+}
+
 function populateReportClassSelect(selected=""){
     const select=document.getElementById("reportClassSelect");
     if(!select)return;
@@ -3551,28 +3587,54 @@ function populateReportClassSelect(selected=""){
     `).join("");
 
     if(selected) populateReportStudentSelect(selected);
-    else{
-        const studentSelect=document.getElementById("reportStudentSelect");
-        if(studentSelect){studentSelect.innerHTML='<option value="">Select Student</option>';studentSelect.disabled=true;}
-    }
+    else resetReportStudentSelect();
+}
+
+function resetReportStudentSelect(){
+    const select=document.getElementById("reportStudentSelect");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Student</option>';
+    select.disabled=true;
 }
 
 function populateReportStudentSelect(classId,selected=""){
     const select=document.getElementById("reportStudentSelect");
     if(!select)return;
-    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
 
-    const classStudents=getClassStudents(classId);
+    if(!classId){
+        resetReportStudentSelect();
+        return;
+    }
+
+    const classStudents=getReportClassStudents(classId);
     select.innerHTML='<option value="">Select Student</option>'+classStudents.map(s=>`
-        <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
-            ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+        <option value="${escapeHtml(s.id)}" ${normalizeId(selected)===normalizeId(s.id)?"selected":""}>
+            ${escapeHtml(s.name||"Unnamed Student")} (${escapeHtml(s.id)})
         </option>
     `).join("");
     select.disabled=false;
+
+    if(!classStudents.length){
+        select.innerHTML='<option value="">No students found in this class</option>';
+        select.disabled=true;
+    }
+}
+
+function updateReportTypeUI(){
+    const type=document.getElementById("reportType")?.value||"individual";
+    const group=document.getElementById("reportStudentGroup");
+    const studentSelect=document.getElementById("reportStudentSelect");
+    if(!group||!studentSelect)return;
+
+    const bulk=type==="bulk";
+    group.style.display=bulk?"none":"";
+    studentSelect.disabled=bulk || !document.getElementById("reportClassSelect")?.value;
 }
 
 function calculateReportAttendance(studentId,classId,academicYear){
-    const records=attendance.filter(a=>a.studentId===studentId&&a.classId===classId&&String(a.academicYear||"").trim()===String(academicYear||"").trim());
+    const records=attendance.filter(a=>normalizeId(a.studentId)===normalizeId(studentId)&&
+        normalizeId(a.classId)===normalizeId(classId)&&
+        String(a.academicYear||"").trim()===String(academicYear||"").trim());
     const present=records.filter(a=>String(a.status).toLowerCase()==="present").length;
     const late=records.filter(a=>String(a.status).toLowerCase()==="late").length;
     const absent=records.filter(a=>String(a.status).toLowerCase()==="absent").length;
@@ -3584,18 +3646,18 @@ function calculateReportAttendance(studentId,classId,academicYear){
 }
 
 function reportSubjectList(classId,studentId,academicYear,term){
-    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
+    const classSubjects=subjects.filter(s=>(s.classIds||[]).map(normalizeId).includes(normalizeId(classId)));
     const studentResults=results.filter(r=>
-        r.studentId===studentId &&
-        r.classId===classId &&
+        normalizeId(r.studentId)===normalizeId(studentId) &&
+        normalizeId(r.classId)===normalizeId(classId) &&
         String(r.academicYear||"").trim()===String(academicYear||"").trim() &&
         String(r.term||"").trim()===String(term||"").trim()
     );
 
-    const ids=new Set(classSubjects.map(s=>s.id));
-    studentResults.forEach(r=>{if(r.subjectId)ids.add(r.subjectId);});
+    const ids=new Set(classSubjects.map(s=>normalizeId(s.id)));
+    studentResults.forEach(r=>{if(r.subjectId)ids.add(normalizeId(r.subjectId));});
 
-    return [...ids].map(id=>({subject:getSubject(id),result:studentResults.find(r=>r.subjectId===id)})).filter(x=>x.subject||x.result);
+    return [...ids].map(id=>({subject:getSubject(id),result:studentResults.find(r=>normalizeId(r.subjectId)===id)})).filter(x=>x.subject||x.result);
 }
 
 function getReportResultLevel(result){
@@ -3606,27 +3668,12 @@ function getReportResultLevel(result){
     return "No Result";
 }
 
-function generateStudentReport(){
-    const classId=document.getElementById("reportClassSelect")?.value||"";
-    const studentId=document.getElementById("reportStudentSelect")?.value||"";
-    const academicYear=document.getElementById("reportAcademicYear")?.value.trim()||"";
-    const term=document.getElementById("reportTerm")?.value||"Term 1";
-    const container=document.getElementById("studentReportContainer");
+function buildStudentReportCard(student,classId,academicYear,term){
+    const schoolClass=getClass(classId);
+    if(!student||!schoolClass)return "";
 
-    if(!classId){showMessage("reportMessage","Please select a class.","error");return;}
-    if(!studentId){showMessage("reportMessage","Please select a student.","error");return;}
-    if(!academicYear){showMessage("reportMessage","Please enter the academic year.","error");return;}
-
-    const student=getStudent(studentId), schoolClass=getClass(classId);
-    if(!student||!schoolClass){showMessage("reportMessage","The selected student or class could not be found.","error");return;}
-
-    currentReportStudentId=studentId;
-    currentReportClassId=classId;
-    currentReportAcademicYear=academicYear;
-    currentReportTerm=term;
-
-    const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
-    const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
+    const subjectItems=reportSubjectList(classId,student.id,academicYear,term);
+    const attendanceSummary=calculateReportAttendance(student.id,classId,academicYear);
     const scoredResults=subjectItems.map(x=>x.result).filter(Boolean).filter(r=>r.total!==undefined&&r.total!==""&&!isNaN(Number(r.total)));
     const scores=scoredResults.map(r=>Number(r.total));
     const average=scores.length?scores.reduce((sum,n)=>sum+n,0)/scores.length:0;
@@ -3652,8 +3699,7 @@ function generateStudentReport(){
         </tr>`;
     }).join(""):`<tr><td colspan="6" style="text-align:center">No subjects or results available for this student.</td></tr>`;
 
-    container.className="report-card";
-    container.innerHTML=`
+    return `<div class="report-card report-card-page">
         <div class="report-school-header">
             <div class="report-school-logo">SS</div>
             <h1>SWIFTSCHOOL</h1>
@@ -3663,8 +3709,8 @@ function generateStudentReport(){
         </div>
 
         <div class="report-student-info">
-            <div class="report-info-box"><strong>Student Name</strong>${escapeHtml(student.name)}</div>
-            <div class="report-info-box"><strong>Student ID</strong>${escapeHtml(student.id)}</div>
+            <div class="report-info-box"><strong>Student Name</strong>${escapeHtml(student.name||"—")}</div>
+            <div class="report-info-box"><strong>Student ID</strong>${escapeHtml(student.id||"—")}</div>
             <div class="report-info-box"><strong>Class</strong>${escapeHtml(classDisplay(schoolClass))}</div>
             <div class="report-info-box"><strong>Gender</strong>${escapeHtml(student.gender||"—")}</div>
             <div class="report-info-box"><strong>Class Teacher</strong>${escapeHtml(teacherName)}</div>
@@ -3674,9 +3720,7 @@ function generateStudentReport(){
         <h3>Academic Performance</h3>
         <div class="table-wrap">
             <table class="report-table">
-                <thead><tr>
-                    <th>Subject</th><th>Class Score /50</th><th>Exam Mark /100</th><th>Exam /50</th><th>Total /100</th><th>Performance</th>
-                </tr></thead>
+                <thead><tr><th>Subject</th><th>Class Score /50</th><th>Exam Mark /100</th><th>Exam /50</th><th>Total /100</th><th>Performance</th></tr></thead>
                 <tbody>${subjectRows}</tbody>
             </table>
         </div>
@@ -3698,27 +3742,94 @@ function generateStudentReport(){
             <div><div class="signature-line">Class Teacher Signature</div></div>
             <div><div class="signature-line">Headteacher Signature</div></div>
         </div>
-
         <p style="text-align:center;margin-top:25px;font-size:11px;color:#6b7280;">Printed from SwiftSchool</p>
-    `;
+    </div>`;
+}
 
-    showMessage("reportMessage",`Report generated successfully for ${term}.`,"success");
+function generateSelectedReport(){
+    const type=document.getElementById("reportType")?.value||"individual";
+    if(type==="bulk") return generateBulkClassReports();
+    return generateStudentReport();
+}
+
+function generateStudentReport(){
+    const classId=document.getElementById("reportClassSelect")?.value||"";
+    const studentId=document.getElementById("reportStudentSelect")?.value||"";
+    const academicYear=document.getElementById("reportAcademicYear")?.value.trim()||"";
+    const term=document.getElementById("reportTerm")?.value||"Term 1";
+    const container=document.getElementById("studentReportContainer");
+
+    if(!classId){showMessage("reportMessage","Please select a class.","error");return;}
+    if(!studentId){showMessage("reportMessage","Please select a student.","error");return;}
+    if(!academicYear){showMessage("reportMessage","Please enter the academic year.","error");return;}
+
+    const student=getStudent(studentId), schoolClass=getClass(classId);
+    if(!student||!schoolClass){showMessage("reportMessage","The selected student or class could not be found.","error");return;}
+
+    currentReportStudentId=studentId;
+    currentReportClassId=classId;
+    currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
+
+    container.className="report-single-container";
+    container.innerHTML=buildStudentReportCard(student,classId,academicYear,term);
+    showMessage("reportMessage",`Report generated successfully for ${student.name}.`,"success");
+}
+
+function generateBulkClassReports(){
+    const classId=document.getElementById("reportClassSelect")?.value||"";
+    const academicYear=document.getElementById("reportAcademicYear")?.value.trim()||"";
+    const term=document.getElementById("reportTerm")?.value||"Term 1";
+    const container=document.getElementById("studentReportContainer");
+
+    if(!classId){showMessage("reportMessage","Please select a class.","error");return;}
+    if(!academicYear){showMessage("reportMessage","Please enter the academic year.","error");return;}
+
+    const schoolClass=getClass(classId);
+    const classStudents=getReportClassStudents(classId);
+    if(!schoolClass||!classStudents.length){
+        showMessage("reportMessage","No students were found in the selected class.","error");
+        return;
+    }
+
+    currentReportStudentId="";
+    currentReportClassId=classId;
+    currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
+
+    container.className="report-bulk-container";
+    container.innerHTML=classStudents.map(student=>buildStudentReportCard(student,classId,academicYear,term)).join("");
+    showMessage("reportMessage",`${classStudents.length} report card(s) generated for ${classDisplay(schoolClass)}.`,"success");
 }
 
 function printStudentReport(){
     const container=document.getElementById("studentReportContainer");
-    if(!container||!container.classList.contains("report-card")){showMessage("reportMessage","Generate a report before printing.","error");return;}
+    if(!container || !container.innerHTML.trim() || container.classList.contains("report-placeholder")){
+        showMessage("reportMessage","Generate a report before printing.","error");
+        return;
+    }
     document.body.classList.add("report-printing");
-    setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove("report-printing"),500);},100);
+    setTimeout(()=>{
+        window.print();
+        setTimeout(()=>document.body.classList.remove("report-printing"),500);
+    },100);
 }
 
 document.getElementById("reportClassSelect")?.addEventListener("change",function(){
     populateReportStudentSelect(this.value);
     document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML='<p>Select a student or choose <strong>Entire Class</strong>, then click <strong>Generate Report</strong>.</p>';
+    updateReportTypeUI();
 });
 
 document.getElementById("reportStudentSelect")?.addEventListener("change",function(){
     document.getElementById("studentReportContainer").className="report-placeholder";
+});
+
+document.getElementById("reportType")?.addEventListener("change",function(){
+    updateReportTypeUI();
+    document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML='<p>Select the report options, then click <strong>Generate Report</strong>.</p>';
 });
 
 /* =========================
