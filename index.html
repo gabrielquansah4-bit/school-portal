@@ -609,7 +609,7 @@ td{font-size:14px}
         <div class="nav-link" data-page="children">My Children</div>
         <div class="nav-link" data-page="parentResults">Results</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
-            </div>
+    </div>
 
     <div id="teacherNav">
         <div class="nav-section">Teacher</div>
@@ -1132,7 +1132,17 @@ td{font-size:14px}
 <section id="fees" class="page"><div class="panel"><h1>Fees</h1><p>Fees Management will be added next.</p></div></section>
 
 
+<section id="parentAttendance" class="page">
+    <div class="page-header">
+        <div><h1>Children's Attendance</h1><p>Attendance records for your children.</p></div>
+    </div>
+    <div class="panel">
+        <div id="parentAttendanceContent"></div>
+    </div>
+</section>
+<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
 <section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
+<section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
 <section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
 <section id="teacherAttendance" class="page">
@@ -4210,15 +4220,6 @@ function saveCurrentReportComments(){
         return;
     }
 
-    const teacher=document.getElementById("reportTeacherComment")?.value || "";
-    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-    saveReportComments(
-        currentReportStudentId,
-        currentReportAcademicYear,
-        teacher,
-        headteacher
-    );
 
     showMessage("reportMessage","Report comments saved successfully.","success");
 }
@@ -4302,8 +4303,6 @@ function generateStudentReport(){
         }).join("")
         : `<tr><td colspan="5" style="text-align:center">No subjects or results available for this student.</td></tr>`;
 
-    const gender=student.gender || "";
-    const teacherName=teacher?.name || "Class Teacher";
 
     container.className="report-card";
     container.innerHTML=`
@@ -4327,11 +4326,6 @@ function generateStudentReport(){
             <div class="report-info-box">
                 <strong>Class</strong>
                 ${escapeHtml(classDisplay(schoolClass))}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Gender</strong>
-                ${escapeHtml(gender || "—")}
             </div>
 
             <div class="report-info-box">
@@ -4411,35 +4405,7 @@ function generateStudentReport(){
             </table>
         </div>
 
-        <div class="report-comments">
-            <div class="report-comment-box">
-                <h3>Class Teacher's Comment</h3>
-                <textarea id="reportTeacherComment"
-                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
-            </div>
 
-            <div class="report-comment-box">
-                <h3>Headteacher's Comment</h3>
-                <textarea id="reportHeadteacherComment"
-                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
-            </div>
-        </div>
-
-        <div class="report-comment-actions">
-            <button class="primary-btn" onclick="saveCurrentReportComments()">
-                Save Comments
-            </button>
-        </div>
-
-        <div class="report-footer">
-            <div>
-                <div class="signature-line">Class Teacher</div>
-            </div>
-
-            <div>
-                <div class="signature-line">Headteacher / Principal</div>
-            </div>
-        </div>
     `;
 
     showMessage("reportMessage","Report generated successfully.","success");
@@ -4451,19 +4417,6 @@ function printStudentReport(){
     if(!container || !container.classList.contains("report-card")){
         showMessage("reportMessage","Generate a report before printing.","error");
         return;
-    }
-
-    // Save any comments currently typed before printing.
-    if(currentReportStudentId && currentReportAcademicYear){
-        const teacher=document.getElementById("reportTeacherComment")?.value || "";
-        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-        saveReportComments(
-            currentReportStudentId,
-            currentReportAcademicYear,
-            teacher,
-            headteacher
-        );
     }
 
     document.body.classList.add("report-printing");
