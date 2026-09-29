@@ -1027,7 +1027,7 @@ td{font-size:14px}
     <div class="page-header">
         <div>
             <h1>Results Management</h1>
-            <p>Enter and manage student academic results.</p>
+            <p>Review teacher-submitted results, monitor missing marks, and manage submission deadlines.</p>
         </div>
         <button class="primary-btn" onclick="openResultForm()">+ Add Result</button>
     </div>
@@ -1102,6 +1102,27 @@ td{font-size:14px}
             <button class="primary-btn" type="submit">Save Result</button>
             <button class="secondary-btn" type="button" onclick="closeResultForm()">Cancel</button>
         </form>
+    </div>
+
+    <div class="panel" style="background:#f8fafc">
+        <h2>Teacher Submission Deadlines</h2>
+        <p style="color:#666;margin-top:6px">Set a deadline for each class, academic year and term. The dashboard below will show whether marks are complete, still pending, or past the deadline.</p>
+        <div class="form-grid">
+            <div class="form-group"><label>Academic Year *</label><input id="resultDeadlineYear" value="2026/2027"></div>
+            <div class="form-group"><label>Term *</label><select id="resultDeadlineTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+            <div class="form-group"><label>Class *</label><select id="resultDeadlineClass"><option value="">Select Class</option></select></div>
+            <div class="form-group"><label>Submission Deadline *</label><input id="resultDeadlineDate" type="date"></div>
+        </div>
+        <div style="margin-top:10px">
+            <button class="primary-btn" type="button" onclick="saveResultDeadline()">Save Deadline</button>
+            <button class="secondary-btn" type="button" onclick="clearResultDeadlineForm()">Clear</button>
+        </div>
+        <div id="resultDeadlineMessage" class="message" style="margin-top:12px"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Teacher Submission Monitor</h2>
+        <div id="resultSubmissionMonitor"></div>
     </div>
 
     <div class="panel">
@@ -1335,6 +1356,7 @@ let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
 ];
 
 let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
+let resultDeadlines = JSON.parse(localStorage.getItem("schoolPortalResultDeadlines")) || [];
 let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
 
 let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
@@ -1360,6 +1382,7 @@ function saveAll(){
     localStorage.setItem("schoolPortalClasses",JSON.stringify(classes));
     localStorage.setItem("schoolPortalSubjects",JSON.stringify(subjects));
     localStorage.setItem("schoolPortalResults",JSON.stringify(results));
+    localStorage.setItem("schoolPortalResultDeadlines",JSON.stringify(resultDeadlines));
     localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
 }
 
@@ -1770,6 +1793,7 @@ function refreshPage(pageId){
     if(pageId==="adminSubjects")renderSubjects();
     if(pageId==="adminResults"){
         populateResultClassSelect();
+        populateResultDeadlineClassSelect();
         renderResults();
     }
 
@@ -2846,7 +2870,11 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
         examMark,
         examScore,
         total,
-        grade:getPerformance(total)
+        grade:getPerformance(total),
+        uploadedBy:currentUser?.role==="Teacher" ? currentUser.id : "ADMIN-001",
+        uploadedByName:currentUser?.name || "Administrator",
+        uploadedAt:new Date().toISOString(),
+        source:currentUser?.role==="Teacher" ? "Teacher Upload" : "Administrator"
     };
 
     if(editingResultId){
@@ -2863,6 +2891,199 @@ document.getElementById("resultForm").addEventListener("submit",function(e){
     renderResults();
     refreshDashboard();
 });
+
+/* =========================
+   ADMIN RESULT MONITOR
+========================= */
+
+function editResult(id){
+    const r=results.find(x=>x.id===id);
+    if(!r)return;
+    editingResultId=id;
+
+    document.getElementById("resultYear").value=r.academicYear||"2026/2027";
+    populateResultClassSelect(r.classId);
+    populateResultStudentSelect(r.classId,r.studentId);
+    populateResultSubjectSelect(r.classId,r.subjectId);
+    document.getElementById("classScore").value=r.classScore ?? "";
+    document.getElementById("examScore").value=r.examMark ?? ((Number(r.examScore||0)*2)) ?? "";
+    updateResultCalculation();
+    document.getElementById("resultFormTitle").textContent="Edit Result";
+    document.getElementById("resultFormPanel").style.display="block";
+    document.getElementById("resultFormPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function deleteResult(id){
+    if(!confirm("Delete this result?"))return;
+    results=results.filter(r=>r.id!==id);
+    saveAll();
+    renderResults();
+    refreshDashboard();
+}
+
+function populateResultDeadlineClassSelect(selected=""){
+    const select=document.getElementById("resultDeadlineClass");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>
+        `<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`
+    ).join("");
+}
+
+function getResultDeadline(classId,year,term){
+    return resultDeadlines.find(d=>
+        d.classId===classId && String(d.academicYear||"").trim()===String(year||"").trim() && d.term===term
+    );
+}
+
+function saveResultDeadline(){
+    const classId=document.getElementById("resultDeadlineClass")?.value;
+    const year=(document.getElementById("resultDeadlineYear")?.value||"").trim();
+    const term=document.getElementById("resultDeadlineTerm")?.value||"Term 1";
+    const date=document.getElementById("resultDeadlineDate")?.value||"";
+
+    if(!classId || !year || !date){
+        showMessage("resultDeadlineMessage","Please select a class and enter a deadline.","error");
+        return;
+    }
+
+    const existing=getResultDeadline(classId,year,term);
+    if(existing){
+        existing.deadline=date;
+        existing.updatedAt=new Date().toISOString();
+    }else{
+        resultDeadlines.push({
+            id:"DL-"+Date.now().toString(36).toUpperCase(),
+            classId,academicYear:year,term,deadline:date,
+            createdAt:new Date().toISOString()
+        });
+    }
+
+    saveAll();
+    renderResultSubmissionMonitor();
+    showMessage("resultDeadlineMessage","Submission deadline saved successfully.","success");
+}
+
+function clearResultDeadlineForm(){
+    const year=document.getElementById("resultDeadlineYear");
+    const term=document.getElementById("resultDeadlineTerm");
+    const date=document.getElementById("resultDeadlineDate");
+    const cls=document.getElementById("resultDeadlineClass");
+    if(year)year.value="2026/2027";
+    if(term)term.value="Term 1";
+    if(date)date.value="";
+    if(cls)cls.value="";
+}
+
+function deleteResultDeadline(id){
+    if(!confirm("Remove this submission deadline?"))return;
+    resultDeadlines=resultDeadlines.filter(d=>d.id!==id);
+    saveAll();
+    renderResultSubmissionMonitor();
+}
+
+function formatDeadline(date){
+    if(!date)return "Not set";
+    const d=new Date(date+"T00:00:00");
+    return Number.isNaN(d.getTime()) ? date : d.toLocaleDateString();
+}
+
+function renderResultSubmissionMonitor(){
+    const box=document.getElementById("resultSubmissionMonitor");
+    if(!box)return;
+
+    if(!classes.length){box.innerHTML='<div class="empty">No classes available.</div>';return;}
+
+    const rows=[];
+    classes.forEach(c=>{
+        const year=c.academicYear || "2026/2027";
+        ["Term 1","Term 2","Term 3"].forEach(term=>{
+            const subjectsForClass=subjects.filter(s=>(s.classIds||[]).includes(c.id));
+            const studentsForClass=getClassStudents(c.id);
+            const expected=studentsForClass.length*subjectsForClass.length;
+            const submitted=results.filter(r=>
+                r.classId===c.id && String(r.academicYear||year).trim()===String(year).trim() && r.term===term && subjectsForClass.some(s=>s.id===r.subjectId)
+            );
+            const uniqueKeys=new Set(submitted.map(r=>`${r.studentId}|${r.subjectId}`));
+            const done=uniqueKeys.size;
+            const deadline=getResultDeadline(c.id,year,term);
+            const teacher=getTeacher(c.teacherId);
+            const uploaderNames=[...new Set(submitted.map(r=>r.uploadedByName).filter(Boolean))];
+            const percent=expected ? Math.round(done/expected*100) : 0;
+            const today=new Date(); today.setHours(0,0,0,0);
+            const deadlineDate=deadline?.deadline ? new Date(deadline.deadline+"T00:00:00") : null;
+            let status="Not Started";
+            if(expected && done>=expected)status="Complete";
+            else if(done>0)status="In Progress";
+            if(deadlineDate && today>deadlineDate && done<expected)status="Overdue";
+
+            rows.push({c,year,term,teacher,expected,done,percent,deadline,status,uploaderNames});
+        });
+    });
+
+    box.innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Class</th><th>Term</th><th>Teacher</th><th>Submitted By</th>
+            <th>Progress</th><th>Deadline</th><th>Status</th><th>Action</th>
+        </tr></thead>
+        <tbody>
+        ${rows.map(x=>`<tr>
+            <td><strong>${escapeHtml(classDisplay(x.c))}</strong><br><small>${escapeHtml(x.year)}</small></td>
+            <td>${escapeHtml(x.term)}</td>
+            <td>${escapeHtml(x.teacher?.name||"No class teacher assigned")}</td>
+            <td>${escapeHtml(x.uploaderNames.join(", ")||"No upload yet")}</td>
+            <td>${x.done} / ${x.expected} (${x.percent}%)</td>
+            <td>${escapeHtml(formatDeadline(x.deadline?.deadline))}</td>
+            <td><span class="badge ${x.status.toLowerCase().replace(/\s+/g,"-")}">${escapeHtml(x.status)}</span></td>
+            <td>${x.deadline?`<button class="danger-btn" onclick="deleteResultDeadline('${x.deadline.id}')">Remove Deadline</button>`:"—"}</td>
+        </tr>`).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function renderResults(){
+    const table=document.getElementById("resultTable");
+    if(!table)return;
+    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase();
+
+    const filtered=results.filter(r=>{
+        const student=getStudent(r.studentId);
+        const subject=getSubject(r.subjectId);
+        const c=getClass(r.classId);
+        const uploader=r.uploadedByName || "";
+        const text=[student?.name||"",subject?.name||"",c?classDisplay(c):"",uploader,r.academicYear||"",r.term||"",r.grade||""].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    if(!filtered.length){
+        table.innerHTML='<div class="empty">No results found.</div>';
+        renderResultSubmissionMonitor();
+        return;
+    }
+
+    table.innerHTML=`<div class="table-wrap"><table>
+        <thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total</th><th>Performance</th><th>Submitted By</th><th>Submitted At</th><th>Actions</th></tr></thead>
+        <tbody>${filtered.map(r=>{
+            const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
+            const submitted=r.uploadedByName || "Administrator";
+            const when=r.uploadedAt ? new Date(r.uploadedAt).toLocaleString() : "—";
+            return `<tr>
+                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(c?classDisplay(c):"Unknown Class")}</td>
+                <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
+                <td>${Number(r.classScore||0).toFixed(2)}</td>
+                <td>${Number(r.examMark??r.examScore??0).toFixed(2)}</td>
+                <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
+                <td><span class="badge ${performanceClass(r.grade||getPerformance(r.total))}">${escapeHtml(r.grade||getPerformance(r.total))}</span></td>
+                <td>${escapeHtml(submitted)}</td>
+                <td>${escapeHtml(when)}</td>
+                <td><button class="edit-btn" onclick="editResult('${r.id}')">Edit</button><button class="danger-btn" onclick="deleteResult('${r.id}')">Delete</button></td>
+            </tr>`;
+        }).join("")}</tbody></table></div>`;
+    renderResultSubmissionMonitor();
+}
 
 /* =========================
    TEACHER BULK MARKS UPLOAD
@@ -3084,7 +3305,11 @@ function importTeacherBulkMarksFromExcel(){
                         examMark,
                         examScore,
                         total,
-                        grade:getPerformance(total)
+                        grade:getPerformance(total),
+                        uploadedBy:currentUser?.id || "",
+                        uploadedByName:currentUser?.name || "Teacher",
+                        uploadedAt:new Date().toISOString(),
+                        source:"Teacher Upload"
                     };
 
                     if(existingIndex!==-1){
