@@ -195,6 +195,7 @@ td{font-size:14px}
     border-radius:8px;
     margin-bottom:15px
 }
+.checkbox-list{border:1px solid #d1d5db;border-radius:8px;padding:8px;max-height:180px;overflow:auto;background:#f8fafc}.checkbox-list label{display:flex;align-items:center;gap:8px;padding:7px 4px;margin:0;cursor:pointer}.checkbox-list input{width:auto}.assignment-note{font-size:12px;color:#666;padding:5px}
 
 .form-grid{
     display:grid;
@@ -826,7 +827,9 @@ td{font-size:14px}
                 <div class="form-group"><label>Email</label><input id="teacherEmail" type="email"></div>
                 <div class="form-group"><label>Address</label><input id="teacherAddress"></div>
                 <div class="form-group"><label>Qualification</label><input id="teacherQualification"></div>
-                <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects"></div>
+                <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects" placeholder="e.g. Mathematics, Science"></div>
+                <div class="form-group"><label>Assigned Classes</label><div id="teacherClassAssignmentList" class="checkbox-list"></div></div>
+                <div class="form-group"><label>Assigned Subjects</label><div id="teacherSubjectAssignmentList" class="checkbox-list"></div></div>
                 <div class="form-group"><label>Username *</label><input id="teacherUsername" required></div>
                 <div class="form-group"><label>Password *</label><input id="teacherPassword" required></div>
             </div>
@@ -1959,6 +1962,7 @@ function deleteParent(id){
 function openTeacherForm(){
     editingTeacherId=null;
     document.getElementById("teacherForm").reset();
+    populateTeacherAssignmentLists([],[]);
     document.getElementById("teacherFormTitle").textContent="Add Teacher";
     document.getElementById("teacherFormPanel").style.display="block";
 }
@@ -1966,6 +1970,22 @@ function openTeacherForm(){
 function closeTeacherForm(){
     document.getElementById("teacherFormPanel").style.display="none";
 }
+
+function populateTeacherAssignmentLists(selectedClassIds=[],selectedSubjectIds=[]){
+    const classBox=document.getElementById("teacherClassAssignmentList");
+    const subjectBox=document.getElementById("teacherSubjectAssignmentList");
+    if(!classBox||!subjectBox)return;
+    classBox.innerHTML=classes.length ? classes.map(c=>`<label><input type="checkbox" name="teacherAssignedClass" value="${escapeHtml(c.id)}" ${selectedClassIds.includes(c.id)?"checked":""}><span>${escapeHtml(classDisplay(c))}${c.academicYear?` — ${escapeHtml(c.academicYear)}`:""}</span></label>`).join("") : '<div class="assignment-note">No classes have been created yet.</div>';
+    subjectBox.innerHTML=subjects.length ? subjects.map(sub=>`<label><input type="checkbox" name="teacherAssignedSubject" value="${escapeHtml(sub.id)}" ${selectedSubjectIds.includes(sub.id)?"checked":""}><span>${escapeHtml(sub.name)}${sub.code?` (${escapeHtml(sub.code)})`:""}</span></label>`).join("") : '<div class="assignment-note">No subjects have been created yet.</div>';
+}
+function getTeacherAssignedClassIds(teacherId){ return classes.filter(c=>c.teacherId===teacherId).map(c=>c.id); }
+function getTeacherAssignedSubjectIds(teacherId){ return subjects.filter(s=>s.teacherId===teacherId).map(s=>s.id); }
+function syncTeacherAssignments(teacherId,classIds,subjectIds){
+    classes.forEach(c=>{if(classIds.includes(c.id)) c.teacherId=teacherId; else if(c.teacherId===teacherId)c.teacherId="";});
+    subjects.forEach(s=>{if(subjectIds.includes(s.id)) s.teacherId=teacherId; else if(s.teacherId===teacherId)s.teacherId="";});
+}
+function getAssignedClassNames(teacherId){return getTeacherAssignedClassIds(teacherId).map(id=>classDisplay(getClass(id))).filter(Boolean);}
+function getAssignedSubjectNames(teacherId){return getTeacherAssignedSubjectIds(teacherId).map(id=>getSubject(id)?.name||"").filter(Boolean);}
 
 document.getElementById("teacherForm").addEventListener("submit",function(e){
     e.preventDefault();
@@ -1976,6 +1996,9 @@ document.getElementById("teacherForm").addEventListener("submit",function(e){
         showMessage("teacherMessage","Teacher ID already exists.","error");
         return;
     }
+
+    const assignedClassIds=[...document.querySelectorAll('input[name="teacherAssignedClass"]:checked')].map(x=>x.value);
+    const assignedSubjectIds=[...document.querySelectorAll('input[name="teacherAssignedSubject"]:checked')].map(x=>x.value);
 
     const data={
         id,
@@ -1994,10 +2017,12 @@ document.getElementById("teacherForm").addEventListener("submit",function(e){
     if(editingTeacherId){
         const index=teachers.findIndex(t=>t.id===editingTeacherId);
         if(index!==-1)teachers[index]=data;
-        showMessage("teacherMessage","Teacher updated successfully.");
+        syncTeacherAssignments(id,assignedClassIds,assignedSubjectIds);
+        showMessage("teacherMessage","Teacher and assignments updated successfully.");
     }else{
         teachers.push(data);
-        showMessage("teacherMessage","Teacher added successfully.");
+        syncTeacherAssignments(id,assignedClassIds,assignedSubjectIds);
+        showMessage("teacherMessage","Teacher and assignments saved successfully.");
     }
 
     saveAll();
@@ -2027,6 +2052,8 @@ function renderTeachers(){
                 <th>Name</th>
                 <th>Qualification</th>
                 <th>Subjects</th>
+                <th>Assigned Classes</th>
+                <th>Assigned Subjects</th>
                 <th>Phone</th>
                 <th>Username</th>
                 <th>Actions</th>
@@ -2039,6 +2066,8 @@ function renderTeachers(){
                 <td>${escapeHtml(t.name)}</td>
                 <td>${escapeHtml(t.qualification)}</td>
                 <td>${escapeHtml(t.subjects)}</td>
+                <td>${escapeHtml(getAssignedClassNames(t.id).join(", ")||"None")}</td>
+                <td>${escapeHtml(getAssignedSubjectNames(t.id).join(", ")||"None")}</td>
                 <td>${escapeHtml(t.phone)}</td>
                 <td>${escapeHtml(t.username)}</td>
                 <td>
@@ -2067,6 +2096,7 @@ function editTeacher(id){
     document.getElementById("teacherAddress").value=t.address;
     document.getElementById("teacherQualification").value=t.qualification;
     document.getElementById("teacherSubjects").value=t.subjects;
+    populateTeacherAssignmentLists(getTeacherAssignedClassIds(id),getTeacherAssignedSubjectIds(id));
     document.getElementById("teacherUsername").value=t.username;
     document.getElementById("teacherPassword").value=t.password;
 
