@@ -1025,134 +1025,51 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 <section id="adminResults" class="page">
     <div class="page-header">
         <div>
-            <h1>Results Management</h1>
-            <p>Review teacher-submitted results, monitor missing marks, and manage submission deadlines.</p>
+            <h1>Results Review</h1>
+            <p>Select a class and term to review the results submitted by teachers.</p>
         </div>
-        <div style="font-size:13px;color:#64748b;background:#f8fafc;padding:10px 14px;border-radius:8px">Admin review only — marks are uploaded by teachers.</div>
     </div>
 
     <div id="resultMessage" class="message"></div>
 
-    <div class="panel" id="resultFormPanel" style="display:none">
-        <h2 id="resultFormTitle">Add Result</h2>
-
-        <form id="resultForm">
-            <div class="form-grid">
-
-                <div class="form-group">
-                    <label>Academic Year *</label>
-                    <input id="resultYear" value="2026/2027" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Class *</label>
-                    <select id="resultClass" required>
-                        <option value="">Select Class</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Student *</label>
-                    <select id="resultStudent" required disabled>
-                        <option value="">Select Class First</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Subject *</label>
-                    <select id="resultSubject" required disabled>
-                        <option value="">Select Class First</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Class Score / 50 *</label>
-                    <input id="classScore" type="number" min="0" max="50" step="0.01" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Exam Mark / 100 *</label>
-                    <input id="examScore" type="number" min="0" max="100" step="0.01" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Total / 100</label>
-                    <input id="resultTotal" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label>Performance Level</label>
-                    <input id="resultGrade" readonly>
-                </div>
-
-            </div>
-
-            <br>
-            <div class="panel" style="background:#f8fafc">
-                <strong>Performance Scale</strong><br><br>
-                80–100: Advanced<br>
-                70–79: Approaching Advanced<br>
-                60–69: Proficient<br>
-                50–59: Approaching Proficiency<br>
-                40–49: Developing<br>
-                0–39: Beginning
-            </div>
-
-            <button class="primary-btn" type="submit">Save Result</button>
-            <button class="secondary-btn" type="button" onclick="closeResultForm()">Cancel</button>
-        </form>
-    </div>
-
     <div class="panel" style="background:#f8fafc">
-        <h2>Teacher Submission Deadlines</h2>
-        <p style="color:#666;margin-top:6px">Set a deadline for each class, academic year and term. The dashboard below will show whether marks are complete, still pending, or past the deadline.</p>
+        <h2>Review Class Results</h2>
+        <p style="color:#666;margin-top:6px">Choose the academic year, term and class, then click <strong>Review Results</strong>.</p>
         <div class="form-grid">
-            <div class="form-group"><label>Academic Year *</label><input id="resultDeadlineYear" value="2026/2027"></div>
-            <div class="form-group"><label>Term *</label><select id="resultDeadlineTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
-            <div class="form-group"><label>Class *</label><select id="resultDeadlineClass"><option value="">Select Class</option></select></div>
-            <div class="form-group"><label>Submission Deadline *</label><input id="resultDeadlineDate" type="date"></div>
-        </div>
-        <div style="margin-top:10px">
-            <button class="primary-btn" type="button" onclick="saveResultDeadline()">Save Deadline</button>
-            <button class="secondary-btn" type="button" onclick="clearResultDeadlineForm()">Clear</button>
-        </div>
-        <div id="resultDeadlineMessage" class="message" style="margin-top:12px"></div>
-    </div>
-
-    <div class="panel">
-        <h2>Teacher Submission Monitor</h2>
-        <div id="resultSubmissionMonitor"></div>
-    </div>
-
-    <div class="panel">
-        <h2>Review Teacher-Uploaded Results</h2>
-        <p style="color:#666;margin-top:6px">Review marks submitted through the Teacher Excel upload. Blank Excel cells do not erase previously uploaded marks.</p>
-        <div class="form-grid" style="margin-top:15px">
-            <div class="form-group">
-                <label>Class</label>
-                <select id="resultReviewClass"><option value="">All Classes</option></select>
-            </div>
-            <div class="form-group">
-                <label>Subject</label>
-                <select id="resultReviewSubject"><option value="">All Subjects</option></select>
-            </div>
             <div class="form-group">
                 <label>Academic Year</label>
-                <select id="resultReviewYear"><option value="">All Years</option></select>
+                <input id="reviewResultYear" value="2026/2027">
             </div>
             <div class="form-group">
                 <label>Term</label>
-                <select id="resultReviewTerm"><option value="">All Terms</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select>
+                <select id="reviewResultTerm">
+                    <option value="Term 1">Term 1</option>
+                    <option value="Term 2">Term 2</option>
+                    <option value="Term 3">Term 3</option>
+                </select>
             </div>
             <div class="form-group">
-                <label>Status</label>
-                <select id="resultReviewStatus"><option value="">All Statuses</option><option value="Complete">Complete</option><option value="Incomplete">Incomplete</option></select>
+                <label>Class</label>
+                <select id="reviewResultClass">
+                    <option value="">Select Class</option>
+                </select>
             </div>
         </div>
-        <input class="search-box" id="resultSearch" style="margin-top:12px"
-               placeholder="Search by student, class, subject, teacher, year or performance level...">
-        <div id="resultReviewSummary" style="margin-top:12px"></div>
-        <div id="resultTable" style="margin-top:12px"></div>
+        <div style="margin-top:12px">
+            <button class="primary-btn" type="button" onclick="reviewSelectedResults()">Review Results</button>
+            <button class="secondary-btn" type="button" onclick="clearResultsReview()">Clear</button>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div>
+                <h2 id="resultsReviewTitle">Results</h2>
+                <p id="resultsReviewSummary" style="color:#666;margin-top:5px">Select a class and term to begin.</p>
+            </div>
+            <input class="search-box" id="resultSearch" style="max-width:360px" placeholder="Search student or subject...">
+        </div>
+        <div id="resultTable" style="margin-top:15px"></div>
     </div>
 </section>
 
@@ -1818,9 +1735,8 @@ function refreshPage(pageId){
     if(pageId==="classes")renderClasses();
     if(pageId==="adminSubjects")renderSubjects();
     if(pageId==="adminResults"){
-        populateResultClassSelect();
-        populateResultDeadlineClassSelect();
-        renderResults();
+        populateReviewResultClassSelect();
+        clearResultsReview();
     }
 
     if(pageId==="reports"){
@@ -2730,426 +2646,112 @@ function deleteSubject(id){
    RESULTS MANAGEMENT
 ========================= */
 
-function openResultForm(){
-    editingResultId=null;
-
-    document.getElementById("resultForm").reset();
-    document.getElementById("resultYear").value="2026/2027";
-
-    populateResultClassSelect();
-
-    document.getElementById("resultStudent").innerHTML=
-        '<option value="">Select Class First</option>';
-    document.getElementById("resultStudent").disabled=true;
-
-    document.getElementById("resultSubject").innerHTML=
-        '<option value="">Select Class First</option>';
-    document.getElementById("resultSubject").disabled=true;
-
-    document.getElementById("resultTotal").value="";
-    document.getElementById("resultGrade").value="";
-
-    document.getElementById("resultFormTitle").textContent="Add Result";
-    document.getElementById("resultFormPanel").style.display="block";
-}
-
-function closeResultForm(){
-    document.getElementById("resultFormPanel").style.display="none";
-}
-
-function populateResultClassSelect(selected=""){
-    const select=document.getElementById("resultClass");
-
-    select.innerHTML='<option value="">Select Class</option>'+
-        classes.map(c=>`
-            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
-                ${escapeHtml(classDisplay(c))}
-            </option>
-        `).join("");
-}
-
-function populateResultStudentSelect(classId,selected=""){
-    const select=document.getElementById("resultStudent");
-
-    if(!classId){
-        select.innerHTML='<option value="">Select Class First</option>';
-        select.disabled=true;
-        return;
-    }
-
-    const c=getClass(classId);
-
-    const classStudents=(c?.studentIds||[])
-        .map(id=>getStudent(id))
-        .filter(Boolean);
-
-    select.innerHTML='<option value="">Select Student</option>'+
-        classStudents.map(s=>`
-            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
-                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
-            </option>
-        `).join("");
-
-    select.disabled=false;
-}
-
-function populateResultSubjectSelect(classId,selected=""){
-    const select=document.getElementById("resultSubject");
-
-    if(!classId){
-        select.innerHTML='<option value="">Select Class First</option>';
-        select.disabled=true;
-        return;
-    }
-
-    const classSubjects=subjects.filter(s=>
-        (s.classIds||[]).includes(classId)
-    );
-
-    select.innerHTML='<option value="">Select Subject</option>'+
-        classSubjects.map(s=>`
-            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
-                ${escapeHtml(s.name)}${s.code ? " ("+escapeHtml(s.code)+")":""}
-            </option>
-        `).join("");
-
-    select.disabled=false;
-}
-
-document.getElementById("resultClass").addEventListener("change",function(){
-    populateResultStudentSelect(this.value);
-    populateResultSubjectSelect(this.value);
-});
-
-function updateResultCalculation(){
-    const classScore=parseFloat(document.getElementById("classScore").value)||0;
-    const examMark=parseFloat(document.getElementById("examScore").value)||0;
-
-    const examComponent=(examMark*50)/100;
-    const total=classScore+examComponent;
-
-    document.getElementById("resultTotal").value=total.toFixed(2);
-    document.getElementById("resultGrade").value=getPerformance(total);
-}
-
-document.getElementById("classScore").addEventListener("input",updateResultCalculation);
-document.getElementById("examScore").addEventListener("input",updateResultCalculation);
-
-document.getElementById("resultForm").addEventListener("submit",function(e){
-    e.preventDefault();
-
-    const year=document.getElementById("resultYear").value.trim();
-    const classId=document.getElementById("resultClass").value;
-    const studentId=document.getElementById("resultStudent").value;
-    const subjectId=document.getElementById("resultSubject").value;
-
-    const classScore=parseFloat(document.getElementById("classScore").value);
-    const examMark=parseFloat(document.getElementById("examScore").value);
-
-    if(classScore<0 || classScore>50 || examMark<0 || examMark>100){
-        showMessage("resultMessage","Class Score must be between 0 and 50, and Exam Mark must be between 0 and 100.","error");
-        return;
-    }
-
-    const duplicate=results.some(r=>
-        r.studentId===studentId &&
-        r.subjectId===subjectId &&
-        r.academicYear===year &&
-        r.id!==editingResultId
-    );
-
-    if(duplicate){
-        showMessage(
-            "resultMessage",
-            "A result already exists for this student, subject and academic year.",
-            "error"
-        );
-        return;
-    }
-
-    const examScore=(examMark*50)/100;
-    const total=classScore+examScore;
-
-    const data={
-        id:editingResultId || ("RES-"+Date.now().toString().slice(-6)),
-        studentId,
-        classId,
-        subjectId,
-        academicYear:year,
-        classScore,
-        examMark,
-        examScore,
-        total,
-        grade:getPerformance(total),
-        uploadedBy:currentUser?.role==="Teacher" ? currentUser.id : "ADMIN-001",
-        uploadedByName:currentUser?.name || "Administrator",
-        uploadedAt:new Date().toISOString(),
-        source:currentUser?.role==="Teacher" ? "Teacher Upload" : "Administrator"
-    };
-
-    if(editingResultId){
-        const index=results.findIndex(r=>r.id===editingResultId);
-        if(index!==-1)results[index]=data;
-        showMessage("resultMessage","Result updated successfully.");
-    }else{
-        results.push(data);
-        showMessage("resultMessage","Result added successfully.");
-    }
-
-    saveAll();
-    closeResultForm();
-    renderResults();
-    refreshDashboard();
-});
-
-/* =========================
-   ADMIN RESULT MONITOR
-========================= */
-
-function editResult(id){
-    const r=results.find(x=>x.id===id);
-    if(!r)return;
-    editingResultId=id;
-
-    document.getElementById("resultYear").value=r.academicYear||"2026/2027";
-    populateResultClassSelect(r.classId);
-    populateResultStudentSelect(r.classId,r.studentId);
-    populateResultSubjectSelect(r.classId,r.subjectId);
-    document.getElementById("classScore").value=r.classScore ?? "";
-    document.getElementById("examScore").value=r.examMark ?? ((Number(r.examScore||0)*2)) ?? "";
-    updateResultCalculation();
-    document.getElementById("resultFormTitle").textContent="Edit Result";
-    document.getElementById("resultFormPanel").style.display="block";
-    document.getElementById("resultFormPanel").scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-function deleteResult(id){
-    if(!confirm("Delete this result?"))return;
-    results=results.filter(r=>r.id!==id);
-    saveAll();
-    renderResults();
-    refreshDashboard();
-}
-
-function populateResultDeadlineClassSelect(selected=""){
-    const select=document.getElementById("resultDeadlineClass");
+function populateReviewResultClassSelect(selected=""){
+    const select=document.getElementById("reviewResultClass");
     if(!select)return;
     select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>
         `<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`
     ).join("");
 }
 
-function getResultDeadline(classId,year,term){
-    return resultDeadlines.find(d=>
-        d.classId===classId && String(d.academicYear||"").trim()===String(year||"").trim() && d.term===term
-    );
-}
+function reviewSelectedResults(){
+    const year=(document.getElementById("reviewResultYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("reviewResultTerm")?.value||"Term 1";
+    const classId=document.getElementById("reviewResultClass")?.value||"";
 
-function saveResultDeadline(){
-    const classId=document.getElementById("resultDeadlineClass")?.value;
-    const year=(document.getElementById("resultDeadlineYear")?.value||"").trim();
-    const term=document.getElementById("resultDeadlineTerm")?.value||"Term 1";
-    const date=document.getElementById("resultDeadlineDate")?.value||"";
-
-    if(!classId || !year || !date){
-        showMessage("resultDeadlineMessage","Please select a class and enter a deadline.","error");
+    if(!classId){
+        showMessage("resultMessage","Please select a class first.","error");
         return;
     }
 
-    const existing=getResultDeadline(classId,year,term);
-    if(existing){
-        existing.deadline=date;
-        existing.updatedAt=new Date().toISOString();
-    }else{
-        resultDeadlines.push({
-            id:"DL-"+Date.now().toString(36).toUpperCase(),
-            classId,academicYear:year,term,deadline:date,
-            createdAt:new Date().toISOString()
-        });
-    }
-
-    saveAll();
-    renderResultSubmissionMonitor();
-    showMessage("resultDeadlineMessage","Submission deadline saved successfully.","success");
+    const cls=getClass(classId);
+    document.getElementById("resultsReviewTitle").textContent=`${classDisplay(cls)} — ${term}`;
+    renderResults();
+    showMessage("resultMessage",`Showing ${classDisplay(cls)} results for ${term}.`,"success");
 }
 
-function clearResultDeadlineForm(){
-    const year=document.getElementById("resultDeadlineYear");
-    const term=document.getElementById("resultDeadlineTerm");
-    const date=document.getElementById("resultDeadlineDate");
-    const cls=document.getElementById("resultDeadlineClass");
+function clearResultsReview(){
+    const year=document.getElementById("reviewResultYear");
+    const term=document.getElementById("reviewResultTerm");
+    const cls=document.getElementById("reviewResultClass");
+    const search=document.getElementById("resultSearch");
     if(year)year.value="2026/2027";
     if(term)term.value="Term 1";
-    if(date)date.value="";
     if(cls)cls.value="";
-}
-
-function deleteResultDeadline(id){
-    if(!confirm("Remove this submission deadline?"))return;
-    resultDeadlines=resultDeadlines.filter(d=>d.id!==id);
-    saveAll();
-    renderResultSubmissionMonitor();
-}
-
-function formatDeadline(date){
-    if(!date)return "Not set";
-    const d=new Date(date+"T00:00:00");
-    return Number.isNaN(d.getTime()) ? date : d.toLocaleDateString();
-}
-
-function renderResultSubmissionMonitor(){
-    const box=document.getElementById("resultSubmissionMonitor");
-    if(!box)return;
-
-    if(!classes.length){box.innerHTML='<div class="empty">No classes available.</div>';return;}
-
-    const rows=[];
-    classes.forEach(c=>{
-        const year=c.academicYear || "2026/2027";
-        ["Term 1","Term 2","Term 3"].forEach(term=>{
-            const subjectsForClass=subjects.filter(s=>(s.classIds||[]).includes(c.id));
-            const studentsForClass=getClassStudents(c.id);
-            const expected=studentsForClass.length*subjectsForClass.length;
-            const submitted=results.filter(r=>
-                r.classId===c.id && String(r.academicYear||year).trim()===String(year).trim() && r.term===term && subjectsForClass.some(s=>s.id===r.subjectId)
-            );
-            const uniqueKeys=new Set(submitted.map(r=>`${r.studentId}|${r.subjectId}`));
-            const done=uniqueKeys.size;
-            const deadline=getResultDeadline(c.id,year,term);
-            const teacher=getTeacher(c.teacherId);
-            const uploaderNames=[...new Set(submitted.map(r=>r.uploadedByName).filter(Boolean))];
-            const percent=expected ? Math.round(done/expected*100) : 0;
-            const today=new Date(); today.setHours(0,0,0,0);
-            const deadlineDate=deadline?.deadline ? new Date(deadline.deadline+"T00:00:00") : null;
-            let status="Not Started";
-            if(expected && done>=expected)status="Complete";
-            else if(done>0)status="In Progress";
-            if(deadlineDate && today>deadlineDate && done<expected)status="Overdue";
-
-            rows.push({c,year,term,teacher,expected,done,percent,deadline,status,uploaderNames});
-        });
-    });
-
-    box.innerHTML=`
-    <div class="table-wrap">
-    <table>
-        <thead><tr>
-            <th>Class</th><th>Term</th><th>Teacher</th><th>Submitted By</th>
-            <th>Progress</th><th>Deadline</th><th>Status</th><th>Action</th>
-        </tr></thead>
-        <tbody>
-        ${rows.map(x=>`<tr>
-            <td><strong>${escapeHtml(classDisplay(x.c))}</strong><br><small>${escapeHtml(x.year)}</small></td>
-            <td>${escapeHtml(x.term)}</td>
-            <td>${escapeHtml(x.teacher?.name||"No class teacher assigned")}</td>
-            <td>${escapeHtml(x.uploaderNames.join(", ")||"No upload yet")}</td>
-            <td>${x.done} / ${x.expected} (${x.percent}%)</td>
-            <td>${escapeHtml(formatDeadline(x.deadline?.deadline))}</td>
-            <td><span class="badge ${x.status.toLowerCase().replace(/\s+/g,"-")}">${escapeHtml(x.status)}</span></td>
-            <td>${x.deadline?`<button class="danger-btn" onclick="deleteResultDeadline('${x.deadline.id}')">Remove Deadline</button>`:"—"}</td>
-        </tr>`).join("")}
-        </tbody>
-    </table>
-    </div>`;
-}
-
-function getResultReviewStatus(r){
-    const hasClass=Number.isFinite(Number(r.classScore)) && r.classScore!=="" && r.classScore!==null && r.classScore!==undefined;
-    const hasExam=Number.isFinite(Number(r.examMark)) && r.examMark!=="" && r.examMark!==null && r.examMark!==undefined;
-    return hasClass && hasExam ? "Complete" : "Incomplete";
-}
-
-function populateResultReviewFilters(){
-    const classSelect=document.getElementById("resultReviewClass");
-    const subjectSelect=document.getElementById("resultReviewSubject");
-    const yearSelect=document.getElementById("resultReviewYear");
-    if(!classSelect || !subjectSelect || !yearSelect)return;
-
-    const currentClass=classSelect.value, currentSubject=subjectSelect.value, currentYear=yearSelect.value;
-    const classItems=[...classes].sort((a,b)=>classDisplay(a).localeCompare(classDisplay(b)));
-    const subjectItems=[...subjects].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||"")));
-    const years=[...new Set(results.map(r=>String(r.academicYear||"").trim()).filter(Boolean))].sort().reverse();
-
-    classSelect.innerHTML='<option value="">All Classes</option>'+classItems.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    subjectSelect.innerHTML='<option value="">All Subjects</option>'+subjectItems.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join("");
-    yearSelect.innerHTML='<option value="">All Years</option>'+years.map(y=>`<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
-
-    if([...classSelect.options].some(o=>o.value===currentClass))classSelect.value=currentClass;
-    if([...subjectSelect.options].some(o=>o.value===currentSubject))subjectSelect.value=currentSubject;
-    if([...yearSelect.options].some(o=>o.value===currentYear))yearSelect.value=currentYear;
+    if(search)search.value="";
+    document.getElementById("resultsReviewTitle").textContent="Results";
+    document.getElementById("resultsReviewSummary").textContent="Select a class and term to begin.";
+    document.getElementById("resultTable").innerHTML='<div class="empty">Select a class and term to review results.</div>';
+    const msg=document.getElementById("resultMessage");
+    if(msg){msg.className="message";msg.textContent="";}
 }
 
 function renderResults(){
     const table=document.getElementById("resultTable");
     if(!table)return;
 
-    populateResultReviewFilters();
-
+    const classId=document.getElementById("reviewResultClass")?.value||"";
+    const year=(document.getElementById("reviewResultYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("reviewResultTerm")?.value||"Term 1";
     const search=(document.getElementById("resultSearch")?.value||"").toLowerCase().trim();
-    const classFilter=document.getElementById("resultReviewClass")?.value||"";
-    const subjectFilter=document.getElementById("resultReviewSubject")?.value||"";
-    const yearFilter=document.getElementById("resultReviewYear")?.value||"";
-    const termFilter=document.getElementById("resultReviewTerm")?.value||"";
-    const statusFilter=document.getElementById("resultReviewStatus")?.value||"";
 
-    const filtered=results.filter(r=>{
-        const student=getStudent(r.studentId);
-        const subject=getSubject(r.subjectId);
-        const c=getClass(r.classId);
-        const uploader=r.uploadedByName || "";
-        const status=getResultReviewStatus(r);
-        const text=[student?.name||r.studentName||"",subject?.name||"",c?classDisplay(c):"",uploader,r.academicYear||"",r.term||"",r.grade||"",status].join(" ").toLowerCase();
-        return (!classFilter || r.classId===classFilter) &&
-               (!subjectFilter || r.subjectId===subjectFilter) &&
-               (!yearFilter || String(r.academicYear||"").trim()===yearFilter) &&
-               (!termFilter || String(r.term||"").trim()===termFilter) &&
-               (!statusFilter || status===statusFilter) &&
-               text.includes(search);
-    });
-
-    const complete=filtered.filter(r=>getResultReviewStatus(r)==="Complete").length;
-    const incomplete=filtered.length-complete;
-    const total=filtered.length;
-    const summary=document.getElementById("resultReviewSummary");
-    if(summary){
-        summary.innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap">
-            <span class="badge">Showing ${total}</span>
-            <span class="badge">Complete: ${complete}</span>
-            <span class="badge">Incomplete: ${incomplete}</span>
-        </div>`;
+    if(!classId){
+        table.innerHTML='<div class="empty">Select a class and term to review results.</div>';
+        const summary=document.getElementById("resultsReviewSummary");
+        if(summary)summary.textContent="Select a class and term to begin.";
+        return;
     }
 
+    const cls=getClass(classId);
+    const classResults=results.filter(r=>
+        r.classId===classId &&
+        String(r.academicYear||"").trim()===year &&
+        String(r.term||"").trim()===term
+    );
+
+    const filtered=classResults.filter(r=>{
+        const student=getStudent(r.studentId);
+        const subject=getSubject(r.subjectId);
+        const text=[student?.name||r.studentName||"",subject?.name||"",r.uploadedByName||""].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    const complete=classResults.filter(r=>r.classScore!==undefined && r.classScore!=="" && r.examMark!==undefined && r.examMark!=="").length;
+    const incomplete=classResults.length-complete;
+    const summary=document.getElementById("resultsReviewSummary");
+    if(summary)summary.textContent=`${classResults.length} result${classResults.length===1?"":"s"} submitted • ${complete} complete • ${incomplete} incomplete`;
+
     if(!filtered.length){
-        table.innerHTML='<div class="empty">No teacher-uploaded results match the selected filters.</div>';
-        renderResultSubmissionMonitor();
+        table.innerHTML='<div class="empty">No results have been submitted for this class and term.</div>';
         return;
     }
 
     table.innerHTML=`<div class="table-wrap"><table>
-        <thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th><th>Status</th><th>Uploaded By</th><th>Uploaded At</th></tr></thead>
+        <thead><tr>
+            <th>Student</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total /100</th><th>Performance</th><th>Status</th><th>Uploaded By</th><th>Uploaded At</th>
+        </tr></thead>
         <tbody>${filtered.map(r=>{
-            const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
-            const submitted=r.uploadedByName || "Teacher";
-            const when=r.uploadedAt ? new Date(r.uploadedAt).toLocaleString() : "—";
-            const status=getResultReviewStatus(r);
-            const classValue=(r.classScore!=="" && r.classScore!==null && r.classScore!==undefined) ? Number(r.classScore).toFixed(2) : "—";
-            const examValue=(r.examMark!=="" && r.examMark!==null && r.examMark!==undefined) ? Number(r.examMark).toFixed(2) : "—";
-            const totalValue=(status==="Complete" ? Number(r.total||0).toFixed(2) : "—");
-            const grade=status==="Complete" ? (r.grade||getPerformance(r.total)) : "Pending";
+            const student=getStudent(r.studentId);
+            const subject=getSubject(r.subjectId);
+            const hasClass=r.classScore!==undefined && r.classScore!=="" && r.classScore!==null;
+            const hasExam=r.examMark!==undefined && r.examMark!=="" && r.examMark!==null;
+            const complete=hasClass&&hasExam;
+            const total=Number(r.total||0);
+            const performance=complete?(r.grade||getPerformance(total)):"Incomplete";
+            const when=r.uploadedAt?new Date(r.uploadedAt).toLocaleString():"—";
             return `<tr>
                 <td>${escapeHtml(student?.name||r.studentName||"Unknown Student")}</td>
-                <td>${escapeHtml(c?classDisplay(c):"Unknown Class")}</td>
                 <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
-                <td>${classValue}</td>
-                <td>${examValue}</td>
-                <td><strong>${totalValue}</strong></td>
-                <td>${escapeHtml(grade)}</td>
-                <td><span class="badge ${status.toLowerCase()}">${status}</span></td>
-                <td>${escapeHtml(submitted)}</td>
+                <td>${hasClass?Number(r.classScore).toFixed(2):"—"}</td>
+                <td>${hasExam?Number(r.examMark).toFixed(2):"—"}</td>
+                <td><strong>${complete?total.toFixed(2):"—"}</strong></td>
+                <td>${complete?`<span class="badge ${performanceClass(performance)}">${escapeHtml(performance)}</span>`:`<span class="badge">Incomplete</span>`}</td>
+                <td><span class="badge ${complete?"complete":"in-progress"}">${complete?"Complete":"Incomplete"}</span></td>
+                <td>${escapeHtml(r.uploadedByName||"Teacher")}</td>
                 <td>${escapeHtml(when)}</td>
             </tr>`;
-        }).join("")}</tbody></table></div>`;
-    renderResultSubmissionMonitor();
+        }).join("")}</tbody>
+    </table></div>`;
 }
 
 /* =========================
@@ -4511,12 +4113,10 @@ document.getElementById("parentSearch").addEventListener("input",renderParents);
 document.getElementById("teacherSearch").addEventListener("input",renderTeachers);
 document.getElementById("classSearch").addEventListener("input",renderClasses);
 document.getElementById("subjectSearch").addEventListener("input",renderSubjects);
-document.getElementById("resultSearch").addEventListener("input",renderResults);
-document.getElementById("resultReviewClass")?.addEventListener("change",renderResults);
-document.getElementById("resultReviewSubject")?.addEventListener("change",renderResults);
-document.getElementById("resultReviewYear")?.addEventListener("change",renderResults);
-document.getElementById("resultReviewTerm")?.addEventListener("change",renderResults);
-document.getElementById("resultReviewStatus")?.addEventListener("change",renderResults);
+document.getElementById("resultSearch")?.addEventListener("input",renderResults);
+document.getElementById("reviewResultClass")?.addEventListener("change",function(){ renderResults(); });
+document.getElementById("reviewResultTerm")?.addEventListener("change",function(){ renderResults(); });
+document.getElementById("reviewResultYear")?.addEventListener("input",function(){ renderResults(); });
 document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
 document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
 
