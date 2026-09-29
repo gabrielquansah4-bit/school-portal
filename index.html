@@ -728,7 +728,7 @@ td{font-size:14px}
             <button class="primary-btn" type="button" onclick="importStudentsFromExcel()">Upload & Import Students</button>
             <button class="secondary-btn" type="button" onclick="downloadStudentTemplate()">Download Template</button>
         </div>
-        <div class="import-note">Use exactly these columns: <strong>ID, Name, Gender, DOB, Class, Parent, Phone, Email</strong>. Existing students with the same ID will be updated; new IDs will be added. Blank cells will not erase existing information when an ID is updated.</div>
+        <div class="import-note">Use exactly these 4 columns: <strong>Student ID, First Name, Last Name, Class</strong>. Existing students with the same Student ID will be updated; new Student IDs will be added.</div>
         <div id="studentImportMessage" class="message" style="margin-top:10px"></div>
     </div>
 
@@ -1523,7 +1523,7 @@ function parseImportSheet(sheet,type){
             rows:[],headerRow:-1,headers:[],totalRows:0,
             error:type==="teacher"
                 ? "Could not find a teacher header row. Use columns: ID, Name, Gender, DOB, Phone, Email, Address, Qualification, Subjects, Username, Password."
-                : "Could not find the student header row. Use columns: Student ID, First Name, Last Name, Class."
+                : "Could not find the student header row. Use exactly: Student ID, First Name, Last Name, Class."
         };
     }
 
