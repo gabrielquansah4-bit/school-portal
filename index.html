@@ -1140,7 +1140,7 @@ td{font-size:14px}
         <div class="form-grid">
             <div class="form-group"><label>Academic Year *</label><input id="teacherAttendanceYear" value="2026/2027" required></div>
             <div class="form-group"><label>Date *</label><input id="teacherAttendanceDate" type="date" required></div>
-            <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required><option value="">Select Class</option></select></div>
+            <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required onchange="renderTeacherAttendanceStudents()"><option value="">Select Class</option></select></div>
         </div>
         <div id="teacherAttendanceStudents" style="margin-top:18px"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
@@ -3581,7 +3581,7 @@ function populateAttendanceClassSelect(type,selected=""){
     let available=classes;
 
     if(type==="Teacher"){
-        available=classes.filter(c=>c.teacherId===currentUser?.id);
+        available=classes.filter(c=>String(c.teacherId||"").trim()===String(currentUser?.id||"").trim());
     }
 
     select.innerHTML='<option value="">Select Class</option>'+
@@ -3624,7 +3624,7 @@ function renderTeacherAttendanceStudents(){
     }
 
     const schoolClass=getClass(classId);
-    if(!schoolClass || schoolClass.teacherId!==currentUser?.id){
+    if(!schoolClass || String(schoolClass.teacherId||"").trim()!==String(currentUser?.id||"").trim()){
         container.innerHTML='<div class="empty">You can only mark attendance for your assigned classes.</div>';
         return;
     }
@@ -3725,7 +3725,7 @@ function saveTeacherClassAttendance(){
     }
 
     const schoolClass=getClass(classId);
-    if(!schoolClass || schoolClass.teacherId!==currentUser?.id){
+    if(!schoolClass || String(schoolClass.teacherId||"").trim()!==String(currentUser?.id||"").trim()){
         showMessage("teacherAttendanceMessage","You can only manage attendance for your assigned classes.","error");
         return;
     }
@@ -4011,7 +4011,7 @@ function deleteTeacherAttendance(id){
     if(!record)return;
 
     const teacherOwnsClass=classes.some(c=>
-        c.id===record.classId && c.teacherId===currentUser?.id
+        c.id===record.classId && String(c.teacherId||"").trim()===String(currentUser?.id||"").trim()
     );
 
     if(!teacherOwnsClass){
