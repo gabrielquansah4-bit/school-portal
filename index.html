@@ -3839,32 +3839,6 @@ let currentReportClassId = "";
 let currentReportAcademicYear = "";
 let currentReportTerm = "Term 1";
 
-function reportCommentsKey(studentId, academicYear){
-    return `${studentId}_${academicYear}`;
-}
-
-function reportCommentsKey(studentId,academicYear,term="") {
-    return `${studentId}__${academicYear}__${term||"All Terms"}`;
-}
-
-function getReportComments(studentId, academicYear, term="") {
-    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
-    const current=all[reportCommentsKey(studentId,academicYear,term)];
-    if(current) return current;
-
-    // Keep older saved comments working if they were created before terms were added.
-    return all[`${studentId}__${academicYear}`] || {teacher:"",headteacher:""};
-}
-
-function saveReportComments(studentId, academicYear, term, teacher, headteacher) {
-    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
-    all[reportCommentsKey(studentId,academicYear,term)]= {
-        teacher:String(teacher||"").trim(),
-        headteacher:String(headteacher||"").trim()
-    };
-    localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
-}
-
 function populateReportClassSelect(selected=""){
     const select=document.getElementById("reportClassSelect");
     if(!select)return;
@@ -3979,26 +3953,6 @@ function getReportResultLevel(result){
     return "No Result";
 }
 
-function saveCurrentReportComments(){
-    if(!currentReportStudentId || !currentReportAcademicYear || !currentReportTerm){
-        showMessage("reportMessage","Generate a report before saving comments.","error");
-        return;
-    }
-
-    const teacher=document.getElementById("reportTeacherComment")?.value || "";
-    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-    saveReportComments(
-        currentReportStudentId,
-        currentReportAcademicYear,
-        currentReportTerm,
-        teacher,
-        headteacher
-    );
-
-    showMessage("reportMessage","Report comments saved successfully.","success");
-}
-
 function generateStudentReport(){
     const classId=document.getElementById("reportClassSelect")?.value || "";
     const studentId=document.getElementById("reportStudentSelect")?.value || "";
@@ -4037,7 +3991,6 @@ function generateStudentReport(){
 
     const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
     const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
-    const comments=getReportComments(studentId,academicYear,term);
 
     const scoredResults=subjectItems
         .map(x=>x.result)
@@ -4189,26 +4142,6 @@ function generateStudentReport(){
             </table>
         </div>
 
-        <div class="report-comments">
-            <div class="report-comment-box">
-                <h3>Class Teacher's Comment</h3>
-                <textarea id="reportTeacherComment"
-                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
-            </div>
-
-            <div class="report-comment-box">
-                <h3>Headteacher's Comment</h3>
-                <textarea id="reportHeadteacherComment"
-                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
-            </div>
-        </div>
-
-        <div class="report-comment-actions">
-            <button class="primary-btn" onclick="saveCurrentReportComments()">
-                Save Comments
-            </button>
-        </div>
-
         <div class="report-footer">
             <div>
                 <div class="signature-line">Class Teacher</div>
@@ -4229,20 +4162,6 @@ function printStudentReport(){
     if(!container || !container.classList.contains("report-card")){
         showMessage("reportMessage","Generate a report before printing.","error");
         return;
-    }
-
-    // Save any comments currently typed before printing.
-    if(currentReportStudentId && currentReportAcademicYear){
-        const teacher=document.getElementById("reportTeacherComment")?.value || "";
-        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-        saveReportComments(
-            currentReportStudentId,
-            currentReportAcademicYear,
-            currentReportTerm,
-            teacher,
-            headteacher
-        );
     }
 
     document.body.classList.add("report-printing");
