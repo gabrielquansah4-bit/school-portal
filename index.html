@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>School Portal</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -501,52 +500,9 @@ td{font-size:14px}
 }
 
 
-/* =========================
-   ENHANCED RESULTS / ASSESSMENT
-========================= */
-.results-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.results-summary .card{position:relative;overflow:hidden}
-.results-summary .card strong{font-size:28px;color:#2563eb;display:block;margin-bottom:4px}
-.results-summary .card span{color:#6b7280;font-size:13px}
-.assessment-scale{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}
-.assessment-scale-item{padding:10px 7px;border:1px solid #e5e7eb;border-radius:8px;text-align:center;font-size:12px}
-.assessment-scale-item strong{display:block;font-size:14px;margin-bottom:3px}
-.result-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end}
-.result-filters .form-group{margin-bottom:0}
-.result-table-wrap{overflow-x:auto}
-.result-table{width:100%;min-width:1050px;border-collapse:collapse}
-.result-table th,.result-table td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}
-.result-table th{background:#f8fafc}
-.result-student-name{font-weight:700}
-.result-student-id{font-size:11px;color:#6b7280}
-.result-score{font-weight:700}
-.result-performance{white-space:nowrap}
-.result-overview{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.result-overview-box{border:1px solid #e5e7eb;border-radius:10px;padding:16px;background:#fafafa}
-.result-overview-box h3{margin-bottom:10px}
-@media(max-width:900px){.results-summary{grid-template-columns:repeat(2,1fr)}.assessment-scale{grid-template-columns:repeat(3,1fr)}.result-filters{grid-template-columns:repeat(2,1fr)}.result-overview{grid-template-columns:1fr}}
-@media(max-width:600px){.results-summary{grid-template-columns:1fr}.assessment-scale{grid-template-columns:repeat(2,1fr)}.result-filters{grid-template-columns:1fr}}
-
-
-/* =========================
-   EXCEL IMPORT
-========================= */
-.import-panel{background:#f8fafc;border:1px solid #dbeafe;border-radius:10px;padding:16px;margin-bottom:20px}
-.import-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.import-actions input[type=file]{max-width:100%}
-.import-note{font-size:13px;color:#64748b;margin-top:10px;line-height:1.5}
-
-
-/* =========================
-   ALL-IN-ONE MODULES UPGRADE
-========================= */
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
-.analytics-list{display:flex;flex-direction:column;gap:10px}.analytics-row{display:flex;justify-content:space-between;gap:12px;align-items:center}.bar-wrap{flex:1;background:#e5e7eb;border-radius:20px;height:10px;overflow:hidden}.bar-fill{height:100%;background:#2563eb}.analytics-value{min-width:55px;text-align:right;font-weight:700}
-.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.module-card{border:1px solid #e5e7eb;border-radius:10px;padding:15px;background:#fff}.module-card h3{margin-bottom:7px}.muted{color:#6b7280;font-size:13px}
-.logo-preview{width:90px;height:90px;border:1px dashed #cbd5e1;border-radius:8px;object-fit:contain;background:#f8fafc;display:block;margin-top:8px}.notice{border-left:4px solid #2563eb;background:#f8fafc;padding:15px;border-radius:8px;margin-bottom:12px}.notice h3{margin-bottom:5px}.notice small{color:#64748b}.timetable-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.day-column{border:1px solid #e5e7eb;border-radius:8px;padding:10px;min-height:160px;background:#fafafa}.slot{background:#fff;border:1px solid #dbeafe;border-radius:7px;padding:9px;margin-bottom:8px}.slot strong{display:block}.document-actions{display:flex;gap:10px;flex-wrap:wrap}.danger-outline{border:1px solid #dc2626;background:#fff;color:#dc2626;padding:9px 13px;border-radius:7px}.small-btn{background:#475569;color:#fff;border:0;padding:6px 9px;border-radius:6px}
-@media(max-width:900px){.analytics-grid,.module-grid{grid-template-columns:1fr 1fr}.timetable-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.analytics-grid,.module-grid,.timetable-grid{grid-template-columns:1fr}}
-
+.parent-password-box{margin-top:20px;padding:20px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;}
+.parent-password-box h3{margin-top:0;}
+.parent-password-notice{padding:14px 16px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-bottom:18px;}
 </style>
 </head>
 
@@ -556,13 +512,14 @@ td{font-size:14px}
 <div id="loginScreen" class="login-screen">
     <div class="login-box">
         <h1>School Portal</h1>
-        <p>Parent & Administrator Management System</p>
+        <p>Student & Parent Management System</p>
 
         <div id="loginMessage" class="message"></div>
 
         <div class="form-group">
             <label>Account Type</label>
             <select id="loginRole">
+                <option value="Student">Student</option>
                 <option value="Parent">Parent / Guardian</option>
                 <option value="Teacher">Teacher</option>
                 <option value="Administrator">Administrator</option>
@@ -583,7 +540,8 @@ td{font-size:14px}
 
         <div class="demo-box">
             <strong>Demo Accounts</strong><br><br>
-            Parent: parent001 / 123456<br>
+            Student: student001 / 123456<br>
+            Parent: parent001 / 123456 <small>(set your own password after first login)</small><br>
             Teacher: teacher001 / 123456<br>
             Administrator: admin / admin123
         </div>
@@ -602,22 +560,35 @@ td{font-size:14px}
     <div class="nav-section">Main</div>
     <div class="nav-link" data-page="dashboard">Dashboard</div>
     <div class="nav-link" data-page="profile">My Profile</div>
-    <div class="nav-link" data-page="timetable">Timetable</div>
-    <div class="nav-link" data-page="notifications">Notifications</div>
+
+    <div id="studentNav">
+        <div class="nav-section">Student</div>
+        <div class="nav-link" data-page="subjects">My Subjects</div>
+        <div class="nav-link" data-page="studentResults">Results</div>
+        <div class="nav-link" data-page="attendance">Attendance</div>
+        <div class="nav-link" data-page="assignments">Assignments</div>
+        <div class="nav-link" data-page="fees">Fees</div>
+        <div class="nav-link" data-page="announcements">Announcements</div>
+    </div>
 
     <div id="parentNav">
         <div class="nav-section">Parent</div>
         <div class="nav-link" data-page="children">My Children</div>
         <div class="nav-link" data-page="parentResults">Results</div>
         <div class="nav-link" data-page="parentAttendance">Attendance</div>
+        <div class="nav-link" data-page="parentAssignments">Assignments</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
+        <div class="nav-link" data-page="parentAnnouncements">Announcements</div>
     </div>
 
     <div id="teacherNav">
         <div class="nav-section">Teacher</div>
         <div class="nav-link" data-page="teacherSubjects">My Subjects</div>
-        <div class="nav-link" data-page="teacherResults">Enter Marks / Results</div>
+        <div class="nav-link" data-page="teacherStudents">Students</div>
+        <div class="nav-link" data-page="teacherResults">Results</div>
         <div class="nav-link" data-page="teacherAttendance">Attendance</div>
+        <div class="nav-link" data-page="teacherAssignments">Assignments</div>
+        <div class="nav-link" data-page="teacherAnnouncements">Announcements</div>
     </div>
 
     <div id="adminNav">
@@ -629,12 +600,11 @@ td{font-size:14px}
         <div class="nav-link" data-page="adminSubjects">Subjects</div>
         <div class="nav-link" data-page="adminResults">Results</div>
         <div class="nav-link" data-page="adminAttendance">Attendance</div>
+        <div class="nav-link" data-page="adminAssignments">Assignments</div>
         <div class="nav-link" data-page="adminFees">Fees</div>
+        <div class="nav-link" data-page="adminAnnouncements">Announcements</div>
         <div class="nav-link" data-page="reports">Reports</div>
-        <div class="nav-link" data-page="promotions">Promotions / Progression</div>
-        <div class="nav-link" data-page="accounts">User Accounts</div>
-        <div class="nav-link" data-page="documents">Printable Documents</div>
-        <div class="nav-link" data-page="settings">School Settings</div>
+        <div class="nav-link" data-page="settings">Settings</div>
     </div>
 
     <div class="nav-link logout-link" onclick="logout()">Logout</div>
@@ -697,12 +667,6 @@ td{font-size:14px}
         <h2>Performance Levels</h2>
         <p>Advanced • Approaching Advanced • Proficient • Approaching Proficiency • Developing • Beginning</p>
     </div>
-    <div class="analytics-grid">
-        <div class="panel"><h2>Performance Distribution</h2><div id="dashboardPerformanceChart" class="analytics-list"></div></div>
-        <div class="panel"><h2>Attendance Overview</h2><div id="dashboardAttendanceChart" class="analytics-list"></div></div>
-        <div class="panel"><h2>Fees Overview</h2><div id="dashboardFeesChart" class="analytics-list"></div></div>
-        <div class="panel"><h2>Quick Actions</h2><div class="document-actions"><button class="primary-btn" onclick="showPage('students')">Students</button><button class="primary-btn" onclick="showPage('adminResults')">Results</button><button class="primary-btn" onclick="showPage('adminAttendance')">Attendance</button><button class="primary-btn" onclick="showPage('adminFees')">Fees</button><button class="primary-btn" onclick="showPage('reports')">Reports</button></div></div>
-    </div>
 </section>
 
 <!-- PROFILE -->
@@ -711,6 +675,27 @@ td{font-size:14px}
         <div><h1>My Profile</h1><p>Your account information.</p></div>
     </div>
     <div class="panel" id="profileContent"></div>
+</section>
+
+<!-- STUDENT SUBJECTS -->
+<section id="subjects" class="page">
+    <div class="page-header">
+        <div><h1>My Subjects</h1><p>Subjects assigned to your class.</p></div>
+    </div>
+    <div class="panel">
+        <div id="studentSubjectsContent"></div>
+    </div>
+</section>
+
+<!-- STUDENT RESULTS -->
+<section id="studentResults" class="page">
+    <div class="page-header">
+        <div><h1>My Results</h1><p>Your academic performance.</p></div>
+    </div>
+    <div id="studentResultSummary" class="cards"></div>
+    <div class="panel">
+        <div id="studentResultsContent"></div>
+    </div>
 </section>
 
 <!-- PARENT CHILDREN -->
@@ -733,26 +718,34 @@ td{font-size:14px}
     </div>
 </section>
 
+<!-- TEACHER SUBJECTS -->
+<section id="teacherSubjects" class="page">
+    <div class="page-header">
+        <div><h1>My Subjects</h1><p>Subjects assigned to you.</p></div>
+    </div>
+    <div class="panel">
+        <div id="teacherSubjectsContent"></div>
+    </div>
+</section>
+
+<!-- TEACHER RESULTS -->
+<section id="teacherResults" class="page">
+    <div class="page-header">
+        <div><h1>Student Results</h1><p>Results for students in your assigned subjects.</p></div>
+    </div>
+    <div class="panel">
+        <div id="teacherResultsContent"></div>
+    </div>
+</section>
+
 <!-- STUDENTS -->
 <section id="students" class="page">
     <div class="page-header">
         <div><h1>Student Management</h1><p>Add, edit and manage students.</p></div>
         <button class="primary-btn" onclick="openStudentForm()">+ Add Student</button>
-        <button class="secondary-btn" onclick="toggleImportPanel('studentImportPanel')">Import Excel</button>
     </div>
 
     <div id="studentMessage" class="message"></div>
-
-    <div class="import-panel" id="studentImportPanel" style="display:none">
-        <h2 style="margin-bottom:10px">Import Students from Excel</h2>
-        <div class="import-actions">
-            <input type="file" id="studentExcelFile" accept=".xlsx,.xls,.csv">
-            <button class="primary-btn" type="button" onclick="importStudentsFromExcel()">Upload & Import Students</button>
-            <button class="secondary-btn" type="button" onclick="downloadStudentTemplate()">Download Template</button>
-        </div>
-        <div class="import-note">Use exactly these 4 columns: <strong>Student ID, First Name, Last Name, Class</strong>. Existing students with the same Student ID will be updated; new Student IDs will be added.</div>
-        <div id="studentImportMessage" class="message" style="margin-top:10px"></div>
-    </div>
 
     <div class="panel" id="studentFormPanel" style="display:none">
         <h2 id="studentFormTitle">Add Student</h2>
@@ -849,21 +842,9 @@ td{font-size:14px}
     <div class="page-header">
         <div><h1>Teacher Management</h1><p>Manage teachers and their accounts.</p></div>
         <button class="primary-btn" onclick="openTeacherForm()">+ Add Teacher</button>
-        <button class="secondary-btn" onclick="toggleImportPanel('teacherImportPanel')">Import Excel</button>
     </div>
 
     <div id="teacherMessage" class="message"></div>
-
-    <div class="import-panel" id="teacherImportPanel" style="display:none">
-        <h2 style="margin-bottom:10px">Import Teachers from Excel</h2>
-        <div class="import-actions">
-            <input type="file" id="teacherExcelFile" accept=".xlsx,.xls,.csv">
-            <button class="primary-btn" type="button" onclick="importTeachersFromExcel()">Upload & Import Teachers</button>
-            <button class="secondary-btn" type="button" onclick="downloadTeacherTemplate()">Download Template</button>
-        </div>
-        <div class="import-note">Use columns: <strong>ID, Name, Gender, DOB, Phone, Email, Address, Qualification, Subjects, Username, Password</strong>. Existing teachers with the same ID will be updated; new IDs will be added.</div>
-        <div id="teacherImportMessage" class="message" style="margin-top:10px"></div>
-    </div>
 
     <div class="panel" id="teacherFormPanel" style="display:none">
         <h2 id="teacherFormTitle">Add Teacher</h2>
@@ -978,129 +959,89 @@ td{font-size:14px}
 <section id="adminResults" class="page">
     <div class="page-header">
         <div>
-            <h1>Results & Assessment</h1>
-            <p>Record, review and manage student academic performance.</p>
+            <h1>Results Management</h1>
+            <p>Enter and manage student academic results.</p>
         </div>
-        <button class="primary-btn" onclick="openResultForm()">+ Add Assessment</button>
+        <button class="primary-btn" onclick="openResultForm()">+ Add Result</button>
     </div>
 
     <div id="resultMessage" class="message"></div>
 
-    <div class="results-summary">
-        <div class="card"><strong id="resultSummaryCount">0</strong><span>Results Recorded</span></div>
-        <div class="card"><strong id="resultSummaryAverage">0.00</strong><span>Average Score</span></div>
-        <div class="card"><strong id="resultSummaryHighest">0.00</strong><span>Highest Score</span></div>
-        <div class="card"><strong id="resultSummaryAdvanced">0</strong><span>Advanced Results</span></div>
-    </div>
-
     <div class="panel" id="resultFormPanel" style="display:none">
-        <h2 id="resultFormTitle">Add Assessment</h2>
+        <h2 id="resultFormTitle">Add Result</h2>
+
         <form id="resultForm">
             <div class="form-grid">
+
                 <div class="form-group">
                     <label>Academic Year *</label>
                     <input id="resultYear" value="2026/2027" required>
                 </div>
-                <div class="form-group">
-                    <label>Term *</label>
-                    <select id="resultTerm" required>
-                        <option value="">Select Term</option>
-                        <option>Term 1</option>
-                        <option>Term 2</option>
-                        <option>Term 3</option>
-                    </select>
-                </div>
+
                 <div class="form-group">
                     <label>Class *</label>
-                    <select id="resultClass" required><option value="">Select Class</option></select>
+                    <select id="resultClass" required>
+                        <option value="">Select Class</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label>Student *</label>
-                    <select id="resultStudent" required disabled><option value="">Select Class First</option></select>
+                    <select id="resultStudent" required disabled>
+                        <option value="">Select Class First</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label>Subject *</label>
-                    <select id="resultSubject" required disabled><option value="">Select Class First</option></select>
+                    <select id="resultSubject" required disabled>
+                        <option value="">Select Class First</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
                     <label>Class Score / 50 *</label>
                     <input id="classScore" type="number" min="0" max="50" step="0.01" required>
                 </div>
+
                 <div class="form-group">
                     <label>Exam Score / 50 *</label>
                     <input id="examScore" type="number" min="0" max="50" step="0.01" required>
                 </div>
+
                 <div class="form-group">
                     <label>Total / 100</label>
                     <input id="resultTotal" readonly>
                 </div>
+
                 <div class="form-group">
                     <label>Performance Level</label>
                     <input id="resultGrade" readonly>
                 </div>
-                <div class="form-group full">
-                    <label>Teacher / Assessment Remark</label>
-                    <input id="resultRemark" maxlength="200" placeholder="Optional remark for this subject...">
-                </div>
+
             </div>
 
-            <div class="panel" style="background:#f8fafc;margin-top:18px">
-                <strong>Performance Scale</strong>
-                <div class="assessment-scale">
-                    <div class="assessment-scale-item"><strong>80–100</strong>Advanced</div>
-                    <div class="assessment-scale-item"><strong>70–79</strong>Approaching Advanced</div>
-                    <div class="assessment-scale-item"><strong>60–69</strong>Proficient</div>
-                    <div class="assessment-scale-item"><strong>50–59</strong>Approaching Proficiency</div>
-                    <div class="assessment-scale-item"><strong>40–49</strong>Developing</div>
-                    <div class="assessment-scale-item"><strong>0–39</strong>Beginning</div>
-                </div>
+            <br>
+            <div class="panel" style="background:#f8fafc">
+                <strong>Performance Scale</strong><br><br>
+                80–100: Advanced<br>
+                70–79: Approaching Advanced<br>
+                60–69: Proficient<br>
+                50–59: Approaching Proficiency<br>
+                40–49: Developing<br>
+                0–39: Beginning
             </div>
 
-            <button class="primary-btn" type="submit">Save Assessment</button>
+            <button class="primary-btn" type="submit">Save Result</button>
             <button class="secondary-btn" type="button" onclick="closeResultForm()">Cancel</button>
         </form>
     </div>
 
     <div class="panel">
-        <h2>Assessment Records</h2>
-        <div class="result-filters">
-            <div class="form-group">
-                <label>Search</label>
-                <input class="search-box" id="resultSearch" style="margin-bottom:0" placeholder="Student, subject, class or ID...">
-            </div>
-            <div class="form-group">
-                <label>Academic Year</label>
-                <select id="resultYearFilter"><option value="">All Years</option></select>
-            </div>
-            <div class="form-group">
-                <label>Term</label>
-                <select id="resultTermFilter">
-                    <option value="">All Terms</option>
-                    <option>Term 1</option><option>Term 2</option><option>Term 3</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Performance</label>
-                <select id="resultPerformanceFilter">
-                    <option value="">All Levels</option>
-                    <option>Advanced</option><option>Approaching Advanced</option><option>Proficient</option>
-                    <option>Approaching Proficiency</option><option>Developing</option><option>Beginning</option>
-                </select>
-            </div>
-        </div>
-        <br>
-        <div id="resultTable"></div>
-    </div>
+        <input class="search-box" id="resultSearch"
+               placeholder="Search by student, class, subject, teacher, year or performance level...">
 
-    <div class="result-overview">
-        <div class="result-overview-box">
-            <h3>Performance Distribution</h3>
-            <div id="resultPerformanceOverview"></div>
-        </div>
-        <div class="result-overview-box">
-            <h3>Selected Records Summary</h3>
-            <div id="resultSelectionOverview" class="empty" style="padding:10px">Use the filters above to review assessment records.</div>
-        </div>
+        <div id="resultTable"></div>
     </div>
 </section>
 
@@ -1114,15 +1055,9 @@ td{font-size:14px}
         <div id="studentAttendanceContent"></div>
     </div>
 </section>
-<section id="fees" class="page">
-    <div class="page-header"><div><h1>My Fees</h1><p>View your fee charges, payments and outstanding balance.</p></div></div>
-    <div class="results-summary">
-        <div class="card"><strong id="studentFeeDue">0.00</strong><span>Total Due</span></div>
-        <div class="card"><strong id="studentFeePaid">0.00</strong><span>Total Paid</span></div>
-        <div class="card"><strong id="studentFeeBalance">0.00</strong><span>Balance</span></div>
-    </div>
-    <div class="panel"><div id="studentFeeTable"></div></div>
-</section>
+<section id="assignments" class="page"><div class="panel"><h1>Assignments</h1><p>Assignments Management will be added next.</p></div></section>
+<section id="fees" class="page"><div class="panel"><h1>Fees</h1><p>Fees Management will be added next.</p></div></section>
+<section id="announcements" class="page"><div class="panel"><h1>Announcements</h1><p>Announcements Management will be added next.</p></div></section>
 
 <section id="parentAttendance" class="page">
     <div class="page-header">
@@ -1132,41 +1067,11 @@ td{font-size:14px}
         <div id="parentAttendanceContent"></div>
     </div>
 </section>
-<section id="parentFees" class="page">
-    <div class="page-header"><div><h1>Children's Fees</h1><p>View fee charges, payments and balances for your children.</p></div></div>
-    <div class="panel"><div id="parentFeeTable"></div></div>
-</section>
+<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
+<section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
+<section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
-<section id="teacherResults" class="page">
-    <div class="page-header">
-        <div><h1>Enter Marks / Results</h1><p>Enter assessment marks for students in your assigned subjects and classes.</p></div>
-        <button class="primary-btn" onclick="openTeacherResultForm()">+ Enter Marks</button>
-    </div>
-    <div id="teacherResultMessage" class="message"></div>
-    <div class="panel" id="teacherResultFormPanel" style="display:none">
-        <h2 id="teacherResultFormTitle">Enter Student Marks</h2>
-        <form id="teacherResultForm">
-            <div class="form-grid">
-                <div class="form-group"><label>Academic Year *</label><input id="teacherResultYear" value="2026/2027" required></div>
-                <div class="form-group"><label>Term *</label><select id="teacherResultTerm" required><option value="">Select Term</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
-                <div class="form-group"><label>Class *</label><select id="teacherResultClass" required></select></div>
-                <div class="form-group"><label>Student *</label><select id="teacherResultStudent" required disabled><option value="">Select Class First</option></select></div>
-                <div class="form-group"><label>Subject *</label><select id="teacherResultSubject" required></select></div>
-                <div class="form-group"><label>Class Score / 50 *</label><input id="teacherResultClassScore" type="number" min="0" max="50" step="0.01" required></div>
-                <div class="form-group"><label>Exam Score / 50 *</label><input id="teacherResultExamScore" type="number" min="0" max="50" step="0.01" required></div>
-                <div class="form-group"><label>Total / 100</label><input id="teacherResultTotal" readonly></div>
-                <div class="form-group full"><label>Remark</label><input id="teacherResultRemark" maxlength="200" placeholder="Optional remark"></div>
-            </div><br>
-            <button class="primary-btn" type="submit">Save Marks</button>
-            <button class="secondary-btn" type="button" onclick="closeTeacherResultForm()">Cancel</button>
-        </form>
-    </div>
-    <div class="panel">
-        <input class="search-box" id="teacherResultSearch" placeholder="Search student, subject, class or year...">
-        <div id="teacherResultsContent"></div>
-    </div>
-</section>
-
+<section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
 <section id="teacherAttendance" class="page">
     <div class="page-header">
         <div><h1>Attendance Management</h1><p>Mark and manage attendance for your assigned classes.</p></div>
@@ -1200,6 +1105,8 @@ td{font-size:14px}
         <div id="teacherAttendanceContent"></div>
     </div>
 </section>
+<section id="teacherAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Teacher assignment management will be added next.</p></div></section>
+<section id="teacherAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Teacher announcements will be added next.</p></div></section>
 
 <section id="adminAttendance" class="page">
     <div class="page-header">
@@ -1234,62 +1141,9 @@ td{font-size:14px}
         <div id="attendanceTable"></div>
     </div>
 </section>
-<section id="adminFees" class="page">
-    <div class="page-header">
-        <div><h1>Fees & Payments</h1><p>Manage student fee charges, payments and balances.</p></div>
-        <button class="primary-btn" onclick="openFeeForm()">+ Add Fee Record</button>
-    </div>
-    <div id="feeMessage" class="message"></div>
-    <div class="results-summary">
-        <div class="card"><strong id="feeSummaryRecords">0</strong><span>Fee Records</span></div>
-        <div class="card"><strong id="feeSummaryDue">0.00</strong><span>Total Charges</span></div>
-        <div class="card"><strong id="feeSummaryPaid">0.00</strong><span>Total Paid</span></div>
-        <div class="card"><strong id="feeSummaryBalance">0.00</strong><span>Total Balance</span></div>
-    </div>
-    <div class="panel" id="feeFormPanel" style="display:none">
-        <h2 id="feeFormTitle">Add Fee Record</h2>
-        <form id="feeForm">
-            <div class="form-grid">
-                <div class="form-group"><label>Academic Year *</label><input id="feeYear" value="2026/2027" required></div>
-                <div class="form-group"><label>Term *</label><select id="feeTerm" required><option value="">Select Term</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
-                <div class="form-group"><label>Class *</label><select id="feeClass" required><option value="">Select Class</option></select></div>
-                <div class="form-group"><label>Student *</label><select id="feeStudent" required disabled><option value="">Select Class First</option></select></div>
-                <div class="form-group"><label>Fee Type *</label><select id="feeType" required><option value="">Select Fee Type</option><option>Tuition</option><option>Development Fee</option><option>Books</option><option>Uniform</option><option>Transportation</option><option>Feeding</option><option>Examination Fee</option><option>Other</option></select></div>
-                <div class="form-group"><label>Amount Charged *</label><input id="feeAmount" type="number" min="0" step="0.01" required></div>
-                <div class="form-group"><label>Amount Paid *</label><input id="feePaid" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="form-group"><label>Balance</label><input id="feeBalance" readonly></div>
-                <div class="form-group"><label>Payment Date</label><input id="feeDate" type="date"></div>
-                <div class="form-group"><label>Payment Method</label><select id="feeMethod"><option value="">Select Method</option><option>Cash</option><option>Mobile Money</option><option>Bank Transfer</option><option>Card</option><option>Other</option></select></div>
-                <div class="form-group full"><label>Receipt / Transaction Reference</label><input id="feeReference" maxlength="100" placeholder="Optional reference number"></div>
-                <div class="form-group full"><label>Remark</label><input id="feeRemark" maxlength="200" placeholder="Optional fee or payment remark"></div>
-            </div><br>
-            <button class="primary-btn" type="submit">Save Fee Record</button>
-            <button class="secondary-btn" type="button" onclick="closeFeeForm()">Cancel</button>
-        </form>
-    </div>
-    <div class="panel">
-        <div class="form-grid">
-            <div class="form-group"><label>Search</label><input class="search-box" id="feeSearch" placeholder="Search student, class, fee type, term or reference..."></div>
-            <div class="form-group"><label>Academic Year</label><select id="feeFilterYear"><option value="">All Academic Years</option></select></div>
-            <div class="form-group"><label>Class</label><select id="feeFilterClass"><option value="">All Classes</option></select></div>
-            <div class="form-group"><label>Student</label><select id="feeFilterStudent"><option value="">All Students</option></select></div>
-            <div class="form-group"><label>Term</label><select id="feeFilterTerm"><option value="">All Terms</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
-            <div class="form-group"><label>Status</label><select id="feeFilterStatus"><option value="">All Statuses</option><option>Paid</option><option>Part Payment</option><option>Unpaid</option></select></div>
-        </div>
-        <div id="feeTable"></div>
-    </div>
-
-    <div class="panel" id="feeStatementPanel" style="display:none">
-        <div class="page-header">
-            <div><h2>Student Fee Statement</h2><p id="feeStatementSubtitle"></p></div>
-            <div>
-                <button class="primary-btn" onclick="printFeeStatement()">Print Statement</button>
-                <button class="secondary-btn" onclick="closeFeeStatement()">Close</button>
-            </div>
-        </div>
-        <div id="feeStatementContent"></div>
-    </div>
-</section>
+<section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
+<section id="adminFees" class="page"><div class="panel"><h1>Fees Management</h1><p>Fees module will be added next.</p></div></section>
+<section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
 <section id="reports" class="page">
 
     <div class="page-header">
@@ -1323,15 +1177,6 @@ td{font-size:14px}
                        placeholder="e.g. 2026/2027">
             </div>
 
-            <div class="form-group">
-                <label for="reportTerm">Term</label>
-                <select id="reportTerm">
-                    <option value="Term 1">Term 1</option>
-                    <option value="Term 2">Term 2</option>
-                    <option value="Term 3">Term 3</option>
-                </select>
-            </div>
-
         </div>
 
         <div class="report-actions">
@@ -1353,83 +1198,7 @@ td{font-size:14px}
     </div>
 
 </section>
-<section id="timetable" class="page">
-    <div class="page-header"><div><h1>School Timetable</h1><p>View and manage the weekly class timetable.</p></div><button class="primary-btn" onclick="openTimetableForm()">+ Add Timetable Entry</button></div>
-    <div id="timetableMessage" class="message"></div>
-    <div class="panel" id="timetableFormPanel" style="display:none">
-        <h2 id="timetableFormTitle">Add Timetable Entry</h2>
-        <form id="timetableForm"><div class="form-grid">
-            <div class="form-group"><label>Academic Year *</label><input id="ttYear" value="2026/2027" required></div>
-            <div class="form-group"><label>Day *</label><select id="ttDay" required><option value="">Select Day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></div>
-            <div class="form-group"><label>Class *</label><select id="ttClass" required></select></div>
-            <div class="form-group"><label>Subject *</label><select id="ttSubject" required></select></div>
-            <div class="form-group"><label>Teacher</label><select id="ttTeacher"></select></div>
-            <div class="form-group"><label>Start Time *</label><input id="ttStart" type="time" required></div>
-            <div class="form-group"><label>End Time *</label><input id="ttEnd" type="time" required></div>
-            <div class="form-group"><label>Room</label><input id="ttRoom"></div>
-        </div><br><button class="primary-btn" type="submit">Save Entry</button> <button class="secondary-btn" type="button" onclick="closeTimetableForm()">Cancel</button></form>
-    </div>
-    <div class="panel"><div id="timetableTable"></div></div>
-</section>
-
-<section id="notifications" class="page">
-    <div class="page-header"><div><h1>Notifications</h1><p>School notices for parents and teachers.</p></div></div>
-    <div id="notificationAdminArea" class="panel" style="display:none">
-        <h2>Create Notice</h2><form id="notificationForm"><div class="form-grid">
-            <div class="form-group"><label>Audience *</label><select id="noticeAudience" required><option>All</option><option>Parents</option><option>Teachers</option></select></div>
-            <div class="form-group"><label>Title *</label><input id="noticeTitle" required></div>
-            <div class="form-group full"><label>Message *</label><textarea id="noticeMessage" rows="4" style="width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px" required></textarea></div>
-        </div><br><button class="primary-btn" type="submit">Publish Notice</button></form></div>
-    <div class="panel"><div id="notificationList"></div></div>
-</section>
-
-<section id="promotions" class="page">
-    <div class="page-header"><div><h1>Promotions / Student Progression</h1><p>Move students from one class to another for a new academic year.</p></div></div>
-    <div id="promotionMessage" class="message"></div>
-    <div class="panel"><form id="promotionForm"><div class="form-grid">
-        <div class="form-group"><label>Current Class *</label><select id="promotionFrom" required></select></div>
-        <div class="form-group"><label>New Class *</label><select id="promotionTo" required></select></div>
-        <div class="form-group"><label>New Academic Year *</label><input id="promotionYear" value="2027/2028" required></div>
-    </div><br><button class="primary-btn" type="submit">Promote Selected Students</button></form></div>
-    <div class="panel"><h2>Students in Selected Class</h2><div id="promotionStudents"></div></div>
-</section>
-
-<section id="accounts" class="page">
-    <div class="page-header"><div><h1>User Accounts</h1><p>Reset or update parent and teacher login credentials.</p></div></div>
-    <div id="accountMessage" class="message"></div>
-    <div class="panel"><div class="form-grid">
-        <div class="form-group"><label>Account Type</label><select id="accountType"><option>Teacher</option><option>Parent</option><option>Administrator</option></select></div>
-        <div class="form-group"><label>Account</label><select id="accountUser"></select></div>
-        <div class="form-group"><label>Username</label><input id="accountUsername"></div>
-        <div class="form-group"><label>New Password</label><input id="accountPassword" type="password"></div>
-    </div><br><button class="primary-btn" onclick="saveAccountChanges()">Save Account Changes</button></div>
-    <div class="panel"><div id="accountTable"></div></div>
-</section>
-
-<section id="documents" class="page">
-    <div class="page-header"><div><h1>Printable Documents</h1><p>Print common school documents directly from the portal.</p></div></div>
-    <div class="module-grid">
-        <div class="module-card"><h3>Student List</h3><p class="muted">Print all students and their classes.</p><br><button class="primary-btn" onclick="printStudentList()">Print</button></div>
-        <div class="module-card"><h3>Class List</h3><p class="muted">Print students grouped by class.</p><br><button class="primary-btn" onclick="printClassList()">Print</button></div>
-        <div class="module-card"><h3>Admission Form</h3><p class="muted">Print a blank student admission form.</p><br><button class="primary-btn" onclick="printAdmissionForm()">Print</button></div>
-        <div class="module-card"><h3>Teacher List</h3><p class="muted">Print teacher names and details.</p><br><button class="primary-btn" onclick="printTeacherList()">Print</button></div>
-        <div class="module-card"><h3>Attendance Summary</h3><p class="muted">Print attendance totals by student.</p><br><button class="primary-btn" onclick="printAttendanceSummary()">Print</button></div>
-    </div>
-</section>
-
-<section id="settings" class="page">
-    <div class="page-header"><div><h1>School Settings</h1><p>Configure the school identity used across reports and printable documents.</p></div></div>
-    <div id="settingsMessage" class="message"></div>
-    <div class="panel"><form id="settingsForm"><div class="form-grid">
-        <div class="form-group"><label>School Name *</label><input id="schoolName" required></div>
-        <div class="form-group"><label>Academic Year</label><input id="schoolAcademicYear" value="2026/2027"></div>
-        <div class="form-group"><label>Address</label><input id="schoolAddress"></div>
-        <div class="form-group"><label>Phone</label><input id="schoolPhone"></div>
-        <div class="form-group"><label>Email</label><input id="schoolEmail" type="email"></div>
-        <div class="form-group"><label>Headteacher / Principal</label><input id="schoolHead"></div>
-        <div class="form-group full"><label>School Logo</label><input id="schoolLogoFile" type="file" accept="image/*"><img id="schoolLogoPreview" class="logo-preview" alt="Logo preview"></div>
-    </div><br><button class="primary-btn" type="submit">Save School Settings</button></form></div>
-</section>
+<section id="settings" class="page"><div class="panel"><h1>Settings</h1><p>System settings will be added later.</p></div></section>
 
     </div>
 </main>
@@ -1462,6 +1231,7 @@ let parents = JSON.parse(localStorage.getItem("schoolPortalParents")) || [
         address:"",
         username:"parent001",
         password:"123456",
+        mustChangePassword:true,
         studentIds:["STU-001"]
     }
 ];
@@ -1506,10 +1276,6 @@ let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
 
 let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
 let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
-let fees = JSON.parse(localStorage.getItem("schoolPortalFees")) || [];
-let timetable = JSON.parse(localStorage.getItem("schoolPortalTimetable")) || [];
-let notifications = JSON.parse(localStorage.getItem("schoolPortalNotifications")) || [];
-let schoolSettings = JSON.parse(localStorage.getItem("schoolPortalSettings")) || {name:"SWIFTSCHOOL",academicYear:"2026/2027",address:"",phone:"",email:"",head:"",logo:""};
 
 let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
 
@@ -1521,311 +1287,7 @@ let editingSubjectId = null;
 let editingResultId = null;
 let editingAttendanceId = null;
 let editingTeacherAttendanceId = null;
-let editingFeeId = null;
 
-
-/* =========================
-   EXCEL IMPORT
-========================= */
-
-function toggleImportPanel(id){
-    const panel=document.getElementById(id);
-    if(!panel)return;
-    panel.style.display=panel.style.display==="none" ? "block" : "none";
-}
-
-function normalizeImportKey(value){
-    return String(value ?? "")
-        .replace(/^\uFEFF/,"")
-        .trim()
-        .toLowerCase()
-        .replace(/&/g,"and")
-        .replace(/[^a-z0-9]/g,"");
-}
-
-function importValue(row, keys){
-    const wanted=keys.map(normalizeImportKey);
-    for(const key of Object.keys(row||{})){
-        if(wanted.includes(normalizeImportKey(key))) return row[key];
-    }
-    return "";
-}
-
-function rowHasData(row){
-    return Array.isArray(row)
-        ? row.some(v=>String(v ?? "").trim()!=="")
-        : Object.values(row||{}).some(v=>String(v ?? "").trim()!=="");
-}
-
-function detectHeaderRow(matrix,type){
-    const max=Math.min(matrix.length,50);
-    const studentKeys=[
-        "id","studentid","studentnumber","studentno",
-        "name","fullname","studentname","firstname","givenname",
-        "middlename","lastname","surname","familyname",
-        "gender","sex","dob","dateofbirth","birthdate",
-        "class","classname","classsection","parent","parentguardian",
-        "guardian","parentname","phone","phonenumber","mobile",
-        "telephone","email","emailaddress"
-    ];
-    const teacherKeys=[
-        "id","teacherid","name","fullname","teachername","firstname",
-        "lastname","gender","sex","dob","dateofbirth","phone",
-        "phonenumber","mobile","email","emailaddress","address",
-        "qualification","qualifications","subjects","subject","username","password"
-    ];
-    const keys=type==="teacher" ? teacherKeys : studentKeys;
-    let best=null;
-
-    for(let i=0;i<max;i++){
-        const row=matrix[i]||[];
-        const headers=row.map(v=>String(v ?? "").replace(/^\uFEFF/,"").trim());
-        if(!headers.some(Boolean)) continue;
-        const normalized=headers.map(normalizeImportKey);
-        const matched=normalized.filter(h=>keys.includes(h));
-        const score=matched.length;
-
-        // Strongly prefer the exact student format requested by the portal.
-        const exactStudent=
-            type!=="teacher" &&
-            normalized.includes("id") &&
-            normalized.includes("name") &&
-            normalized.includes("gender") &&
-            normalized.includes("dob") &&
-            normalized.includes("class") &&
-            normalized.includes("parent") &&
-            normalized.includes("phone") &&
-            normalized.includes("email");
-
-        const exactTeacher=
-            type==="teacher" &&
-            normalized.includes("id") &&
-            normalized.includes("name") &&
-            normalized.includes("username") &&
-            normalized.includes("password");
-
-        const candidate={index:i,score,headers,exact:exactStudent||exactTeacher};
-        if(!best || candidate.exact || score>best.score){
-            best=candidate;
-            if(candidate.exact) break;
-        }
-    }
-
-    return best && best.score>=2 ? best : null;
-}
-
-function parseImportSheet(sheet,type){
-    const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:true,blankrows:false});
-    if(!matrix.length) return {rows:[],headerRow:-1,headers:[],totalRows:0};
-
-    const detected=detectHeaderRow(matrix,type);
-    if(!detected){
-        return {
-            rows:[],headerRow:-1,headers:[],totalRows:0,
-            error:type==="teacher"
-                ? "Could not find a teacher header row. Use columns: ID, Name, Gender, DOB, Phone, Email, Address, Qualification, Subjects, Username, Password."
-                : "Could not find the student header row. Use exactly: Student ID, First Name, Last Name, Class."
-        };
-    }
-
-    const headers=detected.headers.map((h,i)=>String(h||`Column ${i+1}`).replace(/^\uFEFF/,"").trim()||`Column ${i+1}`);
-    const rows=[];
-    for(let r=detected.index+1;r<matrix.length;r++){
-        const values=matrix[r]||[];
-        if(!rowHasData(values)) continue;
-        const obj={};
-        headers.forEach((h,i)=>{obj[h]=values[i]??"";});
-        rows.push(obj);
-    }
-    return {rows,headerRow:detected.index,headers,totalRows:rows.length};
-}
-
-function importRowsFromFile(file,callback,type="student"){
-    if(!file){callback(new Error("Please select an Excel or CSV file first."));return;}
-    if(typeof XLSX==="undefined"){
-        callback(new Error("Excel support could not be loaded. Check your internet connection and try again."));
-        return;
-    }
-    const reader=new FileReader();
-    reader.onload=function(e){
-        try{
-            const data=new Uint8Array(e.target.result);
-            const workbook=XLSX.read(data,{type:"array",cellDates:true});
-            if(!workbook.SheetNames.length) throw new Error("The selected file does not contain a worksheet.");
-
-            // Use the first worksheet, which is the normal location for a student/teacher list.
-            const sheet=workbook.Sheets[workbook.SheetNames[0]];
-            const parsed=parseImportSheet(sheet,type);
-            if(parsed.error){callback(new Error(parsed.error));return;}
-            callback(null,parsed.rows,parsed);
-        }catch(err){
-            callback(new Error("The Excel file could not be imported. Please make sure it is a valid .xlsx, .xls or .csv file."));
-        }
-    };
-    reader.onerror=function(){callback(new Error("The selected file could not be read."));};
-    reader.readAsArrayBuffer(file);
-}
-
-function cleanDate(value){
-    if(value instanceof Date && !isNaN(value)) return value.toISOString().slice(0,10);
-    if(typeof value==="number" && isFinite(value)){
-        // Excel serial date (SheetJS may return this when raw values are used).
-        const excelEpoch=new Date(Date.UTC(1899,11,30));
-        const d=new Date(excelEpoch.getTime()+value*86400000);
-        if(!isNaN(d)) return d.toISOString().slice(0,10);
-    }
-    const text=String(value??"").trim();
-    if(!text)return "";
-
-    // Handle common DD/MM/YYYY and DD-MM-YYYY formats safely.
-    let m=text.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-    if(m){
-        const dd=m[1].padStart(2,"0"), mm=m[2].padStart(2,"0"), yyyy=m[3];
-        return `${yyyy}-${mm}-${dd}`;
-    }
-    m=text.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
-    if(m) return `${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
-
-    const d=new Date(text);
-    return isNaN(d) ? text : d.toISOString().slice(0,10);
-}
-
-function buildStudentName(row){
-    const full=String(importValue(row,["Name","Full Name","Student Name","StudentName"])).trim();
-    if(full) return full;
-
-    const first=String(importValue(row,["First Name","FirstName","Given Name","GivenName"])).trim();
-    const middle=String(importValue(row,["Middle Name","MiddleName"])).trim();
-    const last=String(importValue(row,["Last Name","LastName","Surname","Family Name"])).trim();
-    return [first,middle,last].filter(Boolean).join(" ").trim();
-}
-
-function importStudentsFromExcel(){
-    const input=document.getElementById("studentExcelFile");
-    const file=input?.files?.[0];
-
-    importRowsFromFile(file,function(err,rows,meta){
-        if(err){showMessage("studentImportMessage",err.message,"error");return;}
-        if(!rows.length){
-            showMessage("studentImportMessage","No student rows were found. Use exactly: Student ID, First Name, Last Name, Class.","error");
-            return;
-        }
-
-        let added=0,updated=0,skipped=0;
-        const reasons={};
-
-        rows.forEach(row=>{
-            const id=String(importValue(row,["Student ID","StudentID","Student Id","ID"])).trim();
-            const firstName=String(importValue(row,["First Name","FirstName","Given Name","GivenName"])).trim();
-            const lastName=String(importValue(row,["Last Name","LastName","Surname","Family Name"])).trim();
-            const className=String(importValue(row,["Class","Class Name","ClassName","Class / Section","ClassSection"])).trim();
-            const name=[firstName,lastName].filter(Boolean).join(" ").trim();
-
-            if(!id||!firstName||!lastName||!className){
-                skipped++;
-                const missing=[];
-                if(!id) missing.push("Student ID");
-                if(!firstName) missing.push("First Name");
-                if(!lastName) missing.push("Last Name");
-                if(!className) missing.push("Class");
-                const reason="missing "+missing.join(", ");
-                reasons[reason]=(reasons[reason]||0)+1;
-                return;
-            }
-
-            const data={
-                id,
-                name,
-                firstName,
-                lastName,
-                className
-            };
-
-            const existing=students.findIndex(s=>String(s.id||"").trim()===id);
-            if(existing>=0){
-                students[existing]={...students[existing],...data};
-                updated++;
-            }else{
-                students.push(data);
-                added++;
-            }
-        });
-
-        saveAll();
-        renderStudents();
-        refreshDashboard();
-
-        let msg=`Import complete: ${added} added, ${updated} updated, ${skipped} skipped.`;
-        if(meta) msg+=` Header row ${meta.headerRow+1} detected.`;
-        if(skipped) msg+=` ${Object.entries(reasons).map(([k,v])=>`${v} ${k}`).join(", ")}.`;
-
-        showMessage("studentImportMessage",msg,skipped&&added+updated===0?"error":"success");
-        if(input) input.value="";
-    },"student");
-}
-
-function importTeachersFromExcel(){
-    const input=document.getElementById("teacherExcelFile");
-    const file=input?.files?.[0];
-    importRowsFromFile(file,function(err,rows,meta){
-        if(err){showMessage("teacherImportMessage",err.message,"error");return;}
-        if(!rows.length){showMessage("teacherImportMessage","No teacher rows were found below the header row.","error");return;}
-
-        let added=0,updated=0,skipped=0;
-        const reasons={};
-        rows.forEach(row=>{
-            const id=String(importValue(row,["ID","Teacher ID","TeacherID"])).trim();
-            const name=String(importValue(row,["Name","Full Name","Teacher Name"])).trim();
-            if(!id||!name){
-                skipped++;
-                const reason=!id&&!name?"missing ID and Name":!id?"missing ID":"missing Name";
-                reasons[reason]=(reasons[reason]||0)+1;
-                return;
-            }
-            const data={
-                id,name,
-                gender:String(importValue(row,["Gender","Sex"])).trim(),
-                dob:cleanDate(importValue(row,["DOB","Date of Birth","DateOfBirth"])),
-                phone:String(importValue(row,["Phone","Telephone","Mobile"])).trim(),
-                email:String(importValue(row,["Email","E-mail"])).trim(),
-                address:String(importValue(row,["Address"])).trim(),
-                qualification:String(importValue(row,["Qualification","Qualifications"])).trim(),
-                subjects:String(importValue(row,["Subjects","Subject"])).trim(),
-                username:String(importValue(row,["Username","User Name"])).trim(),
-                password:String(importValue(row,["Password","Pass"])).trim()
-            };
-            const existing=teachers.findIndex(t=>String(t.id).trim()===id);
-            if(existing>=0){teachers[existing]={...teachers[existing],...data};updated++;}
-            else{teachers.push(data);added++;}
-        });
-        saveAll();
-        renderTeachers();
-        refreshDashboard();
-        let msg=`Import complete: ${added} added, ${updated} updated, ${skipped} skipped.`;
-        if(meta) msg+=` Header row ${meta.headerRow+1} detected.`;
-        if(skipped) msg+=` ${Object.entries(reasons).map(([k,v])=>`${v} ${k}`).join(", ")}.`;
-        showMessage("teacherImportMessage",msg,skipped&&added+updated===0?"error":"success");
-        if(input)input.value="";
-    },"teacher");
-}
-
-function downloadStudentTemplate(){
-    if(typeof XLSX==="undefined"){showMessage("studentImportMessage","Excel support could not be loaded.","error");return;}
-    const rows=[{"Student ID":"STU-002","First Name":"Sample","Last Name":"Student",Class:"Basic 8"}];
-    const ws=XLSX.utils.json_to_sheet(rows);
-    const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"Students");
-    XLSX.writeFile(wb,"SwiftSchool_Student_Template.xlsx");
-}
-
-function downloadTeacherTemplate(){
-    if(typeof XLSX==="undefined"){showMessage("teacherImportMessage","Excel support could not be loaded.","error");return;}
-    const rows=[{ID:"TCH-002",Name:"Sample Teacher",Gender:"Female",DOB:"1990-03-15",Phone:"0240000000",Email:"teacher@example.com",Address:"Accra",Qualification:"B.Ed.",Subjects:"Mathematics",Username:"teacher002",Password:"123456"}];
-    const ws=XLSX.utils.json_to_sheet(rows);
-    const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"Teachers");
-    XLSX.writeFile(wb,"SwiftSchool_Teacher_Template.xlsx");
-}
 
 /* =========================
    HELPERS
@@ -1839,10 +1301,6 @@ function saveAll(){
     localStorage.setItem("schoolPortalSubjects",JSON.stringify(subjects));
     localStorage.setItem("schoolPortalResults",JSON.stringify(results));
     localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
-    localStorage.setItem("schoolPortalFees",JSON.stringify(fees));
-    localStorage.setItem("schoolPortalTimetable",JSON.stringify(timetable));
-    localStorage.setItem("schoolPortalNotifications",JSON.stringify(notifications));
-    localStorage.setItem("schoolPortalSettings",JSON.stringify(schoolSettings));
 }
 
 function escapeHtml(value){
@@ -1913,7 +1371,6 @@ function refreshDashboard(){
     document.getElementById("subjectCount").textContent=subjects.length;
     document.getElementById("resultCount").textContent=results.length;
     document.getElementById("attendanceCount").textContent=attendance.length;
-    renderDashboardAnalytics();
 }
 
 
@@ -1929,8 +1386,7 @@ function login(){
     let user=null;
 
     if(role==="Administrator"){
-        const adminCred=JSON.parse(localStorage.getItem("schoolPortalAdminCredentials")) || {username:"admin",password:"admin123"};
-        if(username===adminCred.username && password===adminCred.password){
+        if(username==="admin" && password==="admin123"){
             user={
                 username:"admin",
                 name:"Administrator",
@@ -1940,10 +1396,25 @@ function login(){
         }
     }
 
-    if(role==="Teacher"){
-        const found=teachers.find(t=>t.username===username && t.password===password);
+    if(role==="Student"){
+        const found=students.find(s=>s.username===username && s.password===password);
+
         if(found){
-            user={username:found.username,name:found.name,role:"Teacher",id:found.id};
+            user={
+                username:found.username,
+                name:found.name,
+                role:"Student",
+                id:found.id,
+                className:found.className
+            };
+        }else if(username==="student001" && password==="123456"){
+            user={
+                username:"student001",
+                name:"Gabriel Quansah",
+                role:"Student",
+                id:"STU-001",
+                className:"Basic 8"
+            };
         }
     }
 
@@ -1955,7 +1426,22 @@ function login(){
                 username:found.username,
                 name:found.name,
                 role:"Parent",
-                id:found.id
+                id:found.id,
+                mustChangePassword:found.mustChangePassword !== false
+            };
+        }
+    }
+
+    if(role==="Teacher"){
+        const found=teachers.find(t=>t.username===username && t.password===password);
+
+        if(found){
+            user={
+                username:found.username,
+                name:found.name,
+                role:"Teacher",
+                id:found.id,
+                className:"Teacher Account"
             };
         }
     }
@@ -1978,6 +1464,9 @@ function showPortal(user){
     document.getElementById("topUser").textContent=user.name;
     document.getElementById("topRole").textContent=user.role;
 
+    document.getElementById("studentNav").style.display =
+        user.role==="Student" ? "block":"none";
+
     document.getElementById("parentNav").style.display =
         user.role==="Parent" ? "block":"none";
 
@@ -1987,8 +1476,20 @@ function showPortal(user){
     document.getElementById("adminNav").style.display =
         user.role==="Administrator" ? "block":"none";
 
+    // On a parent's first login, require a personal password before normal portal access.
+    document.querySelectorAll("#parentNav .nav-link[data-page]").forEach(link=>{
+        link.style.display = (user.role==="Parent" && user.mustChangePassword)
+            ? "none"
+            : "block";
+    });
+
     refreshDashboard();
-    showPage("dashboard");
+
+    if(user.role==="Parent" && user.mustChangePassword){
+        showPage("profile");
+    }else{
+        showPage("dashboard");
+    }
 }
 
 function logout(){
@@ -2030,7 +1531,7 @@ function showPage(pageId){
         }
     });
 
-    const title=pageId==="adminResults" || pageId==="parentResults"
+    const title=pageId==="adminResults" || pageId==="studentResults" || pageId==="parentResults" || pageId==="teacherResults"
         ? "Results"
         : pageId.charAt(0).toUpperCase()+pageId.slice(1);
 
@@ -2041,15 +1542,15 @@ function showPage(pageId){
 
 function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
-    if(pageId==="teacherSubjects")renderTeacherSubjects();
-    if(pageId==="teacherResults")renderTeacherResults();
-    if(pageId==="teacherAttendance"){
-        populateAttendanceClassSelect("Teacher");
-        renderTeacherAttendance();
-    }
+    if(pageId==="subjects")renderStudentSubjects();
+    if(pageId==="studentResults")renderStudentResults();
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
+    if(pageId==="teacherSubjects")renderTeacherSubjects();
+    if(pageId==="teacherResults")renderTeacherResults();
+    if(pageId==="attendance")renderStudentAttendance();
     if(pageId==="parentAttendance")renderParentAttendance();
+    if(pageId==="teacherAttendance")renderTeacherAttendance();
     if(pageId==="adminAttendance"){
         populateAttendanceClassSelect("Admin");
         renderAdminAttendance();
@@ -2065,13 +1566,6 @@ function refreshPage(pageId){
         renderResults();
     }
 
-    if(pageId==="adminFees"){
-        populateFeeClassSelect();
-        renderFees();
-    }
-    if(pageId==="fees") renderStudentFees();
-    if(pageId==="parentFees") renderParentFees();
-
     if(pageId==="reports"){
         populateReportClassSelect();
         const classSelect=document.getElementById("reportClassSelect");
@@ -2079,11 +1573,6 @@ function refreshPage(pageId){
             populateReportStudentSelect(classSelect.value);
         }
     }
-    if(pageId==="timetable")renderTimetable();
-    if(pageId==="notifications")renderNotifications();
-    if(pageId==="promotions")renderPromotionPage();
-    if(pageId==="accounts")renderAccountsPage();
-    if(pageId==="settings")loadSchoolSettings();
 }
 
 
@@ -2094,14 +1583,120 @@ function refreshPage(pageId){
 function renderProfile(){
     const u=currentUser;
 
+    let passwordSection="";
+
+    if(u.role==="Parent"){
+        const firstLogin=u.mustChangePassword===true;
+
+        passwordSection=`
+            <div class="parent-password-box">
+                ${firstLogin ? `
+                    <div class="parent-password-notice">
+                        <strong>First login:</strong> Please create your own password before accessing the rest of the parent portal.
+                    </div>
+                ` : ""}
+
+                <h3>${firstLogin ? "Create Your Password" : "Change Password"}</h3>
+                <p>${firstLogin ? "Use your temporary password once, then choose a private password that you will use for future logins." : "You can change your parent portal password at any time."}</p>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input id="parentCurrentPassword" type="password" autocomplete="current-password">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input id="parentNewPassword" type="password" minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input id="parentConfirmPassword" type="password" minlength="6" autocomplete="new-password">
+                    </div>
+                </div>
+                <br>
+                <button class="primary-btn" onclick="changeParentPassword()">
+                    ${firstLogin ? "Set My Password" : "Change Password"}
+                </button>
+                <div id="parentPasswordMessage" class="message"></div>
+            </div>
+        `;
+    }
+
     document.getElementById("profileContent").innerHTML=`
         <h2>${escapeHtml(u.name)}</h2>
         <br>
         <p><strong>Username:</strong> ${escapeHtml(u.username)}</p>
         <p><strong>Account Type:</strong> ${escapeHtml(u.role)}</p>
         <p><strong>ID:</strong> ${escapeHtml(u.id)}</p>
+        ${passwordSection}
     `;
 }
+
+function changeParentPassword(){
+    if(!currentUser || currentUser.role!=="Parent")return;
+
+    const current=document.getElementById("parentCurrentPassword")?.value || "";
+    const newPassword=document.getElementById("parentNewPassword")?.value || "";
+    const confirmPassword=document.getElementById("parentConfirmPassword")?.value || "";
+    const message=document.getElementById("parentPasswordMessage");
+
+    const showError=(text)=>{
+        if(message){
+            message.className="message error";
+            message.textContent=text;
+        }
+    };
+
+    if(!current || !newPassword || !confirmPassword){
+        showError("Please complete all password fields.");
+        return;
+    }
+
+    const parent=parents.find(p=>p.id===currentUser.id);
+
+    if(!parent){
+        showError("Parent account could not be found.");
+        return;
+    }
+
+    if(parent.password!==current){
+        showError("Current password is incorrect.");
+        return;
+    }
+
+    if(newPassword.length<6){
+        showError("Your new password must be at least 6 characters.");
+        return;
+    }
+
+    if(newPassword===current){
+        showError("Your new password must be different from the current password.");
+        return;
+    }
+
+    if(newPassword!==confirmPassword){
+        showError("The new passwords do not match.");
+        return;
+    }
+
+    parent.password=newPassword;
+    parent.mustChangePassword=false;
+    saveAll();
+
+    currentUser.mustChangePassword=false;
+    localStorage.setItem("schoolPortalUser",JSON.stringify(currentUser));
+
+    if(message){
+        message.className="message success";
+        message.textContent="Password updated successfully.";
+    }
+
+    setTimeout(()=>{
+        showPortal(currentUser);
+        showMessage("loginMessage","", "success");
+    },700);
+}
+
 
 
 /* =========================
@@ -2299,6 +1894,9 @@ document.getElementById("parentForm").addEventListener("submit",function(e){
         address:document.getElementById("parentAddress").value.trim(),
         username:document.getElementById("parentUsername").value.trim(),
         password:document.getElementById("parentPassword").value,
+        mustChangePassword: editingParentId
+            ? (parents.find(p=>p.id===editingParentId)?.mustChangePassword !== false)
+            : true,
         studentIds
     };
 
@@ -2890,23 +2488,29 @@ function deleteSubject(id){
 
 
 /* =========================
-   RESULTS / ASSESSMENT MANAGEMENT
+   RESULTS MANAGEMENT
 ========================= */
 
 function openResultForm(){
     editingResultId=null;
+
     document.getElementById("resultForm").reset();
     document.getElementById("resultYear").value="2026/2027";
-    document.getElementById("resultTerm").value="";
+
     populateResultClassSelect();
-    document.getElementById("resultStudent").innerHTML='<option value="">Select Class First</option>';
+
+    document.getElementById("resultStudent").innerHTML=
+        '<option value="">Select Class First</option>';
     document.getElementById("resultStudent").disabled=true;
-    document.getElementById("resultSubject").innerHTML='<option value="">Select Class First</option>';
+
+    document.getElementById("resultSubject").innerHTML=
+        '<option value="">Select Class First</option>';
     document.getElementById("resultSubject").disabled=true;
+
     document.getElementById("resultTotal").value="";
     document.getElementById("resultGrade").value="";
-    document.getElementById("resultRemark").value="";
-    document.getElementById("resultFormTitle").textContent="Add Assessment";
+
+    document.getElementById("resultFormTitle").textContent="Add Result";
     document.getElementById("resultFormPanel").style.display="block";
 }
 
@@ -2916,133 +2520,257 @@ function closeResultForm(){
 
 function populateResultClassSelect(selected=""){
     const select=document.getElementById("resultClass");
-    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`).join("");
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        classes.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
 }
 
 function populateResultStudentSelect(classId,selected=""){
     const select=document.getElementById("resultStudent");
-    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
     const c=getClass(classId);
-    const classStudents=(c?.studentIds||[]).map(id=>getStudent(id)).filter(Boolean);
-    select.innerHTML='<option value="">Select Student</option>'+classStudents.map(s=>`<option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>${escapeHtml(s.name)} (${escapeHtml(s.id)})</option>`).join("");
+
+    const classStudents=(c?.studentIds||[])
+        .map(id=>getStudent(id))
+        .filter(Boolean);
+
+    select.innerHTML='<option value="">Select Student</option>'+
+        classStudents.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+            </option>
+        `).join("");
+
     select.disabled=false;
 }
 
 function populateResultSubjectSelect(classId,selected=""){
     const select=document.getElementById("resultSubject");
-    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
-    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
-    select.innerHTML='<option value="">Select Subject</option>'+classSubjects.map(s=>`<option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>${escapeHtml(s.name)}${s.code?" ("+escapeHtml(s.code)+")":""}</option>`).join("");
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
+    const classSubjects=subjects.filter(s=>
+        (s.classIds||[]).includes(classId)
+    );
+
+    select.innerHTML='<option value="">Select Subject</option>'+
+        classSubjects.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)}${s.code ? " ("+escapeHtml(s.code)+")":""}
+            </option>
+        `).join("");
+
     select.disabled=false;
 }
+
+document.getElementById("resultClass").addEventListener("change",function(){
+    populateResultStudentSelect(this.value);
+    populateResultSubjectSelect(this.value);
+});
 
 function updateResultCalculation(){
     const classScore=parseFloat(document.getElementById("classScore").value)||0;
     const examScore=parseFloat(document.getElementById("examScore").value)||0;
+
     const total=classScore+examScore;
+
     document.getElementById("resultTotal").value=total.toFixed(2);
     document.getElementById("resultGrade").value=getPerformance(total);
 }
 
-function updateResultFilterOptions(){
-    const yearSelect=document.getElementById("resultYearFilter");
-    if(!yearSelect)return;
-    const years=[...new Set(results.map(r=>String(r.academicYear||"").trim()).filter(Boolean))].sort().reverse();
-    const current=yearSelect.value;
-    yearSelect.innerHTML='<option value="">All Years</option>'+years.map(y=>`<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
-    if(years.includes(current))yearSelect.value=current;
-}
+document.getElementById("classScore").addEventListener("input",updateResultCalculation);
+document.getElementById("examScore").addEventListener("input",updateResultCalculation);
 
-function getFilteredResults(){
-    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase().trim();
-    const year=document.getElementById("resultYearFilter")?.value||"";
-    const term=document.getElementById("resultTermFilter")?.value||"";
-    const performance=document.getElementById("resultPerformanceFilter")?.value||"";
+document.getElementById("resultForm").addEventListener("submit",function(e){
+    e.preventDefault();
 
-    return results.filter(r=>{
+    const year=document.getElementById("resultYear").value.trim();
+    const classId=document.getElementById("resultClass").value;
+    const studentId=document.getElementById("resultStudent").value;
+    const subjectId=document.getElementById("resultSubject").value;
+
+    const classScore=parseFloat(document.getElementById("classScore").value);
+    const examScore=parseFloat(document.getElementById("examScore").value);
+
+    if(classScore<0 || classScore>50 || examScore<0 || examScore>50){
+        showMessage("resultMessage","Scores must be between 0 and 50.","error");
+        return;
+    }
+
+    const duplicate=results.some(r=>
+        r.studentId===studentId &&
+        r.subjectId===subjectId &&
+        r.academicYear===year &&
+        r.id!==editingResultId
+    );
+
+    if(duplicate){
+        showMessage(
+            "resultMessage",
+            "A result already exists for this student, subject and academic year.",
+            "error"
+        );
+        return;
+    }
+
+    const total=classScore+examScore;
+
+    const data={
+        id:editingResultId || ("RES-"+Date.now().toString().slice(-6)),
+        studentId,
+        classId,
+        subjectId,
+        academicYear:year,
+        classScore,
+        examScore,
+        total,
+        grade:getPerformance(total)
+    };
+
+    if(editingResultId){
+        const index=results.findIndex(r=>r.id===editingResultId);
+        if(index!==-1)results[index]=data;
+        showMessage("resultMessage","Result updated successfully.");
+    }else{
+        results.push(data);
+        showMessage("resultMessage","Result added successfully.");
+    }
+
+    saveAll();
+    closeResultForm();
+    renderResults();
+    refreshDashboard();
+});
+
+function renderResults(){
+    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase();
+
+    const filtered=results.filter(r=>{
         const student=getStudent(r.studentId);
         const c=getClass(r.classId);
         const subject=getSubject(r.subjectId);
-        const teacher=subject?getTeacher(subject.teacherId):null;
-        const text=[r.id,r.academicYear,r.term||"",r.grade||"",r.remark||"",student?.name||"",student?.id||"",c?classDisplay(c):"",subject?.name||"",subject?.code||"",teacher?.name||""].join(" ").toLowerCase();
-        return text.includes(search) && (!year || String(r.academicYear||"")===year) && (!term || String(r.term||"")===term) && (!performance || String(r.grade||"")===performance);
+        const teacher=subject ? getTeacher(subject.teacherId):null;
+
+        const text=[
+            r.id,
+            r.academicYear,
+            r.grade,
+            student?.name||"",
+            student?.id||"",
+            c ? classDisplay(c):"",
+            subject?.name||"",
+            subject?.code||"",
+            teacher?.name||""
+        ].join(" ").toLowerCase();
+
+        return text.includes(search);
     });
-}
 
-function renderResults(){
-    updateResultFilterOptions();
-    const filtered=getFilteredResults();
-    const totalScores=filtered.map(r=>Number(r.total)).filter(n=>!isNaN(n));
-    const average=totalScores.length?totalScores.reduce((a,b)=>a+b,0)/totalScores.length:0;
-    const highest=totalScores.length?Math.max(...totalScores):0;
-    const advanced=filtered.filter(r=>r.grade==="Advanced").length;
+    if(!filtered.length){
+        document.getElementById("resultTable").innerHTML=
+            '<div class="empty">No results found.</div>';
+        return;
+    }
 
-    document.getElementById("resultSummaryCount").textContent=filtered.length;
-    document.getElementById("resultSummaryAverage").textContent=average.toFixed(2);
-    document.getElementById("resultSummaryHighest").textContent=highest.toFixed(2);
-    document.getElementById("resultSummaryAdvanced").textContent=advanced;
+    document.getElementById("resultTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Class /50</th>
+                <th>Exam /50</th>
+                <th>Total</th>
+                <th>Performance</th>
+                <th>Academic Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(r=>{
+            const student=getStudent(r.studentId);
+            const c=getClass(r.classId);
+            const subject=getSubject(r.subjectId);
 
-    const counts={"Advanced":0,"Approaching Advanced":0,"Proficient":0,"Approaching Proficiency":0,"Developing":0,"Beginning":0};
-    filtered.forEach(r=>{if(counts[r.grade]!==undefined)counts[r.grade]++;});
-    document.getElementById("resultPerformanceOverview").innerHTML=Object.entries(counts).map(([level,count])=>`<div style="display:flex;justify-content:space-between;gap:10px;margin:7px 0"><span><span class="badge ${performanceClass(level)}">${escapeHtml(level)}</span></span><strong>${count}</strong></div>`).join("");
-    document.getElementById("resultSelectionOverview").innerHTML=`<strong>${filtered.length}</strong> record(s) selected.<br><span style="color:#6b7280;font-size:13px">Average: ${average.toFixed(2)} &nbsp;|&nbsp; Highest: ${highest.toFixed(2)}</span>`;
-
-    if(!filtered.length){document.getElementById("resultTable").innerHTML='<div class="empty">No assessment records match the selected filters.</div>';return;}
-
-    document.getElementById("resultTable").innerHTML=`<div class="result-table-wrap"><table class="result-table"><thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Term</th><th>Class /50</th><th>Exam /50</th><th>Total /100</th><th>Performance</th><th>Remark</th><th>Actions</th></tr></thead><tbody>${filtered.map(r=>{
-        const student=getStudent(r.studentId);const c=getClass(r.classId);const subject=getSubject(r.subjectId);
-        return `<tr><td><div class="result-student-name">${escapeHtml(student?.name||"Unknown Student")}</div><div class="result-student-id">${escapeHtml(r.studentId)}</div></td><td>${escapeHtml(c?classDisplay(c):"Deleted Class")}</td><td>${escapeHtml(subject?.name||"Unknown Subject")}</td><td>${escapeHtml(r.term||"Not Set")}</td><td>${Number(r.classScore||0).toFixed(2)}</td><td>${Number(r.examScore||0).toFixed(2)}</td><td class="result-score">${Number(r.total||0).toFixed(2)}</td><td class="result-performance"><span class="badge ${performanceClass(r.grade||getPerformance(r.total))}">${escapeHtml(r.grade||getPerformance(r.total))}</span></td><td>${escapeHtml(r.remark||"")}</td><td><button class="edit-btn" onclick="editResult('${r.id}')">Edit</button><button class="danger-btn" onclick="deleteResult('${r.id}')">Delete</button></td></tr>`;
-    }).join("")}</tbody></table></div>`;
+            return `
+            <tr>
+                <td>
+                    <strong>${escapeHtml(student?.name||"Unknown Student")}</strong><br>
+                    <small>${escapeHtml(r.studentId)}</small>
+                </td>
+                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+                <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
+                <td>${Number(r.classScore).toFixed(2)}</td>
+                <td>${Number(r.examScore).toFixed(2)}</td>
+                <td><strong>${Number(r.total).toFixed(2)}</strong></td>
+                <td>
+                    <span class="badge ${performanceClass(r.grade)}">
+                        ${escapeHtml(r.grade)}
+                    </span>
+                </td>
+                <td>${escapeHtml(r.academicYear)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editResult('${r.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteResult('${r.id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
 }
 
 function editResult(id){
-    const r=results.find(x=>x.id===id);if(!r)return;
+    const r=results.find(x=>x.id===id);
+    if(!r)return;
+
     editingResultId=id;
-    document.getElementById("resultYear").value=r.academicYear||"2026/2027";
-    document.getElementById("resultTerm").value=r.term||"";
+
+    document.getElementById("resultYear").value=r.academicYear;
+
     populateResultClassSelect(r.classId);
     populateResultStudentSelect(r.classId,r.studentId);
     populateResultSubjectSelect(r.classId,r.subjectId);
+
     document.getElementById("classScore").value=r.classScore;
     document.getElementById("examScore").value=r.examScore;
-    document.getElementById("resultRemark").value=r.remark||"";
+
     updateResultCalculation();
-    document.getElementById("resultFormTitle").textContent="Edit Assessment";
+
+    document.getElementById("resultFormTitle").textContent="Edit Result";
     document.getElementById("resultFormPanel").style.display="block";
 }
 
 function deleteResult(id){
-    if(!confirm("Delete this assessment result?"))return;
+    if(!confirm("Delete this result?"))return;
+
     results=results.filter(r=>r.id!==id);
-    saveAll();renderResults();refreshDashboard();
+
+    saveAll();
+    renderResults();
+    refreshDashboard();
 }
 
-document.getElementById("resultClass").addEventListener("change",function(){populateResultStudentSelect(this.value);populateResultSubjectSelect(this.value);});
-document.getElementById("classScore").addEventListener("input",updateResultCalculation);
-document.getElementById("examScore").addEventListener("input",updateResultCalculation);
-document.getElementById("resultYearFilter").addEventListener("change",renderResults);
-document.getElementById("resultTermFilter").addEventListener("change",renderResults);
-document.getElementById("resultPerformanceFilter").addEventListener("change",renderResults);
-document.getElementById("resultForm").addEventListener("submit",function(e){
-    e.preventDefault();
-    const year=document.getElementById("resultYear").value.trim();
-    const term=document.getElementById("resultTerm").value;
-    const classId=document.getElementById("resultClass").value;
-    const studentId=document.getElementById("resultStudent").value;
-    const subjectId=document.getElementById("resultSubject").value;
-    const classScore=parseFloat(document.getElementById("classScore").value);
-    const examScore=parseFloat(document.getElementById("examScore").value);
-    const remark=document.getElementById("resultRemark").value.trim();
-    if(!year||!term||!classId||!studentId||!subjectId){showMessage("resultMessage","Please complete all required assessment fields.","error");return;}
-    if(isNaN(classScore)||classScore<0||classScore>50||isNaN(examScore)||examScore<0||examScore>50){showMessage("resultMessage","Scores must be between 0 and 50.","error");return;}
-    const duplicate=results.some(r=>r.studentId===studentId&&r.subjectId===subjectId&&String(r.academicYear||"")===year&&String(r.term||"")===term&&r.id!==editingResultId);
-    if(duplicate){showMessage("resultMessage","An assessment already exists for this student, subject, academic year and term.","error");return;}
-    const total=classScore+examScore;
-    const data={id:editingResultId||("RES-"+Date.now().toString().slice(-6)),studentId,classId,subjectId,academicYear:year,term,classScore,examScore,total,grade:getPerformance(total),remark};
-    if(editingResultId){const index=results.findIndex(r=>r.id===editingResultId);if(index!==-1)results[index]=data;showMessage("resultMessage","Assessment updated successfully.");}
-    else{results.push(data);showMessage("resultMessage","Assessment saved successfully.");}
-    saveAll();closeResultForm();renderResults();refreshDashboard();
-});
+
+/* =========================
+   STUDENT RESULT VIEW
+========================= */
 
 function renderStudentResults(){
     const studentId=currentUser?.id;
@@ -3181,13 +2909,9 @@ function renderTeacherResults(){
         .filter(s=>s.teacherId===teacherId)
         .map(s=>s.id);
 
-    const search=(document.getElementById("teacherResultSearch")?.value||"").toLowerCase();
     const teacherResults=results.filter(r=>
         teacherSubjectIds.includes(r.subjectId)
-    ).filter(r=>{
-        const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
-        return [student?.name||"",subject?.name||"",c?.name||"",c?.section||"",r.academicYear||"",r.term||""].join(" ").toLowerCase().includes(search);
-    });
+    );
 
     if(!teacherResults.length){
         document.getElementById("teacherResultsContent").innerHTML=
@@ -3851,104 +3575,35 @@ function deleteTeacherAttendance(id){
 
 
 /* =========================
-   TEACHER RESULT ENTRY
-========================= */
-
-function teacherAssignedClasses(){
-    return classes.filter(c=>c.teacherId===currentUser?.id);
-}
-
-function teacherAssignedSubjects(){
-    return subjects.filter(s=>s.teacherId===currentUser?.id);
-}
-
-function populateTeacherResultClassSelect(){
-    const select=document.getElementById("teacherResultClass");
-    if(!select)return;
-    const current=select.value;
-    const list=teacherAssignedClasses();
-    select.innerHTML='<option value="">Select Class</option>'+list.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    if(list.some(c=>c.id===current))select.value=current;
-    populateTeacherResultStudentSelect(select.value);
-}
-
-function populateTeacherResultStudentSelect(classId){
-    const select=document.getElementById("teacherResultStudent");
-    if(!select)return;
-    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
-    const c=getClass(classId);
-    const list=students.filter(st=>(c?.studentIds||[]).includes(st.id)||st.classId===classId||st.className===c?.name);
-    select.innerHTML='<option value="">Select Student</option>'+list.map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
-    select.disabled=false;
-}
-
-function populateTeacherResultSubjectSelect(){
-    const select=document.getElementById("teacherResultSubject");
-    if(!select)return;
-    const list=teacherAssignedSubjects();
-    select.innerHTML='<option value="">Select Subject</option>'+list.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}${s.code?` (${escapeHtml(s.code)})`:''}</option>`).join("");
-}
-
-function openTeacherResultForm(){
-    document.getElementById("teacherResultForm").reset();
-    document.getElementById("teacherResultTotal").value="";
-    document.getElementById("teacherResultFormTitle").textContent="Enter Student Marks";
-    populateTeacherResultClassSelect();
-    populateTeacherResultSubjectSelect();
-    document.getElementById("teacherResultFormPanel").style.display="block";
-}
-
-function closeTeacherResultForm(){
-    document.getElementById("teacherResultFormPanel").style.display="none";
-}
-
-document.getElementById("teacherResultClass")?.addEventListener("change",function(){
-    populateTeacherResultStudentSelect(this.value);
-});
-
-function updateTeacherResultTotal(){
-    const a=Number(document.getElementById("teacherResultClassScore")?.value)||0;
-    const b=Number(document.getElementById("teacherResultExamScore")?.value)||0;
-    document.getElementById("teacherResultTotal").value=(a+b).toFixed(2);
-}
-document.getElementById("teacherResultClassScore")?.addEventListener("input",updateTeacherResultTotal);
-document.getElementById("teacherResultExamScore")?.addEventListener("input",updateTeacherResultTotal);
-
-document.getElementById("teacherResultForm")?.addEventListener("submit",function(e){
-    e.preventDefault();
-    const classId=document.getElementById("teacherResultClass").value;
-    const studentId=document.getElementById("teacherResultStudent").value;
-    const subjectId=document.getElementById("teacherResultSubject").value;
-    const year=document.getElementById("teacherResultYear").value.trim();
-    const term=document.getElementById("teacherResultTerm").value;
-    const classScore=Number(document.getElementById("teacherResultClassScore").value);
-    const examScore=Number(document.getElementById("teacherResultExamScore").value);
-    const remark=document.getElementById("teacherResultRemark").value.trim();
-    const ownsClass=teacherAssignedClasses().some(c=>c.id===classId);
-    const ownsSubject=teacherAssignedSubjects().some(s=>s.id===subjectId);
-    if(!ownsClass||!ownsSubject){showMessage("teacherResultMessage","You can only enter marks for your assigned classes and subjects.","error");return;}
-    if(classScore<0||classScore>50||examScore<0||examScore>50){showMessage("teacherResultMessage","Scores must be between 0 and 50.","error");return;}
-    const duplicate=results.find(r=>r.studentId===studentId&&r.subjectId===subjectId&&r.academicYear===year&&r.term===term);
-    if(duplicate){showMessage("teacherResultMessage","Marks already exist for this student, subject, academic year and term. Use Administrator to edit existing marks.","error");return;}
-    const total=classScore+examScore;
-    results.push({id:"RES-"+Math.random().toString(36).slice(2,8).toUpperCase(),studentId,classId,subjectId,academicYear:year,term,classScore,examScore,total,grade:getPerformance(total),remark});
-    saveAll();
-    closeTeacherResultForm();
-    renderTeacherResults();
-    refreshDashboard();
-    showMessage("teacherResultMessage","Marks saved successfully.");
-});
-
-document.getElementById("teacherResultSearch")?.addEventListener("input",renderTeacherResults);
-
-/* =========================
    REPORT CARDS / STUDENT REPORTS
 ========================= */
 
 let currentReportStudentId = "";
 let currentReportClassId = "";
 let currentReportAcademicYear = "";
-let currentReportTerm = "Term 1";
+
+function reportCommentsKey(studentId, academicYear){
+    return `${studentId}_${academicYear}`;
+}
+
+function getReportComments(studentId, academicYear){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+    return all[reportCommentsKey(studentId,academicYear)] || {
+        teacher:"",
+        headteacher:""
+    };
+}
+
+function saveReportComments(studentId, academicYear, teacher, headteacher){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+
+    all[reportCommentsKey(studentId,academicYear)]={
+        teacher:String(teacher||"").trim(),
+        headteacher:String(headteacher||"").trim()
+    };
+
+    localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
+}
 
 function populateReportClassSelect(selected=""){
     const select=document.getElementById("reportClassSelect");
@@ -4022,7 +3677,7 @@ function calculateReportAttendance(studentId,classId,academicYear){
     };
 }
 
-function reportSubjectList(classId,studentId,academicYear,term=""){
+function reportSubjectList(classId,studentId,academicYear){
     const classSubjects=subjects.filter(s=>
         (s.classIds||[]).includes(classId)
     );
@@ -4030,8 +3685,7 @@ function reportSubjectList(classId,studentId,academicYear,term=""){
     const studentResults=results.filter(r=>
         r.studentId===studentId &&
         r.classId===classId &&
-        String(r.academicYear||"").trim()===String(academicYear||"").trim() &&
-        (!term || String(r.term||"").trim()===String(term).trim())
+        String(r.academicYear||"").trim()===String(academicYear||"").trim()
     );
 
     const ids=new Set(classSubjects.map(s=>s.id));
@@ -4064,11 +3718,29 @@ function getReportResultLevel(result){
     return "No Result";
 }
 
+function saveCurrentReportComments(){
+    if(!currentReportStudentId || !currentReportAcademicYear){
+        showMessage("reportMessage","Generate a report before saving comments.","error");
+        return;
+    }
+
+    const teacher=document.getElementById("reportTeacherComment")?.value || "";
+    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+    saveReportComments(
+        currentReportStudentId,
+        currentReportAcademicYear,
+        teacher,
+        headteacher
+    );
+
+    showMessage("reportMessage","Report comments saved successfully.","success");
+}
+
 function generateStudentReport(){
     const classId=document.getElementById("reportClassSelect")?.value || "";
     const studentId=document.getElementById("reportStudentSelect")?.value || "";
     const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
-    const term=document.getElementById("reportTerm")?.value || "Term 1";
 
     const container=document.getElementById("studentReportContainer");
 
@@ -4098,10 +3770,10 @@ function generateStudentReport(){
     currentReportStudentId=studentId;
     currentReportClassId=classId;
     currentReportAcademicYear=academicYear;
-    currentReportTerm=term;
 
-    const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
+    const subjectItems=reportSubjectList(classId,studentId,academicYear);
     const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
+    const comments=getReportComments(studentId,academicYear);
 
     const scoredResults=subjectItems
         .map(x=>x.result)
@@ -4150,10 +3822,9 @@ function generateStudentReport(){
     container.className="report-card";
     container.innerHTML=`
         <div class="report-school-header">
-            ${schoolSettings.logo?`<img src="${schoolSettings.logo}" style="width:80px;height:80px;object-fit:contain"><br>`:""}<h1>${escapeHtml(schoolName())}</h1>
-            <p>${escapeHtml(schoolSettings.address||"")}</p><p>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}</p>
+            <h1>SWIFTSCHOOL</h1>
             <h2>STUDENT ACADEMIC REPORT</h2>
-            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong> &nbsp; | &nbsp; Term: <strong>${escapeHtml(term)}</strong></p>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
         </div>
 
         <div class="report-student-info">
@@ -4254,6 +3925,26 @@ function generateStudentReport(){
             </table>
         </div>
 
+        <div class="report-comments">
+            <div class="report-comment-box">
+                <h3>Class Teacher's Comment</h3>
+                <textarea id="reportTeacherComment"
+                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
+            </div>
+
+            <div class="report-comment-box">
+                <h3>Headteacher's Comment</h3>
+                <textarea id="reportHeadteacherComment"
+                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
+            </div>
+        </div>
+
+        <div class="report-comment-actions">
+            <button class="primary-btn" onclick="saveCurrentReportComments()">
+                Save Comments
+            </button>
+        </div>
+
         <div class="report-footer">
             <div>
                 <div class="signature-line">Class Teacher</div>
@@ -4274,6 +3965,19 @@ function printStudentReport(){
     if(!container || !container.classList.contains("report-card")){
         showMessage("reportMessage","Generate a report before printing.","error");
         return;
+    }
+
+    // Save any comments currently typed before printing.
+    if(currentReportStudentId && currentReportAcademicYear){
+        const teacher=document.getElementById("reportTeacherComment")?.value || "";
+        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+        saveReportComments(
+            currentReportStudentId,
+            currentReportAcademicYear,
+            teacher,
+            headteacher
+        );
     }
 
     document.body.classList.add("report-printing");
@@ -4301,346 +4005,6 @@ document.getElementById("reportStudentSelect")?.addEventListener("change",functi
 });
 
 /* =========================
-   FEES & PAYMENTS
-========================= */
-
-function feeStatus(amount,paid){
-    amount=Number(amount)||0; paid=Number(paid)||0;
-    if(amount>0 && paid>=amount) return "Paid";
-    if(paid>0) return "Part Payment";
-    return "Unpaid";
-}
-
-function feeBalance(amount,paid){
-    return Math.max(0,(Number(amount)||0)-(Number(paid)||0));
-}
-
-function populateFeeClassSelect(){
-    const select=document.getElementById("feeClass");
-    if(!select)return;
-    const current=select.value;
-    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    if(classes.some(c=>c.id===current)) select.value=current;
-    populateFeeStudentSelect(select.value);
-}
-
-function populateFeeStudentSelect(classId){
-    const select=document.getElementById("feeStudent");
-    if(!select)return;
-    select.innerHTML='<option value="">Select Student</option>';
-    select.disabled=!classId;
-    if(!classId)return;
-    const c=getClass(classId);
-    const ids=c?.studentIds||[];
-    const list=students.filter(s=>ids.includes(s.id) || s.classId===classId || s.className===c?.name);
-    select.innerHTML='<option value="">Select Student</option>'+list.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)} (${escapeHtml(s.id)})</option>`).join("");
-}
-
-function openFeeForm(id=null){
-    editingFeeId=id;
-    const form=document.getElementById("feeForm");
-    form.reset();
-    document.getElementById("feeFormTitle").textContent=id?"Edit Fee Record":"Add Fee Record";
-    document.getElementById("feeFormPanel").style.display="block";
-    document.getElementById("feeDate").value=new Date().toISOString().slice(0,10);
-    populateFeeClassSelect();
-    if(id){
-        const f=fees.find(x=>x.id===id);
-        if(!f)return;
-        document.getElementById("feeYear").value=f.academicYear||"";
-        document.getElementById("feeTerm").value=f.term||"";
-        document.getElementById("feeClass").value=f.classId||"";
-        populateFeeStudentSelect(f.classId||"");
-        document.getElementById("feeStudent").value=f.studentId||"";
-        document.getElementById("feeType").value=f.feeType||"";
-        document.getElementById("feeAmount").value=f.amount||0;
-        document.getElementById("feePaid").value=f.paid||0;
-        document.getElementById("feeBalance").value=feeBalance(f.amount,f.paid).toFixed(2);
-        document.getElementById("feeDate").value=f.paymentDate||"";
-        document.getElementById("feeMethod").value=f.paymentMethod||"";
-        document.getElementById("feeReference").value=f.reference||"";
-        document.getElementById("feeRemark").value=f.remark||"";
-    }
-}
-
-function closeFeeForm(){
-    document.getElementById("feeFormPanel").style.display="none";
-    editingFeeId=null;
-}
-
-function populateFeeFilters(){
-    const yearSelect=document.getElementById("feeFilterYear");
-    const classSelect=document.getElementById("feeFilterClass");
-    const studentSelect=document.getElementById("feeFilterStudent");
-    if(!yearSelect||!classSelect||!studentSelect)return;
-
-    const currentYear=yearSelect.value;
-    const currentClass=classSelect.value;
-    const currentStudent=studentSelect.value;
-
-    const years=[...new Set(fees.map(f=>String(f.academicYear||"").trim()).filter(Boolean))].sort().reverse();
-    yearSelect.innerHTML='<option value="">All Academic Years</option>'+years.map(y=>`<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join("");
-    if(years.includes(currentYear))yearSelect.value=currentYear;
-
-    classSelect.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    if(classes.some(c=>c.id===currentClass))classSelect.value=currentClass;
-
-    const classId=classSelect.value;
-    const studentPool=classId ? students.filter(s=>{
-        const c=getClass(classId);
-        return (c?.studentIds||[]).includes(s.id) || s.classId===classId || s.className===c?.name;
-    }) : students;
-    studentSelect.innerHTML='<option value="">All Students</option>'+studentPool.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
-    if(studentPool.some(s=>s.id===currentStudent))studentSelect.value=currentStudent;
-}
-
-function renderFees(){
-    populateFeeFilters();
-    const search=(document.getElementById("feeSearch")?.value||"").toLowerCase();
-    const year=document.getElementById("feeFilterYear")?.value||"";
-    const classId=document.getElementById("feeFilterClass")?.value||"";
-    const studentId=document.getElementById("feeFilterStudent")?.value||"";
-    const term=document.getElementById("feeFilterTerm")?.value||"";
-    const status=document.getElementById("feeFilterStatus")?.value||"";
-    const filtered=fees.filter(f=>{
-        const st=getStudent(f.studentId), c=getClass(f.classId);
-        const text=[st?.name,st?.id,c?classDisplay(c):f.className,f.feeType,f.term,f.academicYear,f.reference,f.paymentMethod,f.remark].join(" ").toLowerCase();
-        return (!search||text.includes(search)) && (!year||String(f.academicYear||"")===year) && (!classId||f.classId===classId) && (!studentId||f.studentId===studentId) && (!term||f.term===term) && (!status||feeStatus(f.amount,f.paid)===status);
-    });
-
-    const summarySource=filtered.length || search || year || classId || studentId || term || status ? filtered : fees;
-    const totalDue=summarySource.reduce((a,f)=>a+Number(f.amount||0),0);
-    const totalPaid=summarySource.reduce((a,f)=>a+Number(f.paid||0),0);
-    document.getElementById("feeSummaryRecords").textContent=summarySource.length;
-    document.getElementById("feeSummaryDue").textContent=totalDue.toFixed(2);
-    document.getElementById("feeSummaryPaid").textContent=totalPaid.toFixed(2);
-    document.getElementById("feeSummaryBalance").textContent=Math.max(0,totalDue-totalPaid).toFixed(2);
-
-    const box=document.getElementById("feeTable");
-    if(!filtered.length){box.innerHTML='<p>No fee records found.</p>';return;}
-
-    box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Student</th><th>Class</th><th>Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(f=>{
-        const st=getStudent(f.studentId), c=getClass(f.classId), bal=feeBalance(f.amount,f.paid), stat=feeStatus(f.amount,f.paid);
-        return `<tr><td>${escapeHtml(st?.name||f.studentName||"Unknown")}</td><td>${escapeHtml(c?classDisplay(c):f.className||"—")}</td><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${bal.toFixed(2)}</td><td><span class="badge ${stat.toLowerCase().replace(/\s+/g,'-')}">${stat}</span></td><td><button class="small-btn" onclick="openFeeForm('${escapeHtml(f.id)}')">Edit</button> <button class="small-btn danger" onclick="deleteFee('${escapeHtml(f.id)}')">Delete</button> <button class="small-btn" onclick="printFeeReceipt('${escapeHtml(f.id)}')">Receipt</button> <button class="small-btn" onclick="openFeeStatement('${escapeHtml(f.studentId)}')">Statement</button></td></tr>`;
-    }).join("")}</tbody></table></div>`;
-}
-
-document.getElementById("feeForm")?.addEventListener("submit",function(e){
-    e.preventDefault();
-    const amount=Number(document.getElementById("feeAmount").value)||0;
-    const paid=Number(document.getElementById("feePaid").value)||0;
-    if(paid>amount){showMessage("feeMessage","Amount paid cannot be greater than the amount charged.","error");return;}
-    const studentId=document.getElementById("feeStudent").value;
-    const c=getClass(document.getElementById("feeClass").value), st=getStudent(studentId);
-    const data={id:editingFeeId||("FEE-"+Date.now()),academicYear:document.getElementById("feeYear").value.trim(),term:document.getElementById("feeTerm").value,classId:document.getElementById("feeClass").value,studentId,studentName:st?.name||"",className:c?classDisplay(c):"",feeType:document.getElementById("feeType").value,amount,paid,paymentDate:document.getElementById("feeDate").value,paymentMethod:document.getElementById("feeMethod").value,reference:document.getElementById("feeReference").value.trim(),remark:document.getElementById("feeRemark").value.trim(),createdAt:new Date().toISOString()};
-    if(editingFeeId){const i=fees.findIndex(f=>f.id===editingFeeId);if(i!==-1)fees[i]=data;showMessage("feeMessage","Fee record updated successfully.");}
-    else{fees.push(data);showMessage("feeMessage","Fee record saved successfully.");}
-    saveAll(); closeFeeForm(); renderFees();
-});
-
-document.getElementById("feeClass")?.addEventListener("change",function(){populateFeeStudentSelect(this.value);});
-document.getElementById("feeAmount")?.addEventListener("input",function(){document.getElementById("feeBalance").value=feeBalance(this.value,document.getElementById("feePaid").value).toFixed(2);});
-document.getElementById("feePaid")?.addEventListener("input",function(){document.getElementById("feeBalance").value=feeBalance(document.getElementById("feeAmount").value,this.value).toFixed(2);});
-function deleteFee(id){if(!confirm("Delete this fee record?"))return;fees=fees.filter(f=>f.id!==id);saveAll();renderFees();showMessage("feeMessage","Fee record deleted.");}
-
-function renderStudentFees(){
-    const mine=fees.filter(f=>f.studentId===currentUser?.id);
-    const due=mine.reduce((a,f)=>a+Number(f.amount||0),0), paid=mine.reduce((a,f)=>a+Number(f.paid||0),0);
-    document.getElementById("studentFeeDue").textContent=due.toFixed(2);
-    document.getElementById("studentFeePaid").textContent=paid.toFixed(2);
-    document.getElementById("studentFeeBalance").textContent=Math.max(0,due-paid).toFixed(2);
-    const box=document.getElementById("studentFeeTable");
-    if(!mine.length){box.innerHTML="<p>No fee records have been posted for you yet.</p>";return;}
-    box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${mine.map(f=>`<tr><td>${escapeHtml(f.academicYear)}</td><td>${escapeHtml(f.term)}</td><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td><td>${Number(f.paid).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${feeStatus(f.amount,f.paid)}</td></tr>`).join("")}</tbody></table></div>`;
-}
-
-function renderParentFees(){
-    const childIds=(students.filter(s=>s.parent===currentUser?.id || s.parentId===currentUser?.id).map(s=>s.id));
-    const mine=fees.filter(f=>childIds.includes(f.studentId));
-    const box=document.getElementById("parentFeeTable");
-    if(!mine.length){box.innerHTML="<p>No fee records found for your children.</p>";return;}
-    box.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Child</th><th>Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${mine.map(f=>`<tr><td>${escapeHtml(getStudent(f.studentId)?.name||f.studentName)}</td><td>${escapeHtml(f.academicYear)}</td><td>${escapeHtml(f.term)}</td><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td><td>${Number(f.paid).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${feeStatus(f.amount,f.paid)}</td></tr>`).join("")}</tbody></table></div>`;
-}
-
-let currentFeeStatementStudentId="";
-
-function openFeeStatement(studentId){
-    const student=getStudent(studentId);
-    if(!student){showMessage("feeMessage","Student not found.","error");return;}
-
-    currentFeeStatementStudentId=studentId;
-    const records=fees.filter(f=>f.studentId===studentId);
-    const totalDue=records.reduce((a,f)=>a+Number(f.amount||0),0);
-    const totalPaid=records.reduce((a,f)=>a+Number(f.paid||0),0);
-    const balance=Math.max(0,totalDue-totalPaid);
-    const classRecord=records.length?getClass(records[0].classId):null;
-
-    document.getElementById("feeStatementSubtitle").textContent=`${student.name} (${student.id})${classRecord?" • "+classDisplay(classRecord):""}`;
-    document.getElementById("feeStatementContent").innerHTML=`
-        <div class="results-summary">
-            <div class="card"><strong>${records.length}</strong><span>Fee Records</span></div>
-            <div class="card"><strong>${totalDue.toFixed(2)}</strong><span>Total Charges</span></div>
-            <div class="card"><strong>${totalPaid.toFixed(2)}</strong><span>Total Paid</span></div>
-            <div class="card"><strong>${balance.toFixed(2)}</strong><span>Outstanding Balance</span></div>
-        </div>
-        ${records.length?`<div class="table-wrap"><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th><th>Receipt</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td><td><button class="small-btn" onclick="printFeeReceipt('${escapeHtml(f.id)}')">Receipt</button></td></tr>`).join("")}</tbody></table></div>`:'<p>No fee records found for this student.</p>'}
-    `;
-    document.getElementById("feeStatementPanel").style.display="block";
-    document.getElementById("feeStatementPanel").scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-function closeFeeStatement(){
-    currentFeeStatementStudentId="";
-    document.getElementById("feeStatementPanel").style.display="none";
-}
-
-function printFeeStatement(){
-    if(!currentFeeStatementStudentId)return;
-    const student=getStudent(currentFeeStatementStudentId);
-    const records=fees.filter(f=>f.studentId===currentFeeStatementStudentId);
-    if(!student||!records.length){showMessage("feeMessage","No fee statement available to print.","error");return;}
-    const totalDue=records.reduce((a,f)=>a+Number(f.amount||0),0);
-    const totalPaid=records.reduce((a,f)=>a+Number(f.paid||0),0);
-    const balance=Math.max(0,totalDue-totalPaid);
-    const w=window.open("","_blank","width=900,height=750");
-    if(!w){showMessage("feeMessage","Please allow pop-ups to print the statement.","error");return;}
-    w.document.write(`<!doctype html><html><head><title>Student Fee Statement</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#111}h1{text-align:center;margin:0}.sub{text-align:center;color:#555;margin:6px 0 25px}.info{display:flex;justify-content:space-between;border:1px solid #ccc;padding:15px;margin-bottom:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:9px;text-align:left}th{background:#f2f2f2}.summary{display:flex;gap:12px;margin:20px 0}.summary div{border:1px solid #ccc;padding:12px;flex:1}.total{font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>${escapeHtml(schoolName())}</h1><div class="sub">${escapeHtml(schoolSettings.address||"")}<br>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}<br>STUDENT FEE STATEMENT</div><div class="info"><div><strong>Student:</strong> ${escapeHtml(student.name)}<br><strong>ID:</strong> ${escapeHtml(student.id)}</div><div><strong>Generated:</strong> ${new Date().toLocaleDateString()}</div></div><div class="summary"><div><strong>Total Charges</strong><br>${totalDue.toFixed(2)}</div><div><strong>Total Paid</strong><br>${totalPaid.toFixed(2)}</div><div><strong>Outstanding Balance</strong><br>${balance.toFixed(2)}</div></div><table><thead><tr><th>Academic Year</th><th>Term</th><th>Fee Type</th><th>Charged</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead><tbody>${records.map(f=>`<tr><td>${escapeHtml(f.academicYear||"")}</td><td>${escapeHtml(f.term||"")}</td><td>${escapeHtml(f.feeType||"")}</td><td>${Number(f.amount||0).toFixed(2)}</td><td>${Number(f.paid||0).toFixed(2)}</td><td>${feeBalance(f.amount,f.paid).toFixed(2)}</td><td>${escapeHtml(feeStatus(f.amount,f.paid))}</td></tr>`).join("")}</tbody></table><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
-    w.document.close();
-}
-
-function printFeeReceipt(id){
-    const f=fees.find(x=>x.id===id); if(!f)return;
-    const st=getStudent(f.studentId), c=getClass(f.classId), bal=feeBalance(f.amount,f.paid);
-    const w=window.open("","_blank","width=800,height=700");
-    w.document.write(`<!doctype html><html><head><title>Fee Receipt</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#111}h1{text-align:center;margin-bottom:4px}.sub{text-align:center;color:#555}.box{border:1px solid #222;padding:20px;margin-top:25px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border:1px solid #ccc;padding:10px;text-align:left}.total{font-size:18px;font-weight:bold}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:6px}@media print{button{display:none}}</style></head><body><h1>${escapeHtml(schoolName())}</h1><div class="sub">${escapeHtml(schoolSettings.address||"")}<br>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}<br>OFFICIAL FEE RECEIPT</div><div class="box"><p><strong>Receipt:</strong> ${escapeHtml(f.reference||f.id)}</p><p><strong>Student:</strong> ${escapeHtml(st?.name||f.studentName)}</p><p><strong>Class:</strong> ${escapeHtml(c?classDisplay(c):f.className)}</p><p><strong>Academic Year:</strong> ${escapeHtml(f.academicYear)} &nbsp; <strong>Term:</strong> ${escapeHtml(f.term)}</p><table><tr><th>Description</th><th>Amount</th></tr><tr><td>${escapeHtml(f.feeType)}</td><td>${Number(f.amount).toFixed(2)}</td></tr><tr><td>Amount Paid</td><td>${Number(f.paid).toFixed(2)}</td></tr><tr class="total"><td>Balance</td><td>${bal.toFixed(2)}</td></tr></table><p><strong>Payment Date:</strong> ${escapeHtml(f.paymentDate||"—")}</p><p><strong>Payment Method:</strong> ${escapeHtml(f.paymentMethod||"—")}</p><p><strong>Remark:</strong> ${escapeHtml(f.remark||"—")}</p></div><div class="sign"><div class="line">Accounts Officer</div><div class="line">Parent / Guardian</div></div><script>window.print();<\/script></body></html>`);
-    w.document.close();
-}
-
-
-/* =========================
-   ALL-IN-ONE MODULES
-========================= */
-
-function schoolName(){return schoolSettings.name||"SWIFTSCHOOL";}
-function schoolHeaderHtml(){
-    return `<div style="text-align:center;border-bottom:2px solid #111;padding-bottom:15px;margin-bottom:20px">${schoolSettings.logo?`<img src="${schoolSettings.logo}" style="width:80px;height:80px;object-fit:contain"><br>`:""}<h1>${escapeHtml(schoolName())}</h1><p>${escapeHtml(schoolSettings.address||"")}</p><p>${escapeHtml(schoolSettings.phone||"")} ${schoolSettings.email?" | "+escapeHtml(schoolSettings.email):""}</p></div>`;
-}
-
-function renderDashboardAnalytics(){
-    const levels=["Advanced","Approaching Advanced","Proficient","Approaching Proficiency","Developing","Beginning"];
-    const counts=Object.fromEntries(levels.map(x=>[x,0]));
-    results.forEach(r=>{const l=getReportResultLevel(r);if(counts[l]!==undefined)counts[l]++;});
-    const total=results.length||1;
-    const pc=document.getElementById("dashboardPerformanceChart");
-    if(pc)pc.innerHTML=levels.map(l=>`<div class="analytics-row"><span style="width:150px">${escapeHtml(l)}</span><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(counts[l]/total*100)}%"></div></div><span class="analytics-value">${counts[l]}</span></div>`).join("");
-    const present=attendance.filter(a=>String(a.status).toLowerCase()==="present").length;
-    const late=attendance.filter(a=>String(a.status).toLowerCase()==="late").length;
-    const absent=attendance.filter(a=>String(a.status).toLowerCase()==="absent").length;
-    const excused=attendance.filter(a=>String(a.status).toLowerCase()==="excused").length;
-    const ac=document.getElementById("dashboardAttendanceChart");
-    if(ac)ac.innerHTML=[["Present",present],["Late",late],["Absent",absent],["Excused",excused]].map(([l,n])=>`<div class="analytics-row"><span style="width:90px">${l}</span><div class="bar-wrap"><div class="bar-fill" style="width:${attendance.length?Math.round(n/attendance.length*100):0}%"></div></div><span class="analytics-value">${n}</span></div>`).join("");
-    const due=fees.reduce((a,f)=>a+Number(f.amount||0),0), paid=fees.reduce((a,f)=>a+Number(f.paid||0),0), bal=Math.max(0,due-paid);
-    const fc=document.getElementById("dashboardFeesChart");
-    if(fc)fc.innerHTML=[["Charges",due],["Paid",paid],["Balance",bal]].map(([l,n])=>`<div class="analytics-row"><span style="width:90px">${l}</span><div class="bar-wrap"><div class="bar-fill" style="width:${due?Math.round(n/due*100):0}%"></div></div><span class="analytics-value">${n.toFixed(2)}</span></div>`).join("");
-}
-
-function populateTimetableSelectors(){
-    const cs=document.getElementById("ttClass"), ss=document.getElementById("ttSubject"), ts=document.getElementById("ttTeacher");
-    if(cs)cs.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    if(ss)ss.innerHTML='<option value="">Select Subject</option>'+subjects.map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.name)}</option>`).join("");
-    if(ts)ts.innerHTML='<option value="">Select Teacher</option>'+teachers.map(t=>`<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)}</option>`).join("");
-}
-function openTimetableForm(){populateTimetableSelectors();document.getElementById("timetableFormPanel").style.display="block";}
-function closeTimetableForm(){document.getElementById("timetableFormPanel").style.display="none";document.getElementById("timetableForm")?.reset();}
-function renderTimetable(){
-    populateTimetableSelectors();
-    const role=currentUser?.role;
-    let rows=timetable.slice();
-    if(role==="Teacher")rows=rows.filter(x=>x.teacherId===currentUser.id);
-    if(role==="Parent"){
-        const p=getParent(currentUser.id), ids=p?.studentIds||[]; const classIds=new Set(ids.flatMap(id=>classes.filter(c=>(c.studentIds||[]).includes(id)).map(c=>c.id))); rows=rows.filter(x=>classIds.has(x.classId));
-    }
-    rows.sort((a,b)=>(["Monday","Tuesday","Wednesday","Thursday","Friday"].indexOf(a.day)-["Monday","Tuesday","Wednesday","Thursday","Friday"].indexOf(b.day))||String(a.start).localeCompare(String(b.start)));
-    const el=document.getElementById("timetableTable");
-    if(!el)return;
-    if(!rows.length){el.innerHTML='<div class="empty">No timetable entries found.</div>';return;}
-    const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
-    el.innerHTML=`<div class="timetable-grid">${days.map(day=>`<div class="day-column"><h3>${day}</h3>${rows.filter(x=>x.day===day).map(x=>{const c=getClass(x.classId),sub=getSubject(x.subjectId),t=getTeacher(x.teacherId);return `<div class="slot"><strong>${escapeHtml(sub?.name||x.subjectName||"Subject")}</strong><span>${escapeHtml(x.start)} - ${escapeHtml(x.end)}</span><br><span>${escapeHtml(c?classDisplay(c):x.className||"")}</span><br><span class="muted">${escapeHtml(t?.name||x.teacherName||"")}${x.room?" • Room "+escapeHtml(x.room):""}</span>${role==="Administrator"?`<br><button class="danger-btn" style="margin-top:7px" onclick="deleteTimetable('${escapeHtml(x.id)}')">Delete</button>`:""}</div>`}).join("")}</div>`).join("")}</div>`;
-}
-function deleteTimetable(id){if(!confirm("Delete this timetable entry?"))return;timetable=timetable.filter(x=>x.id!==id);saveAll();renderTimetable();}
-
-document.getElementById("timetableForm")?.addEventListener("submit",function(e){
-    e.preventDefault();
-    const x={id:"TT-"+Date.now(),academicYear:document.getElementById("ttYear").value.trim(),day:document.getElementById("ttDay").value,classId:document.getElementById("ttClass").value,subjectId:document.getElementById("ttSubject").value,teacherId:document.getElementById("ttTeacher").value,start:document.getElementById("ttStart").value,end:document.getElementById("ttEnd").value,room:document.getElementById("ttRoom").value.trim()};
-    timetable.push(x);saveAll();closeTimetableForm();renderTimetable();showMessage("timetableMessage","Timetable entry saved.","success");
-});
-
-function renderNotifications(){
-    const area=document.getElementById("notificationAdminArea"); if(area)area.style.display=currentUser?.role==="Administrator"?"block":"none";
-    let rows=notifications.slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
-    if(currentUser?.role==="Parent")rows=rows.filter(n=>n.audience==="All"||n.audience==="Parents");
-    if(currentUser?.role==="Teacher")rows=rows.filter(n=>n.audience==="All"||n.audience==="Teachers");
-    const el=document.getElementById("notificationList");if(!el)return;
-    el.innerHTML=rows.length?rows.map(n=>`<div class="notice"><h3>${escapeHtml(n.title)}</h3><p>${escapeHtml(n.message).replace(/\n/g,"<br>")}</p><small>${escapeHtml(n.audience)} • ${escapeHtml(new Date(n.date).toLocaleString())}${currentUser?.role==="Administrator"?` <button class="danger-btn" style="float:right" onclick="deleteNotification('${escapeHtml(n.id)}')">Delete</button>`:""}</small></div>`).join(""):'<div class="empty">No notifications.</div>';
-}
-function deleteNotification(id){if(!confirm("Delete this notice?"))return;notifications=notifications.filter(n=>n.id!==id);saveAll();renderNotifications();}
-document.getElementById("notificationForm")?.addEventListener("submit",function(e){e.preventDefault();notifications.push({id:"N-"+Date.now(),audience:document.getElementById("noticeAudience").value,title:document.getElementById("noticeTitle").value.trim(),message:document.getElementById("noticeMessage").value.trim(),date:new Date().toISOString()});saveAll();this.reset();renderNotifications();});
-
-function renderPromotionPage(){
-    const from=document.getElementById("promotionFrom"),to=document.getElementById("promotionTo");if(!from||!to)return;
-    from.innerHTML='<option value="">Select Current Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    to.innerHTML='<option value="">Select New Class</option>'+classes.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
-    renderPromotionStudents();
-}
-function renderPromotionStudents(){
-    const id=document.getElementById("promotionFrom")?.value, el=document.getElementById("promotionStudents");if(!el)return;
-    if(!id){el.innerHTML='<div class="empty">Select a current class to view students.</div>';return;}
-    const c=getClass(id), list=students.filter(s=>(c?.studentIds||[]).includes(s.id)||s.classId===id||s.className===c?.name);
-    el.innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="promotionSelectAll"></th><th>ID</th><th>Name</th><th>Current Class</th></tr></thead><tbody>${list.map(s=>`<tr><td><input type="checkbox" class="promotion-student" value="${escapeHtml(s.id)}"></td><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(c?classDisplay(c):s.className||"")}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">No students found.</div>';
-    document.getElementById("promotionSelectAll")?.addEventListener("change",function(){document.querySelectorAll(".promotion-student").forEach(x=>x.checked=this.checked);});
-}
-document.getElementById("promotionFrom")?.addEventListener("change",renderPromotionStudents);
-document.getElementById("promotionForm")?.addEventListener("submit",function(e){
-    e.preventDefault();const from=getClass(document.getElementById("promotionFrom").value),to=getClass(document.getElementById("promotionTo").value),year=document.getElementById("promotionYear").value.trim();const ids=[...document.querySelectorAll(".promotion-student:checked")].map(x=>x.value);
-    if(!from||!to||!year||!ids.length){showMessage("promotionMessage","Select the current class, new class, academic year and at least one student.","error");return;}
-    ids.forEach(id=>{const st=getStudent(id);if(st){st.classId=to.id;st.className=to.name;}});
-    from.studentIds=(from.studentIds||[]).filter(id=>!ids.includes(id));to.studentIds=Array.from(new Set([...(to.studentIds||[]),...ids]));to.academicYear=year;saveAll();renderPromotionPage();renderClasses();renderStudents();showMessage("promotionMessage",`${ids.length} student(s) moved to ${classDisplay(to)} for ${year}.`,"success");
-});
-
-function renderAccountsPage(){
-    const type=document.getElementById("accountType")?.value||"Teacher", sel=document.getElementById("accountUser");if(!sel)return;
-    let arr=type==="Teacher"?teachers:type==="Parent"?parents:[];
-    if(type==="Administrator"){sel.innerHTML='<option value="ADMIN-001">Administrator</option>';document.getElementById("accountUsername").value=(JSON.parse(localStorage.getItem("schoolPortalAdminCredentials"))||{username:"admin"}).username;document.getElementById("accountPassword").value="";}
-    else {sel.innerHTML=arr.map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.name)} (${escapeHtml(x.username||"")})</option>`).join("");loadSelectedAccount();}
-    renderAccountTable();
-}
-function loadSelectedAccount(){const type=document.getElementById("accountType")?.value,id=document.getElementById("accountUser")?.value;const arr=type==="Teacher"?teachers:parents,x=arr.find(a=>a.id===id);if(x){document.getElementById("accountUsername").value=x.username||"";document.getElementById("accountPassword").value="";}}
-function renderAccountTable(){const el=document.getElementById("accountTable");if(!el)return;el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Role</th><th>Name</th><th>Username</th><th>Password Status</th></tr></thead><tbody>${teachers.map(t=>`<tr><td>Teacher</td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(t.username||"")}</td><td>${t.password?"Set":"Not set"}</td></tr>`).join("")}${parents.map(p=>`<tr><td>Parent</td><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.username||"")}</td><td>${p.password?"Set":"Not set"}</td></tr>`).join("")}</tbody></table></div>`;}
-function saveAccountChanges(){
-    const type=document.getElementById("accountType").value,username=document.getElementById("accountUsername").value.trim(),password=document.getElementById("accountPassword").value;
-    if(!username){showMessage("accountMessage","Username is required.","error");return;}
-    if(type==="Administrator"){if(!password){showMessage("accountMessage","Enter a new administrator password.","error");return;}localStorage.setItem("schoolPortalAdminCredentials",JSON.stringify({username,password}));showMessage("accountMessage","Administrator credentials updated. You must use the new login details next time.","success");return;}
-    const arr=type==="Teacher"?teachers:parents,id=document.getElementById("accountUser").value,x=arr.find(a=>a.id===id);if(!x)return;x.username=username;if(password)x.password=password;saveAll();renderAccountsPage();showMessage("accountMessage","Account updated successfully.","success");
-}
-document.getElementById("accountType")?.addEventListener("change",renderAccountsPage);document.getElementById("accountUser")?.addEventListener("change",loadSelectedAccount);
-
-function loadSchoolSettings(){
-    document.getElementById("schoolName").value=schoolSettings.name||"";document.getElementById("schoolAcademicYear").value=schoolSettings.academicYear||"";document.getElementById("schoolAddress").value=schoolSettings.address||"";document.getElementById("schoolPhone").value=schoolSettings.phone||"";document.getElementById("schoolEmail").value=schoolSettings.email||"";document.getElementById("schoolHead").value=schoolSettings.head||"";document.getElementById("schoolLogoPreview").src=schoolSettings.logo||"";
-}
-document.getElementById("schoolLogoFile")?.addEventListener("change",function(){const f=this.files?.[0];if(!f)return;const r=new FileReader();r.onload=e=>document.getElementById("schoolLogoPreview").src=e.target.result;r.readAsDataURL(f);});
-document.getElementById("settingsForm")?.addEventListener("submit",function(e){
-    e.preventDefault();schoolSettings={...schoolSettings,name:document.getElementById("schoolName").value.trim(),academicYear:document.getElementById("schoolAcademicYear").value.trim(),address:document.getElementById("schoolAddress").value.trim(),phone:document.getElementById("schoolPhone").value.trim(),email:document.getElementById("schoolEmail").value.trim(),head:document.getElementById("schoolHead").value.trim()};
-    const logo=document.getElementById("schoolLogoPreview").src;if(logo&&logo.startsWith("data:"))schoolSettings.logo=logo;saveAll();showMessage("settingsMessage","School settings saved successfully.","success");
-});
-
-function printWindow(title,body){const w=window.open("","_blank","width=1000,height=800");if(!w){alert("Please allow pop-ups to print documents.");return;}w.document.write(`<!doctype html><html><head><title>${escapeHtml(title)}</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#111}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #bbb;padding:8px;text-align:left}th{background:#f1f5f9}.sign{display:flex;justify-content:space-between;margin-top:70px}.line{border-top:1px solid #111;width:220px;text-align:center;padding-top:7px}</style></head><body>${body}<script>window.print();<\/script></body></html>`);w.document.close();}
-function printStudentList(){const rows=students.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(s=>`<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.gender||"")}</td><td>${escapeHtml(s.className||getClass(s.classId)?.name||"")}</td><td>${escapeHtml(s.parent||"")}</td></tr>`).join("");printWindow("Student List",schoolHeaderHtml()+`<h2>STUDENT LIST</h2><table><thead><tr><th>ID</th><th>Name</th><th>Gender</th><th>Class</th><th>Parent/Guardian</th></tr></thead><tbody>${rows}</tbody></table>`);}
-function printTeacherList(){const rows=teachers.map(t=>`<tr><td>${escapeHtml(t.id)}</td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(t.phone||"")}</td><td>${escapeHtml(t.email||"")}</td><td>${escapeHtml(t.qualification||"")}</td></tr>`).join("");printWindow("Teacher List",schoolHeaderHtml()+`<h2>TEACHER LIST</h2><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Qualification</th></tr></thead><tbody>${rows}</tbody></table>`);}
-function printClassList(){const groups=classes.map(c=>`<h3>${escapeHtml(classDisplay(c))}</h3><table><thead><tr><th>ID</th><th>Student</th><th>Gender</th></tr></thead><tbody>${students.filter(s=>(c.studentIds||[]).includes(s.id)||s.classId===c.id||s.className===c.name).map(s=>`<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.gender||"")}</td></tr>`).join("")}</tbody></table>`).join("");printWindow("Class List",schoolHeaderHtml()+`<h2>CLASS LIST</h2>${groups}`);}
-function printAdmissionForm(){printWindow("Student Admission Form",schoolHeaderHtml()+`<h2>STUDENT ADMISSION FORM</h2><table>${["Student ID","First Name","Last Name","Date of Birth","Gender","Class","Parent / Guardian","Phone","Email","Address","Previous School","Medical / Special Notes"].map(x=>`<tr><th style="width:35%">${x}</th><td style="height:34px"></td></tr>`).join("")}</table><div class="sign"><div class="line">Parent / Guardian</div><div class="line">Admissions Officer</div></div>`);}
-function printAttendanceSummary(){const map={};attendance.forEach(a=>{if(!map[a.studentId])map[a.studentId]={p:0,l:0,a:0,e:0};const k=String(a.status||"").toLowerCase();if(k==="present")map[a.studentId].p++;if(k==="late")map[a.studentId].l++;if(k==="absent")map[a.studentId].a++;if(k==="excused")map[a.studentId].e++;});const rows=students.map(s=>{const x=map[s.id]||{p:0,l:0,a:0,e:0};const n=x.p+x.l+x.a;return `<tr><td>${escapeHtml(s.id)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.className||"")}</td><td>${x.p}</td><td>${x.l}</td><td>${x.a}</td><td>${x.e}</td><td>${n?Math.round((x.p+x.l)/n*100):0}%</td></tr>`}).join("");printWindow("Attendance Summary",schoolHeaderHtml()+`<h2>ATTENDANCE SUMMARY</h2><table><thead><tr><th>ID</th><th>Student</th><th>Class</th><th>Present</th><th>Late</th><th>Absent</th><th>Excused</th><th>Attendance %</th></tr></thead><tbody>${rows}</tbody></table>`);}
-
-/* =========================
    SEARCH EVENTS
 ========================= */
 
@@ -4652,23 +4016,6 @@ document.getElementById("subjectSearch").addEventListener("input",renderSubjects
 document.getElementById("resultSearch").addEventListener("input",renderResults);
 document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
 document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
-document.getElementById("feeSearch")?.addEventListener("input",renderFees);
-document.getElementById("feeFilterYear")?.addEventListener("change",renderFees);
-document.getElementById("feeFilterClass")?.addEventListener("change",function(){
-    const studentSelect=document.getElementById("feeFilterStudent");
-    if(studentSelect){
-        const current=studentSelect.value;
-        const classId=this.value;
-        const c=getClass(classId);
-        const pool=classId?students.filter(s=>(c?.studentIds||[]).includes(s.id)||s.classId===classId||s.className===c?.name):students;
-        studentSelect.innerHTML='<option value="">All Students</option>'+pool.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))).map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
-        if(pool.some(s=>s.id===current))studentSelect.value=current;
-    }
-    renderFees();
-});
-document.getElementById("feeFilterStudent")?.addEventListener("change",renderFees);
-document.getElementById("feeFilterTerm")?.addEventListener("change",renderFees);
-document.getElementById("feeFilterStatus")?.addEventListener("change",renderFees);
 
 
 /* =========================
@@ -4677,7 +4024,6 @@ document.getElementById("feeFilterStatus")?.addEventListener("change",renderFees
 
 saveAll();
 refreshDashboard();
-if(document.getElementById("schoolLogoPreview")) loadSchoolSettings();
 
 </script>
 
