@@ -535,14 +535,13 @@ td{font-size:14px}
 <div id="loginScreen" class="login-screen">
     <div class="login-box">
         <h1>School Portal</h1>
-        <p>Student & Parent Management System</p>
+        <p>Parent & Administrator Management System</p>
 
         <div id="loginMessage" class="message"></div>
 
         <div class="form-group">
             <label>Account Type</label>
             <select id="loginRole">
-                <option value="Student">Student</option>
                 <option value="Parent">Parent / Guardian</option>
                 <option value="Teacher">Teacher</option>
                 <option value="Administrator">Administrator</option>
@@ -563,7 +562,6 @@ td{font-size:14px}
 
         <div class="demo-box">
             <strong>Demo Accounts</strong><br><br>
-            Student: student001 / 123456<br>
             Parent: parent001 / 123456<br>
             Teacher: teacher001 / 123456<br>
             Administrator: admin / admin123
@@ -584,34 +582,19 @@ td{font-size:14px}
     <div class="nav-link" data-page="dashboard">Dashboard</div>
     <div class="nav-link" data-page="profile">My Profile</div>
 
-    <div id="studentNav">
-        <div class="nav-section">Student</div>
-        <div class="nav-link" data-page="subjects">My Subjects</div>
-        <div class="nav-link" data-page="studentResults">Results</div>
-        <div class="nav-link" data-page="attendance">Attendance</div>
-        <div class="nav-link" data-page="assignments">Assignments</div>
-        <div class="nav-link" data-page="fees">Fees</div>
-        <div class="nav-link" data-page="announcements">Announcements</div>
-    </div>
-
     <div id="parentNav">
         <div class="nav-section">Parent</div>
         <div class="nav-link" data-page="children">My Children</div>
         <div class="nav-link" data-page="parentResults">Results</div>
         <div class="nav-link" data-page="parentAttendance">Attendance</div>
-        <div class="nav-link" data-page="parentAssignments">Assignments</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
-        <div class="nav-link" data-page="parentAnnouncements">Announcements</div>
     </div>
 
     <div id="teacherNav">
         <div class="nav-section">Teacher</div>
         <div class="nav-link" data-page="teacherSubjects">My Subjects</div>
-        <div class="nav-link" data-page="teacherStudents">Students</div>
-        <div class="nav-link" data-page="teacherResults">Results</div>
+        <div class="nav-link" data-page="teacherResults">Enter Marks / Results</div>
         <div class="nav-link" data-page="teacherAttendance">Attendance</div>
-        <div class="nav-link" data-page="teacherAssignments">Assignments</div>
-        <div class="nav-link" data-page="teacherAnnouncements">Announcements</div>
     </div>
 
     <div id="adminNav">
@@ -623,9 +606,7 @@ td{font-size:14px}
         <div class="nav-link" data-page="adminSubjects">Subjects</div>
         <div class="nav-link" data-page="adminResults">Results</div>
         <div class="nav-link" data-page="adminAttendance">Attendance</div>
-        <div class="nav-link" data-page="adminAssignments">Assignments</div>
         <div class="nav-link" data-page="adminFees">Fees</div>
-        <div class="nav-link" data-page="adminAnnouncements">Announcements</div>
         <div class="nav-link" data-page="reports">Reports</div>
         <div class="nav-link" data-page="settings">Settings</div>
     </div>
@@ -700,27 +681,6 @@ td{font-size:14px}
     <div class="panel" id="profileContent"></div>
 </section>
 
-<!-- STUDENT SUBJECTS -->
-<section id="subjects" class="page">
-    <div class="page-header">
-        <div><h1>My Subjects</h1><p>Subjects assigned to your class.</p></div>
-    </div>
-    <div class="panel">
-        <div id="studentSubjectsContent"></div>
-    </div>
-</section>
-
-<!-- STUDENT RESULTS -->
-<section id="studentResults" class="page">
-    <div class="page-header">
-        <div><h1>My Results</h1><p>Your academic performance.</p></div>
-    </div>
-    <div id="studentResultSummary" class="cards"></div>
-    <div class="panel">
-        <div id="studentResultsContent"></div>
-    </div>
-</section>
-
 <!-- PARENT CHILDREN -->
 <section id="children" class="page">
     <div class="page-header">
@@ -738,26 +698,6 @@ td{font-size:14px}
     </div>
     <div class="panel">
         <div id="parentResultsContent"></div>
-    </div>
-</section>
-
-<!-- TEACHER SUBJECTS -->
-<section id="teacherSubjects" class="page">
-    <div class="page-header">
-        <div><h1>My Subjects</h1><p>Subjects assigned to you.</p></div>
-    </div>
-    <div class="panel">
-        <div id="teacherSubjectsContent"></div>
-    </div>
-</section>
-
-<!-- TEACHER RESULTS -->
-<section id="teacherResults" class="page">
-    <div class="page-header">
-        <div><h1>Student Results</h1><p>Results for students in your assigned subjects.</p></div>
-    </div>
-    <div class="panel">
-        <div id="teacherResultsContent"></div>
     </div>
 </section>
 
@@ -1118,7 +1058,6 @@ td{font-size:14px}
         <div id="studentAttendanceContent"></div>
     </div>
 </section>
-<section id="assignments" class="page"><div class="panel"><h1>Assignments</h1><p>Assignments Management will be added next.</p></div></section>
 <section id="fees" class="page">
     <div class="page-header"><div><h1>My Fees</h1><p>View your fee charges, payments and outstanding balance.</p></div></div>
     <div class="results-summary">
@@ -1128,7 +1067,6 @@ td{font-size:14px}
     </div>
     <div class="panel"><div id="studentFeeTable"></div></div>
 </section>
-<section id="announcements" class="page"><div class="panel"><h1>Announcements</h1><p>Announcements Management will be added next.</p></div></section>
 
 <section id="parentAttendance" class="page">
     <div class="page-header">
@@ -1138,14 +1076,41 @@ td{font-size:14px}
         <div id="parentAttendanceContent"></div>
     </div>
 </section>
-<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
 <section id="parentFees" class="page">
     <div class="page-header"><div><h1>Children's Fees</h1><p>View fee charges, payments and balances for your children.</p></div></div>
     <div class="panel"><div id="parentFeeTable"></div></div>
 </section>
-<section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
 
-<section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
+<section id="teacherResults" class="page">
+    <div class="page-header">
+        <div><h1>Enter Marks / Results</h1><p>Enter assessment marks for students in your assigned subjects and classes.</p></div>
+        <button class="primary-btn" onclick="openTeacherResultForm()">+ Enter Marks</button>
+    </div>
+    <div id="teacherResultMessage" class="message"></div>
+    <div class="panel" id="teacherResultFormPanel" style="display:none">
+        <h2 id="teacherResultFormTitle">Enter Student Marks</h2>
+        <form id="teacherResultForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Academic Year *</label><input id="teacherResultYear" value="2026/2027" required></div>
+                <div class="form-group"><label>Term *</label><select id="teacherResultTerm" required><option value="">Select Term</option><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+                <div class="form-group"><label>Class *</label><select id="teacherResultClass" required></select></div>
+                <div class="form-group"><label>Student *</label><select id="teacherResultStudent" required disabled><option value="">Select Class First</option></select></div>
+                <div class="form-group"><label>Subject *</label><select id="teacherResultSubject" required></select></div>
+                <div class="form-group"><label>Class Score / 50 *</label><input id="teacherResultClassScore" type="number" min="0" max="50" step="0.01" required></div>
+                <div class="form-group"><label>Exam Score / 50 *</label><input id="teacherResultExamScore" type="number" min="0" max="50" step="0.01" required></div>
+                <div class="form-group"><label>Total / 100</label><input id="teacherResultTotal" readonly></div>
+                <div class="form-group full"><label>Remark</label><input id="teacherResultRemark" maxlength="200" placeholder="Optional remark"></div>
+            </div><br>
+            <button class="primary-btn" type="submit">Save Marks</button>
+            <button class="secondary-btn" type="button" onclick="closeTeacherResultForm()">Cancel</button>
+        </form>
+    </div>
+    <div class="panel">
+        <input class="search-box" id="teacherResultSearch" placeholder="Search student, subject, class or year...">
+        <div id="teacherResultsContent"></div>
+    </div>
+</section>
+
 <section id="teacherAttendance" class="page">
     <div class="page-header">
         <div><h1>Attendance Management</h1><p>Mark and manage attendance for your assigned classes.</p></div>
@@ -1179,8 +1144,6 @@ td{font-size:14px}
         <div id="teacherAttendanceContent"></div>
     </div>
 </section>
-<section id="teacherAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Teacher assignment management will be added next.</p></div></section>
-<section id="teacherAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Teacher announcements will be added next.</p></div></section>
 
 <section id="adminAttendance" class="page">
     <div class="page-header">
@@ -1215,7 +1178,6 @@ td{font-size:14px}
         <div id="attendanceTable"></div>
     </div>
 </section>
-<section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
 <section id="adminFees" class="page">
     <div class="page-header">
         <div><h1>Fees & Payments</h1><p>Manage student fee charges, payments and balances.</p></div>
@@ -1272,7 +1234,6 @@ td{font-size:14px}
         <div id="feeStatementContent"></div>
     </div>
 </section>
-<section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
 <section id="reports" class="page">
 
     <div class="page-header">
@@ -1536,25 +1497,10 @@ function login(){
         }
     }
 
-    if(role==="Student"){
-        const found=students.find(s=>s.username===username && s.password===password);
-
+    if(role==="Teacher"){
+        const found=teachers.find(t=>t.username===username && t.password===password);
         if(found){
-            user={
-                username:found.username,
-                name:found.name,
-                role:"Student",
-                id:found.id,
-                className:found.className
-            };
-        }else if(username==="student001" && password==="123456"){
-            user={
-                username:"student001",
-                name:"Gabriel Quansah",
-                role:"Student",
-                id:"STU-001",
-                className:"Basic 8"
-            };
+            user={username:found.username,name:found.name,role:"Teacher",id:found.id};
         }
     }
 
@@ -1567,20 +1513,6 @@ function login(){
                 name:found.name,
                 role:"Parent",
                 id:found.id
-            };
-        }
-    }
-
-    if(role==="Teacher"){
-        const found=teachers.find(t=>t.username===username && t.password===password);
-
-        if(found){
-            user={
-                username:found.username,
-                name:found.name,
-                role:"Teacher",
-                id:found.id,
-                className:"Teacher Account"
             };
         }
     }
@@ -1602,9 +1534,6 @@ function showPortal(user){
 
     document.getElementById("topUser").textContent=user.name;
     document.getElementById("topRole").textContent=user.role;
-
-    document.getElementById("studentNav").style.display =
-        user.role==="Student" ? "block":"none";
 
     document.getElementById("parentNav").style.display =
         user.role==="Parent" ? "block":"none";
@@ -1658,7 +1587,7 @@ function showPage(pageId){
         }
     });
 
-    const title=pageId==="adminResults" || pageId==="studentResults" || pageId==="parentResults" || pageId==="teacherResults"
+    const title=pageId==="adminResults" || pageId==="parentResults"
         ? "Results"
         : pageId.charAt(0).toUpperCase()+pageId.slice(1);
 
@@ -1669,15 +1598,15 @@ function showPage(pageId){
 
 function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
-    if(pageId==="subjects")renderStudentSubjects();
-    if(pageId==="studentResults")renderStudentResults();
-    if(pageId==="children")renderChildren();
-    if(pageId==="parentResults")renderParentResults();
     if(pageId==="teacherSubjects")renderTeacherSubjects();
     if(pageId==="teacherResults")renderTeacherResults();
-    if(pageId==="attendance")renderStudentAttendance();
+    if(pageId==="teacherAttendance"){
+        populateAttendanceClassSelect("Teacher");
+        renderTeacherAttendance();
+    }
+    if(pageId==="children")renderChildren();
+    if(pageId==="parentResults")renderParentResults();
     if(pageId==="parentAttendance")renderParentAttendance();
-    if(pageId==="teacherAttendance")renderTeacherAttendance();
     if(pageId==="adminAttendance"){
         populateAttendanceClassSelect("Admin");
         renderAdminAttendance();
@@ -2804,9 +2733,13 @@ function renderTeacherResults(){
         .filter(s=>s.teacherId===teacherId)
         .map(s=>s.id);
 
+    const search=(document.getElementById("teacherResultSearch")?.value||"").toLowerCase();
     const teacherResults=results.filter(r=>
         teacherSubjectIds.includes(r.subjectId)
-    );
+    ).filter(r=>{
+        const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
+        return [student?.name||"",subject?.name||"",c?.name||"",c?.section||"",r.academicYear||"",r.term||""].join(" ").toLowerCase().includes(search);
+    });
 
     if(!teacherResults.length){
         document.getElementById("teacherResultsContent").innerHTML=
@@ -3468,6 +3401,97 @@ function deleteTeacherAttendance(id){
 }
 
 
+
+/* =========================
+   TEACHER RESULT ENTRY
+========================= */
+
+function teacherAssignedClasses(){
+    return classes.filter(c=>c.teacherId===currentUser?.id);
+}
+
+function teacherAssignedSubjects(){
+    return subjects.filter(s=>s.teacherId===currentUser?.id);
+}
+
+function populateTeacherResultClassSelect(){
+    const select=document.getElementById("teacherResultClass");
+    if(!select)return;
+    const current=select.value;
+    const list=teacherAssignedClasses();
+    select.innerHTML='<option value="">Select Class</option>'+list.map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`).join("");
+    if(list.some(c=>c.id===current))select.value=current;
+    populateTeacherResultStudentSelect(select.value);
+}
+
+function populateTeacherResultStudentSelect(classId){
+    const select=document.getElementById("teacherResultStudent");
+    if(!select)return;
+    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
+    const c=getClass(classId);
+    const list=students.filter(st=>(c?.studentIds||[]).includes(st.id)||st.classId===classId||st.className===c?.name);
+    select.innerHTML='<option value="">Select Student</option>'+list.map(st=>`<option value="${escapeHtml(st.id)}">${escapeHtml(st.name)} (${escapeHtml(st.id)})</option>`).join("");
+    select.disabled=false;
+}
+
+function populateTeacherResultSubjectSelect(){
+    const select=document.getElementById("teacherResultSubject");
+    if(!select)return;
+    const list=teacherAssignedSubjects();
+    select.innerHTML='<option value="">Select Subject</option>'+list.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}${s.code?` (${escapeHtml(s.code)})`:''}</option>`).join("");
+}
+
+function openTeacherResultForm(){
+    document.getElementById("teacherResultForm").reset();
+    document.getElementById("teacherResultTotal").value="";
+    document.getElementById("teacherResultFormTitle").textContent="Enter Student Marks";
+    populateTeacherResultClassSelect();
+    populateTeacherResultSubjectSelect();
+    document.getElementById("teacherResultFormPanel").style.display="block";
+}
+
+function closeTeacherResultForm(){
+    document.getElementById("teacherResultFormPanel").style.display="none";
+}
+
+document.getElementById("teacherResultClass")?.addEventListener("change",function(){
+    populateTeacherResultStudentSelect(this.value);
+});
+
+function updateTeacherResultTotal(){
+    const a=Number(document.getElementById("teacherResultClassScore")?.value)||0;
+    const b=Number(document.getElementById("teacherResultExamScore")?.value)||0;
+    document.getElementById("teacherResultTotal").value=(a+b).toFixed(2);
+}
+document.getElementById("teacherResultClassScore")?.addEventListener("input",updateTeacherResultTotal);
+document.getElementById("teacherResultExamScore")?.addEventListener("input",updateTeacherResultTotal);
+
+document.getElementById("teacherResultForm")?.addEventListener("submit",function(e){
+    e.preventDefault();
+    const classId=document.getElementById("teacherResultClass").value;
+    const studentId=document.getElementById("teacherResultStudent").value;
+    const subjectId=document.getElementById("teacherResultSubject").value;
+    const year=document.getElementById("teacherResultYear").value.trim();
+    const term=document.getElementById("teacherResultTerm").value;
+    const classScore=Number(document.getElementById("teacherResultClassScore").value);
+    const examScore=Number(document.getElementById("teacherResultExamScore").value);
+    const remark=document.getElementById("teacherResultRemark").value.trim();
+    const ownsClass=teacherAssignedClasses().some(c=>c.id===classId);
+    const ownsSubject=teacherAssignedSubjects().some(s=>s.id===subjectId);
+    if(!ownsClass||!ownsSubject){showMessage("teacherResultMessage","You can only enter marks for your assigned classes and subjects.","error");return;}
+    if(classScore<0||classScore>50||examScore<0||examScore>50){showMessage("teacherResultMessage","Scores must be between 0 and 50.","error");return;}
+    const duplicate=results.find(r=>r.studentId===studentId&&r.subjectId===subjectId&&r.academicYear===year&&r.term===term);
+    if(duplicate){showMessage("teacherResultMessage","Marks already exist for this student, subject, academic year and term. Use Administrator to edit existing marks.","error");return;}
+    const total=classScore+examScore;
+    results.push({id:"RES-"+Math.random().toString(36).slice(2,8).toUpperCase(),studentId,classId,subjectId,academicYear:year,term,classScore,examScore,total,grade:getPerformance(total),remark});
+    saveAll();
+    closeTeacherResultForm();
+    renderTeacherResults();
+    refreshDashboard();
+    showMessage("teacherResultMessage","Marks saved successfully.");
+});
+
+document.getElementById("teacherResultSearch")?.addEventListener("input",renderTeacherResults);
 
 /* =========================
    REPORT CARDS / STUDENT REPORTS
