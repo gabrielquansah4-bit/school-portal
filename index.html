@@ -1811,8 +1811,9 @@ function renderProfile(){
                 <h3>${firstLogin ? "Create Your Password" : "Change Password"}</h3>
                 <p>${firstLogin ? "Use your temporary password once, then choose a private password for future logins." : `You can change your ${roleLabel} portal password at any time.`}</p>
                 <div class="form-grid">
+                    ${role==="Parent" ? `<div class="form-group"><label>New Username</label><input id="parentNewUsername" type="text" value="${escapeHtml(u.username)}" autocomplete="username"></div>` : ""}
                     <div class="form-group"><label>Current Password</label><input id="${prefix}CurrentPassword" type="password" autocomplete="current-password"></div>
-                    <div class="form-group"><label>New Password</label><input id="${prefix}NewPassword" type="password" minlength="6" autocomplete="new-password"></div>
+                    <div class="form-group"><label>New Password ${firstLogin ? "*" : "(leave blank to keep current)"}</label><input id="${prefix}NewPassword" type="password" minlength="6" autocomplete="new-password"></div>
                     <div class="form-group"><label>Confirm New Password</label><input id="${prefix}ConfirmPassword" type="password" minlength="6" autocomplete="new-password"></div>
                 </div>
                 <br>
@@ -1834,35 +1835,59 @@ function changeTeacherPassword(){ changePortalPassword("Teacher"); }
 
 function changePortalPassword(role){
     if(!currentUser || currentUser.role!==role)return;
+
     const prefix=role.toLowerCase();
     const current=document.getElementById(prefix+"CurrentPassword")?.value || "";
     const newPassword=document.getElementById(prefix+"NewPassword")?.value || "";
     const confirmPassword=document.getElementById(prefix+"ConfirmPassword")?.value || "";
+    const newUsername=role==="Parent"
+        ? (document.getElementById("parentNewUsername")?.value || "").trim()
+        : currentUser.username;
     const message=document.getElementById(prefix+"PasswordMessage");
     const showError=(text)=>{ if(message){message.className="message error";message.textContent=text;} };
-    if(!current || !newPassword || !confirmPassword){showError("Please complete all password fields.");return;}
+
     const records=role==="Parent" ? parents : teachers;
     const account=records.find(x=>x.id===currentUser.id);
     if(!account){showError(role+" account could not be found.");return;}
+
+    if(!current){showError("Please enter your current password to update your account.");return;}
     if(account.password!==current){showError("Current password is incorrect.");return;}
-    if(newPassword.length<6){showError("Your new password must be at least 6 characters.");return;}
-    if(newPassword===current){showError("Your new password must be different from the current password.");return;}
-    if(newPassword!==confirmPassword){showError("The new passwords do not match.");return;}
-    // Save the new password permanently to the parent's/teacher's account.
-    // The old temporary password is replaced immediately, so it can no longer be used.
-    account.password=newPassword;
+
+    if(role==="Parent") {
+        if(!newUsername){showError("Username cannot be empty.");return;}
+        const usernameTaken=parents.some(p=>
+            p.id!==account.id &&
+            String(p.username||"").toLowerCase()===newUsername.toLowerCase()
+        );
+        if(usernameTaken){showError("That username is already in use. Please choose another username.");return;}
+    }
+
+    const firstLogin=currentUser.mustChangePassword===true;
+    if(firstLogin && !newPassword){
+        showError("Please create a new password on your first login.");
+        return;
+    }
+
+    if(newPassword){
+        if(newPassword.length<6){showError("Your new password must be at least 6 characters.");return;}
+        if(newPassword===current){showError("Your new password must be different from the current password.");return;}
+        if(newPassword!==confirmPassword){showError("The new passwords do not match.");return;}
+        account.password=newPassword;
+    }
+
+    if(role==="Parent") account.username=newUsername;
     account.mustChangePassword=false;
     saveAll();
 
-    // Keep the active session in sync with the saved account.
-    currentUser.password=newPassword;
+    currentUser.username=account.username;
+    currentUser.password=account.password;
     currentUser.mustChangePassword=false;
     localStorage.setItem("schoolPortalUser",JSON.stringify(currentUser));
 
     if(message){
         message.className="message success";
         message.textContent=role==="Parent"
-            ? "Password created successfully. From now on, use your username and this new password to log in."
+            ? "Account updated successfully. Use your new username and password the next time you log in."
             : "Password updated successfully.";
     }
 
@@ -2157,6 +2182,7 @@ function renderParents(){
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Username</th>
+                <th>Password</th>
                 <th>Children</th>
                 <th>Actions</th>
             </tr>
@@ -2175,6 +2201,7 @@ function renderParents(){
                 <td>${escapeHtml(p.phone)}</td>
                 <td>${escapeHtml(p.email)}</td>
                 <td>${escapeHtml(p.username)}</td>
+                <td><span id="parent-password-${escapeHtml(p.id)}">••••••••</span> <button class="secondary-btn" style="padding:5px 9px;margin-left:5px" type="button" onclick="toggleParentPassword('${p.id}')">Show</button></td>
                 <td>${escapeHtml(children||"None")}</td>
                 <td>
                     <button class="edit-btn" onclick="editParent('${p.id}')">Edit</button>
@@ -2205,6 +2232,24 @@ function editParent(id){
 
     document.getElementById("parentFormTitle").textContent="Edit Parent";
     document.getElementById("parentFormPanel").style.display="block";
+}
+
+function toggleParentPassword(id){
+    if(!currentUser || currentUser.role!=="Administrator")return;
+    const account=parents.find(p=>p.id===id);
+    const span=document.getElementById("parent-password-"+id);
+    const button=span?.nextElementSibling;
+    if(!account || !span || !button)return;
+    const visible=span.dataset.visible==="true";
+    if(visible){
+        span.textContent="••••••••";
+        span.dataset.visible="false";
+        button.textContent="Show";
+    }else{
+        span.textContent=account.password||"";
+        span.dataset.visible="true";
+        button.textContent="Hide";
+    }
 }
 
 function deleteParent(id){
