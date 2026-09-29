@@ -987,7 +987,7 @@ td{font-size:14px}
 <!-- SUBJECTS -->
 <section id="adminSubjects" class="page">
     <div class="page-header">
-        <div><h1>Subject Management</h1><p>Manage subjects, classes and teachers.</p></div>
+        <div><h1>Subject Management</h1><p>Manage subjects and the classes they belong to.</p></div>
         <button class="primary-btn" onclick="openSubjectForm()">+ Add Subject</button>
     </div>
 
@@ -1001,10 +1001,6 @@ td{font-size:14px}
                 <div class="form-group"><label>Subject Name *</label><input id="subjectName" required></div>
                 <div class="form-group"><label>Subject Code</label><input id="subjectCode"></div>
                 <div class="form-group"><label>Academic Year</label><input id="subjectYear" value="2026/2027"></div>
-                <div class="form-group">
-                    <label>Teacher</label>
-                    <select id="subjectTeacher"></select>
-                </div>
                 <div class="form-group full">
                     <label>Assign Classes</label>
                     <div id="subjectClassList" class="checkbox-list"></div>
@@ -1354,6 +1350,9 @@ let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
         academicYear:"2026/2027"
     }
 ];
+// Subjects are linked to classes only; remove legacy teacher assignments.
+subjects=subjects.map(s=>{const copy={...s}; delete copy.teacherId; return copy;});
+
 
 let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
 let resultDeadlines = JSON.parse(localStorage.getItem("schoolPortalResultDeadlines")) || [];
@@ -2548,7 +2547,6 @@ function openSubjectForm(){
     document.getElementById("subjectForm").reset();
     document.getElementById("subjectYear").value="2026/2027";
 
-    populateSubjectTeacherSelect("");
     populateSubjectClassList([]);
 
     document.getElementById("subjectFormTitle").textContent="Add Subject";
@@ -2557,17 +2555,6 @@ function openSubjectForm(){
 
 function closeSubjectForm(){
     document.getElementById("subjectFormPanel").style.display="none";
-}
-
-function populateSubjectTeacherSelect(selected=""){
-    const select=document.getElementById("subjectTeacher");
-
-    select.innerHTML='<option value="">Unassigned</option>'+
-        teachers.map(t=>`
-            <option value="${escapeHtml(t.id)}" ${selected===t.id?"selected":""}>
-                ${escapeHtml(t.name)}
-            </option>
-        `).join("");
 }
 
 function populateSubjectClassList(selected=[]){
@@ -2600,7 +2587,6 @@ document.getElementById("subjectForm").addEventListener("submit",function(e){
         name:document.getElementById("subjectName").value.trim(),
         code:document.getElementById("subjectCode").value.trim(),
         classIds,
-        teacherId:document.getElementById("subjectTeacher").value,
         academicYear:document.getElementById("subjectYear").value.trim()
     };
 
@@ -2651,7 +2637,6 @@ function renderSubjects(){
                 <th>Subject</th>
                 <th>Code</th>
                 <th>Classes</th>
-                <th>Teacher</th>
                 <th>Academic Year</th>
                 <th>Actions</th>
             </tr>
@@ -2672,7 +2657,6 @@ function renderSubjects(){
                 <td>${escapeHtml(s.name)}</td>
                 <td>${escapeHtml(s.code)}</td>
                 <td>${escapeHtml(classNames||"None")}</td>
-                <td>${escapeHtml(getTeacher(s.teacherId)?.name||"Unassigned")}</td>
                 <td>${escapeHtml(s.academicYear)}</td>
                 <td>
                     <button class="edit-btn" onclick="editSubject('${s.id}')">Edit</button>
@@ -2696,7 +2680,6 @@ function editSubject(id){
     document.getElementById("subjectCode").value=s.code;
     document.getElementById("subjectYear").value=s.academicYear;
 
-    populateSubjectTeacherSelect(s.teacherId||"");
     populateSubjectClassList(s.classIds||[]);
 
     document.getElementById("subjectFormTitle").textContent="Edit Subject";
@@ -3449,7 +3432,6 @@ function renderStudentSubjects(){
             <tr>
                 <th>Subject</th>
                 <th>Code</th>
-                <th>Teacher</th>
                 <th>Academic Year</th>
             </tr>
         </thead>
@@ -3458,7 +3440,6 @@ function renderStudentSubjects(){
             <tr>
                 <td>${escapeHtml(s.name)}</td>
                 <td>${escapeHtml(s.code)}</td>
-                <td>${escapeHtml(getTeacher(s.teacherId)?.name||"Unassigned")}</td>
                 <td>${escapeHtml(s.academicYear)}</td>
             </tr>
         `).join("")}
@@ -3526,11 +3507,12 @@ function renderChildren(){
 function renderTeacherSubjects(){
     const teacherId=currentUser?.id;
 
-    const mySubjects=subjects.filter(s=>s.teacherId===teacherId);
+    const myClassIds=classes.filter(c=>c && c.id).map(c=>c.id);
+    const mySubjects=subjects.filter(s=>(s.classIds||[]).some(id=>myClassIds.includes(id)));
 
     if(!mySubjects.length){
         document.getElementById("teacherSubjectsContent").innerHTML=
-            '<div class="empty">No subjects assigned to you.</div>';
+            '<div class="empty">No subjects are linked to the available classes.</div>';
         return;
     }
 
