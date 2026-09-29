@@ -421,7 +421,6 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div class="nav-link" data-page="children">My Children</div>
         <div class="nav-link" data-page="parentResults">Results</div>
         <div class="nav-link" data-page="parentAttendance">Attendance</div>
-        <div class="nav-link" data-page="parentAssignments">Assignments</div>
         <div class="nav-link" data-page="parentFees">Fees</div>
     </div>
 
@@ -532,11 +531,23 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 <!-- PARENT RESULTS -->
 <section id="parentResults" class="page">
     <div class="page-header">
-        <div><h1>Children's Results</h1><p>Academic results for your children.</p></div>
+        <div><h1>Children's Results</h1><p>View results and print report cards for your linked children.</p></div>
+    </div>
+    <div class="panel">
+        <div class="form-grid">
+            <div class="form-group"><label>Child</label><select id="parentResultStudent"></select></div>
+            <div class="form-group"><label>Academic Year</label><input id="parentResultYear" value="2026/2027"></div>
+            <div class="form-group"><label>Term</label><select id="parentResultTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+        </div>
+        <br>
+        <button class="primary-btn" type="button" onclick="renderSelectedParentResults()">View Results</button>
+        <button class="secondary-btn" type="button" onclick="printParentReport()">Print Report Card</button>
+        <div id="parentResultsMessage" class="message"></div>
     </div>
     <div class="panel">
         <div id="parentResultsContent"></div>
     </div>
+    <div id="parentReportPrintContainer" style="display:none"></div>
 </section>
 
 <!-- TEACHER SUBJECTS -->
@@ -916,11 +927,15 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div><h1>Children's Attendance</h1><p>Attendance records for your children.</p></div>
     </div>
     <div class="panel">
-        <div id="parentAttendanceContent"></div>
+        <div class="form-grid"><div class="form-group"><label>Child</label><select id="parentAttendanceStudent"><option value="">All Children</option></select></div></div>
     </div>
+    <div class="panel"><div id="parentAttendanceContent"></div></div>
 </section>
-<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
-<section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
+<section id="parentFees" class="page">
+    <div class="page-header"><div><h1>School Fees</h1><p>View fee charges, payments and balances for your children.</p></div></div>
+    <div class="panel"><div id="parentFeesSummary" class="cards"></div></div>
+    <div class="panel"><div id="parentFeesContent"></div></div>
+</section>
 
 <section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
 <section id="teacherAttendance" class="page">
@@ -1124,6 +1139,7 @@ subjects=subjects.map(s=>{const copy={...s}; delete copy.teacherId; return copy;
 let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
 let resultDeadlines = JSON.parse(localStorage.getItem("schoolPortalResultDeadlines")) || [];
 let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
+let fees = JSON.parse(localStorage.getItem("schoolPortalFees")) || [];
 
 let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
 
@@ -1150,6 +1166,7 @@ function saveAll(){
     localStorage.setItem("schoolPortalResults",JSON.stringify(results));
     localStorage.setItem("schoolPortalResultDeadlines",JSON.stringify(resultDeadlines));
     localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
+    localStorage.setItem("schoolPortalFees",JSON.stringify(fees));
 }
 
 function escapeHtml(value){
@@ -1541,6 +1558,7 @@ function refreshPage(pageId){
     if(pageId==="profile")renderProfile();
     if(pageId==="children")renderChildren();
     if(pageId==="parentResults")renderParentResults();
+    if(pageId==="parentFees")renderParentFees();
     if(pageId==="teacherSubjects")renderTeacherSubjects();
     if(pageId==="teacherResults"){
         populateTeacherBulkMarksClassSelect();
@@ -3013,48 +3031,27 @@ function renderStudentSubjects(){
 
 function renderChildren(){
     const parent=getParent(currentUser?.id);
+    const content=document.getElementById("childrenContent");
+    if(!parent){content.innerHTML='<div class="empty">Parent account not found.</div>';return;}
+    const children=getLinkedChildren();
+    if(!children.length){content.innerHTML='<div class="empty">No children are linked to your account. Please contact the school administrator.</div>';return;}
+    content.innerHTML=`<div class="cards">${children.map(s=>{
+        const schoolClass=classes.find(c=>getReportClassStudents(c.id).some(x=>normalizeId(x.id)===normalizeId(s.id))) || classes.find(c=>normalizeId(c.name)===normalizeId(s.className));
+        return `<div class="card" style="padding:20px"><h2>${escapeHtml(s.name)}</h2><p><strong>Student ID:</strong> ${escapeHtml(s.id)}</p><p><strong>Class:</strong> ${escapeHtml(schoolClass?classDisplay(schoolClass):s.className||"—")}</p><p><strong>Gender:</strong> ${escapeHtml(s.gender||"—")}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px"><button class="primary-btn" type="button" onclick="openParentChildResults('${escapeHtml(s.id)}')">Results</button><button class="secondary-btn" type="button" onclick="openParentChildAttendance('${escapeHtml(s.id)}')">Attendance</button></div></div>`;
+    }).join("")}</div>`;
+}
 
-    if(!parent){
-        document.getElementById("childrenContent").innerHTML=
-            '<div class="empty">Parent account not found.</div>';
-        return;
-    }
+function openParentChildResults(studentId){
+    showPage("parentResults");
+    populateParentResultStudent(studentId);
+    renderSelectedParentResults();
+}
 
-    const children=(parent.studentIds||[])
-        .map(id=>getStudent(id))
-        .filter(Boolean);
-
-    if(!children.length){
-        document.getElementById("childrenContent").innerHTML=
-            '<div class="empty">No children linked to your account.</div>';
-        return;
-    }
-
-    document.getElementById("childrenContent").innerHTML=`
-    <div class="table-wrap">
-    <table>
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Class</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-        ${children.map(s=>`
-            <tr>
-                <td>${escapeHtml(s.id)}</td>
-                <td>${escapeHtml(s.name)}</td>
-                <td>${escapeHtml(s.gender)}</td>
-                <td>${escapeHtml(s.className)}</td>
-                <td>${escapeHtml(s.email)}</td>
-            </tr>
-        `).join("")}
-        </tbody>
-    </table>
-    </div>`;
+function openParentChildAttendance(studentId){
+    showPage("parentAttendance");
+    const select=document.getElementById("parentAttendanceStudent");
+    if(select){select.value=studentId;}
+    renderParentAttendance();
 }
 
 
@@ -3414,49 +3411,30 @@ function renderStudentAttendance(){
 }
 
 function renderParentAttendance(){
-    const parent=getParent(currentUser?.id);
-
-    if(!parent){
-        document.getElementById("parentAttendanceContent").innerHTML=
-            '<div class="empty">Parent account not found.</div>';
-        return;
+    const content=document.getElementById("parentAttendanceContent");
+    const select=document.getElementById("parentAttendanceStudent");
+    if(!content)return;
+    const children=getLinkedChildren();
+    if(select){
+        const current=select.value;
+        select.innerHTML='<option value="">All Children</option>'+children.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join("");
+        if(current && children.some(s=>normalizeId(s.id)===normalizeId(current)))select.value=current;
     }
-
-    const childIds=parent.studentIds||[];
-
-    const records=attendance
-        .filter(a=>childIds.includes(a.studentId))
-        .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-
-    if(!records.length){
-        document.getElementById("parentAttendanceContent").innerHTML=
-            '<div class="empty">No attendance records available for your children.</div>';
-        return;
-    }
-
-    document.getElementById("parentAttendanceContent").innerHTML=`
-    <div class="table-wrap">
-    <table>
-        <thead><tr>
-            <th>Date</th><th>Student</th><th>Class</th><th>Status</th><th>Academic Year</th><th>Remarks</th>
-        </tr></thead>
-        <tbody>
-        ${records.map(a=>{
-            const student=getStudent(a.studentId);
-            const c=getClass(a.classId);
-            return `<tr>
-                <td>${escapeHtml(formatDate(a.date))}</td>
-                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
-                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
-                <td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
-                <td>${escapeHtml(a.academicYear)}</td>
-                <td>${escapeHtml(a.remarks||"")}</td>
-            </tr>`;
-        }).join("")}
-        </tbody>
-    </table>
-    </div>`;
+    const selected=select?.value||"";
+    const ids=new Set(children.map(s=>normalizeId(s.id)));
+    let records=attendance.filter(a=>ids.has(normalizeId(a.studentId)));
+    if(selected)records=records.filter(a=>normalizeId(a.studentId)===normalizeId(selected));
+    records.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    if(!children.length){content.innerHTML='<div class="empty">No children are linked to your account.</div>';return;}
+    if(!records.length){content.innerHTML='<div class="empty">No attendance records are available for the selected child.</div>';return;}
+    const present=records.filter(a=>String(a.status).toLowerCase()==="present").length;
+    const late=records.filter(a=>String(a.status).toLowerCase()==="late").length;
+    const absent=records.filter(a=>String(a.status).toLowerCase()==="absent").length;
+    const excused=records.filter(a=>String(a.status).toLowerCase()==="excused").length;
+    const counted=present+late+absent; const pct=counted?Math.round(((present+late)/counted)*100):0;
+    content.innerHTML=`<div class="cards"><div class="card stat-card"><h3>${records.length}</h3><p>Total Records</p></div><div class="card stat-card"><h3>${present}</h3><p>Present</p></div><div class="card stat-card"><h3>${absent}</h3><p>Absent</p></div><div class="card stat-card"><h3>${pct}%</h3><p>Attendance</p></div></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Student</th><th>Class</th><th>Status</th><th>Academic Year</th><th>Remarks</th></tr></thead><tbody>${records.map(a=>{const st=getStudent(a.studentId);const c=getClass(a.classId);return `<tr><td>${escapeHtml(formatDate(a.date))}</td><td>${escapeHtml(st?.name||"Unknown Student")}</td><td>${escapeHtml(c?classDisplay(c):"Deleted Class")}</td><td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td><td>${escapeHtml(a.academicYear||"")}</td><td>${escapeHtml(a.remarks||"")}</td></tr>`;}).join("")}</tbody></table></div>`;
 }
+
 
 function renderTeacherAttendance(){
     const teacherId=currentUser?.id;
@@ -3831,6 +3809,8 @@ document.getElementById("reportType")?.addEventListener("change",function(){
     document.getElementById("studentReportContainer").className="report-placeholder";
     document.getElementById("studentReportContainer").innerHTML='<p>Select the report options, then click <strong>Generate Report</strong>.</p>';
 });
+
+document.getElementById("parentAttendanceStudent")?.addEventListener("change",renderParentAttendance);
 
 /* =========================
    SEARCH EVENTS
