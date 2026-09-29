@@ -510,6 +510,7 @@ td{font-size:14px}
 .password-modal-box h2{margin-top:0;}
 .password-modal-actions{display:flex;gap:10px;margin-top:16px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -809,6 +810,17 @@ td{font-size:14px}
             <button class="primary-btn" type="submit">Save Student</button>
             <button class="secondary-btn" type="button" onclick="closeStudentForm()">Cancel</button>
         </form>
+    </div>
+
+    <div class="panel">
+        <h2>Import Students & Update Classes</h2>
+        <p style="margin:8px 0 14px;color:#666">Upload the student Excel file using these columns: <strong>Student ID, First Name, Last Name, Class</strong>. The portal will update student classes and automatically create/update the matching class records.</p>
+        <div class="form-group">
+            <input type="file" id="studentExcelFile" accept=".xlsx,.xls,.csv">
+        </div>
+        <button class="primary-btn" type="button" onclick="importStudentsFromExcel()">Import Students & Sync Classes</button>
+        <button class="secondary-btn" type="button" onclick="downloadStudentTemplate()">Download Template</button>
+        <div id="studentImportMessage" class="message"></div>
     </div>
 
     <div class="panel">
@@ -1383,6 +1395,148 @@ function refreshDashboard(){
     document.getElementById("attendanceCount").textContent=attendance.length;
 }
 
+
+/* =========================
+   STUDENT EXCEL IMPORT + CLASS SYNC
+========================= */
+
+function importValue(row,names){
+    const keys=Object.keys(row||{});
+    const wanted=(Array.isArray(names)?names:[names]).map(x=>String(x).trim().toLowerCase());
+    const key=keys.find(k=>wanted.includes(String(k).trim().toLowerCase()));
+    return key!==undefined ? row[key] : "";
+}
+
+function parseStudentExcelRows(sheet){
+    const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:true,blankrows:false});
+    if(!matrix.length) return [];
+
+    let headerIndex=-1;
+    for(let i=0;i<Math.min(matrix.length,15);i++){
+        const row=(matrix[i]||[]).map(v=>String(v||"").trim().toLowerCase());
+        const hasId=row.some(v=>["student id","studentid","student id ","id"].includes(v));
+        const hasFirst=row.some(v=>["first name","firstname","given name"].includes(v));
+        const hasLast=row.some(v=>["last name","lastname","surname","family name"].includes(v));
+        const hasClass=row.some(v=>["class","class name","classname","class / section","classsection"].includes(v));
+        if(hasId && hasFirst && hasLast && hasClass){ headerIndex=i; break; }
+    }
+
+    if(headerIndex===-1) throw new Error("Could not find the required columns: Student ID, First Name, Last Name and Class.");
+
+    const headers=matrix[headerIndex].map((h,i)=>String(h||`Column ${i+1}`).trim());
+    const rows=[];
+    for(let i=headerIndex+1;i<matrix.length;i++){
+        const values=matrix[i]||[];
+        if(!values.some(v=>String(v||"").trim())) continue;
+        const obj={};
+        headers.forEach((h,j)=>obj[h]=values[j]??"");
+        rows.push(obj);
+    }
+    return rows;
+}
+
+function syncClassesFromStudents(){
+    const grouped={};
+
+    students.forEach(s=>{
+        const className=String(s.className||"").trim();
+        if(!className) return;
+        if(!grouped[className]) grouped[className]=[];
+        if(!grouped[className].includes(s.id)) grouped[className].push(s.id);
+    });
+
+    let classesAdded=0, classesUpdated=0;
+    Object.entries(grouped).forEach(([className,studentIds])=>{
+        // Match classes by exact class name. This preserves an existing section/teacher/year.
+        let c=classes.find(x=>String(x.name||"").trim().toLowerCase()===className.toLowerCase());
+        if(!c){
+            c={
+                id:"CLS-"+Date.now().toString().slice(-6)+Math.floor(Math.random()*90+10),
+                name:className,
+                section:"",
+                academicYear:"2026/2027",
+                teacherId:"",
+                studentIds:[]
+            };
+            classes.push(c);
+            classesAdded++;
+        }
+        c.studentIds=studentIds;
+        classesUpdated++;
+    });
+
+    return {classesAdded,classesUpdated};
+}
+
+function importStudentsFromExcel(){
+    const input=document.getElementById("studentExcelFile");
+    const file=input?.files?.[0];
+    if(!file){
+        showMessage("studentImportMessage","Please select the student Excel file first.","error");
+        return;
+    }
+    if(typeof XLSX==="undefined"){
+        showMessage("studentImportMessage","Excel support could not be loaded. Check your internet connection and try again.","error");
+        return;
+    }
+
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const workbook=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+            const sheet=workbook.Sheets[workbook.SheetNames[0]];
+            const rows=parseStudentExcelRows(sheet);
+            if(!rows.length) throw new Error("No student records were found in the Excel file.");
+
+            let added=0,updated=0,skipped=0;
+            rows.forEach(row=>{
+                const id=String(importValue(row,["Student ID","StudentID","ID"])).trim();
+                const first=String(importValue(row,["First Name","FirstName","Given Name"])).trim();
+                const last=String(importValue(row,["Last Name","LastName","Surname","Family Name"])).trim();
+                const className=String(importValue(row,["Class","Class Name","ClassName","Class / Section","ClassSection"])).trim();
+
+                if(!id || !first || !last || !className){ skipped++; return; }
+
+                const data={id,name:[first,last].join(" "),firstName:first,lastName:last,className};
+                const index=students.findIndex(s=>String(s.id||"").trim()===id);
+                if(index>=0){
+                    students[index]={...students[index],...data};
+                    updated++;
+                }else{
+                    students.push(data);
+                    added++;
+                }
+            });
+
+            const sync=syncClassesFromStudents();
+            saveAll();
+            renderStudents();
+            renderClasses();
+            refreshDashboard();
+
+            showMessage("studentImportMessage",`Import complete: ${added} added, ${updated} updated, ${skipped} skipped. Classes synchronized: ${sync.classesAdded} new class(es), ${sync.classesUpdated} class record(s) updated.`,skipped&&added+updated===0?"error":"success");
+            input.value="";
+        }catch(err){
+            showMessage("studentImportMessage",err.message||"The Excel file could not be imported.","error");
+        }
+    };
+    reader.onerror=function(){showMessage("studentImportMessage","The selected file could not be read.","error");};
+    reader.readAsArrayBuffer(file);
+}
+
+function downloadStudentTemplate(){
+    if(typeof XLSX==="undefined"){
+        showMessage("studentImportMessage","Excel support could not be loaded.","error");
+        return;
+    }
+    const rows=[
+        {"Student ID":"STU-2026-0001","First Name":"Sample","Last Name":"Student",Class:"Basic1 Cosmos"}
+    ];
+    const ws=XLSX.utils.json_to_sheet(rows);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Students");
+    XLSX.writeFile(wb,"SwiftSchool_Student_Template.xlsx");
+}
 
 /* =========================
    LOGIN
