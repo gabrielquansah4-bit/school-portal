@@ -268,6 +268,237 @@ td{font-size:14px}
     .main{margin-left:0}
     .topbar{flex-direction:column;align-items:flex-start;gap:10px}
 }
+
+/* =========================
+   REPORT CARDS
+========================= */
+
+.report-controls{
+    margin-bottom:20px;
+}
+
+.report-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+.report-placeholder{
+    background:#fff;
+    border-radius:12px;
+    padding:45px 25px;
+    text-align:center;
+    color:#6b7280;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.report-card{
+    background:#fff;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    max-width:1000px;
+    margin:0 auto 30px;
+}
+
+.report-school-header{
+    text-align:center;
+    border-bottom:2px solid #111827;
+    padding-bottom:18px;
+    margin-bottom:20px;
+}
+
+.report-school-header h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.report-school-header h2{
+    font-size:20px;
+    margin:5px 0;
+}
+
+.report-school-header p{
+    margin:4px 0;
+    color:#4b5563;
+}
+
+.report-student-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.report-info-box{
+    border:1px solid #d1d5db;
+    padding:11px 13px;
+    border-radius:7px;
+    background:#f8fafc;
+}
+
+.report-info-box strong{
+    display:block;
+    font-size:12px;
+    color:#6b7280;
+    margin-bottom:3px;
+}
+
+.report-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:20px 0;
+}
+
+.report-summary-box{
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    padding:13px;
+    text-align:center;
+}
+
+.report-summary-box strong{
+    display:block;
+    font-size:22px;
+    margin-bottom:4px;
+}
+
+.report-summary-box span{
+    font-size:12px;
+    color:#6b7280;
+}
+
+.report-table{
+    width:100%;
+    min-width:0;
+    margin-top:10px;
+}
+
+.report-table th,
+.report-table td{
+    border:1px solid #d1d5db;
+    padding:10px;
+}
+
+.report-table th{
+    background:#f1f5f9;
+}
+
+.report-comments{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:25px;
+}
+
+.report-comment-box{
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    padding:14px;
+}
+
+.report-comment-box h3{
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.report-comment-box textarea{
+    width:100%;
+    min-height:90px;
+    resize:vertical;
+}
+
+.report-comment-actions{
+    margin-top:8px;
+}
+
+.report-footer{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    margin-top:55px;
+}
+
+.signature-line{
+    border-top:1px solid #111827;
+    padding-top:8px;
+    text-align:center;
+    margin-top:35px;
+}
+
+.report-no-data{
+    text-align:center;
+    padding:25px;
+    color:#6b7280;
+    border:1px dashed #cbd5e1;
+    border-radius:8px;
+}
+
+@media(max-width:800px){
+    .report-student-info{
+        grid-template-columns:1fr;
+    }
+
+    .report-summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .report-comments,
+    .report-footer{
+        grid-template-columns:1fr;
+    }
+
+    .report-card{
+        padding:20px;
+    }
+}
+
+@media print{
+    body.report-printing *{
+        visibility:hidden !important;
+    }
+
+    body.report-printing #studentReportContainer,
+    body.report-printing #studentReportContainer *{
+        visibility:visible !important;
+    }
+
+    body.report-printing #studentReportContainer{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        margin:0;
+        padding:0;
+        box-shadow:none;
+        background:#fff;
+    }
+
+    body.report-printing .report-card{
+        max-width:none;
+        margin:0;
+        padding:20px;
+        box-shadow:none;
+        border-radius:0;
+    }
+
+    body.report-printing .report-comment-box textarea{
+        border:0;
+        padding:0;
+        min-height:50px;
+        resize:none;
+        font-family:inherit;
+        font-size:14px;
+    }
+
+    @page{
+        size:A4;
+        margin:12mm;
+    }
+}
+
 </style>
 </head>
 
@@ -909,7 +1140,60 @@ td{font-size:14px}
 <section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
 <section id="adminFees" class="page"><div class="panel"><h1>Fees Management</h1><p>Fees module will be added next.</p></div></section>
 <section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
-<section id="reports" class="page"><div class="panel"><h1>Reports</h1><p>Report generation will be added after Results, Attendance and other academic modules.</p></div></section>
+<section id="reports" class="page">
+
+    <div class="page-header">
+        <div>
+            <h1>Student Reports</h1>
+            <p>Generate and print student academic report cards.</p>
+        </div>
+    </div>
+
+    <div class="panel report-controls">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="reportClassSelect">Class</label>
+                <select id="reportClassSelect">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reportStudentSelect">Student</label>
+                <select id="reportStudentSelect" disabled>
+                    <option value="">Select Student</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reportAcademicYear">Academic Year</label>
+                <input type="text" id="reportAcademicYear" value="2026/2027"
+                       placeholder="e.g. 2026/2027">
+            </div>
+
+        </div>
+
+        <div class="report-actions">
+            <button class="primary-btn" onclick="generateStudentReport()">
+                Generate Report
+            </button>
+
+            <button class="secondary-btn" onclick="printStudentReport()">
+                Print Report
+            </button>
+        </div>
+
+        <div id="reportMessage"></div>
+
+    </div>
+
+    <div id="studentReportContainer" class="report-placeholder">
+        <p>Select a class and student, then click <strong>Generate Report</strong>.</p>
+    </div>
+
+</section>
 <section id="settings" class="page"><div class="panel"><h1>Settings</h1><p>System settings will be added later.</p></div></section>
 
     </div>
@@ -1262,6 +1546,14 @@ function refreshPage(pageId){
     if(pageId==="adminResults"){
         populateResultClassSelect();
         renderResults();
+    }
+
+    if(pageId==="reports"){
+        populateReportClassSelect();
+        const classSelect=document.getElementById("reportClassSelect");
+        if(classSelect?.value){
+            populateReportStudentSelect(classSelect.value);
+        }
     }
 }
 
@@ -3153,6 +3445,437 @@ function deleteTeacherAttendance(id){
     refreshDashboard();
 }
 
+
+
+/* =========================
+   REPORT CARDS / STUDENT REPORTS
+========================= */
+
+let currentReportStudentId = "";
+let currentReportClassId = "";
+let currentReportAcademicYear = "";
+
+function reportCommentsKey(studentId, academicYear){
+    return `${studentId}_${academicYear}`;
+}
+
+function getReportComments(studentId, academicYear){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+    return all[reportCommentsKey(studentId,academicYear)] || {
+        teacher:"",
+        headteacher:""
+    };
+}
+
+function saveReportComments(studentId, academicYear, teacher, headteacher){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+
+    all[reportCommentsKey(studentId,academicYear)]={
+        teacher:String(teacher||"").trim(),
+        headteacher:String(headteacher||"").trim()
+    };
+
+    localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
+}
+
+function populateReportClassSelect(selected=""){
+    const select=document.getElementById("reportClassSelect");
+    if(!select)return;
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        classes.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+
+    if(selected){
+        populateReportStudentSelect(selected);
+    }else{
+        const studentSelect=document.getElementById("reportStudentSelect");
+        if(studentSelect){
+            studentSelect.innerHTML='<option value="">Select Student</option>';
+            studentSelect.disabled=true;
+        }
+    }
+}
+
+function populateReportStudentSelect(classId,selected=""){
+    const select=document.getElementById("reportStudentSelect");
+    if(!select)return;
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
+    const classStudents=getClassStudents(classId);
+
+    select.innerHTML='<option value="">Select Student</option>'+
+        classStudents.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+            </option>
+        `).join("");
+
+    select.disabled=false;
+}
+
+function calculateReportAttendance(studentId,classId,academicYear){
+    const records=attendance.filter(a=>
+        a.studentId===studentId &&
+        a.classId===classId &&
+        String(a.academicYear||"").trim()===String(academicYear||"").trim()
+    );
+
+    const present=records.filter(a=>String(a.status).toLowerCase()==="present").length;
+    const late=records.filter(a=>String(a.status).toLowerCase()==="late").length;
+    const absent=records.filter(a=>String(a.status).toLowerCase()==="absent").length;
+    const excused=records.filter(a=>String(a.status).toLowerCase()==="excused").length;
+
+    const counted=present+late+absent;
+    const attended=present+late;
+    const percentage=counted ? Math.round((attended/counted)*100) : 0;
+
+    return {
+        total:records.length,
+        present,
+        late,
+        absent,
+        excused,
+        counted,
+        attended,
+        percentage
+    };
+}
+
+function reportSubjectList(classId,studentId,academicYear){
+    const classSubjects=subjects.filter(s=>
+        (s.classIds||[]).includes(classId)
+    );
+
+    const studentResults=results.filter(r=>
+        r.studentId===studentId &&
+        r.classId===classId &&
+        String(r.academicYear||"").trim()===String(academicYear||"").trim()
+    );
+
+    const ids=new Set(classSubjects.map(s=>s.id));
+
+    studentResults.forEach(r=>{
+        if(r.subjectId)ids.add(r.subjectId);
+    });
+
+    return [...ids].map(id=>({
+        subject:getSubject(id),
+        result:studentResults.find(r=>r.subjectId===id)
+    })).filter(x=>x.subject || x.result);
+}
+
+function getReportResultLevel(result){
+    if(!result)return "No Result";
+
+    if(result.grade && String(result.grade).trim()){
+        return result.grade;
+    }
+
+    if(result.performance && String(result.performance).trim()){
+        return result.performance;
+    }
+
+    if(result.total!==undefined && result.total!==""){
+        return getPerformance(result.total);
+    }
+
+    return "No Result";
+}
+
+function saveCurrentReportComments(){
+    if(!currentReportStudentId || !currentReportAcademicYear){
+        showMessage("reportMessage","Generate a report before saving comments.","error");
+        return;
+    }
+
+    const teacher=document.getElementById("reportTeacherComment")?.value || "";
+    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+    saveReportComments(
+        currentReportStudentId,
+        currentReportAcademicYear,
+        teacher,
+        headteacher
+    );
+
+    showMessage("reportMessage","Report comments saved successfully.","success");
+}
+
+function generateStudentReport(){
+    const classId=document.getElementById("reportClassSelect")?.value || "";
+    const studentId=document.getElementById("reportStudentSelect")?.value || "";
+    const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
+
+    const container=document.getElementById("studentReportContainer");
+
+    if(!classId){
+        showMessage("reportMessage","Please select a class.","error");
+        return;
+    }
+
+    if(!studentId){
+        showMessage("reportMessage","Please select a student.","error");
+        return;
+    }
+
+    if(!academicYear){
+        showMessage("reportMessage","Please enter the academic year.","error");
+        return;
+    }
+
+    const student=getStudent(studentId);
+    const schoolClass=getClass(classId);
+
+    if(!student || !schoolClass){
+        showMessage("reportMessage","The selected student or class could not be found.","error");
+        return;
+    }
+
+    currentReportStudentId=studentId;
+    currentReportClassId=classId;
+    currentReportAcademicYear=academicYear;
+
+    const subjectItems=reportSubjectList(classId,studentId,academicYear);
+    const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
+    const comments=getReportComments(studentId,academicYear);
+
+    const scoredResults=subjectItems
+        .map(x=>x.result)
+        .filter(Boolean)
+        .filter(r=>r.total!==undefined && r.total!=="" && !isNaN(Number(r.total)));
+
+    const scores=scoredResults.map(r=>Number(r.total));
+    const average=scores.length
+        ? scores.reduce((sum,n)=>sum+n,0)/scores.length
+        : 0;
+
+    const highest=scores.length ? Math.max(...scores) : 0;
+    const overall=scores.length ? getPerformance(average) : "No Result";
+
+    const teacher=getTeacher(schoolClass.teacherId);
+
+    const subjectRows=subjectItems.length
+        ? subjectItems.map(item=>{
+            const subject=item.subject;
+            const result=item.result;
+            const total=result && result.total!==undefined && result.total!==""
+                ? Number(result.total)
+                : null;
+
+            const level=getReportResultLevel(result);
+
+            return `<tr>
+                <td>${escapeHtml(subject?.name || result?.subjectName || "Subject")}</td>
+                <td>${result?.classScore!==undefined && result.classScore!=="" ? escapeHtml(result.classScore) : "—"}</td>
+                <td>${result?.examScore!==undefined && result.examScore!=="" ? escapeHtml(result.examScore) : "—"}</td>
+                <td>${total!==null && !isNaN(total) ? escapeHtml(total) : "—"}</td>
+                <td>
+                    ${level==="No Result"
+                        ? "No Result"
+                        : `<span class="badge ${escapeHtml(performanceClass(level))}">
+                            ${escapeHtml(level)}
+                           </span>`}
+                </td>
+            </tr>`;
+        }).join("")
+        : `<tr><td colspan="5" style="text-align:center">No subjects or results available for this student.</td></tr>`;
+
+    const gender=student.gender || "";
+    const teacherName=teacher?.name || "Class Teacher";
+
+    container.className="report-card";
+    container.innerHTML=`
+        <div class="report-school-header">
+            <h1>SWIFTSCHOOL</h1>
+            <h2>STUDENT ACADEMIC REPORT</h2>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
+        </div>
+
+        <div class="report-student-info">
+            <div class="report-info-box">
+                <strong>Student Name</strong>
+                ${escapeHtml(student.name)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Student ID</strong>
+                ${escapeHtml(student.id)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Class</strong>
+                ${escapeHtml(classDisplay(schoolClass))}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Gender</strong>
+                ${escapeHtml(gender || "—")}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Class Teacher</strong>
+                ${escapeHtml(teacherName)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Report Date</strong>
+                ${escapeHtml(new Date().toLocaleDateString())}
+            </div>
+        </div>
+
+        <h3>Academic Performance</h3>
+
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Class Score</th>
+                        <th>Exam Score</th>
+                        <th>Total</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${subjectRows}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-summary">
+            <div class="report-summary-box">
+                <strong>${scores.length ? average.toFixed(1) : "—"}</strong>
+                <span>Average Score</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${scores.length ? highest : "—"}</strong>
+                <span>Highest Score</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${escapeHtml(overall)}</strong>
+                <span>Overall Performance</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${attendanceSummary.percentage}%</strong>
+                <span>Attendance</span>
+            </div>
+        </div>
+
+        <h3>Attendance Summary</h3>
+
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Present</th>
+                        <th>Late</th>
+                        <th>Absent</th>
+                        <th>Excused</th>
+                        <th>Attendance %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${attendanceSummary.present}</td>
+                        <td>${attendanceSummary.late}</td>
+                        <td>${attendanceSummary.absent}</td>
+                        <td>${attendanceSummary.excused}</td>
+                        <td>${attendanceSummary.percentage}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-comments">
+            <div class="report-comment-box">
+                <h3>Class Teacher's Comment</h3>
+                <textarea id="reportTeacherComment"
+                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
+            </div>
+
+            <div class="report-comment-box">
+                <h3>Headteacher's Comment</h3>
+                <textarea id="reportHeadteacherComment"
+                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
+            </div>
+        </div>
+
+        <div class="report-comment-actions">
+            <button class="primary-btn" onclick="saveCurrentReportComments()">
+                Save Comments
+            </button>
+        </div>
+
+        <div class="report-footer">
+            <div>
+                <div class="signature-line">Class Teacher</div>
+            </div>
+
+            <div>
+                <div class="signature-line">Headteacher / Principal</div>
+            </div>
+        </div>
+    `;
+
+    showMessage("reportMessage","Report generated successfully.","success");
+}
+
+function printStudentReport(){
+    const container=document.getElementById("studentReportContainer");
+
+    if(!container || !container.classList.contains("report-card")){
+        showMessage("reportMessage","Generate a report before printing.","error");
+        return;
+    }
+
+    // Save any comments currently typed before printing.
+    if(currentReportStudentId && currentReportAcademicYear){
+        const teacher=document.getElementById("reportTeacherComment")?.value || "";
+        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+        saveReportComments(
+            currentReportStudentId,
+            currentReportAcademicYear,
+            teacher,
+            headteacher
+        );
+    }
+
+    document.body.classList.add("report-printing");
+
+    setTimeout(()=>{
+        window.print();
+
+        setTimeout(()=>{
+            document.body.classList.remove("report-printing");
+        },500);
+    },100);
+}
+
+document.getElementById("reportClassSelect")?.addEventListener("change",function(){
+    populateReportStudentSelect(this.value);
+    document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML=
+        '<p>Select a student, then click <strong>Generate Report</strong>.</p>';
+});
+
+document.getElementById("reportStudentSelect")?.addEventListener("change",function(){
+    document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML=
+        '<p>Click <strong>Generate Report</strong> to create the student report.</p>';
+});
 
 /* =========================
    SEARCH EVENTS
