@@ -1417,7 +1417,8 @@ function performanceClass(level){
 
 function refreshDashboard(){
     document.getElementById("studentCount").textContent=students.length;
-    document.getElementById("parentCount").textContent=parents.length;
+    const parentCount=document.getElementById("parentCount");
+    if(parentCount) parentCount.textContent=parents.length;
     document.getElementById("teacherCount").textContent=teachers.length;
     document.getElementById("classCount").textContent=classes.length;
     document.getElementById("subjectCount").textContent=subjects.length;
