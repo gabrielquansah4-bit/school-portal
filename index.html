@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>School Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -195,7 +196,6 @@ td{font-size:14px}
     border-radius:8px;
     margin-bottom:15px
 }
-.checkbox-list{border:1px solid #d1d5db;border-radius:8px;padding:8px;max-height:180px;overflow:auto;background:#f8fafc}.checkbox-list label{display:flex;align-items:center;gap:8px;padding:7px 4px;margin:0;cursor:pointer}.checkbox-list input{width:auto}.assignment-note{font-size:12px;color:#666;padding:5px}
 
 .form-grid{
     display:grid;
@@ -527,6 +527,15 @@ td{font-size:14px}
 @media(max-width:900px){.results-summary{grid-template-columns:repeat(2,1fr)}.assessment-scale{grid-template-columns:repeat(3,1fr)}.result-filters{grid-template-columns:repeat(2,1fr)}.result-overview{grid-template-columns:1fr}}
 @media(max-width:600px){.results-summary{grid-template-columns:1fr}.assessment-scale{grid-template-columns:repeat(2,1fr)}.result-filters{grid-template-columns:1fr}}
 
+
+/* =========================
+   EXCEL IMPORT
+========================= */
+.import-panel{background:#f8fafc;border:1px solid #dbeafe;border-radius:10px;padding:16px;margin-bottom:20px}
+.import-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.import-actions input[type=file]{max-width:100%}
+.import-note{font-size:13px;color:#64748b;margin-top:10px;line-height:1.5}
+
 </style>
 </head>
 
@@ -707,9 +716,21 @@ td{font-size:14px}
     <div class="page-header">
         <div><h1>Student Management</h1><p>Add, edit and manage students.</p></div>
         <button class="primary-btn" onclick="openStudentForm()">+ Add Student</button>
+        <button class="secondary-btn" onclick="toggleImportPanel('studentImportPanel')">Import Excel</button>
     </div>
 
     <div id="studentMessage" class="message"></div>
+
+    <div class="import-panel" id="studentImportPanel" style="display:none">
+        <h2 style="margin-bottom:10px">Import Students from Excel</h2>
+        <div class="import-actions">
+            <input type="file" id="studentExcelFile" accept=".xlsx,.xls,.csv">
+            <button class="primary-btn" type="button" onclick="importStudentsFromExcel()">Upload & Import Students</button>
+            <button class="secondary-btn" type="button" onclick="downloadStudentTemplate()">Download Template</button>
+        </div>
+        <div class="import-note">Use columns: <strong>ID, Name, Gender, DOB, Class, Parent, Phone, Email</strong>. Existing students with the same ID will be updated; new IDs will be added.</div>
+        <div id="studentImportMessage" class="message" style="margin-top:10px"></div>
+    </div>
 
     <div class="panel" id="studentFormPanel" style="display:none">
         <h2 id="studentFormTitle">Add Student</h2>
@@ -806,9 +827,21 @@ td{font-size:14px}
     <div class="page-header">
         <div><h1>Teacher Management</h1><p>Manage teachers and their accounts.</p></div>
         <button class="primary-btn" onclick="openTeacherForm()">+ Add Teacher</button>
+        <button class="secondary-btn" onclick="toggleImportPanel('teacherImportPanel')">Import Excel</button>
     </div>
 
     <div id="teacherMessage" class="message"></div>
+
+    <div class="import-panel" id="teacherImportPanel" style="display:none">
+        <h2 style="margin-bottom:10px">Import Teachers from Excel</h2>
+        <div class="import-actions">
+            <input type="file" id="teacherExcelFile" accept=".xlsx,.xls,.csv">
+            <button class="primary-btn" type="button" onclick="importTeachersFromExcel()">Upload & Import Teachers</button>
+            <button class="secondary-btn" type="button" onclick="downloadTeacherTemplate()">Download Template</button>
+        </div>
+        <div class="import-note">Use columns: <strong>ID, Name, Gender, DOB, Phone, Email, Address, Qualification, Subjects, Username, Password</strong>. Existing teachers with the same ID will be updated; new IDs will be added.</div>
+        <div id="teacherImportMessage" class="message" style="margin-top:10px"></div>
+    </div>
 
     <div class="panel" id="teacherFormPanel" style="display:none">
         <h2 id="teacherFormTitle">Add Teacher</h2>
@@ -827,9 +860,7 @@ td{font-size:14px}
                 <div class="form-group"><label>Email</label><input id="teacherEmail" type="email"></div>
                 <div class="form-group"><label>Address</label><input id="teacherAddress"></div>
                 <div class="form-group"><label>Qualification</label><input id="teacherQualification"></div>
-                <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects" placeholder="e.g. Mathematics, Science"></div>
-                <div class="form-group"><label>Assigned Classes</label><div id="teacherClassAssignmentList" class="checkbox-list"></div></div>
-                <div class="form-group"><label>Assigned Subjects</label><div id="teacherSubjectAssignmentList" class="checkbox-list"></div></div>
+                <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects"></div>
                 <div class="form-group"><label>Username *</label><input id="teacherUsername" required></div>
                 <div class="form-group"><label>Password *</label><input id="teacherPassword" required></div>
             </div>
@@ -1391,6 +1422,141 @@ let editingAttendanceId = null;
 let editingTeacherAttendanceId = null;
 let editingFeeId = null;
 
+
+/* =========================
+   EXCEL IMPORT
+========================= */
+
+function toggleImportPanel(id){
+    const panel=document.getElementById(id);
+    if(!panel)return;
+    panel.style.display=panel.style.display==="none" ? "block" : "none";
+}
+
+function normalizeImportKey(value){
+    return String(value||"").trim().toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+
+function importValue(row, keys){
+    const wanted=keys.map(normalizeImportKey);
+    for(const key of Object.keys(row||{})){
+        if(wanted.includes(normalizeImportKey(key))) return row[key];
+    }
+    return "";
+}
+
+function importRowsFromFile(file, callback){
+    if(!file){ callback(new Error("Please select an Excel or CSV file first.")); return; }
+    if(typeof XLSX==="undefined"){
+        callback(new Error("Excel support could not be loaded. Check your internet connection and try again."));
+        return;
+    }
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const data=new Uint8Array(e.target.result);
+            const workbook=XLSX.read(data,{type:"array",cellDates:true});
+            const firstSheet=workbook.Sheets[workbook.SheetNames[0]];
+            const rows=XLSX.utils.sheet_to_json(firstSheet,{defval:""});
+            callback(null,rows);
+        }catch(err){ callback(err); }
+    };
+    reader.onerror=function(){callback(new Error("The selected file could not be read."));};
+    reader.readAsArrayBuffer(file);
+}
+
+function cleanDate(value){
+    if(value instanceof Date && !isNaN(value)) return value.toISOString().slice(0,10);
+    const text=String(value||"").trim();
+    if(!text)return "";
+    const d=new Date(text);
+    return isNaN(d) ? text : d.toISOString().slice(0,10);
+}
+
+function importStudentsFromExcel(){
+    const input=document.getElementById("studentExcelFile");
+    const file=input?.files?.[0];
+    importRowsFromFile(file,function(err,rows){
+        if(err){showMessage("studentImportMessage",err.message,"error");return;}
+        if(!rows.length){showMessage("studentImportMessage","No student rows were found in the file.","error");return;}
+        let added=0,updated=0,skipped=0;
+        rows.forEach((row,index)=>{
+            const id=String(importValue(row,["ID","Student ID","StudentID"])).trim();
+            const name=String(importValue(row,["Name","Full Name","Student Name"])).trim();
+            if(!id||!name){skipped++;return;}
+            const data={
+                id,name,
+                gender:String(importValue(row,["Gender","Sex"])).trim(),
+                dob:cleanDate(importValue(row,["DOB","Date of Birth","DateOfBirth"])),
+                className:String(importValue(row,["Class","Class Name"])).trim(),
+                parent:String(importValue(row,["Parent","Parent / Guardian","Guardian"])).trim(),
+                phone:String(importValue(row,["Phone","Telephone","Mobile"])).trim(),
+                email:String(importValue(row,["Email","E-mail"])).trim()
+            };
+            const existing=students.findIndex(s=>s.id===id);
+            if(existing>=0){students[existing]={...students[existing],...data};updated++;}
+            else{students.push(data);added++;}
+        });
+        saveAll();
+        renderStudents();
+        refreshDashboard();
+        showMessage("studentImportMessage",`${added} student(s) added, ${updated} updated, ${skipped} skipped.`,skipped&&added+updated===0?"error":"success");
+        if(input)input.value="";
+    });
+}
+
+function importTeachersFromExcel(){
+    const input=document.getElementById("teacherExcelFile");
+    const file=input?.files?.[0];
+    importRowsFromFile(file,function(err,rows){
+        if(err){showMessage("teacherImportMessage",err.message,"error");return;}
+        if(!rows.length){showMessage("teacherImportMessage","No teacher rows were found in the file.","error");return;}
+        let added=0,updated=0,skipped=0;
+        rows.forEach(row=>{
+            const id=String(importValue(row,["ID","Teacher ID","TeacherID"])).trim();
+            const name=String(importValue(row,["Name","Full Name","Teacher Name"])).trim();
+            if(!id||!name){skipped++;return;}
+            const data={
+                id,name,
+                gender:String(importValue(row,["Gender","Sex"])).trim(),
+                dob:cleanDate(importValue(row,["DOB","Date of Birth","DateOfBirth"])),
+                phone:String(importValue(row,["Phone","Telephone","Mobile"])).trim(),
+                email:String(importValue(row,["Email","E-mail"])).trim(),
+                address:String(importValue(row,["Address"])).trim(),
+                qualification:String(importValue(row,["Qualification","Qualifications"])).trim(),
+                subjects:String(importValue(row,["Subjects","Subject"])).trim(),
+                username:String(importValue(row,["Username","User Name"])).trim(),
+                password:String(importValue(row,["Password","Pass"])).trim()
+            };
+            const existing=teachers.findIndex(t=>t.id===id);
+            if(existing>=0){teachers[existing]={...teachers[existing],...data};updated++;}
+            else{teachers.push(data);added++;}
+        });
+        saveAll();
+        renderTeachers();
+        refreshDashboard();
+        showMessage("teacherImportMessage",`${added} teacher(s) added, ${updated} updated, ${skipped} skipped.`,skipped&&added+updated===0?"error":"success");
+        if(input)input.value="";
+    });
+}
+
+function downloadStudentTemplate(){
+    if(typeof XLSX==="undefined"){showMessage("studentImportMessage","Excel support could not be loaded.","error");return;}
+    const rows=[{ID:"STU-002",Name:"Sample Student",Gender:"Male",DOB:"2014-05-12",Class:"Basic 8",Parent:"Parent Name",Phone:"0240000000",Email:"student@example.com"}];
+    const ws=XLSX.utils.json_to_sheet(rows);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Students");
+    XLSX.writeFile(wb,"SwiftSchool_Student_Template.xlsx");
+}
+
+function downloadTeacherTemplate(){
+    if(typeof XLSX==="undefined"){showMessage("teacherImportMessage","Excel support could not be loaded.","error");return;}
+    const rows=[{ID:"TCH-002",Name:"Sample Teacher",Gender:"Female",DOB:"1990-03-15",Phone:"0240000000",Email:"teacher@example.com",Address:"Accra",Qualification:"B.Ed.",Subjects:"Mathematics",Username:"teacher002",Password:"123456"}];
+    const ws=XLSX.utils.json_to_sheet(rows);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Teachers");
+    XLSX.writeFile(wb,"SwiftSchool_Teacher_Template.xlsx");
+}
 
 /* =========================
    HELPERS
@@ -1962,7 +2128,6 @@ function deleteParent(id){
 function openTeacherForm(){
     editingTeacherId=null;
     document.getElementById("teacherForm").reset();
-    populateTeacherAssignmentLists([],[]);
     document.getElementById("teacherFormTitle").textContent="Add Teacher";
     document.getElementById("teacherFormPanel").style.display="block";
 }
@@ -1970,22 +2135,6 @@ function openTeacherForm(){
 function closeTeacherForm(){
     document.getElementById("teacherFormPanel").style.display="none";
 }
-
-function populateTeacherAssignmentLists(selectedClassIds=[],selectedSubjectIds=[]){
-    const classBox=document.getElementById("teacherClassAssignmentList");
-    const subjectBox=document.getElementById("teacherSubjectAssignmentList");
-    if(!classBox||!subjectBox)return;
-    classBox.innerHTML=classes.length ? classes.map(c=>`<label><input type="checkbox" name="teacherAssignedClass" value="${escapeHtml(c.id)}" ${selectedClassIds.includes(c.id)?"checked":""}><span>${escapeHtml(classDisplay(c))}${c.academicYear?` — ${escapeHtml(c.academicYear)}`:""}</span></label>`).join("") : '<div class="assignment-note">No classes have been created yet.</div>';
-    subjectBox.innerHTML=subjects.length ? subjects.map(sub=>`<label><input type="checkbox" name="teacherAssignedSubject" value="${escapeHtml(sub.id)}" ${selectedSubjectIds.includes(sub.id)?"checked":""}><span>${escapeHtml(sub.name)}${sub.code?` (${escapeHtml(sub.code)})`:""}</span></label>`).join("") : '<div class="assignment-note">No subjects have been created yet.</div>';
-}
-function getTeacherAssignedClassIds(teacherId){ return classes.filter(c=>c.teacherId===teacherId).map(c=>c.id); }
-function getTeacherAssignedSubjectIds(teacherId){ return subjects.filter(s=>s.teacherId===teacherId).map(s=>s.id); }
-function syncTeacherAssignments(teacherId,classIds,subjectIds){
-    classes.forEach(c=>{if(classIds.includes(c.id)) c.teacherId=teacherId; else if(c.teacherId===teacherId)c.teacherId="";});
-    subjects.forEach(s=>{if(subjectIds.includes(s.id)) s.teacherId=teacherId; else if(s.teacherId===teacherId)s.teacherId="";});
-}
-function getAssignedClassNames(teacherId){return getTeacherAssignedClassIds(teacherId).map(id=>classDisplay(getClass(id))).filter(Boolean);}
-function getAssignedSubjectNames(teacherId){return getTeacherAssignedSubjectIds(teacherId).map(id=>getSubject(id)?.name||"").filter(Boolean);}
 
 document.getElementById("teacherForm").addEventListener("submit",function(e){
     e.preventDefault();
@@ -1996,9 +2145,6 @@ document.getElementById("teacherForm").addEventListener("submit",function(e){
         showMessage("teacherMessage","Teacher ID already exists.","error");
         return;
     }
-
-    const assignedClassIds=[...document.querySelectorAll('input[name="teacherAssignedClass"]:checked')].map(x=>x.value);
-    const assignedSubjectIds=[...document.querySelectorAll('input[name="teacherAssignedSubject"]:checked')].map(x=>x.value);
 
     const data={
         id,
@@ -2017,12 +2163,10 @@ document.getElementById("teacherForm").addEventListener("submit",function(e){
     if(editingTeacherId){
         const index=teachers.findIndex(t=>t.id===editingTeacherId);
         if(index!==-1)teachers[index]=data;
-        syncTeacherAssignments(id,assignedClassIds,assignedSubjectIds);
-        showMessage("teacherMessage","Teacher and assignments updated successfully.");
+        showMessage("teacherMessage","Teacher updated successfully.");
     }else{
         teachers.push(data);
-        syncTeacherAssignments(id,assignedClassIds,assignedSubjectIds);
-        showMessage("teacherMessage","Teacher and assignments saved successfully.");
+        showMessage("teacherMessage","Teacher added successfully.");
     }
 
     saveAll();
@@ -2052,8 +2196,6 @@ function renderTeachers(){
                 <th>Name</th>
                 <th>Qualification</th>
                 <th>Subjects</th>
-                <th>Assigned Classes</th>
-                <th>Assigned Subjects</th>
                 <th>Phone</th>
                 <th>Username</th>
                 <th>Actions</th>
@@ -2066,8 +2208,6 @@ function renderTeachers(){
                 <td>${escapeHtml(t.name)}</td>
                 <td>${escapeHtml(t.qualification)}</td>
                 <td>${escapeHtml(t.subjects)}</td>
-                <td>${escapeHtml(getAssignedClassNames(t.id).join(", ")||"None")}</td>
-                <td>${escapeHtml(getAssignedSubjectNames(t.id).join(", ")||"None")}</td>
                 <td>${escapeHtml(t.phone)}</td>
                 <td>${escapeHtml(t.username)}</td>
                 <td>
@@ -2096,7 +2236,6 @@ function editTeacher(id){
     document.getElementById("teacherAddress").value=t.address;
     document.getElementById("teacherQualification").value=t.qualification;
     document.getElementById("teacherSubjects").value=t.subjects;
-    populateTeacherAssignmentLists(getTeacherAssignedClassIds(id),getTeacherAssignedSubjectIds(id));
     document.getElementById("teacherUsername").value=t.username;
     document.getElementById("teacherPassword").value=t.password;
 
