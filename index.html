@@ -303,8 +303,8 @@ td{font-size:14px}
 }
 @media print{
     body.report-printing *{visibility:hidden !important;}
-    body.report-printing #studentReportContainer,body.report-printing #studentReportContainer *{visibility:visible !important;}
-    body.report-printing #studentReportContainer{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;box-shadow:none;background:#fff;}
+    body.report-printing #studentReportContainer,body.report-printing #studentReportContainer *,body.report-printing #parentReportPrintContainer,body.report-printing #parentReportPrintContainer *{visibility:visible !important;}
+    body.report-printing #studentReportContainer,body.report-printing #parentReportPrintContainer{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;box-shadow:none;background:#fff;}
     body.report-printing .report-card{max-width:none;margin:0;padding:0;box-shadow:none;border-radius:0;}
     @page{size:A4;margin:12mm;}
 }
@@ -3119,7 +3119,7 @@ function renderChildren(){
     if(!children.length){content.innerHTML='<div class="empty">No children are linked to your account. Please contact the school administrator.</div>';return;}
     content.innerHTML=`<div class="cards">${children.map(s=>{
         const schoolClass=classes.find(c=>getReportClassStudents(c.id).some(x=>normalizeId(x.id)===normalizeId(s.id))) || classes.find(c=>normalizeId(c.name)===normalizeId(s.className));
-        return `<div class="card" style="padding:20px"><h2>${escapeHtml(s.name)}</h2><p><strong>Student ID:</strong> ${escapeHtml(s.id)}</p><p><strong>Class:</strong> ${escapeHtml(schoolClass?classDisplay(schoolClass):s.className||"—")}</p><p><strong>Gender:</strong> ${escapeHtml(s.gender||"—")}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px"><button class="primary-btn" type="button" onclick="openParentChildResults('${escapeHtml(s.id)}')">Results</button><button class="secondary-btn" type="button" onclick="openParentChildAttendance('${escapeHtml(s.id)}')">Attendance</button></div></div>`;
+        return `<div class="card" style="padding:20px;cursor:pointer" onclick="openParentChildResults('${escapeHtml(s.id)}')"><h2>${escapeHtml(s.name)}</h2><p><strong>Student ID:</strong> ${escapeHtml(s.id)}</p><p><strong>Class:</strong> ${escapeHtml(schoolClass?classDisplay(schoolClass):s.className||"—")}</p><p><strong>Gender:</strong> ${escapeHtml(s.gender||"—")}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px"><button class="primary-btn" type="button" onclick="event.stopPropagation();openParentChildResults('${escapeHtml(s.id)}')">View Results</button><button class="secondary-btn" type="button" onclick="event.stopPropagation();openParentChildAttendance('${escapeHtml(s.id)}')">Attendance</button></div><p style="margin-top:12px;color:#2563eb;font-size:13px">Click the child card to open the report.</p></div>`;
     }).join("")}</div>`;
 }
 
