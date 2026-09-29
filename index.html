@@ -273,232 +273,41 @@ td{font-size:14px}
    REPORT CARDS
 ========================= */
 
-.report-controls{
-    margin-bottom:20px;
-}
-
-.report-actions{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-    flex-wrap:wrap;
-}
-
-.report-placeholder{
-    background:#fff;
-    border-radius:12px;
-    padding:45px 25px;
-    text-align:center;
-    color:#6b7280;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.report-card{
-    background:#fff;
-    padding:35px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);
-    max-width:1000px;
-    margin:0 auto 30px;
-}
-
-.report-school-header{
-    text-align:center;
-    border-bottom:2px solid #111827;
-    padding-bottom:18px;
-    margin-bottom:20px;
-}
-
-.report-school-header h1{
-    font-size:28px;
-    margin-bottom:5px;
-}
-
-.report-school-header h2{
-    font-size:20px;
-    margin:5px 0;
-}
-
-.report-school-header p{
-    margin:4px 0;
-    color:#4b5563;
-}
-
-.report-student-info{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:22px;
-}
-
-.report-info-box{
-    border:1px solid #d1d5db;
-    padding:11px 13px;
-    border-radius:7px;
-    background:#f8fafc;
-}
-
-.report-info-box strong{
-    display:block;
-    font-size:12px;
-    color:#6b7280;
-    margin-bottom:3px;
-}
-
-.report-summary{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin:20px 0;
-}
-
-.report-summary-box{
-    border:1px solid #d1d5db;
-    border-radius:8px;
-    padding:13px;
-    text-align:center;
-}
-
-.report-summary-box strong{
-    display:block;
-    font-size:22px;
-    margin-bottom:4px;
-}
-
-.report-summary-box span{
-    font-size:12px;
-    color:#6b7280;
-}
-
-.report-table{
-    width:100%;
-    min-width:0;
-    margin-top:10px;
-}
-
-.report-table th,
-.report-table td{
-    border:1px solid #d1d5db;
-    padding:10px;
-}
-
-.report-table th{
-    background:#f1f5f9;
-}
-
-.report-comments{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    margin-top:25px;
-}
-
-.report-comment-box{
-    border:1px solid #d1d5db;
-    border-radius:8px;
-    padding:14px;
-}
-
-.report-comment-box h3{
-    font-size:15px;
-    margin-bottom:10px;
-}
-
-.report-comment-box textarea{
-    width:100%;
-    min-height:90px;
-    resize:vertical;
-}
-
-.report-comment-actions{
-    margin-top:8px;
-}
-
-.report-footer{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:60px;
-    margin-top:55px;
-}
-
-.signature-line{
-    border-top:1px solid #111827;
-    padding-top:8px;
-    text-align:center;
-    margin-top:35px;
-}
-
-.report-no-data{
-    text-align:center;
-    padding:25px;
-    color:#6b7280;
-    border:1px dashed #cbd5e1;
-    border-radius:8px;
-}
-
+.report-controls{margin-bottom:20px;}
+.report-actions{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap;}
+.report-placeholder{background:#fff;border-radius:12px;padding:45px 25px;text-align:center;color:#6b7280;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.report-card{background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);max-width:1000px;margin:0 auto 30px;}
+.report-school-header{text-align:center;border-bottom:2px solid #111827;padding-bottom:18px;margin-bottom:20px;}
+.report-school-logo{width:58px;height:58px;border:2px solid #111827;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:800;font-size:20px;}
+.report-school-header h1{font-size:28px;margin:0 0 4px;}
+.report-school-header h2{font-size:19px;margin:4px 0;}
+.report-school-header p{margin:4px 0;color:#4b5563;}
+.report-student-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.report-info-box{border:1px solid #d1d5db;padding:10px 12px;border-radius:7px;background:#f8fafc;}
+.report-info-box strong{display:block;font-size:11px;color:#6b7280;margin-bottom:3px;}
+.report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0;}
+.report-summary-box{border:1px solid #d1d5db;border-radius:8px;padding:12px;text-align:center;}
+.report-summary-box strong{display:block;font-size:20px;margin-bottom:4px;}
+.report-summary-box span{font-size:11px;color:#6b7280;}
+.report-table{width:100%;min-width:0;margin-top:10px;border-collapse:collapse;}
+.report-table th,.report-table td{border:1px solid #d1d5db;padding:8px;font-size:13px;}
+.report-table th{background:#f1f5f9;}
+.report-footer{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:55px;}
+.signature-line{border-top:1px solid #111827;padding-top:8px;text-align:center;margin-top:35px;}
+.report-no-data{text-align:center;padding:25px;color:#6b7280;border:1px dashed #cbd5e1;border-radius:8px;}
 @media(max-width:800px){
-    .report-student-info{
-        grid-template-columns:1fr;
-    }
-
-    .report-summary{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .report-comments,
-    .report-footer{
-        grid-template-columns:1fr;
-    }
-
-    .report-card{
-        padding:20px;
-    }
+    .report-student-info{grid-template-columns:1fr;}
+    .report-summary{grid-template-columns:repeat(2,1fr);}
+    .report-footer{grid-template-columns:1fr;}
+    .report-card{padding:20px;}
 }
-
 @media print{
-    body.report-printing *{
-        visibility:hidden !important;
-    }
-
-    body.report-printing #studentReportContainer,
-    body.report-printing #studentReportContainer *{
-        visibility:visible !important;
-    }
-
-    body.report-printing #studentReportContainer{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        margin:0;
-        padding:0;
-        box-shadow:none;
-        background:#fff;
-    }
-
-    body.report-printing .report-card{
-        max-width:none;
-        margin:0;
-        padding:20px;
-        box-shadow:none;
-        border-radius:0;
-    }
-
-    body.report-printing .report-comment-box textarea{
-        border:0;
-        padding:0;
-        min-height:50px;
-        resize:none;
-        font-family:inherit;
-        font-size:14px;
-    }
-
-    @page{
-        size:A4;
-        margin:12mm;
-    }
+    body.report-printing *{visibility:hidden !important;}
+    body.report-printing #studentReportContainer,body.report-printing #studentReportContainer *{visibility:visible !important;}
+    body.report-printing #studentReportContainer{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;box-shadow:none;background:#fff;}
+    body.report-printing .report-card{max-width:none;margin:0;padding:0;box-shadow:none;border-radius:0;}
+    @page{size:A4;margin:12mm;}
 }
-
 
 .parent-password-box{margin-top:20px;padding:20px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;}
 .parent-password-box h3{margin-top:0;}
@@ -1116,21 +925,29 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
 <section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
 <section id="teacherAttendance" class="page">
     <div class="page-header">
-        <div><h1>Attendance Management</h1><p>Select a class and mark attendance for all students at once.</p></div>
+        <div><h1>Attendance Management</h1><p>Mark and manage attendance for your assigned classes.</p></div>
         <button class="primary-btn" onclick="openAttendanceForm('Teacher')">+ Mark Attendance</button>
     </div>
     <div id="teacherAttendanceMessage" class="message"></div>
     <div class="panel" id="teacherAttendanceFormPanel" style="display:none">
-        <h2 id="teacherAttendanceFormTitle">Mark Class Attendance</h2>
+        <h2 id="teacherAttendanceFormTitle">Mark Attendance</h2>
         <form id="teacherAttendanceForm">
             <div class="form-grid">
                 <div class="form-group"><label>Academic Year *</label><input id="teacherAttendanceYear" value="2026/2027" required></div>
-                <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required onchange="renderTeacherAttendanceStudents(this.value)"></select></div>
+                <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required></select></div>
+                <div class="form-group"><label>Student *</label><select id="teacherAttendanceStudent" required disabled><option value="">Select Class First</option></select></div>
                 <div class="form-group"><label>Date *</label><input id="teacherAttendanceDate" type="date" required></div>
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select id="teacherAttendanceStatus" required>
+                        <option value="">Select Status</option>
+                        <option>Present</option><option>Absent</option><option>Late</option><option>Excused</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Remarks</label><input id="teacherAttendanceRemarks"></div>
             </div>
-            <div id="teacherAttendanceStudents" style="margin-top:18px"></div>
             <br>
-            <button class="primary-btn" type="submit">Save Class Attendance</button>
+            <button class="primary-btn" type="submit">Save Attendance</button>
             <button class="secondary-btn" type="button" onclick="closeAttendanceForm('Teacher')">Cancel</button>
         </form>
     </div>
@@ -1139,10 +956,11 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
         <div id="teacherAttendanceContent"></div>
     </div>
 </section>
+<section id="teacherAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Teacher assignment management will be added next.</p></div></section>
 
 <section id="adminAttendance" class="page">
     <div class="page-header">
-        <div><h1>Attendance Review</h1><p>View attendance submitted by teachers.</p></div>
+        <div><h1>Attendance Records</h1><p>Attendance submitted by teachers appears here for administration to review.</p></div>
     </div>
     <div id="attendanceMessage" class="message"></div>
     <div class="panel">
@@ -1183,6 +1001,15 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
                 <label for="reportAcademicYear">Academic Year</label>
                 <input type="text" id="reportAcademicYear" value="2026/2027"
                        placeholder="e.g. 2026/2027">
+            </div>
+
+            <div class="form-group">
+                <label for="reportTerm">Term</label>
+                <select id="reportTerm">
+                    <option value="Term 1">Term 1</option>
+                    <option value="Term 2">Term 2</option>
+                    <option value="Term 3">Term 3</option>
+                </select>
             </div>
 
         </div>
@@ -1385,8 +1212,7 @@ function refreshDashboard(){
     document.getElementById("classCount").textContent=classes.length;
     document.getElementById("subjectCount").textContent=subjects.length;
     document.getElementById("resultCount").textContent=results.length;
-    const attendanceCount=document.getElementById("attendanceCount");
-    if(attendanceCount) attendanceCount.textContent=attendance.length;
+    document.getElementById("attendanceCount").textContent=attendance.length;
 }
 
 
@@ -3290,43 +3116,18 @@ function getClassStudents(classId){
     const c=getClass(classId);
     if(!c)return [];
 
-    const ids=Array.isArray(c.studentIds)?c.studentIds:[];
+    const ids=c.studentIds||[];
     const listed=ids.map(id=>getStudent(id)).filter(Boolean);
-    const foundIds=new Set(listed.map(s=>String(s.id)));
 
-    const normalize=v=>String(v??"").trim().toLowerCase().replace(/\s+/g," ");
-    const className=normalize(c.name);
-    const section=normalize(c.section);
-
-    const matchesClass=(student)=>{
-        const studentClassId=student.classId||student.classID||student.class_id;
-        if(studentClassId && String(studentClassId)===String(classId))return true;
-
-        const values=[
-            student.className,
-            student.class,
-            student.classSection,
-            student.class_name,
-            student.classroom
-        ].map(normalize).filter(Boolean);
-
-        if(values.includes(className))return true;
-        if(section && values.includes(`${className} - ${section}`))return true;
-        if(section && values.includes(`${className} ${section}`))return true;
-        return false;
-    };
-
-    students.forEach(student=>{
-        if(!foundIds.has(String(student.id)) && matchesClass(student)){
-            listed.push(student);
-            foundIds.add(String(student.id));
-        }
+    // Fallback to the student's class name in case an older record
+    // was saved without the class studentIds relationship.
+    const className=c.name;
+    const fallback=students.filter(s=>{
+        if(listed.some(x=>x.id===s.id))return false;
+        return String(s.className||"").trim()===String(className||"").trim();
     });
 
-    // Keep the class relationship synchronized for future attendance/report use.
-    c.studentIds=listed.map(s=>s.id);
-
-    return listed;
+    return [...listed,...fallback];
 }
 
 function populateAttendanceClassSelect(type,selected=""){
@@ -3338,9 +3139,7 @@ function populateAttendanceClassSelect(type,selected=""){
     let available=classes;
 
     if(type==="Teacher"){
-        // Teachers can select any class available in the school.
-        // Students for the selected class will load automatically.
-        available=classes;
+        available=classes.filter(c=>c.teacherId===currentUser?.id);
     }
 
     select.innerHTML='<option value="">Select Class</option>'+
@@ -3396,7 +3195,6 @@ function openAttendanceForm(type="Admin",id=null){
         document.getElementById("teacherAttendanceDate").value=today;
         populateAttendanceClassSelect("Teacher");
         document.getElementById(titleId).textContent=id ? "Edit Attendance" : "Mark Attendance";
-        renderTeacherAttendanceStudents(document.getElementById("teacherAttendanceClass")?.value||"");
     }else{
         document.getElementById("attendanceYear").value="2026/2027";
         document.getElementById("attendanceDate").value=today;
@@ -3481,74 +3279,17 @@ function saveAttendanceRecord(data,type){
     return true;
 }
 
-document.getElementById("attendanceClass").addEventListener("change",function(){
-    populateAttendanceStudentSelect("Admin",this.value);
-});
-
-document.getElementById("teacherAttendanceClass").addEventListener("change",function(){
-    renderTeacherAttendanceStudents(this.value);
-});
-document.getElementById("teacherAttendanceDate")?.addEventListener("change",function(){
-    renderTeacherAttendanceStudents(document.getElementById("teacherAttendanceClass")?.value||"");
-});
-
-document.getElementById("attendanceForm").addEventListener("submit",function(e){
-    e.preventDefault();
-
-    saveAttendanceRecord({
-        academicYear:document.getElementById("attendanceYear").value.trim(),
-        classId:document.getElementById("attendanceClass").value,
-        studentId:document.getElementById("attendanceStudent").value,
-        date:document.getElementById("attendanceDate").value,
-        status:document.getElementById("attendanceStatus").value,
-        remarks:document.getElementById("attendanceRemarks").value.trim()
-    },"Admin");
-});
-
 document.getElementById("teacherAttendanceForm").addEventListener("submit",function(e){
     e.preventDefault();
 
-    const classId=document.getElementById("teacherAttendanceClass").value;
-    const date=document.getElementById("teacherAttendanceDate").value;
-    const year=document.getElementById("teacherAttendanceYear").value.trim();
-    const rows=[...document.querySelectorAll(".teacher-attendance-row")];
-
-    if(!classId || !date || !rows.length){
-        showMessage("teacherAttendanceMessage","Please select a class, date and make sure students are loaded.","error");
-        return;
-    }
-
-    let saved=0, updated=0;
-    rows.forEach(row=>{
-        const studentId=row.dataset.studentId;
-        const status=row.querySelector("select")?.value;
-        const remarks=row.querySelector("input")?.value.trim()||"";
-        if(!studentId || !status)return;
-
-        const existing=attendance.find(a=>a.studentId===studentId && a.classId===classId && a.date===date);
-        if(existing){
-            existing.academicYear=year;
-            existing.status=status;
-            existing.remarks=remarks;
-            existing.updatedBy=currentUser?.id||"";
-            existing.updatedByName=currentUser?.name||"Teacher";
-            updated++;
-        }else{
-            attendance.push({
-                id:"ATT-"+Math.random().toString(36).slice(2,8).toUpperCase(),
-                academicYear:year,classId,studentId,date,status,remarks,
-                recordedBy:currentUser?.id||"",
-                recordedByName:currentUser?.name||"Teacher"
-            });
-            saved++;
-        }
-    });
-
-    saveAll();
-    refreshDashboard();
-    closeAttendanceForm("Teacher");
-    renderTeacherAttendance();
-    showMessage("teacherAttendanceMessage",`${saved} attendance record(s) saved${updated?` and ${updated} updated`:""}.`);
+    saveAttendanceRecord({
+        academicYear:document.getElementById("teacherAttendanceYear").value.trim(),
+        classId:document.getElementById("teacherAttendanceClass").value,
+        studentId:document.getElementById("teacherAttendanceStudent").value,
+        date:document.getElementById("teacherAttendanceDate").value,
+        status:document.getElementById("teacherAttendanceStatus").value,
+        remarks:document.getElementById("teacherAttendanceRemarks").value.trim()
+    },"Teacher");
 });
 
 function attendanceRows(records,actions=false){
@@ -3601,7 +3342,7 @@ function renderAdminAttendance(){
             <th>Date</th><th>Student</th><th>Class</th><th>Status</th>
             <th>Academic Year</th><th>Remarks</th><th>Actions</th>
         </tr></thead>
-        <tbody>${attendanceRows(filtered,true)}</tbody>
+        <tbody>${attendanceRows(filtered,false)}</tbody>
     </table>
     </div>`;
 }
@@ -3708,52 +3449,12 @@ function renderParentAttendance(){
     </div>`;
 }
 
-function renderTeacherAttendanceStudents(classId){
-    const container=document.getElementById("teacherAttendanceStudents");
-    if(!container)return;
-
-    if(!classId){
-        container.innerHTML="";
-        return;
-    }
-
-    const students=getClassStudents(classId);
-    if(!students.length){
-        container.innerHTML='<div class="empty">No students are assigned to this class.</div>';
-        return;
-    }
-
-    const date=document.getElementById("teacherAttendanceDate")?.value||"";
-    const existingByStudent={};
-    if(date){
-        attendance.filter(a=>a.classId===classId && a.date===date).forEach(a=>existingByStudent[a.studentId]=a);
-    }
-
-    container.innerHTML=`
-    <div style="overflow-x:auto">
-    <table>
-        <thead><tr><th>#</th><th>Student</th><th>Status</th><th>Remarks</th></tr></thead>
-        <tbody>${students.map((student,i)=>{
-            const existing=existingByStudent[student.id];
-            const status=existing?.status||"Present";
-            return `<tr class="teacher-attendance-row" data-student-id="${escapeHtml(student.id)}">
-                <td>${i+1}</td>
-                <td><strong>${escapeHtml(student.name)}</strong><br><small>${escapeHtml(student.id)}</small></td>
-                <td><select class="form-control" style="min-width:130px">
-                    <option ${status==="Present"?"selected":""}>Present</option>
-                    <option ${status==="Absent"?"selected":""}>Absent</option>
-                    <option ${status==="Late"?"selected":""}>Late</option>
-                    <option ${status==="Excused"?"selected":""}>Excused</option>
-                </select></td>
-                <td><input type="text" value="${escapeHtml(existing?.remarks||"")}" placeholder="Optional remark"></td>
-            </tr>`;
-        }).join("")}</tbody>
-    </table></div>`;
-}
-
 function renderTeacherAttendance(){
-    // Teachers can review attendance for any class in the school.
-    const classIds=classes.map(c=>c.id);
+    const teacherId=currentUser?.id;
+
+    const classIds=classes
+        .filter(c=>c.teacherId===teacherId)
+        .map(c=>c.id);
 
     const search=(document.getElementById("teacherAttendanceSearch")?.value||"").toLowerCase();
 
@@ -3774,7 +3475,7 @@ function renderTeacherAttendance(){
 
     if(!records.length){
         document.getElementById("teacherAttendanceContent").innerHTML=
-            '<div class="empty">No attendance records found.</div>';
+            '<div class="empty">No attendance records found for your assigned classes.</div>';
         return;
     }
 
@@ -3834,430 +3535,190 @@ function deleteTeacherAttendance(id){
    REPORT CARDS / STUDENT REPORTS
 ========================= */
 
-let currentReportStudentId = "";
-let currentReportClassId = "";
-let currentReportAcademicYear = "";
-
-function reportCommentsKey(studentId, academicYear){
-    return `${studentId}_${academicYear}`;
-}
-
-function getReportComments(studentId, academicYear){
-    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
-    return all[reportCommentsKey(studentId,academicYear)] || {
-        teacher:"",
-        headteacher:""
-    };
-}
-
-function saveReportComments(studentId, academicYear, teacher, headteacher){
-    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
-
-    all[reportCommentsKey(studentId,academicYear)]={
-        teacher:String(teacher||"").trim(),
-        headteacher:String(headteacher||"").trim()
-    };
-
-    localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
-}
+let currentReportStudentId="";
+let currentReportClassId="";
+let currentReportAcademicYear="";
+let currentReportTerm="Term 1";
 
 function populateReportClassSelect(selected=""){
     const select=document.getElementById("reportClassSelect");
     if(!select)return;
 
-    select.innerHTML='<option value="">Select Class</option>'+
-        classes.map(c=>`
-            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
-                ${escapeHtml(classDisplay(c))}
-            </option>
-        `).join("");
+    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>`
+        <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+            ${escapeHtml(classDisplay(c))}
+        </option>
+    `).join("");
 
-    if(selected){
-        populateReportStudentSelect(selected);
-    }else{
+    if(selected) populateReportStudentSelect(selected);
+    else{
         const studentSelect=document.getElementById("reportStudentSelect");
-        if(studentSelect){
-            studentSelect.innerHTML='<option value="">Select Student</option>';
-            studentSelect.disabled=true;
-        }
+        if(studentSelect){studentSelect.innerHTML='<option value="">Select Student</option>';studentSelect.disabled=true;}
     }
 }
 
 function populateReportStudentSelect(classId,selected=""){
     const select=document.getElementById("reportStudentSelect");
     if(!select)return;
-
-    if(!classId){
-        select.innerHTML='<option value="">Select Class First</option>';
-        select.disabled=true;
-        return;
-    }
+    if(!classId){select.innerHTML='<option value="">Select Class First</option>';select.disabled=true;return;}
 
     const classStudents=getClassStudents(classId);
-
-    select.innerHTML='<option value="">Select Student</option>'+
-        classStudents.map(s=>`
-            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
-                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
-            </option>
-        `).join("");
-
+    select.innerHTML='<option value="">Select Student</option>'+classStudents.map(s=>`
+        <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+            ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+        </option>
+    `).join("");
     select.disabled=false;
 }
 
 function calculateReportAttendance(studentId,classId,academicYear){
-    const records=attendance.filter(a=>
-        a.studentId===studentId &&
-        a.classId===classId &&
-        String(a.academicYear||"").trim()===String(academicYear||"").trim()
-    );
-
+    const records=attendance.filter(a=>a.studentId===studentId&&a.classId===classId&&String(a.academicYear||"").trim()===String(academicYear||"").trim());
     const present=records.filter(a=>String(a.status).toLowerCase()==="present").length;
     const late=records.filter(a=>String(a.status).toLowerCase()==="late").length;
     const absent=records.filter(a=>String(a.status).toLowerCase()==="absent").length;
     const excused=records.filter(a=>String(a.status).toLowerCase()==="excused").length;
-
     const counted=present+late+absent;
     const attended=present+late;
-    const percentage=counted ? Math.round((attended/counted)*100) : 0;
-
-    return {
-        total:records.length,
-        present,
-        late,
-        absent,
-        excused,
-        counted,
-        attended,
-        percentage
-    };
+    const percentage=counted?Math.round((attended/counted)*100):0;
+    return {total:records.length,present,late,absent,excused,counted,attended,percentage};
 }
 
-function reportSubjectList(classId,studentId,academicYear){
-    const classSubjects=subjects.filter(s=>
-        (s.classIds||[]).includes(classId)
-    );
-
+function reportSubjectList(classId,studentId,academicYear,term){
+    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
     const studentResults=results.filter(r=>
         r.studentId===studentId &&
         r.classId===classId &&
-        String(r.academicYear||"").trim()===String(academicYear||"").trim()
+        String(r.academicYear||"").trim()===String(academicYear||"").trim() &&
+        String(r.term||"").trim()===String(term||"").trim()
     );
 
     const ids=new Set(classSubjects.map(s=>s.id));
+    studentResults.forEach(r=>{if(r.subjectId)ids.add(r.subjectId);});
 
-    studentResults.forEach(r=>{
-        if(r.subjectId)ids.add(r.subjectId);
-    });
-
-    return [...ids].map(id=>({
-        subject:getSubject(id),
-        result:studentResults.find(r=>r.subjectId===id)
-    })).filter(x=>x.subject || x.result);
+    return [...ids].map(id=>({subject:getSubject(id),result:studentResults.find(r=>r.subjectId===id)})).filter(x=>x.subject||x.result);
 }
 
 function getReportResultLevel(result){
     if(!result)return "No Result";
-
-    if(result.grade && String(result.grade).trim()){
-        return result.grade;
-    }
-
-    if(result.performance && String(result.performance).trim()){
-        return result.performance;
-    }
-
-    if(result.total!==undefined && result.total!==""){
-        return getPerformance(result.total);
-    }
-
+    if(result.grade&&String(result.grade).trim())return result.grade;
+    if(result.performance&&String(result.performance).trim())return result.performance;
+    if(result.total!==undefined&&result.total!=="")return getPerformance(result.total);
     return "No Result";
 }
 
-function saveCurrentReportComments(){
-    if(!currentReportStudentId || !currentReportAcademicYear){
-        showMessage("reportMessage","Generate a report before saving comments.","error");
-        return;
-    }
-
-    const teacher=document.getElementById("reportTeacherComment")?.value || "";
-    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-    saveReportComments(
-        currentReportStudentId,
-        currentReportAcademicYear,
-        teacher,
-        headteacher
-    );
-
-    showMessage("reportMessage","Report comments saved successfully.","success");
-}
-
 function generateStudentReport(){
-    const classId=document.getElementById("reportClassSelect")?.value || "";
-    const studentId=document.getElementById("reportStudentSelect")?.value || "";
-    const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
-
+    const classId=document.getElementById("reportClassSelect")?.value||"";
+    const studentId=document.getElementById("reportStudentSelect")?.value||"";
+    const academicYear=document.getElementById("reportAcademicYear")?.value.trim()||"";
+    const term=document.getElementById("reportTerm")?.value||"Term 1";
     const container=document.getElementById("studentReportContainer");
 
-    if(!classId){
-        showMessage("reportMessage","Please select a class.","error");
-        return;
-    }
+    if(!classId){showMessage("reportMessage","Please select a class.","error");return;}
+    if(!studentId){showMessage("reportMessage","Please select a student.","error");return;}
+    if(!academicYear){showMessage("reportMessage","Please enter the academic year.","error");return;}
 
-    if(!studentId){
-        showMessage("reportMessage","Please select a student.","error");
-        return;
-    }
-
-    if(!academicYear){
-        showMessage("reportMessage","Please enter the academic year.","error");
-        return;
-    }
-
-    const student=getStudent(studentId);
-    const schoolClass=getClass(classId);
-
-    if(!student || !schoolClass){
-        showMessage("reportMessage","The selected student or class could not be found.","error");
-        return;
-    }
+    const student=getStudent(studentId), schoolClass=getClass(classId);
+    if(!student||!schoolClass){showMessage("reportMessage","The selected student or class could not be found.","error");return;}
 
     currentReportStudentId=studentId;
     currentReportClassId=classId;
     currentReportAcademicYear=academicYear;
+    currentReportTerm=term;
 
-    const subjectItems=reportSubjectList(classId,studentId,academicYear);
+    const subjectItems=reportSubjectList(classId,studentId,academicYear,term);
     const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
-    const comments=getReportComments(studentId,academicYear);
-
-    const scoredResults=subjectItems
-        .map(x=>x.result)
-        .filter(Boolean)
-        .filter(r=>r.total!==undefined && r.total!=="" && !isNaN(Number(r.total)));
-
+    const scoredResults=subjectItems.map(x=>x.result).filter(Boolean).filter(r=>r.total!==undefined&&r.total!==""&&!isNaN(Number(r.total)));
     const scores=scoredResults.map(r=>Number(r.total));
-    const average=scores.length
-        ? scores.reduce((sum,n)=>sum+n,0)/scores.length
-        : 0;
-
-    const highest=scores.length ? Math.max(...scores) : 0;
-    const overall=scores.length ? getPerformance(average) : "No Result";
-
+    const average=scores.length?scores.reduce((sum,n)=>sum+n,0)/scores.length:0;
+    const highest=scores.length?Math.max(...scores):0;
+    const overall=scores.length?getPerformance(average):"No Result";
     const teacher=getTeacher(schoolClass.teacherId);
+    const teacherName=teacher?.name||"Class Teacher";
 
-    const subjectRows=subjectItems.length
-        ? subjectItems.map(item=>{
-            const subject=item.subject;
-            const result=item.result;
-            const total=result && result.total!==undefined && result.total!==""
-                ? Number(result.total)
-                : null;
-
-            const level=getReportResultLevel(result);
-
-            return `<tr>
-                <td>${escapeHtml(subject?.name || result?.subjectName || "Subject")}</td>
-                <td>${result?.classScore!==undefined && result.classScore!=="" ? escapeHtml(result.classScore) : "—"}</td>
-                <td>${result?.examScore!==undefined && result.examScore!=="" ? escapeHtml(result.examScore) : "—"}</td>
-                <td>${total!==null && !isNaN(total) ? escapeHtml(total) : "—"}</td>
-                <td>
-                    ${level==="No Result"
-                        ? "No Result"
-                        : `<span class="badge ${escapeHtml(performanceClass(level))}">
-                            ${escapeHtml(level)}
-                           </span>`}
-                </td>
-            </tr>`;
-        }).join("")
-        : `<tr><td colspan="5" style="text-align:center">No subjects or results available for this student.</td></tr>`;
-
-    const gender=student.gender || "";
-    const teacherName=teacher?.name || "Class Teacher";
+    const subjectRows=subjectItems.length?subjectItems.map(item=>{
+        const subject=item.subject, result=item.result;
+        const classScore=result?.classScore!==undefined&&result.classScore!==""?Number(result.classScore):null;
+        const examMark=result?.examMark!==undefined&&result.examMark!==""?Number(result.examMark):null;
+        const examComponent=result?.examScore!==undefined&&result.examScore!==""?Number(result.examScore):(examMark!==null?examMark/2:null);
+        const total=result?.total!==undefined&&result.total!==""?Number(result.total):(classScore!==null&&examComponent!==null?classScore+examComponent:null);
+        const level=getReportResultLevel(result);
+        return `<tr>
+            <td>${escapeHtml(subject?.name||result?.subjectName||"Subject")}</td>
+            <td>${classScore!==null&&!isNaN(classScore)?classScore.toFixed(1):"—"}</td>
+            <td>${examMark!==null&&!isNaN(examMark)?examMark.toFixed(1):"—"}</td>
+            <td>${examComponent!==null&&!isNaN(examComponent)?examComponent.toFixed(1):"—"}</td>
+            <td>${total!==null&&!isNaN(total)?total.toFixed(1):"—"}</td>
+            <td>${level==="No Result"?"No Result":`<span class="badge ${escapeHtml(performanceClass(level))}">${escapeHtml(level)}</span>`}</td>
+        </tr>`;
+    }).join(""):`<tr><td colspan="6" style="text-align:center">No subjects or results available for this student.</td></tr>`;
 
     container.className="report-card";
     container.innerHTML=`
         <div class="report-school-header">
+            <div class="report-school-logo">SS</div>
             <h1>SWIFTSCHOOL</h1>
             <h2>STUDENT ACADEMIC REPORT</h2>
-            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
+            <p>School Management &amp; Academic Assessment System</p>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong> &nbsp; | &nbsp; <strong>${escapeHtml(term)}</strong></p>
         </div>
 
         <div class="report-student-info">
-            <div class="report-info-box">
-                <strong>Student Name</strong>
-                ${escapeHtml(student.name)}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Student ID</strong>
-                ${escapeHtml(student.id)}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Class</strong>
-                ${escapeHtml(classDisplay(schoolClass))}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Gender</strong>
-                ${escapeHtml(gender || "—")}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Class Teacher</strong>
-                ${escapeHtml(teacherName)}
-            </div>
-
-            <div class="report-info-box">
-                <strong>Report Date</strong>
-                ${escapeHtml(new Date().toLocaleDateString())}
-            </div>
+            <div class="report-info-box"><strong>Student Name</strong>${escapeHtml(student.name)}</div>
+            <div class="report-info-box"><strong>Student ID</strong>${escapeHtml(student.id)}</div>
+            <div class="report-info-box"><strong>Class</strong>${escapeHtml(classDisplay(schoolClass))}</div>
+            <div class="report-info-box"><strong>Gender</strong>${escapeHtml(student.gender||"—")}</div>
+            <div class="report-info-box"><strong>Class Teacher</strong>${escapeHtml(teacherName)}</div>
+            <div class="report-info-box"><strong>Report Date</strong>${escapeHtml(new Date().toLocaleDateString())}</div>
         </div>
 
         <h3>Academic Performance</h3>
-
         <div class="table-wrap">
             <table class="report-table">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Class Score</th>
-                        <th>Exam Score</th>
-                        <th>Total</th>
-                        <th>Performance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${subjectRows}
-                </tbody>
+                <thead><tr>
+                    <th>Subject</th><th>Class Score /50</th><th>Exam Mark /100</th><th>Exam /50</th><th>Total /100</th><th>Performance</th>
+                </tr></thead>
+                <tbody>${subjectRows}</tbody>
             </table>
         </div>
 
         <div class="report-summary">
-            <div class="report-summary-box">
-                <strong>${scores.length ? average.toFixed(1) : "—"}</strong>
-                <span>Average Score</span>
-            </div>
-
-            <div class="report-summary-box">
-                <strong>${scores.length ? highest : "—"}</strong>
-                <span>Highest Score</span>
-            </div>
-
-            <div class="report-summary-box">
-                <strong>${escapeHtml(overall)}</strong>
-                <span>Overall Performance</span>
-            </div>
-
-            <div class="report-summary-box">
-                <strong>${attendanceSummary.percentage}%</strong>
-                <span>Attendance</span>
-            </div>
+            <div class="report-summary-box"><strong>${scores.length?average.toFixed(1):"—"}</strong><span>Average Score</span></div>
+            <div class="report-summary-box"><strong>${scores.length?highest.toFixed(1):"—"}</strong><span>Highest Score</span></div>
+            <div class="report-summary-box"><strong>${escapeHtml(overall)}</strong><span>Overall Performance</span></div>
+            <div class="report-summary-box"><strong>${attendanceSummary.percentage}%</strong><span>Attendance</span></div>
         </div>
 
         <h3>Attendance Summary</h3>
-
         <div class="table-wrap">
-            <table class="report-table">
-                <thead>
-                    <tr>
-                        <th>Present</th>
-                        <th>Late</th>
-                        <th>Absent</th>
-                        <th>Excused</th>
-                        <th>Attendance %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${attendanceSummary.present}</td>
-                        <td>${attendanceSummary.late}</td>
-                        <td>${attendanceSummary.absent}</td>
-                        <td>${attendanceSummary.excused}</td>
-                        <td>${attendanceSummary.percentage}%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="report-comments">
-            <div class="report-comment-box">
-                <h3>Class Teacher's Comment</h3>
-                <textarea id="reportTeacherComment"
-                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
-            </div>
-
-            <div class="report-comment-box">
-                <h3>Headteacher's Comment</h3>
-                <textarea id="reportHeadteacherComment"
-                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
-            </div>
-        </div>
-
-        <div class="report-comment-actions">
-            <button class="primary-btn" onclick="saveCurrentReportComments()">
-                Save Comments
-            </button>
+            <table class="report-table"><thead><tr><th>Present</th><th>Late</th><th>Absent</th><th>Excused</th><th>Attendance %</th></tr></thead>
+            <tbody><tr><td>${attendanceSummary.present}</td><td>${attendanceSummary.late}</td><td>${attendanceSummary.absent}</td><td>${attendanceSummary.excused}</td><td>${attendanceSummary.percentage}%</td></tr></tbody></table>
         </div>
 
         <div class="report-footer">
-            <div>
-                <div class="signature-line">Class Teacher</div>
-            </div>
-
-            <div>
-                <div class="signature-line">Headteacher / Principal</div>
-            </div>
+            <div><div class="signature-line">Class Teacher Signature</div></div>
+            <div><div class="signature-line">Headteacher Signature</div></div>
         </div>
+
+        <p style="text-align:center;margin-top:25px;font-size:11px;color:#6b7280;">Printed from SwiftSchool</p>
     `;
 
-    showMessage("reportMessage","Report generated successfully.","success");
+    showMessage("reportMessage",`Report generated successfully for ${term}.`,"success");
 }
 
 function printStudentReport(){
     const container=document.getElementById("studentReportContainer");
-
-    if(!container || !container.classList.contains("report-card")){
-        showMessage("reportMessage","Generate a report before printing.","error");
-        return;
-    }
-
-    // Save any comments currently typed before printing.
-    if(currentReportStudentId && currentReportAcademicYear){
-        const teacher=document.getElementById("reportTeacherComment")?.value || "";
-        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
-
-        saveReportComments(
-            currentReportStudentId,
-            currentReportAcademicYear,
-            teacher,
-            headteacher
-        );
-    }
-
+    if(!container||!container.classList.contains("report-card")){showMessage("reportMessage","Generate a report before printing.","error");return;}
     document.body.classList.add("report-printing");
-
-    setTimeout(()=>{
-        window.print();
-
-        setTimeout(()=>{
-            document.body.classList.remove("report-printing");
-        },500);
-    },100);
+    setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove("report-printing"),500);},100);
 }
 
 document.getElementById("reportClassSelect")?.addEventListener("change",function(){
     populateReportStudentSelect(this.value);
     document.getElementById("studentReportContainer").className="report-placeholder";
-    document.getElementById("studentReportContainer").innerHTML=
-        '<p>Select a student, then click <strong>Generate Report</strong>.</p>';
 });
 
 document.getElementById("reportStudentSelect")?.addEventListener("change",function(){
     document.getElementById("studentReportContainer").className="report-placeholder";
-    document.getElementById("studentReportContainer").innerHTML=
-        '<p>Click <strong>Generate Report</strong> to create the student report.</p>';
 });
 
 /* =========================
