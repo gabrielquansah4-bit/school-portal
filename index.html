@@ -526,6 +526,4602 @@ td{font-size:14px}
         <div class="form-group">
             <label>Account Type</label>
             <select id="loginRole">
+                <option value="Administrator">Administrator (Admin Only)</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Parent">Parent / Guardian</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <input id="loginUsername" type="text">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input id="loginPassword" type="password">
+        </div>
+
+        <button class="primary-btn" style="width:100%" onclick="login()">Login</button>
+        <a class="forgot-password" onclick="openForgotPassword()">Forgot Password?</a>
+
+        <div class="demo-box">
+            <strong>Demo Accounts</strong><br><br>
+            Parent: parent001 / 123456 <small>(set your own password after first login)</small><br>
+            Teacher: teacher001 / 123456 <small>(set your own password after first login)</small><br>
+            Administrator: admin / admin123 <small>(Admin Only)</small><br>
+            Administrator: admin / admin123
+        </div>
+    </div>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div id="forgotPasswordModal" class="password-modal">
+    <div class="password-modal-box">
+        <h2>Reset Password</h2>
+        <p>Enter your account details to create a new password.</p>
+        <div id="forgotPasswordMessage" class="message"></div>
+        <div class="form-group">
+            <label>Account Type</label>
+            <select id="forgotRole">
+                <option value="Parent">Parent / Guardian</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Administrator">Administrator</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Username</label>
+            <input id="forgotUsername" type="text" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label>Account ID</label>
+            <input id="forgotAccountId" type="text" placeholder="e.g. TCH-001, PAR-001 or ADMIN-001">
+        </div>
+        <div class="form-group">
+            <label>New Password</label>
+            <input id="forgotNewPassword" type="password" minlength="6" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+            <label>Confirm New Password</label>
+            <input id="forgotConfirmPassword" type="password" minlength="6" autocomplete="new-password">
+        </div>
+        <div class="password-modal-actions">
+            <button class="primary-btn" type="button" onclick="resetForgottenPassword()">Reset Password</button>
+            <button class="secondary-btn" type="button" onclick="closeForgotPassword()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- PORTAL -->
+<div id="portal" class="portal">
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>School Portal</h2>
+        <small>Management System</small>
+    </div>
+
+    <div class="nav-section">Main</div>
+    <div class="nav-link" data-page="dashboard">Dashboard</div>
+    <div class="nav-link" data-page="profile">My Profile</div>
+
+    <div id="parentNav">
+        <div class="nav-section">Parent</div>
+        <div class="nav-link" data-page="children">My Children</div>
+        <div class="nav-link" data-page="parentResults">Results</div>
+        <div class="nav-link" data-page="parentAttendance">Attendance</div>
+        <div class="nav-link" data-page="parentAssignments">Assignments</div>
+        <div class="nav-link" data-page="parentFees">Fees</div>
+        <div class="nav-link" data-page="parentAnnouncements">Announcements</div>
+    </div>
+
+    <div id="teacherNav">
+        <div class="nav-section">Teacher</div>
+        <div class="nav-link" data-page="teacherSubjects">My Subjects</div>
+        <div class="nav-link" data-page="teacherStudents">Students</div>
+        <div class="nav-link" data-page="teacherResults">Results</div>
+        <div class="nav-link" data-page="teacherAttendance">Attendance</div>
+        <div class="nav-link" data-page="teacherAssignments">Assignments</div>
+        <div class="nav-link" data-page="teacherAnnouncements">Announcements</div>
+    </div>
+
+    <div id="adminNav">
+        <div class="nav-section">Administration</div>
+        <div class="nav-link" data-page="students">Students</div>
+        <div class="nav-link" data-page="parents">Parents</div>
+        <div class="nav-link" data-page="teachers">Teachers</div>
+        <div class="nav-link" data-page="classes">Classes</div>
+        <div class="nav-link" data-page="adminSubjects">Subjects</div>
+        <div class="nav-link" data-page="adminResults">Results</div>
+        <div class="nav-link" data-page="adminAttendance">Attendance</div>
+        <div class="nav-link" data-page="adminAssignments">Assignments</div>
+        <div class="nav-link" data-page="adminFees">Fees</div>
+        <div class="nav-link" data-page="adminAnnouncements">Announcements</div>
+        <div class="nav-link" data-page="reports">Reports</div>
+        <div class="nav-link" data-page="settings">Settings</div>
+    </div>
+
+    <div class="nav-link logout-link" onclick="logout()">Logout</div>
+</aside>
+
+<main class="main">
+    <header class="topbar">
+        <div>
+            <strong id="topTitle">Dashboard</strong>
+        </div>
+        <div class="user-info">
+            <strong id="topUser">User</strong>
+            <small id="topRole">Role</small>
+        </div>
+    </header>
+
+    <div class="content">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+    <div class="page-header">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Welcome to the School Portal.</p>
+        </div>
+    </div>
+
+    <div class="cards">
+        <div class="card stat-card">
+            <h3 id="studentCount">0</h3>
+            <p>Total Students</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="parentCount">0</h3>
+            <p>Total Parents</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="teacherCount">0</h3>
+            <p>Total Teachers</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="classCount">0</h3>
+            <p>Total Classes</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="subjectCount">0</h3>
+            <p>Total Subjects</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="resultCount">0</h3>
+            <p>Total Results</p>
+        </div>
+        <div class="card stat-card">
+            <h3 id="attendanceCount">0</h3>
+            <p>Attendance Records</p>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Performance Levels</h2>
+        <p>Advanced • Approaching Advanced • Proficient • Approaching Proficiency • Developing • Beginning</p>
+    </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+    <div class="page-header">
+        <div><h1>My Profile</h1><p>Your account information.</p></div>
+    </div>
+    <div class="panel" id="profileContent"></div>
+</section>
+
+<!-- STUDENT SUBJECTS -->
+
+
+<!-- STUDENT RESULTS -->
+
+
+<!-- PARENT CHILDREN -->
+<section id="children" class="page">
+    <div class="page-header">
+        <div><h1>My Children</h1><p>Students linked to your account.</p></div>
+    </div>
+    <div class="panel">
+        <div id="childrenContent"></div>
+    </div>
+</section>
+
+<!-- PARENT RESULTS -->
+<section id="parentResults" class="page">
+    <div class="page-header">
+        <div><h1>Children's Results</h1><p>Academic results for your children.</p></div>
+    </div>
+    <div class="panel">
+        <div id="parentResultsContent"></div>
+    </div>
+</section>
+
+<!-- TEACHER SUBJECTS -->
+<section id="teacherSubjects" class="page">
+    <div class="page-header">
+        <div><h1>My Subjects</h1><p>Subjects assigned to you.</p></div>
+    </div>
+    <div class="panel">
+        <div id="teacherSubjectsContent"></div>
+    </div>
+</section>
+
+<!-- TEACHER RESULTS -->
+<section id="teacherResults" class="page">
+    <div class="page-header">
+        <div><h1>Student Results</h1><p>Download one Excel sheet for a class, enter marks progressively, and upload it for review.</p></div>
+    </div>
+
+    <div class="panel" id="teacherBulkMarksPanel">
+        <h2>Marks Upload (Excel)</h2>
+        <p style="margin:8px 0 14px;color:#666">Download your class Excel sheet, enter the marks that have been reviewed, and upload it. You can upload the sheet several times as marking continues. Blank cells are skipped, so unfinished subjects can be completed later.</p>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Academic Year *</label>
+                <input id="teacherBulkMarksYear" value="2026/2027">
+            </div>
+            <div class="form-group">
+                <label>Term *</label>
+                <select id="teacherBulkMarksTerm">
+                    <option>Term 1</option>
+                    <option>Term 2</option>
+                    <option>Term 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Class *</label>
+                <select id="teacherBulkMarksClass">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Excel File *</label>
+                <input type="file" id="teacherBulkMarksExcelFile" accept=".xlsx,.xls,.csv">
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+            <button class="secondary-btn" type="button" onclick="downloadTeacherBulkMarksTemplate()">Download Class Excel Sheet</button>
+            <button class="primary-btn" type="button" onclick="importTeacherBulkMarksFromExcel()">Upload Scores</button>
+        </div>
+        <div id="teacherBulkMarksMessage" class="message" style="margin-top:15px"></div>
+        <div class="import-note">
+            <strong>Scoring:</strong> Class Score is out of 50. Examination Mark is entered out of 100 and is automatically converted to 50.
+        </div>
+    </div>
+
+    <div class="panel">
+        <div id="teacherResultsContent"></div>
+    </div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students" class="page">
+    <div class="page-header">
+        <div><h1>Student Management</h1><p>Add, edit and manage students.</p></div>
+        <button class="primary-btn" onclick="openStudentForm()">+ Add Student</button>
+    </div>
+
+    <div id="studentMessage" class="message"></div>
+
+    <div class="panel" id="studentFormPanel" style="display:none">
+        <h2 id="studentFormTitle">Add Student</h2>
+        <form id="studentForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Student ID *</label>
+                    <input id="studentId" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input id="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label>Gender *</label>
+                    <select id="studentGender" required>
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input id="studentDob" type="date">
+                </div>
+                <div class="form-group">
+                    <label>Class *</label>
+                    <input id="studentClass" required>
+                </div>
+                <div class="form-group">
+                    <label>Parent / Guardian</label>
+                    <input id="studentParent">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input id="studentPhone">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="studentEmail" type="email">
+                </div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Student</button>
+            <button class="secondary-btn" type="button" onclick="closeStudentForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Import Students & Update Classes</h2>
+        <p style="margin:8px 0 14px;color:#666">Upload the student Excel file using these columns: <strong>Student ID, First Name, Last Name, Class</strong>. The portal will update student classes and automatically create/update the matching class records.</p>
+        <div class="form-group">
+            <input type="file" id="studentExcelFile" accept=".xlsx,.xls,.csv">
+        </div>
+        <button class="primary-btn" type="button" onclick="importStudentsFromExcel()">Import Students & Sync Classes</button>
+        <button class="secondary-btn" type="button" onclick="downloadStudentTemplate()">Download Template</button>
+        <div id="studentImportMessage" class="message"></div>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="studentSearch" placeholder="Search students...">
+        <div id="studentTable"></div>
+    </div>
+</section>
+
+<!-- PARENTS -->
+<section id="parents" class="page">
+    <div class="page-header">
+        <div><h1>Parent Management</h1><p>Manage parents and linked students.</p></div>
+        <button class="primary-btn" onclick="openParentForm()">+ Add Parent</button>
+    </div>
+
+    <div id="parentMessage" class="message"></div>
+
+    <div class="panel" id="parentFormPanel" style="display:none">
+        <h2 id="parentFormTitle">Add Parent</h2>
+        <form id="parentForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Parent ID *</label><input id="parentId" required></div>
+                <div class="form-group"><label>Full Name *</label><input id="parentName" required></div>
+                <div class="form-group"><label>Phone</label><input id="parentPhone"></div>
+                <div class="form-group"><label>Email</label><input id="parentEmail" type="email"></div>
+                <div class="form-group"><label>Address</label><input id="parentAddress"></div>
+                <div class="form-group"><label>Username *</label><input id="parentUsername" required></div>
+                <div class="form-group"><label>Password *</label><input id="parentPassword" required></div>
+                <div class="form-group full">
+                    <label>Link Students</label>
+                    <div id="parentStudentList" class="checkbox-list"></div>
+                </div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Parent</button>
+            <button class="secondary-btn" type="button" onclick="closeParentForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="parentSearch" placeholder="Search parents...">
+        <div id="parentTable"></div>
+    </div>
+</section>
+
+<!-- TEACHERS -->
+<section id="teachers" class="page">
+    <div class="page-header">
+        <div><h1>Teacher Management</h1><p>Manage teachers and their accounts.</p></div>
+        <button class="primary-btn" onclick="openTeacherForm()">+ Add Teacher</button>
+    </div>
+
+    <div id="teacherMessage" class="message"></div>
+
+    <div class="panel" id="teacherFormPanel" style="display:none">
+        <h2 id="teacherFormTitle">Add Teacher</h2>
+        <form id="teacherForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Teacher ID *</label><input id="teacherId" required></div>
+                <div class="form-group"><label>Full Name *</label><input id="teacherName" required></div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="teacherGender">
+                        <option value="">Select</option><option>Male</option><option>Female</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Date of Birth</label><input id="teacherDob" type="date"></div>
+                <div class="form-group"><label>Phone</label><input id="teacherPhone"></div>
+                <div class="form-group"><label>Email</label><input id="teacherEmail" type="email"></div>
+                <div class="form-group"><label>Address</label><input id="teacherAddress"></div>
+                <div class="form-group"><label>Qualification</label><input id="teacherQualification"></div>
+                <div class="form-group"><label>Subject(s)</label><input id="teacherSubjects"></div>
+                <div class="form-group"><label>Username *</label><input id="teacherUsername" required></div>
+                <div class="form-group"><label>Password</label><input id="teacherPassword" type="password" placeholder="Set temporary password for new teachers">
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Teacher</button>
+            <button class="secondary-btn" type="button" onclick="closeTeacherForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="teacherSearch" placeholder="Search teachers...">
+        <div id="teacherTable"></div>
+    </div>
+</section>
+
+<!-- CLASSES -->
+<section id="classes" class="page">
+    <div class="page-header">
+        <div><h1>Class Management</h1><p>Manage classes, teachers and students.</p></div>
+        <button class="primary-btn" onclick="openClassForm()">+ Add Class</button>
+    </div>
+
+    <div id="classMessage" class="message"></div>
+
+    <div class="panel" id="classFormPanel" style="display:none">
+        <h2 id="classFormTitle">Add Class</h2>
+        <form id="classForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Class ID *</label><input id="classId" required></div>
+                <div class="form-group"><label>Class Name *</label><input id="className" required></div>
+                <div class="form-group"><label>Section / Stream</label><input id="classSection"></div>
+                <div class="form-group"><label>Academic Year</label><input id="classYear" value="2026/2027"></div>
+                <div class="form-group">
+                    <label>Class Teacher</label>
+                    <select id="classTeacher"></select>
+                </div>
+                <div class="form-group full">
+                    <label>Assign Students</label>
+                    <div id="classStudentList" class="checkbox-list"></div>
+                </div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Class</button>
+            <button class="secondary-btn" type="button" onclick="closeClassForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="classSearch" placeholder="Search classes...">
+        <div id="classTable"></div>
+    </div>
+</section>
+
+<!-- SUBJECTS -->
+<section id="adminSubjects" class="page">
+    <div class="page-header">
+        <div><h1>Subject Management</h1><p>Manage subjects and the classes they belong to.</p></div>
+        <button class="primary-btn" onclick="openSubjectForm()">+ Add Subject</button>
+    </div>
+
+    <div id="subjectMessage" class="message"></div>
+
+    <div class="panel" id="subjectFormPanel" style="display:none">
+        <h2 id="subjectFormTitle">Add Subject</h2>
+        <form id="subjectForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Subject ID *</label><input id="subjectId" required></div>
+                <div class="form-group"><label>Subject Name *</label><input id="subjectName" required></div>
+                <div class="form-group"><label>Subject Code</label><input id="subjectCode"></div>
+                <div class="form-group"><label>Academic Year</label><input id="subjectYear" value="2026/2027"></div>
+                <div class="form-group full">
+                    <label>Assign Classes</label>
+                    <div id="subjectClassList" class="checkbox-list"></div>
+                </div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Subject</button>
+            <button class="secondary-btn" type="button" onclick="closeSubjectForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="subjectSearch" placeholder="Search subjects...">
+        <div id="subjectTable"></div>
+    </div>
+</section>
+
+<!-- ADMIN RESULTS -->
+<section id="adminResults" class="page">
+    <div class="page-header">
+        <div>
+            <h1>Results Management</h1>
+            <p>Review teacher-submitted results, monitor missing marks, and manage submission deadlines.</p>
+        </div>
+        <button class="primary-btn" onclick="openResultForm()">+ Add Result</button>
+    </div>
+
+    <div id="resultMessage" class="message"></div>
+
+    <div class="panel" id="resultFormPanel" style="display:none">
+        <h2 id="resultFormTitle">Add Result</h2>
+
+        <form id="resultForm">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Academic Year *</label>
+                    <input id="resultYear" value="2026/2027" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Class *</label>
+                    <select id="resultClass" required>
+                        <option value="">Select Class</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Student *</label>
+                    <select id="resultStudent" required disabled>
+                        <option value="">Select Class First</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject *</label>
+                    <select id="resultSubject" required disabled>
+                        <option value="">Select Class First</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Class Score / 50 *</label>
+                    <input id="classScore" type="number" min="0" max="50" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Exam Mark / 100 *</label>
+                    <input id="examScore" type="number" min="0" max="100" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Total / 100</label>
+                    <input id="resultTotal" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Performance Level</label>
+                    <input id="resultGrade" readonly>
+                </div>
+
+            </div>
+
+            <br>
+            <div class="panel" style="background:#f8fafc">
+                <strong>Performance Scale</strong><br><br>
+                80–100: Advanced<br>
+                70–79: Approaching Advanced<br>
+                60–69: Proficient<br>
+                50–59: Approaching Proficiency<br>
+                40–49: Developing<br>
+                0–39: Beginning
+            </div>
+
+            <button class="primary-btn" type="submit">Save Result</button>
+            <button class="secondary-btn" type="button" onclick="closeResultForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="panel" style="background:#f8fafc">
+        <h2>Teacher Submission Deadlines</h2>
+        <p style="color:#666;margin-top:6px">Set a deadline for each class, academic year and term. The dashboard below will show whether marks are complete, still pending, or past the deadline.</p>
+        <div class="form-grid">
+            <div class="form-group"><label>Academic Year *</label><input id="resultDeadlineYear" value="2026/2027"></div>
+            <div class="form-group"><label>Term *</label><select id="resultDeadlineTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+            <div class="form-group"><label>Class *</label><select id="resultDeadlineClass"><option value="">Select Class</option></select></div>
+            <div class="form-group"><label>Submission Deadline *</label><input id="resultDeadlineDate" type="date"></div>
+        </div>
+        <div style="margin-top:10px">
+            <button class="primary-btn" type="button" onclick="saveResultDeadline()">Save Deadline</button>
+            <button class="secondary-btn" type="button" onclick="clearResultDeadlineForm()">Clear</button>
+        </div>
+        <div id="resultDeadlineMessage" class="message" style="margin-top:12px"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Teacher Submission Monitor</h2>
+        <div id="resultSubmissionMonitor"></div>
+    </div>
+
+    <div class="panel">
+        <input class="search-box" id="resultSearch"
+               placeholder="Search by student, class, subject, teacher, year or performance level...">
+
+        <div id="resultTable"></div>
+    </div>
+</section>
+
+<!-- STUDENT ATTENDANCE -->
+
+
+<section id="fees" class="page"><div class="panel"><h1>Fees</h1><p>Fees Management will be added next.</p></div></section>
+
+
+<section id="parentAttendance" class="page">
+    <div class="page-header">
+        <div><h1>Children's Attendance</h1><p>Attendance records for your children.</p></div>
+    </div>
+    <div class="panel">
+        <div id="parentAttendanceContent"></div>
+    </div>
+</section>
+<section id="parentAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Parent assignment view will be added next.</p></div></section>
+<section id="parentFees" class="page"><div class="panel"><h1>Fees</h1><p>Parent fee view will be added next.</p></div></section>
+<section id="parentAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Parent announcements will be added next.</p></div></section>
+
+<section id="teacherStudents" class="page"><div class="panel"><h1>Students</h1><p>Teacher student management will be added next.</p></div></section>
+<section id="teacherAttendance" class="page">
+    <div class="page-header">
+        <div><h1>Attendance Management</h1><p>Mark attendance for all students in your assigned class at once.</p></div>
+        <button class="primary-btn" onclick="openAttendanceForm('Teacher')">+ Mark Class Attendance</button>
+    </div>
+    <div id="teacherAttendanceMessage" class="message"></div>
+    <div class="panel" id="teacherAttendanceFormPanel" style="display:none">
+        <h2 id="teacherAttendanceFormTitle">Mark Class Attendance</h2>
+        <form id="teacherAttendanceForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Academic Year *</label><input id="teacherAttendanceYear" value="2026/2027" required></div>
+                <div class="form-group"><label>Class *</label><select id="teacherAttendanceClass" required></select></div>
+                <div class="form-group"><label>Date *</label><input id="teacherAttendanceDate" type="date" required></div>
+            </div>
+            <br>
+            <div id="teacherAttendanceStudentList" class="panel" style="background:#f8fafc">
+                <div class="empty">Select a class and date to display all students.</div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save All Attendance</button>
+            <button class="secondary-btn" type="button" onclick="closeAttendanceForm('Teacher')">Cancel</button>
+        </form>
+    </div>
+    <div class="panel">
+        <input class="search-box" id="teacherAttendanceSearch" placeholder="Search attendance...">
+        <div id="teacherAttendanceContent"></div>
+    </div>
+</section>
+<section id="teacherAssignments" class="page"><div class="panel"><h1>Assignments</h1><p>Teacher assignment management will be added next.</p></div></section>
+<section id="teacherAnnouncements" class="page"><div class="panel"><h1>Announcements</h1><p>Teacher announcements will be added next.</p></div></section>
+
+<section id="adminAttendance" class="page">
+    <div class="page-header">
+        <div><h1>Attendance Management</h1><p>Record and manage student attendance.</p></div>
+        <button class="primary-btn" onclick="openAttendanceForm('Admin')">+ Add Attendance</button>
+    </div>
+    <div id="attendanceMessage" class="message"></div>
+    <div class="panel" id="attendanceFormPanel" style="display:none">
+        <h2 id="attendanceFormTitle">Add Attendance</h2>
+        <form id="attendanceForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Academic Year *</label><input id="attendanceYear" value="2026/2027" required></div>
+                <div class="form-group"><label>Class *</label><select id="attendanceClass" required></select></div>
+                <div class="form-group"><label>Student *</label><select id="attendanceStudent" required disabled><option value="">Select Class First</option></select></div>
+                <div class="form-group"><label>Date *</label><input id="attendanceDate" type="date" required></div>
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select id="attendanceStatus" required>
+                        <option value="">Select Status</option>
+                        <option>Present</option><option>Absent</option><option>Late</option><option>Excused</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Remarks</label><input id="attendanceRemarks"></div>
+            </div>
+            <br>
+            <button class="primary-btn" type="submit">Save Attendance</button>
+            <button class="secondary-btn" type="button" onclick="closeAttendanceForm('Admin')">Cancel</button>
+        </form>
+    </div>
+    <div class="panel">
+        <input class="search-box" id="attendanceSearch" placeholder="Search by student, class, date, status or year...">
+        <div id="attendanceTable"></div>
+    </div>
+</section>
+<section id="adminAssignments" class="page"><div class="panel"><h1>Assignments Management</h1><p>Assignments module will be added next.</p></div></section>
+<section id="adminFees" class="page"><div class="panel"><h1>Fees Management</h1><p>Fees module will be added next.</p></div></section>
+<section id="adminAnnouncements" class="page"><div class="panel"><h1>Announcements Management</h1><p>Announcements module will be added next.</p></div></section>
+<section id="reports" class="page">
+
+    <div class="page-header">
+        <div>
+            <h1>Student Reports</h1>
+            <p>Generate and print student academic report cards.</p>
+        </div>
+    </div>
+
+    <div class="panel report-controls">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="reportClassSelect">Class</label>
+                <select id="reportClassSelect">
+                    <option value="">Select Class</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reportStudentSelect">Student</label>
+                <select id="reportStudentSelect" disabled>
+                    <option value="">Select Student</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reportAcademicYear">Academic Year</label>
+                <input type="text" id="reportAcademicYear" value="2026/2027"
+                       placeholder="e.g. 2026/2027">
+            </div>
+
+        </div>
+
+        <div class="report-actions">
+            <button class="primary-btn" onclick="generateStudentReport()">
+                Generate Report
+            </button>
+
+            <button class="secondary-btn" onclick="printStudentReport()">
+                Print Report
+            </button>
+        </div>
+
+        <div id="reportMessage"></div>
+
+    </div>
+
+    <div id="studentReportContainer" class="report-placeholder">
+        <p>Select a class and student, then click <strong>Generate Report</strong>.</p>
+    </div>
+
+</section>
+<section id="settings" class="page"><div class="panel"><h1>Settings</h1><p>System settings will be added later.</p></div></section>
+
+    </div>
+</main>
+</div>
+
+<script>
+/* =========================
+   DATA
+========================= */
+
+let students = JSON.parse(localStorage.getItem("schoolPortalStudents")) || [
+    {
+        id:"STU-001",
+        name:"Gabriel Quansah",
+        gender:"Male",
+        dob:"",
+        className:"Basic 8",
+        parent:"Parent / Guardian",
+        phone:"",
+        email:"student@school.com"
+    }
+];
+
+let parents = JSON.parse(localStorage.getItem("schoolPortalParents")) || [
+    {
+        id:"PAR-001",
+        name:"Parent / Guardian",
+        phone:"",
+        email:"",
+        address:"",
+        username:"parent001",
+        password:"123456",
+        mustChangePassword:true,
+        studentIds:["STU-001"]
+    }
+];
+
+let teachers = JSON.parse(localStorage.getItem("schoolPortalTeachers")) || [
+    {
+        id:"TCH-001",
+        name:"Demo Teacher",
+        gender:"Male",
+        dob:"",
+        phone:"",
+        email:"teacher@school.com",
+        address:"",
+        qualification:"B.Ed.",
+        subjects:"Mathematics",
+        username:"teacher001",
+        password:"123456",
+        mustChangePassword:true
+    }
+];
+
+let classes = JSON.parse(localStorage.getItem("schoolPortalClasses")) || [
+    {
+        id:"CLS-001",
+        name:"Basic 8",
+        section:"A",
+        academicYear:"2026/2027",
+        teacherId:"TCH-001",
+        studentIds:["STU-001"]
+    }
+];
+
+let subjects = JSON.parse(localStorage.getItem("schoolPortalSubjects")) || [
+    {
+        id:"SUB-001",
+        name:"Mathematics",
+        code:"MATH",
+        classIds:["CLS-001"],
+        teacherId:"TCH-001",
+        academicYear:"2026/2027"
+    }
+];
+// Subjects are linked to classes only; remove legacy teacher assignments.
+subjects=subjects.map(s=>{const copy={...s}; delete copy.teacherId; return copy;});
+
+
+let results = JSON.parse(localStorage.getItem("schoolPortalResults")) || [];
+let resultDeadlines = JSON.parse(localStorage.getItem("schoolPortalResultDeadlines")) || [];
+let attendance = JSON.parse(localStorage.getItem("schoolPortalAttendance")) || [];
+
+let currentUser = JSON.parse(localStorage.getItem("schoolPortalUser")) || null;
+
+let editingStudentId = null;
+let editingParentId = null;
+let editingTeacherId = null;
+let editingClassId = null;
+let editingSubjectId = null;
+let editingResultId = null;
+let editingAttendanceId = null;
+let editingTeacherAttendanceId = null;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function saveAll(){
+    localStorage.setItem("schoolPortalStudents",JSON.stringify(students));
+    localStorage.setItem("schoolPortalParents",JSON.stringify(parents));
+    localStorage.setItem("schoolPortalTeachers",JSON.stringify(teachers));
+    localStorage.setItem("schoolPortalClasses",JSON.stringify(classes));
+    localStorage.setItem("schoolPortalSubjects",JSON.stringify(subjects));
+    localStorage.setItem("schoolPortalResults",JSON.stringify(results));
+    localStorage.setItem("schoolPortalResultDeadlines",JSON.stringify(resultDeadlines));
+    localStorage.setItem("schoolPortalAttendance",JSON.stringify(attendance));
+}
+
+function escapeHtml(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function showMessage(id,text,type="success"){
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.className="message "+type;
+    el.textContent=text;
+    setTimeout(()=>{
+        el.className="message";
+        el.textContent="";
+    },3000);
+}
+
+function getStudent(id){
+    return students.find(s=>s.id===id);
+}
+
+function getParent(id){
+    return parents.find(p=>p.id===id);
+}
+
+function getTeacher(id){
+    return teachers.find(t=>t.id===id);
+}
+
+function getClass(id){
+    return classes.find(c=>c.id===id);
+}
+
+function getSubject(id){
+    return subjects.find(s=>s.id===id);
+}
+
+function classDisplay(c){
+    if(!c)return "Unknown Class";
+    return c.name+(c.section ? " - "+c.section : "");
+}
+
+function getPerformance(total){
+    total=Number(total)||0;
+
+    if(total>=80)return "Advanced";
+    if(total>=70)return "Approaching Advanced";
+    if(total>=60)return "Proficient";
+    if(total>=50)return "Approaching Proficiency";
+    if(total>=40)return "Developing";
+    return "Beginning";
+}
+
+function performanceClass(level){
+    return level.toLowerCase().replace(/\s+/g,"-");
+}
+
+function refreshDashboard(){
+    document.getElementById("studentCount").textContent=students.length;
+    document.getElementById("parentCount").textContent=parents.length;
+    document.getElementById("teacherCount").textContent=teachers.length;
+    document.getElementById("classCount").textContent=classes.length;
+    document.getElementById("subjectCount").textContent=subjects.length;
+    document.getElementById("resultCount").textContent=results.length;
+    document.getElementById("attendanceCount").textContent=attendance.length;
+}
+
+
+/* =========================
+   STUDENT EXCEL IMPORT + CLASS SYNC
+========================= */
+
+function importValue(row,names){
+    const keys=Object.keys(row||{});
+    const wanted=(Array.isArray(names)?names:[names]).map(x=>String(x).trim().toLowerCase());
+    const key=keys.find(k=>wanted.includes(String(k).trim().toLowerCase()));
+    return key!==undefined ? row[key] : "";
+}
+
+function parseStudentExcelRows(sheet){
+    const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:true,blankrows:false});
+    if(!matrix.length) return [];
+
+    let headerIndex=-1;
+    for(let i=0;i<Math.min(matrix.length,15);i++){
+        const row=(matrix[i]||[]).map(v=>String(v||"").trim().toLowerCase());
+        const hasId=row.some(v=>["student id","studentid","student id ","id"].includes(v));
+        const hasFirst=row.some(v=>["first name","firstname","given name"].includes(v));
+        const hasLast=row.some(v=>["last name","lastname","surname","family name"].includes(v));
+        const hasClass=row.some(v=>["class","class name","classname","class / section","classsection"].includes(v));
+        if(hasId && hasFirst && hasLast && hasClass){ headerIndex=i; break; }
+    }
+
+    if(headerIndex===-1) throw new Error("Could not find the required columns: Student ID, First Name, Last Name and Class.");
+
+    const headers=matrix[headerIndex].map((h,i)=>String(h||`Column ${i+1}`).trim());
+    const rows=[];
+    for(let i=headerIndex+1;i<matrix.length;i++){
+        const values=matrix[i]||[];
+        if(!values.some(v=>String(v||"").trim())) continue;
+        const obj={};
+        headers.forEach((h,j)=>obj[h]=values[j]??"");
+        rows.push(obj);
+    }
+    return rows;
+}
+
+function syncClassesFromStudents(){
+    const grouped={};
+
+    students.forEach(s=>{
+        const className=String(s.className||"").trim();
+        if(!className) return;
+        const key=className.toLowerCase();
+        if(!grouped[key]) grouped[key]={name:className,studentIds:[]};
+        if(!grouped[key].studentIds.includes(s.id)) grouped[key].studentIds.push(s.id);
+    });
+
+    let classesAdded=0, classesUpdated=0;
+
+    Object.values(grouped).forEach(group=>{
+        let c=classes.find(x=>String(x.name||"").trim().toLowerCase()===group.name.toLowerCase());
+
+        if(!c){
+            const safeName=group.name.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"").toUpperCase().slice(0,24);
+            let id="CLS-"+(safeName||"CLASS");
+            let n=2;
+            while(classes.some(x=>x.id===id)){
+                id="CLS-"+(safeName||"CLASS")+"-"+n++;
+            }
+            c={
+                id,
+                name:group.name,
+                section:"",
+                academicYear:"2026/2027",
+                teacherId:"",
+                studentIds:[]
+            };
+            classes.push(c);
+            classesAdded++;
+        }
+
+        c.studentIds=group.studentIds.slice();
+        classesUpdated++;
+    });
+
+    // Remove students from old classes when their current student record
+    // now points to another class.
+    classes.forEach(c=>{
+        c.studentIds=(c.studentIds||[]).filter(studentId=>{
+            const student=students.find(s=>s.id===studentId);
+            if(!student) return false;
+            return String(student.className||"").trim().toLowerCase()===String(c.name||"").trim().toLowerCase();
+        });
+    });
+
+    return {classesAdded,classesUpdated};
+}
+
+function importStudentsFromExcel(){
+    const input=document.getElementById("studentExcelFile");
+    const file=input?.files?.[0];
+    if(!file){
+        showMessage("studentImportMessage","Please select the student Excel file first.","error");
+        return;
+    }
+    if(typeof XLSX==="undefined"){
+        showMessage("studentImportMessage","Excel support could not be loaded. Check your internet connection and try again.","error");
+        return;
+    }
+
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const workbook=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+            const sheet=workbook.Sheets[workbook.SheetNames[0]];
+            const rows=parseStudentExcelRows(sheet);
+            if(!rows.length) throw new Error("No student records were found in the Excel file.");
+
+            let added=0,updated=0,skipped=0;
+            rows.forEach(row=>{
+                const id=String(importValue(row,["Student ID","StudentID","ID"])).trim();
+                const first=String(importValue(row,["First Name","FirstName","Given Name"])).trim();
+                const last=String(importValue(row,["Last Name","LastName","Surname","Family Name"])).trim();
+                const className=String(importValue(row,["Class","Class Name","ClassName","Class / Section","ClassSection"])).trim();
+
+                if(!id || !first || !last || !className){ skipped++; return; }
+
+                const data={id,name:[first,last].join(" "),firstName:first,lastName:last,className};
+                const index=students.findIndex(s=>String(s.id||"").trim()===id);
+                if(index>=0){
+                    students[index]={...students[index],...data};
+                    updated++;
+                }else{
+                    students.push(data);
+                    added++;
+                }
+            });
+
+            const sync=syncClassesFromStudents();
+            saveAll();
+            renderStudents();
+            renderClasses();
+            refreshDashboard();
+
+            showMessage("studentImportMessage",`Import complete: ${added} added, ${updated} updated, ${skipped} skipped. Classes synchronized: ${sync.classesAdded} new class(es), ${sync.classesUpdated} class record(s) updated.`,skipped&&added+updated===0?"error":"success");
+            input.value="";
+        }catch(err){
+            showMessage("studentImportMessage",err.message||"The Excel file could not be imported.","error");
+        }
+    };
+    reader.onerror=function(){showMessage("studentImportMessage","The selected file could not be read.","error");};
+    reader.readAsArrayBuffer(file);
+}
+
+function downloadStudentTemplate(){
+    if(typeof XLSX==="undefined"){
+        showMessage("studentImportMessage","Excel support could not be loaded.","error");
+        return;
+    }
+    const rows=[
+        {"Student ID":"STU-2026-0001","First Name":"Sample","Last Name":"Student",Class:"Basic1 Cosmos"}
+    ];
+    const ws=XLSX.utils.json_to_sheet(rows);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Students");
+    XLSX.writeFile(wb,"SwiftSchool_Student_Template.xlsx");
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+function login(){
+    const role=document.getElementById("loginRole").value;
+    const username=document.getElementById("loginUsername").value.trim();
+    const password=document.getElementById("loginPassword").value;
+
+    let user=null;
+
+    if(role==="Administrator"){
+        const adminPassword=localStorage.getItem("schoolPortalAdminPassword") || "admin123";
+        if(username==="admin" && password===adminPassword){
+            user={
+                username:"admin",
+                name:"Administrator",
+                role:"Administrator",
+                id:"ADMIN-001"
+            };
+        }
+    }
+
+    if(role==="Parent"){
+        const found=parents.find(p=>p.username===username && p.password===password);
+
+        if(found){
+            user={
+                username:found.username,
+                name:found.name,
+                role:"Parent",
+                id:found.id,
+                mustChangePassword:found.mustChangePassword !== false
+            };
+        }
+    }
+
+    if(role==="Teacher"){
+        const found=teachers.find(t=>t.username===username && t.password===password);
+
+        if(found){
+            user={
+                username:found.username,
+                name:found.name,
+                role:"Teacher",
+                id:found.id,
+                className:"Teacher Account",
+                mustChangePassword:found.mustChangePassword !== false
+            };
+        }
+    }
+
+    if(!user){
+        showMessage("loginMessage","Invalid username, password or account type.","error");
+        return;
+    }
+
+    if(!["Administrator","Teacher","Parent"].includes(user.role)){
+        showMessage("loginMessage","This account type is no longer available.","error");
+        return;
+    }
+
+    currentUser=user;
+    localStorage.setItem("schoolPortalUser",JSON.stringify(user));
+
+    showPortal(user);
+}
+
+function showPortal(user){
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("portal").style.display="block";
+
+    document.getElementById("topUser").textContent=user.name;
+    document.getElementById("topRole").textContent=user.role;
+
+    document.getElementById("parentNav").style.display =
+        user.role==="Parent" ? "block":"none";
+
+    document.getElementById("teacherNav").style.display =
+        user.role==="Teacher" ? "block":"none";
+
+    document.getElementById("adminNav").style.display =
+        user.role==="Administrator" ? "block":"none";
+
+    // On first login, parents and teachers must create a personal password before normal portal access.
+    document.querySelectorAll("#parentNav .nav-link[data-page]").forEach(link=>{
+        link.style.display = (user.role==="Parent" && user.mustChangePassword) ? "none" : "block";
+    });
+    document.querySelectorAll("#teacherNav .nav-link[data-page]").forEach(link=>{
+        link.style.display = (user.role==="Teacher" && user.mustChangePassword) ? "none" : "block";
+    });
+
+    refreshDashboard();
+
+    if((user.role==="Parent" || user.role==="Teacher") && user.mustChangePassword){
+        showPage("profile");
+    }else{
+        showPage("dashboard");
+    }
+}
+
+function logout(){
+    localStorage.removeItem("schoolPortalUser");
+    currentUser=null;
+    document.getElementById("portal").style.display="none";
+    document.getElementById("loginScreen").style.display="flex";
+}
+
+if(currentUser && ["Administrator","Teacher","Parent"].includes(currentUser.role)){
+    showPortal(currentUser);
+}else if(currentUser){
+    localStorage.removeItem("schoolPortalUser");
+    currentUser=null;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+document.querySelectorAll(".nav-link[data-page]").forEach(link=>{
+    link.addEventListener("click",()=>{
+        showPage(link.dataset.page);
+    });
+});
+
+function showPage(pageId){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+    const page=document.getElementById(pageId);
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav-link[data-page]").forEach(l=>{
+        l.classList.remove("active");
+
+        if(l.dataset.page===pageId){
+            l.classList.add("active");
+        }
+    });
+
+    const title=pageId==="adminResults" || pageId==="parentResults" || pageId==="teacherResults"
+        ? "Results"
+        : pageId.charAt(0).toUpperCase()+pageId.slice(1);
+
+    document.getElementById("topTitle").textContent=title;
+
+    refreshPage(pageId);
+}
+
+function refreshPage(pageId){
+    if(pageId==="profile")renderProfile();
+    if(pageId==="children")renderChildren();
+    if(pageId==="parentResults")renderParentResults();
+    if(pageId==="teacherSubjects")renderTeacherSubjects();
+    if(pageId==="teacherResults"){
+        populateTeacherBulkMarksClassSelect();
+        renderTeacherResults();
+    }
+    if(pageId==="parentAttendance")renderParentAttendance();
+    if(pageId==="teacherAttendance")renderTeacherAttendance();
+    if(pageId==="adminAttendance"){
+        populateAttendanceClassSelect("Admin");
+        renderAdminAttendance();
+    }
+
+    if(pageId==="students")renderStudents();
+    if(pageId==="parents")renderParents();
+    if(pageId==="teachers")renderTeachers();
+    if(pageId==="classes")renderClasses();
+    if(pageId==="adminSubjects")renderSubjects();
+    if(pageId==="adminResults"){
+        populateResultClassSelect();
+        populateResultDeadlineClassSelect();
+        renderResults();
+    }
+
+    if(pageId==="reports"){
+        populateReportClassSelect();
+        const classSelect=document.getElementById("reportClassSelect");
+        if(classSelect?.value){
+            populateReportStudentSelect(classSelect.value);
+        }
+    }
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function renderProfile(){
+    const u=currentUser;
+    let passwordSection="";
+
+    if(u.role==="Parent" || u.role==="Teacher") {
+        const firstLogin=u.mustChangePassword===true;
+        const roleLabel=u.role==="Parent" ? "parent" : "teacher";
+        const fn=u.role==="Parent" ? "changeParentPassword" : "changeTeacherPassword";
+        const prefix=u.role.toLowerCase();
+
+        passwordSection=`
+            <div class="parent-password-box">
+                ${firstLogin ? `<div class="parent-password-notice"><strong>First login:</strong> Please create your own password before accessing the rest of the ${roleLabel} portal.</div>` : ""}
+                <h3>${firstLogin ? "Create Your Password" : "Change Password"}</h3>
+                <p>${firstLogin ? "Use your temporary password once, then choose a private password for future logins." : `You can change your ${roleLabel} portal password at any time.`}</p>
+                <div class="form-grid">
+                    <div class="form-group"><label>Current Password</label><input id="${prefix}CurrentPassword" type="password" autocomplete="current-password"></div>
+                    <div class="form-group"><label>New Password</label><input id="${prefix}NewPassword" type="password" minlength="6" autocomplete="new-password"></div>
+                    <div class="form-group"><label>Confirm New Password</label><input id="${prefix}ConfirmPassword" type="password" minlength="6" autocomplete="new-password"></div>
+                </div>
+                <br>
+                <button class="primary-btn" onclick="${fn}()">${firstLogin ? "Set My Password" : "Change Password"}</button>
+                <div id="${prefix}PasswordMessage" class="message"></div>
+            </div>`;
+    }
+
+    document.getElementById("profileContent").innerHTML=`
+        <h2>${escapeHtml(u.name)}</h2><br>
+        <p><strong>Username:</strong> ${escapeHtml(u.username)}</p>
+        <p><strong>Account Type:</strong> ${escapeHtml(u.role)}</p>
+        <p><strong>ID:</strong> ${escapeHtml(u.id)}</p>
+        ${passwordSection}`;
+}
+
+function changeParentPassword(){ changePortalPassword("Parent"); }
+function changeTeacherPassword(){ changePortalPassword("Teacher"); }
+
+function changePortalPassword(role){
+    if(!currentUser || currentUser.role!==role)return;
+    const prefix=role.toLowerCase();
+    const current=document.getElementById(prefix+"CurrentPassword")?.value || "";
+    const newPassword=document.getElementById(prefix+"NewPassword")?.value || "";
+    const confirmPassword=document.getElementById(prefix+"ConfirmPassword")?.value || "";
+    const message=document.getElementById(prefix+"PasswordMessage");
+    const showError=(text)=>{ if(message){message.className="message error";message.textContent=text;} };
+    if(!current || !newPassword || !confirmPassword){showError("Please complete all password fields.");return;}
+    const records=role==="Parent" ? parents : teachers;
+    const account=records.find(x=>x.id===currentUser.id);
+    if(!account){showError(role+" account could not be found.");return;}
+    if(account.password!==current){showError("Current password is incorrect.");return;}
+    if(newPassword.length<6){showError("Your new password must be at least 6 characters.");return;}
+    if(newPassword===current){showError("Your new password must be different from the current password.");return;}
+    if(newPassword!==confirmPassword){showError("The new passwords do not match.");return;}
+    account.password=newPassword;
+    account.mustChangePassword=false;
+    saveAll();
+    currentUser.mustChangePassword=false;
+    localStorage.setItem("schoolPortalUser",JSON.stringify(currentUser));
+    if(message){message.className="message success";message.textContent="Password updated successfully.";}
+    setTimeout(()=>showPortal(currentUser),700);
+}
+
+function openForgotPassword(){
+    const modal=document.getElementById("forgotPasswordModal");
+    if(!modal)return;
+    document.getElementById("forgotPasswordMessage").className="message";
+    document.getElementById("forgotPasswordMessage").textContent="";
+    document.getElementById("forgotUsername").value="";
+    document.getElementById("forgotAccountId").value="";
+    document.getElementById("forgotNewPassword").value="";
+    document.getElementById("forgotConfirmPassword").value="";
+    modal.style.display="flex";
+}
+function closeForgotPassword(){ const modal=document.getElementById("forgotPasswordModal"); if(modal)modal.style.display="none"; }
+function resetForgottenPassword(){
+    const role=document.getElementById("forgotRole").value;
+    const username=document.getElementById("forgotUsername").value.trim();
+    const accountId=document.getElementById("forgotAccountId").value.trim();
+    const newPassword=document.getElementById("forgotNewPassword").value;
+    const confirmPassword=document.getElementById("forgotConfirmPassword").value;
+    const message=document.getElementById("forgotPasswordMessage");
+    const error=(text)=>{message.className="message error";message.textContent=text;};
+    if(!username || !accountId || !newPassword || !confirmPassword){error("Please complete all fields.");return;}
+    if(newPassword.length<6){error("Your new password must be at least 6 characters.");return;}
+    if(newPassword!==confirmPassword){error("The new passwords do not match.");return;}
+    if(role==="Administrator"){
+        const ok=username==="admin" && accountId==="ADMIN-001";
+        if(!ok){error("Administrator account details could not be verified.");return;}
+        localStorage.setItem("schoolPortalAdminPassword",newPassword);
+    }else{
+        const records=role==="Parent" ? parents : teachers;
+        const account=records.find(x=>x.username===username && x.id===accountId);
+        if(!account){error("The username and account ID do not match an account.");return;}
+        account.password=newPassword;
+        account.mustChangePassword=false;
+        saveAll();
+    }
+    message.className="message success";
+    message.textContent="Password reset successfully. You can now log in with your new password.";
+    setTimeout(closeForgotPassword,900);
+}
+
+
+/* =========================
+   STUDENT MANAGEMENT
+========================= */
+
+function openStudentForm(){
+    editingStudentId=null;
+    document.getElementById("studentForm").reset();
+    document.getElementById("studentFormTitle").textContent="Add Student";
+    document.getElementById("studentFormPanel").style.display="block";
+}
+
+function closeStudentForm(){
+    document.getElementById("studentFormPanel").style.display="none";
+}
+
+document.getElementById("studentForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const id=document.getElementById("studentId").value.trim();
+    const name=document.getElementById("studentName").value.trim();
+
+    const duplicate=students.some(s=>s.id===id && s.id!==editingStudentId);
+
+    if(duplicate){
+        showMessage("studentMessage","Student ID already exists.","error");
+        return;
+    }
+
+    const data={
+        id,
+        name,
+        gender:document.getElementById("studentGender").value,
+        dob:document.getElementById("studentDob").value,
+        className:document.getElementById("studentClass").value.trim(),
+        parent:document.getElementById("studentParent").value.trim(),
+        phone:document.getElementById("studentPhone").value.trim(),
+        email:document.getElementById("studentEmail").value.trim()
+    };
+
+    if(editingStudentId){
+        const index=students.findIndex(s=>s.id===editingStudentId);
+        if(index!==-1)students[index]=data;
+        showMessage("studentMessage","Student updated successfully.");
+    }else{
+        students.push(data);
+        showMessage("studentMessage","Student added successfully.");
+    }
+
+    saveAll();
+    closeStudentForm();
+    renderStudents();
+    refreshDashboard();
+});
+
+function renderStudents(){
+    const search=(document.getElementById("studentSearch")?.value||"").toLowerCase();
+
+    const filtered=students.filter(s=>
+        JSON.stringify(s).toLowerCase().includes(search)
+    );
+
+    if(!filtered.length){
+        document.getElementById("studentTable").innerHTML='<div class="empty">No students found.</div>';
+        return;
+    }
+
+    document.getElementById("studentTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Class</th>
+                <th>Parent</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(s=>`
+            <tr>
+                <td>${escapeHtml(s.id)}</td>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.gender)}</td>
+                <td>${escapeHtml(s.className)}</td>
+                <td>${escapeHtml(s.parent)}</td>
+                <td>${escapeHtml(s.phone)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editStudent('${s.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteStudent('${s.id}')">Delete</button>
+                </td>
+            </tr>
+        `).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function editStudent(id){
+    const s=getStudent(id);
+    if(!s)return;
+
+    editingStudentId=id;
+
+    document.getElementById("studentId").value=s.id;
+    document.getElementById("studentName").value=s.name;
+    document.getElementById("studentGender").value=s.gender;
+    document.getElementById("studentDob").value=s.dob||"";
+    document.getElementById("studentClass").value=s.className;
+    document.getElementById("studentParent").value=s.parent;
+    document.getElementById("studentPhone").value=s.phone;
+    document.getElementById("studentEmail").value=s.email;
+
+    document.getElementById("studentFormTitle").textContent="Edit Student";
+    document.getElementById("studentFormPanel").style.display="block";
+}
+
+function deleteStudent(id){
+    if(!confirm("Delete this student?"))return;
+
+    students=students.filter(s=>s.id!==id);
+
+    parents.forEach(p=>{
+        p.studentIds=(p.studentIds||[]).filter(x=>x!==id);
+    });
+
+    classes.forEach(c=>{
+        c.studentIds=(c.studentIds||[]).filter(x=>x!==id);
+    });
+
+    results=results.filter(r=>r.studentId!==id);
+    attendance=attendance.filter(a=>a.studentId!==id);
+
+    saveAll();
+    renderStudents();
+    refreshDashboard();
+}
+
+
+/* =========================
+   PARENT MANAGEMENT
+========================= */
+
+function openParentForm(){
+    editingParentId=null;
+    document.getElementById("parentForm").reset();
+    document.getElementById("parentFormTitle").textContent="Add Parent";
+    populateParentStudentList([]);
+    document.getElementById("parentFormPanel").style.display="block";
+}
+
+function closeParentForm(){
+    document.getElementById("parentFormPanel").style.display="none";
+}
+
+function populateParentStudentList(selected=[]){
+    const box=document.getElementById("parentStudentList");
+
+    if(!students.length){
+        box.innerHTML="No students available.";
+        return;
+    }
+
+    box.innerHTML=students.map(s=>`
+        <label class="checkbox-item">
+            <input type="checkbox" value="${escapeHtml(s.id)}" ${selected.includes(s.id)?"checked":""}>
+            ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+        </label>
+    `).join("");
+}
+
+document.getElementById("parentForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const id=document.getElementById("parentId").value.trim();
+
+    const duplicate=parents.some(p=>p.id===id && p.id!==editingParentId);
+
+    if(duplicate){
+        showMessage("parentMessage","Parent ID already exists.","error");
+        return;
+    }
+
+    const studentIds=[...document.querySelectorAll("#parentStudentList input:checked")].map(x=>x.value);
+
+    const data={
+        id,
+        name:document.getElementById("parentName").value.trim(),
+        phone:document.getElementById("parentPhone").value.trim(),
+        email:document.getElementById("parentEmail").value.trim(),
+        address:document.getElementById("parentAddress").value.trim(),
+        username:document.getElementById("parentUsername").value.trim(),
+        password:document.getElementById("parentPassword").value,
+        mustChangePassword: editingParentId
+            ? (parents.find(p=>p.id===editingParentId)?.mustChangePassword !== false)
+            : true,
+        studentIds
+    };
+
+    if(editingParentId){
+        const index=parents.findIndex(p=>p.id===editingParentId);
+        if(index!==-1)parents[index]=data;
+        showMessage("parentMessage","Parent updated successfully.");
+    }else{
+        parents.push(data);
+        showMessage("parentMessage","Parent added successfully.");
+    }
+
+    saveAll();
+    closeParentForm();
+    renderParents();
+    refreshDashboard();
+});
+
+function renderParents(){
+    const search=(document.getElementById("parentSearch")?.value||"").toLowerCase();
+
+    const filtered=parents.filter(p=>
+        JSON.stringify(p).toLowerCase().includes(search)
+    );
+
+    if(!filtered.length){
+        document.getElementById("parentTable").innerHTML='<div class="empty">No parents found.</div>';
+        return;
+    }
+
+    document.getElementById("parentTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Children</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(p=>{
+            const children=(p.studentIds||[])
+                .map(id=>getStudent(id)?.name)
+                .filter(Boolean)
+                .join(", ");
+
+            return `
+            <tr>
+                <td>${escapeHtml(p.id)}</td>
+                <td>${escapeHtml(p.name)}</td>
+                <td>${escapeHtml(p.phone)}</td>
+                <td>${escapeHtml(p.email)}</td>
+                <td>${escapeHtml(p.username)}</td>
+                <td>${escapeHtml(children||"None")}</td>
+                <td>
+                    <button class="edit-btn" onclick="editParent('${p.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteParent('${p.id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function editParent(id){
+    const p=getParent(id);
+    if(!p)return;
+
+    editingParentId=id;
+
+    document.getElementById("parentId").value=p.id;
+    document.getElementById("parentName").value=p.name;
+    document.getElementById("parentPhone").value=p.phone;
+    document.getElementById("parentEmail").value=p.email;
+    document.getElementById("parentAddress").value=p.address;
+    document.getElementById("parentUsername").value=p.username;
+    document.getElementById("parentPassword").value=p.password;
+
+    populateParentStudentList(p.studentIds||[]);
+
+    document.getElementById("parentFormTitle").textContent="Edit Parent";
+    document.getElementById("parentFormPanel").style.display="block";
+}
+
+function deleteParent(id){
+    if(!confirm("Delete this parent?"))return;
+
+    parents=parents.filter(p=>p.id!==id);
+
+    saveAll();
+    renderParents();
+    refreshDashboard();
+}
+
+
+/* =========================
+   TEACHER MANAGEMENT
+========================= */
+
+function openTeacherForm(){
+    editingTeacherId=null;
+    document.getElementById("teacherForm").reset();
+    document.getElementById("teacherFormTitle").textContent="Add Teacher";
+    document.getElementById("teacherFormPanel").style.display="block";
+}
+
+function closeTeacherForm(){
+    document.getElementById("teacherFormPanel").style.display="none";
+}
+
+document.getElementById("teacherForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const id=document.getElementById("teacherId").value.trim();
+
+    if(teachers.some(t=>t.id===id && t.id!==editingTeacherId)){
+        showMessage("teacherMessage","Teacher ID already exists.","error");
+        return;
+    }
+
+    const data={
+        id,
+        name:document.getElementById("teacherName").value.trim(),
+        gender:document.getElementById("teacherGender").value,
+        dob:document.getElementById("teacherDob").value,
+        phone:document.getElementById("teacherPhone").value.trim(),
+        email:document.getElementById("teacherEmail").value.trim(),
+        address:document.getElementById("teacherAddress").value.trim(),
+        qualification:document.getElementById("teacherQualification").value.trim(),
+        subjects:document.getElementById("teacherSubjects").value.trim(),
+        username:document.getElementById("teacherUsername").value.trim(),
+        password:document.getElementById("teacherPassword").value
+    };
+
+    if(editingTeacherId){
+        const existing=teachers.find(t=>t.id===editingTeacherId);
+        if(existing && !data.password) data.password=existing.password;
+        if(existing) data.mustChangePassword=existing.mustChangePassword===true;
+    }else{
+        if(!data.password){
+            showMessage("teacherMessage","Please set a temporary password for the new teacher.","error");
+            return;
+        }
+        data.mustChangePassword=true;
+    }
+
+    if(editingTeacherId){
+        const index=teachers.findIndex(t=>t.id===editingTeacherId);
+        if(index!==-1)teachers[index]=data;
+        showMessage("teacherMessage","Teacher updated successfully.");
+    }else{
+        teachers.push(data);
+        showMessage("teacherMessage","Teacher added successfully.");
+    }
+
+    saveAll();
+    closeTeacherForm();
+    renderTeachers();
+    refreshDashboard();
+});
+
+function renderTeachers(){
+    const search=(document.getElementById("teacherSearch")?.value||"").toLowerCase();
+
+    const filtered=teachers.filter(t=>
+        JSON.stringify(t).toLowerCase().includes(search)
+    );
+
+    if(!filtered.length){
+        document.getElementById("teacherTable").innerHTML='<div class="empty">No teachers found.</div>';
+        return;
+    }
+
+    document.getElementById("teacherTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Qualification</th>
+                <th>Subjects</th>
+                <th>Phone</th>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(t=>`
+            <tr>
+                <td>${escapeHtml(t.id)}</td>
+                <td>${escapeHtml(t.name)}</td>
+                <td>${escapeHtml(t.qualification)}</td>
+                <td>${escapeHtml(t.subjects)}</td>
+                <td>${escapeHtml(t.phone)}</td>
+                <td>${escapeHtml(t.username)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editTeacher('${t.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteTeacher('${t.id}')">Delete</button>
+                </td>
+            </tr>
+        `).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function editTeacher(id){
+    const t=getTeacher(id);
+    if(!t)return;
+
+    editingTeacherId=id;
+
+    document.getElementById("teacherId").value=t.id;
+    document.getElementById("teacherName").value=t.name;
+    document.getElementById("teacherGender").value=t.gender;
+    document.getElementById("teacherDob").value=t.dob||"";
+    document.getElementById("teacherPhone").value=t.phone;
+    document.getElementById("teacherEmail").value=t.email;
+    document.getElementById("teacherAddress").value=t.address;
+    document.getElementById("teacherQualification").value=t.qualification;
+    document.getElementById("teacherSubjects").value=t.subjects;
+    document.getElementById("teacherUsername").value=t.username;
+    document.getElementById("teacherPassword").value=t.password;
+
+    document.getElementById("teacherFormTitle").textContent="Edit Teacher";
+    document.getElementById("teacherFormPanel").style.display="block";
+}
+
+function deleteTeacher(id){
+    if(!confirm("Delete this teacher?"))return;
+
+    teachers=teachers.filter(t=>t.id!==id);
+
+    classes.forEach(c=>{
+        if(c.teacherId===id)c.teacherId="";
+    });
+
+    subjects.forEach(s=>{
+        if(s.teacherId===id)s.teacherId="";
+    });
+
+    saveAll();
+    renderTeachers();
+    refreshDashboard();
+}
+
+
+/* =========================
+   CLASS MANAGEMENT
+========================= */
+
+function openClassForm(){
+    editingClassId=null;
+
+    document.getElementById("classForm").reset();
+    document.getElementById("classYear").value="2026/2027";
+
+    populateClassTeacherSelect("");
+    populateClassStudentList([]);
+
+    document.getElementById("classFormTitle").textContent="Add Class";
+    document.getElementById("classFormPanel").style.display="block";
+}
+
+function closeClassForm(){
+    document.getElementById("classFormPanel").style.display="none";
+}
+
+function populateClassTeacherSelect(selected=""){
+    const select=document.getElementById("classTeacher");
+
+    select.innerHTML='<option value="">Unassigned</option>'+
+        teachers.map(t=>`
+            <option value="${escapeHtml(t.id)}" ${selected===t.id?"selected":""}>
+                ${escapeHtml(t.name)}
+            </option>
+        `).join("");
+}
+
+function populateClassStudentList(selected=[]){
+    const box=document.getElementById("classStudentList");
+
+    box.innerHTML=students.length
+        ? students.map(s=>`
+            <label class="checkbox-item">
+                <input type="checkbox" value="${escapeHtml(s.id)}" ${selected.includes(s.id)?"checked":""}>
+                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+            </label>
+        `).join("")
+        : "No students available.";
+}
+
+document.getElementById("classForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const id=document.getElementById("classId").value.trim();
+
+    if(classes.some(c=>c.id===id && c.id!==editingClassId)){
+        showMessage("classMessage","Class ID already exists.","error");
+        return;
+    }
+
+    const studentIds=[...document.querySelectorAll("#classStudentList input:checked")].map(x=>x.value);
+
+    const name=document.getElementById("className").value.trim();
+    const section=document.getElementById("classSection").value.trim();
+
+    const data={
+        id,
+        name,
+        section,
+        academicYear:document.getElementById("classYear").value.trim(),
+        teacherId:document.getElementById("classTeacher").value,
+        studentIds
+    };
+
+    students.forEach(s=>{
+        if(studentIds.includes(s.id)){
+            s.className=name;
+        }
+    });
+
+    if(editingClassId){
+        const index=classes.findIndex(c=>c.id===editingClassId);
+        if(index!==-1)classes[index]=data;
+        showMessage("classMessage","Class updated successfully.");
+    }else{
+        classes.push(data);
+        showMessage("classMessage","Class added successfully.");
+    }
+
+    saveAll();
+    closeClassForm();
+    renderClasses();
+    refreshDashboard();
+});
+
+function renderClasses(){
+    const sync=syncClassesFromStudents();
+    if(sync.classesAdded || sync.classesUpdated) saveAll();
+    const search=(document.getElementById("classSearch")?.value||"").toLowerCase();
+
+    const filtered=classes.filter(c=>{
+        const teacher=getTeacher(c.teacherId);
+        const text=[
+            c.id,c.name,c.section,c.academicYear,
+            teacher?.name||""
+        ].join(" ").toLowerCase();
+
+        return text.includes(search);
+    });
+
+    if(!filtered.length){
+        document.getElementById("classTable").innerHTML='<div class="empty">No classes found.</div>';
+        return;
+    }
+
+    document.getElementById("classTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Class</th>
+                <th>Academic Year</th>
+                <th>Class Teacher</th>
+                <th>Students</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(c=>`
+            <tr>
+                <td>${escapeHtml(c.id)}</td>
+                <td>${escapeHtml(classDisplay(c))}</td>
+                <td>${escapeHtml(c.academicYear)}</td>
+                <td>${escapeHtml(getTeacher(c.teacherId)?.name||"Unassigned")}</td>
+                <td>${(c.studentIds||[]).length}</td>
+                <td>
+                    <button class="edit-btn" onclick="editClass('${c.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteClass('${c.id}')">Delete</button>
+                </td>
+            </tr>
+        `).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function editClass(id){
+    const c=getClass(id);
+    if(!c)return;
+
+    editingClassId=id;
+
+    document.getElementById("classId").value=c.id;
+    document.getElementById("className").value=c.name;
+    document.getElementById("classSection").value=c.section;
+    document.getElementById("classYear").value=c.academicYear;
+
+    populateClassTeacherSelect(c.teacherId||"");
+    populateClassStudentList(c.studentIds||[]);
+
+    document.getElementById("classFormTitle").textContent="Edit Class";
+    document.getElementById("classFormPanel").style.display="block";
+}
+
+function deleteClass(id){
+    if(!confirm("Delete this class?"))return;
+
+    classes=classes.filter(c=>c.id!==id);
+    attendance=attendance.filter(a=>a.classId!==id);
+
+    saveAll();
+    renderClasses();
+    refreshDashboard();
+}
+
+
+/* =========================
+   SUBJECT MANAGEMENT
+========================= */
+
+function openSubjectForm(){
+    editingSubjectId=null;
+
+    document.getElementById("subjectForm").reset();
+    document.getElementById("subjectYear").value="2026/2027";
+
+    populateSubjectClassList([]);
+
+    document.getElementById("subjectFormTitle").textContent="Add Subject";
+    document.getElementById("subjectFormPanel").style.display="block";
+}
+
+function closeSubjectForm(){
+    document.getElementById("subjectFormPanel").style.display="none";
+}
+
+function populateSubjectClassList(selected=[]){
+    const box=document.getElementById("subjectClassList");
+
+    box.innerHTML=classes.length
+        ? classes.map(c=>`
+            <label class="checkbox-item">
+                <input type="checkbox" value="${escapeHtml(c.id)}" ${selected.includes(c.id)?"checked":""}>
+                ${escapeHtml(classDisplay(c))}
+            </label>
+        `).join("")
+        : "No classes available.";
+}
+
+document.getElementById("subjectForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const id=document.getElementById("subjectId").value.trim();
+
+    if(subjects.some(s=>s.id===id && s.id!==editingSubjectId)){
+        showMessage("subjectMessage","Subject ID already exists.","error");
+        return;
+    }
+
+    const classIds=[...document.querySelectorAll("#subjectClassList input:checked")].map(x=>x.value);
+
+    const data={
+        id,
+        name:document.getElementById("subjectName").value.trim(),
+        code:document.getElementById("subjectCode").value.trim(),
+        classIds,
+        academicYear:document.getElementById("subjectYear").value.trim()
+    };
+
+    if(editingSubjectId){
+        const index=subjects.findIndex(s=>s.id===editingSubjectId);
+        if(index!==-1)subjects[index]=data;
+        showMessage("subjectMessage","Subject updated successfully.");
+    }else{
+        subjects.push(data);
+        showMessage("subjectMessage","Subject added successfully.");
+    }
+
+    saveAll();
+    closeSubjectForm();
+    renderSubjects();
+    refreshDashboard();
+});
+
+function renderSubjects(){
+    const search=(document.getElementById("subjectSearch")?.value||"").toLowerCase();
+
+    const filtered=subjects.filter(s=>{
+        const teacher=getTeacher(s.teacherId);
+        const classNames=(s.classIds||[])
+            .map(id=>classDisplay(getClass(id)))
+            .join(" ");
+
+        const text=[
+            s.id,s.name,s.code,s.academicYear,
+            teacher?.name||"",
+            classNames
+        ].join(" ").toLowerCase();
+
+        return text.includes(search);
+    });
+
+    if(!filtered.length){
+        document.getElementById("subjectTable").innerHTML='<div class="empty">No subjects found.</div>';
+        return;
+    }
+
+    document.getElementById("subjectTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Classes</th>
+                <th>Academic Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${filtered.map(s=>{
+            const classNames=(s.classIds||[])
+                .map(id=>{
+                    const c=getClass(id);
+                    return c ? classDisplay(c) : null;
+                })
+                .filter(Boolean)
+                .join(", ");
+
+            return `
+            <tr>
+                <td>${escapeHtml(s.id)}</td>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.code)}</td>
+                <td>${escapeHtml(classNames||"None")}</td>
+                <td>${escapeHtml(s.academicYear)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editSubject('${s.id}')">Edit</button>
+                    <button class="danger-btn" onclick="deleteSubject('${s.id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function editSubject(id){
+    const s=getSubject(id);
+    if(!s)return;
+
+    editingSubjectId=id;
+
+    document.getElementById("subjectId").value=s.id;
+    document.getElementById("subjectName").value=s.name;
+    document.getElementById("subjectCode").value=s.code;
+    document.getElementById("subjectYear").value=s.academicYear;
+
+    populateSubjectClassList(s.classIds||[]);
+
+    document.getElementById("subjectFormTitle").textContent="Edit Subject";
+    document.getElementById("subjectFormPanel").style.display="block";
+}
+
+function deleteSubject(id){
+    if(!confirm("Delete this subject?"))return;
+
+    subjects=subjects.filter(s=>s.id!==id);
+
+    results=results.filter(r=>r.subjectId!==id);
+
+    saveAll();
+    renderSubjects();
+    refreshDashboard();
+}
+
+
+/* =========================
+   RESULTS MANAGEMENT
+========================= */
+
+function openResultForm(){
+    editingResultId=null;
+
+    document.getElementById("resultForm").reset();
+    document.getElementById("resultYear").value="2026/2027";
+
+    populateResultClassSelect();
+
+    document.getElementById("resultStudent").innerHTML=
+        '<option value="">Select Class First</option>';
+    document.getElementById("resultStudent").disabled=true;
+
+    document.getElementById("resultSubject").innerHTML=
+        '<option value="">Select Class First</option>';
+    document.getElementById("resultSubject").disabled=true;
+
+    document.getElementById("resultTotal").value="";
+    document.getElementById("resultGrade").value="";
+
+    document.getElementById("resultFormTitle").textContent="Add Result";
+    document.getElementById("resultFormPanel").style.display="block";
+}
+
+function closeResultForm(){
+    document.getElementById("resultFormPanel").style.display="none";
+}
+
+function populateResultClassSelect(selected=""){
+    const select=document.getElementById("resultClass");
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        classes.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+}
+
+function populateResultStudentSelect(classId,selected=""){
+    const select=document.getElementById("resultStudent");
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
+    const c=getClass(classId);
+
+    const classStudents=(c?.studentIds||[])
+        .map(id=>getStudent(id))
+        .filter(Boolean);
+
+    select.innerHTML='<option value="">Select Student</option>'+
+        classStudents.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+            </option>
+        `).join("");
+
+    select.disabled=false;
+}
+
+function populateResultSubjectSelect(classId,selected=""){
+    const select=document.getElementById("resultSubject");
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
+    const classSubjects=subjects.filter(s=>
+        (s.classIds||[]).includes(classId)
+    );
+
+    select.innerHTML='<option value="">Select Subject</option>'+
+        classSubjects.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)}${s.code ? " ("+escapeHtml(s.code)+")":""}
+            </option>
+        `).join("");
+
+    select.disabled=false;
+}
+
+document.getElementById("resultClass").addEventListener("change",function(){
+    populateResultStudentSelect(this.value);
+    populateResultSubjectSelect(this.value);
+});
+
+function updateResultCalculation(){
+    const classScore=parseFloat(document.getElementById("classScore").value)||0;
+    const examMark=parseFloat(document.getElementById("examScore").value)||0;
+
+    const examComponent=(examMark*50)/100;
+    const total=classScore+examComponent;
+
+    document.getElementById("resultTotal").value=total.toFixed(2);
+    document.getElementById("resultGrade").value=getPerformance(total);
+}
+
+document.getElementById("classScore").addEventListener("input",updateResultCalculation);
+document.getElementById("examScore").addEventListener("input",updateResultCalculation);
+
+document.getElementById("resultForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const year=document.getElementById("resultYear").value.trim();
+    const classId=document.getElementById("resultClass").value;
+    const studentId=document.getElementById("resultStudent").value;
+    const subjectId=document.getElementById("resultSubject").value;
+
+    const classScore=parseFloat(document.getElementById("classScore").value);
+    const examMark=parseFloat(document.getElementById("examScore").value);
+
+    if(classScore<0 || classScore>50 || examMark<0 || examMark>100){
+        showMessage("resultMessage","Class Score must be between 0 and 50, and Exam Mark must be between 0 and 100.","error");
+        return;
+    }
+
+    const duplicate=results.some(r=>
+        r.studentId===studentId &&
+        r.subjectId===subjectId &&
+        r.academicYear===year &&
+        r.id!==editingResultId
+    );
+
+    if(duplicate){
+        showMessage(
+            "resultMessage",
+            "A result already exists for this student, subject and academic year.",
+            "error"
+        );
+        return;
+    }
+
+    const examScore=(examMark*50)/100;
+    const total=classScore+examScore;
+
+    const data={
+        id:editingResultId || ("RES-"+Date.now().toString().slice(-6)),
+        studentId,
+        classId,
+        subjectId,
+        academicYear:year,
+        classScore,
+        examMark,
+        examScore,
+        total,
+        grade:getPerformance(total),
+        uploadedBy:currentUser?.role==="Teacher" ? currentUser.id : "ADMIN-001",
+        uploadedByName:currentUser?.name || "Administrator",
+        uploadedAt:new Date().toISOString(),
+        source:currentUser?.role==="Teacher" ? "Teacher Upload" : "Administrator"
+    };
+
+    if(editingResultId){
+        const index=results.findIndex(r=>r.id===editingResultId);
+        if(index!==-1)results[index]=data;
+        showMessage("resultMessage","Result updated successfully.");
+    }else{
+        results.push(data);
+        showMessage("resultMessage","Result added successfully.");
+    }
+
+    saveAll();
+    closeResultForm();
+    renderResults();
+    refreshDashboard();
+});
+
+/* =========================
+   ADMIN RESULT MONITOR
+========================= */
+
+function editResult(id){
+    const r=results.find(x=>x.id===id);
+    if(!r)return;
+    editingResultId=id;
+
+    document.getElementById("resultYear").value=r.academicYear||"2026/2027";
+    populateResultClassSelect(r.classId);
+    populateResultStudentSelect(r.classId,r.studentId);
+    populateResultSubjectSelect(r.classId,r.subjectId);
+    document.getElementById("classScore").value=r.classScore ?? "";
+    document.getElementById("examScore").value=r.examMark ?? ((Number(r.examScore||0)*2)) ?? "";
+    updateResultCalculation();
+    document.getElementById("resultFormTitle").textContent="Edit Result";
+    document.getElementById("resultFormPanel").style.display="block";
+    document.getElementById("resultFormPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function deleteResult(id){
+    if(!confirm("Delete this result?"))return;
+    results=results.filter(r=>r.id!==id);
+    saveAll();
+    renderResults();
+    refreshDashboard();
+}
+
+function populateResultDeadlineClassSelect(selected=""){
+    const select=document.getElementById("resultDeadlineClass");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>
+        `<option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>${escapeHtml(classDisplay(c))}</option>`
+    ).join("");
+}
+
+function getResultDeadline(classId,year,term){
+    return resultDeadlines.find(d=>
+        d.classId===classId && String(d.academicYear||"").trim()===String(year||"").trim() && d.term===term
+    );
+}
+
+function saveResultDeadline(){
+    const classId=document.getElementById("resultDeadlineClass")?.value;
+    const year=(document.getElementById("resultDeadlineYear")?.value||"").trim();
+    const term=document.getElementById("resultDeadlineTerm")?.value||"Term 1";
+    const date=document.getElementById("resultDeadlineDate")?.value||"";
+
+    if(!classId || !year || !date){
+        showMessage("resultDeadlineMessage","Please select a class and enter a deadline.","error");
+        return;
+    }
+
+    const existing=getResultDeadline(classId,year,term);
+    if(existing){
+        existing.deadline=date;
+        existing.updatedAt=new Date().toISOString();
+    }else{
+        resultDeadlines.push({
+            id:"DL-"+Date.now().toString(36).toUpperCase(),
+            classId,academicYear:year,term,deadline:date,
+            createdAt:new Date().toISOString()
+        });
+    }
+
+    saveAll();
+    renderResultSubmissionMonitor();
+    showMessage("resultDeadlineMessage","Submission deadline saved successfully.","success");
+}
+
+function clearResultDeadlineForm(){
+    const year=document.getElementById("resultDeadlineYear");
+    const term=document.getElementById("resultDeadlineTerm");
+    const date=document.getElementById("resultDeadlineDate");
+    const cls=document.getElementById("resultDeadlineClass");
+    if(year)year.value="2026/2027";
+    if(term)term.value="Term 1";
+    if(date)date.value="";
+    if(cls)cls.value="";
+}
+
+function deleteResultDeadline(id){
+    if(!confirm("Remove this submission deadline?"))return;
+    resultDeadlines=resultDeadlines.filter(d=>d.id!==id);
+    saveAll();
+    renderResultSubmissionMonitor();
+}
+
+function formatDeadline(date){
+    if(!date)return "Not set";
+    const d=new Date(date+"T00:00:00");
+    return Number.isNaN(d.getTime()) ? date : d.toLocaleDateString();
+}
+
+function renderResultSubmissionMonitor(){
+    const box=document.getElementById("resultSubmissionMonitor");
+    if(!box)return;
+
+    if(!classes.length){box.innerHTML='<div class="empty">No classes available.</div>';return;}
+
+    const rows=[];
+    classes.forEach(c=>{
+        const year=c.academicYear || "2026/2027";
+        ["Term 1","Term 2","Term 3"].forEach(term=>{
+            const subjectsForClass=subjects.filter(s=>(s.classIds||[]).includes(c.id));
+            const studentsForClass=getClassStudents(c.id);
+            const expected=studentsForClass.length*subjectsForClass.length;
+            const submitted=results.filter(r=>
+                r.classId===c.id && String(r.academicYear||year).trim()===String(year).trim() && r.term===term && subjectsForClass.some(s=>s.id===r.subjectId)
+            );
+            const uniqueKeys=new Set(submitted.map(r=>`${r.studentId}|${r.subjectId}`));
+            const done=uniqueKeys.size;
+            const deadline=getResultDeadline(c.id,year,term);
+            const teacher=getTeacher(c.teacherId);
+            const uploaderNames=[...new Set(submitted.map(r=>r.uploadedByName).filter(Boolean))];
+            const percent=expected ? Math.round(done/expected*100) : 0;
+            const today=new Date(); today.setHours(0,0,0,0);
+            const deadlineDate=deadline?.deadline ? new Date(deadline.deadline+"T00:00:00") : null;
+            let status="Not Started";
+            if(expected && done>=expected)status="Complete";
+            else if(done>0)status="In Progress";
+            if(deadlineDate && today>deadlineDate && done<expected)status="Overdue";
+
+            rows.push({c,year,term,teacher,expected,done,percent,deadline,status,uploaderNames});
+        });
+    });
+
+    box.innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Class</th><th>Term</th><th>Teacher</th><th>Submitted By</th>
+            <th>Progress</th><th>Deadline</th><th>Status</th><th>Action</th>
+        </tr></thead>
+        <tbody>
+        ${rows.map(x=>`<tr>
+            <td><strong>${escapeHtml(classDisplay(x.c))}</strong><br><small>${escapeHtml(x.year)}</small></td>
+            <td>${escapeHtml(x.term)}</td>
+            <td>${escapeHtml(x.teacher?.name||"No class teacher assigned")}</td>
+            <td>${escapeHtml(x.uploaderNames.join(", ")||"No upload yet")}</td>
+            <td>${x.done} / ${x.expected} (${x.percent}%)</td>
+            <td>${escapeHtml(formatDeadline(x.deadline?.deadline))}</td>
+            <td><span class="badge ${x.status.toLowerCase().replace(/\s+/g,"-")}">${escapeHtml(x.status)}</span></td>
+            <td>${x.deadline?`<button class="danger-btn" onclick="deleteResultDeadline('${x.deadline.id}')">Remove Deadline</button>`:"—"}</td>
+        </tr>`).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function renderResults(){
+    const table=document.getElementById("resultTable");
+    if(!table)return;
+    const search=(document.getElementById("resultSearch")?.value||"").toLowerCase();
+
+    const filtered=results.filter(r=>{
+        const student=getStudent(r.studentId);
+        const subject=getSubject(r.subjectId);
+        const c=getClass(r.classId);
+        const uploader=r.uploadedByName || "";
+        const text=[student?.name||"",subject?.name||"",c?classDisplay(c):"",uploader,r.academicYear||"",r.term||"",r.grade||""].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    if(!filtered.length){
+        table.innerHTML='<div class="empty">No results found.</div>';
+        renderResultSubmissionMonitor();
+        return;
+    }
+
+    table.innerHTML=`<div class="table-wrap"><table>
+        <thead><tr><th>Student</th><th>Class</th><th>Subject</th><th>Class /50</th><th>Exam /100</th><th>Total</th><th>Performance</th><th>Submitted By</th><th>Submitted At</th><th>Actions</th></tr></thead>
+        <tbody>${filtered.map(r=>{
+            const student=getStudent(r.studentId), subject=getSubject(r.subjectId), c=getClass(r.classId);
+            const submitted=r.uploadedByName || "Administrator";
+            const when=r.uploadedAt ? new Date(r.uploadedAt).toLocaleString() : "—";
+            return `<tr>
+                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(c?classDisplay(c):"Unknown Class")}</td>
+                <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
+                <td>${Number(r.classScore||0).toFixed(2)}</td>
+                <td>${Number(r.examMark??r.examScore??0).toFixed(2)}</td>
+                <td><strong>${Number(r.total||0).toFixed(2)}</strong></td>
+                <td><span class="badge ${performanceClass(r.grade||getPerformance(r.total))}">${escapeHtml(r.grade||getPerformance(r.total))}</span></td>
+                <td>${escapeHtml(submitted)}</td>
+                <td>${escapeHtml(when)}</td>
+                <td><button class="edit-btn" onclick="editResult('${r.id}')">Edit</button><button class="danger-btn" onclick="deleteResult('${r.id}')">Delete</button></td>
+            </tr>`;
+        }).join("")}</tbody></table></div>`;
+    renderResultSubmissionMonitor();
+}
+
+/* =========================
+   TEACHER BULK MARKS UPLOAD
+========================= */
+
+function normalizeExcelHeader(value){
+    return String(value||"")
+        .trim()
+        .replace(/\s+/g," ")
+        .toLowerCase();
+}
+
+function getTeacherBulkClasses(){
+    // Show the teacher's assigned classes first. If no class has been
+    // explicitly assigned to the teacher yet, show all existing classes
+    // so the class selector is still usable.
+    const teacherId=currentUser?.id;
+    const assigned=classes.filter(c=>c && c.id && String(c.teacherId||"")===String(teacherId||""));
+    return assigned.length ? assigned : classes.filter(c=>c && c.id);
+}
+
+function getTeacherBulkSubjects(classId){
+    // Teachers download one complete class sheet. Every subject linked
+    // to the selected class must appear on the Excel sheet.
+    return subjects.filter(s=>(s.classIds||[]).includes(classId));
+}
+
+function populateTeacherBulkMarksClassSelect(selected=""){
+    const select=document.getElementById("teacherBulkMarksClass");
+    if(!select)return;
+
+    const available=getTeacherBulkClasses();
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        available.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+}
+
+function downloadTeacherBulkMarksTemplate(){
+    const classId=document.getElementById("teacherBulkMarksClass")?.value;
+    const year=(document.getElementById("teacherBulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("teacherBulkMarksTerm")?.value||"Term 1";
+
+    if(!classId){
+        showMessage("teacherBulkMarksMessage","Please select a class first.","error");
+        return;
+    }
+
+    if(typeof XLSX==="undefined"){
+        showMessage("teacherBulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const schoolClass=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=getTeacherBulkSubjects(classId);
+
+    if(!schoolClass){
+        showMessage("teacherBulkMarksMessage","The selected class could not be found.","error");
+        return;
+    }
+    if(!classStudents.length){
+        showMessage("teacherBulkMarksMessage","No students are allocated to this class.","error");
+        return;
+    }
+    if(!classSubjects.length){
+        showMessage("teacherBulkMarksMessage","No subjects are linked to this class.","error");
+        return;
+    }
+
+    const headers=["Student ID","Student Name"];
+    classSubjects.forEach(subject=>{
+        headers.push(`${subject.name} Class Score /50`);
+        headers.push(`${subject.name} Exam Mark /100`);
+    });
+
+    const rows=classStudents.map(student=>{
+        const row={"Student ID":student.id,"Student Name":student.name};
+        classSubjects.forEach(subject=>{
+            row[`${subject.name} Class Score /50`]='';
+            row[`${subject.name} Exam Mark /100`]='';
+        });
+        return row;
+    });
+
+    const ws=XLSX.utils.json_to_sheet(rows,{header:headers});
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Marks");
+
+    const instructions=[
+        ["SwiftSchool Teacher Marks Template"],
+        ["Teacher",currentUser?.name||""],
+        ["Class",classDisplay(schoolClass)],
+        ["Academic Year",year],
+        ["Term",term],
+        [],
+        ["Instructions"],
+        ["1","Enter Class Score from 0 to 50."],
+        ["2","Enter the full Examination Mark from 0 to 100."],
+        ["3","The system converts the Exam Mark to 50%."],
+        ["4","Example: 80/100 becomes 40/50."],
+        ["5","Leave unfinished marks blank. Blank cells will be skipped."],
+        ["6","You can upload the same sheet again after reviewing more marks."],
+        ["7","Do not change Student ID, Student Name, or subject column names."]
+    ];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(instructions),"Instructions");
+
+    const safe=classDisplay(schoolClass).replace(/[^A-Za-z0-9]+/g,"_");
+    XLSX.writeFile(wb,`SwiftSchool_${safe}_Teacher_Marks_${term.replace(/\s+/g,"_")}.xlsx`);
+    showMessage("teacherBulkMarksMessage","Your class Excel sheet has been downloaded.","success");
+}
+
+function importTeacherBulkMarksFromExcel(){
+    const classId=document.getElementById("teacherBulkMarksClass")?.value;
+    const year=(document.getElementById("teacherBulkMarksYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("teacherBulkMarksTerm")?.value||"Term 1";
+    const file=document.getElementById("teacherBulkMarksExcelFile")?.files?.[0];
+
+    if(!classId){showMessage("teacherBulkMarksMessage","Please select a class first.","error");return;}
+    if(!file){showMessage("teacherBulkMarksMessage","Please select the completed Excel sheet.","error");return;}
+    if(typeof XLSX==="undefined"){
+        showMessage("teacherBulkMarksMessage","Excel support could not be loaded. Please check your internet connection and try again.","error");
+        return;
+    }
+
+    const schoolClass=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=getTeacherBulkSubjects(classId);
+
+    if(!schoolClass){showMessage("teacherBulkMarksMessage","The selected class could not be found.","error");return;}
+    if(!classStudents.length){showMessage("teacherBulkMarksMessage","This class has no students.","error");return;}
+    if(!classSubjects.length){showMessage("teacherBulkMarksMessage","No subjects are linked to this class.","error");return;}
+
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            // Read the actual workbook as an ArrayBuffer. Using a 2-D array
+            // instead of sheet_to_json makes the import tolerant of Excel
+            // formatting and prevents header parsing from failing.
+            let wb;
+            try{
+                wb=XLSX.read(e.target.result,{type:"array",cellDates:false,raw:false});
+            }catch(readErr){
+                throw new Error("Excel workbook could not be opened. Make sure you are uploading the .xlsx file downloaded from SwiftSchool, not the HTML portal file.");
+            }
+            if(!wb || !wb.SheetNames || !wb.SheetNames.length){
+                throw new Error("No worksheet found in the uploaded file.");
+            }
+
+            const sheet=wb.Sheets[wb.SheetNames[0]];
+            if(!sheet)throw new Error("The first worksheet could not be opened.");
+
+            const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false});
+            if(!matrix.length)throw new Error("The worksheet is empty.");
+
+            // Find the header row rather than assuming it is always row 1.
+            let headerRowIndex=-1;
+            for(let i=0;i<Math.min(matrix.length,10);i++){
+                const row=Array.isArray(matrix[i])?matrix[i]:[];
+                const normalized=row.map(normalizeExcelHeader);
+                if(normalized.includes("student id") && normalized.includes("student name")){
+                    headerRowIndex=i;
+                    break;
+                }
+            }
+
+            if(headerRowIndex===-1){
+                throw new Error("Student ID and Student Name columns were not found. Please upload the Excel sheet downloaded from SwiftSchool.");
+            }
+
+            const headerRow=matrix[headerRowIndex].map(v=>String(v??"").trim());
+            const headerIndexes={};
+            headerRow.forEach((h,i)=>{
+                const key=normalizeExcelHeader(h);
+                if(key && headerIndexes[key]===undefined)headerIndexes[key]=i;
+            });
+
+            const findColumn=wanted=>{
+                const wantedKey=normalizeExcelHeader(wanted);
+                if(headerIndexes[wantedKey]!==undefined)return headerIndexes[wantedKey];
+                const wantedCompact=wantedKey.replace(/[^a-z0-9]+/g,"");
+                for(const key of Object.keys(headerIndexes)){
+                    const compact=key.replace(/[^a-z0-9]+/g,"");
+                    if(compact===wantedCompact)return headerIndexes[key];
+                }
+                return undefined;
+            };
+            const studentIdCol=findColumn("Student ID");
+            const studentNameCol=findColumn("Student Name");
+
+            if(studentIdCol===undefined || studentNameCol===undefined){
+                throw new Error("The sheet must contain Student ID and Student Name columns. Download a new class sheet and use that file.");
+            }
+
+            const columns={};
+            const missing=[];
+            classSubjects.forEach(subject=>{
+                const classCol=findColumn(`${subject.name} Class Score /50`);
+                const examCol=findColumn(`${subject.name} Exam Mark /100`);
+                if(classCol===undefined || examCol===undefined)missing.push(subject.name);
+                columns[subject.id]={subject,classCol,examCol};
+            });
+
+            if(missing.length){
+                throw new Error(`The uploaded sheet is missing subject columns for: ${missing.join(", ")}. Please download a fresh class sheet.`);
+            }
+
+            const studentMap=new Map(classStudents.map(s=>[String(s.id).trim().toLowerCase(),s]));
+            let created=0,updated=0,uploaded=0,skipped=0,incomplete=0;
+            const errors=[];
+
+            for(let i=headerRowIndex+1;i<matrix.length;i++){
+                const row=Array.isArray(matrix[i])?matrix[i]:[];
+                const valueAt=col=>col===undefined?"":String(row[col]??"").trim();
+                const studentId=valueAt(studentIdCol);
+                const studentName=valueAt(studentNameCol);
+
+                if(!studentId && !studentName)continue;
+
+                const rowNumber=i+1;
+                const student=studentMap.get(studentId.toLowerCase());
+                if(!student){
+                    errors.push(`Row ${rowNumber}: Student ID ${studentId||"(blank)"} is not in this class.`);
+                    skipped++;
+                    continue;
+                }
+
+                if(studentName && studentName.toLowerCase()!==String(student.name).trim().toLowerCase()){
+                    errors.push(`Row ${rowNumber}: Student name does not match Student ID ${student.id}.`);
+                    skipped++;
+                    continue;
+                }
+
+                let rowUploaded=0;
+
+                Object.values(columns).forEach(({subject,classCol,examCol})=>{
+                    const rawClass=valueAt(classCol);
+                    const rawExam=valueAt(examCol);
+
+                    // Blank pair means this subject has not been reviewed yet.
+                    if(rawClass==="" && rawExam==="")return;
+                    if(rawClass==="" || rawExam===""){
+                        incomplete++;
+                        errors.push(`Row ${rowNumber}: ${subject.name} needs both Class Score and Exam Mark, or leave both blank.`);
+                        return;
+                    }
+
+                    const classScore=Number(rawClass);
+                    const examMark=Number(rawExam);
+                    if(!Number.isFinite(classScore) || classScore<0 || classScore>50){
+                        errors.push(`Row ${rowNumber}: ${subject.name} Class Score must be 0–50.`);
+                        return;
+                    }
+                    if(!Number.isFinite(examMark) || examMark<0 || examMark>100){
+                        errors.push(`Row ${rowNumber}: ${subject.name} Exam Mark must be 0–100.`);
+                        return;
+                    }
+
+                    const examScore=(examMark*50)/100;
+                    const total=classScore+examScore;
+                    const existingIndex=results.findIndex(r=>
+                        r.studentId===student.id &&
+                        r.classId===classId &&
+                        r.subjectId===subject.id &&
+                        String(r.academicYear||"").trim()===year &&
+                        String(r.term||"").trim()===term
+                    );
+
+                    const data={
+                        studentId:student.id,
+                        studentName:student.name,
+                        classId,
+                        subjectId:subject.id,
+                        academicYear:year,
+                        term,
+                        classScore,
+                        examMark,
+                        examScore,
+                        total,
+                        grade:getPerformance(total),
+                        uploadedBy:currentUser?.id || "",
+                        uploadedByName:currentUser?.name || "Teacher",
+                        uploadedAt:new Date().toISOString(),
+                        source:"Teacher Upload"
+                    };
+
+                    if(existingIndex!==-1){
+                        results[existingIndex]={...results[existingIndex],...data};
+                        updated++;
+                    }else{
+                        results.push({id:"RES-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),...data});
+                        created++;
+                    }
+                    uploaded++;
+                    rowUploaded++;
+                });
+
+                if(rowUploaded===0)skipped++;
+            }
+
+            saveAll();
+            renderTeacherResults();
+            refreshDashboard();
+
+            let message=`Upload complete: ${uploaded} mark${uploaded===1?"":"s"} saved (${created} new, ${updated} updated).`;
+            if(incomplete)message+=` ${incomplete} incomplete subject entr${incomplete===1?"y":"ies"} skipped.`;
+            if(errors.length)message+=` ${errors.length} issue${errors.length===1?"":"s"} found.`;
+            showMessage("teacherBulkMarksMessage",message,errors.length?"error":"success");
+
+            if(errors.length){
+                const detail=errors.slice(0,8).join("<br>");
+                const box=document.getElementById("teacherBulkMarksMessage");
+                box.innerHTML+=`<div style="margin-top:8px;font-size:13px">${detail}${errors.length>8?"<br>…and more.":""}</div>`;
+            }
+        }catch(err){
+            console.error("SwiftSchool Excel import error:",err);
+            const reason=err?.message||"Unknown Excel reading error.";
+            const msg=document.getElementById("teacherBulkMarksMessage");
+            if(msg){
+                msg.className="message error";
+                msg.textContent=`Excel upload failed: ${reason}`;
+            }
+        }
+    };
+    reader.onerror=function(){
+        const msg=document.getElementById("teacherBulkMarksMessage");
+        if(msg){msg.className="message error";msg.textContent="Excel upload failed: the browser could not read this file. Please upload the .xlsx file downloaded from SwiftSchool.";}
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+/* =========================
+   TEACHER RESULT VIEW
+========================= */
+
+function renderTeacherResults(){
+    const teacherId=currentUser?.id;
+    const assignedClasses=classes.filter(c=>c && c.id && String(c.teacherId||"")===String(teacherId||""));
+    const allowedClassIds=(assignedClasses.length ? assignedClasses : classes.filter(c=>c && c.id)).map(c=>c.id);
+
+    const teacherSubjectIds=subjects
+        .filter(s=>(s.classIds||[]).some(id=>allowedClassIds.includes(id)))
+        .map(s=>s.id);
+
+    const teacherResults=results.filter(r=>
+        allowedClassIds.includes(r.classId) && teacherSubjectIds.includes(r.subjectId)
+    );
+
+    if(!teacherResults.length){
+        document.getElementById("teacherResultsContent").innerHTML=
+            '<div class="empty">No results available for your subjects.</div>';
+        return;
+    }
+
+    document.getElementById("teacherResultsContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Class</th>
+                <th>Class Score</th>
+                <th>Exam Score</th>
+                <th>Total</th>
+                <th>Performance</th>
+                <th>Academic Year</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${teacherResults.map(r=>{
+            const student=getStudent(r.studentId);
+            const subject=getSubject(r.subjectId);
+            const c=getClass(r.classId);
+
+            return `
+            <tr>
+                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(subject?.name||"Unknown Subject")}</td>
+                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+                <td>${Number(r.classScore).toFixed(2)}</td>
+                <td>${Number(r.examScore).toFixed(2)}</td>
+                <td><strong>${Number(r.total).toFixed(2)}</strong></td>
+                <td>
+                    <span class="badge ${performanceClass(r.grade)}">
+                        ${escapeHtml(r.grade)}
+                    </span>
+                </td>
+                <td>${escapeHtml(r.academicYear)}</td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+
+/* =========================
+   STUDENT SUBJECT VIEW
+========================= */
+
+function renderStudentSubjects(){
+    const student=getStudent(currentUser?.id);
+
+    if(!student){
+        document.getElementById("studentSubjectsContent").innerHTML=
+            '<div class="empty">Student account not found.</div>';
+        return;
+    }
+
+    const studentClass=classes.find(c=>
+        (c.studentIds||[]).includes(student.id)
+    );
+
+    if(!studentClass){
+        document.getElementById("studentSubjectsContent").innerHTML=
+            '<div class="empty">You have not been assigned to a class.</div>';
+        return;
+    }
+
+    const mySubjects=subjects.filter(s=>
+        (s.classIds||[]).includes(studentClass.id)
+    );
+
+    if(!mySubjects.length){
+        document.getElementById("studentSubjectsContent").innerHTML=
+            '<div class="empty">No subjects assigned yet.</div>';
+        return;
+    }
+
+    document.getElementById("studentSubjectsContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Academic Year</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${mySubjects.map(s=>`
+            <tr>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.code)}</td>
+                <td>${escapeHtml(s.academicYear)}</td>
+            </tr>
+        `).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+
+/* =========================
+   PARENT CHILDREN
+========================= */
+
+function renderChildren(){
+    const parent=getParent(currentUser?.id);
+
+    if(!parent){
+        document.getElementById("childrenContent").innerHTML=
+            '<div class="empty">Parent account not found.</div>';
+        return;
+    }
+
+    const children=(parent.studentIds||[])
+        .map(id=>getStudent(id))
+        .filter(Boolean);
+
+    if(!children.length){
+        document.getElementById("childrenContent").innerHTML=
+            '<div class="empty">No children linked to your account.</div>';
+        return;
+    }
+
+    document.getElementById("childrenContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Class</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${children.map(s=>`
+            <tr>
+                <td>${escapeHtml(s.id)}</td>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.gender)}</td>
+                <td>${escapeHtml(s.className)}</td>
+                <td>${escapeHtml(s.email)}</td>
+            </tr>
+        `).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+
+/* =========================
+   TEACHER SUBJECT VIEW
+========================= */
+
+function renderTeacherSubjects(){
+    const teacherId=currentUser?.id;
+
+    const assignedClasses=classes.filter(c=>c && c.id && String(c.teacherId||"")===String(teacherId||""));
+    const myClassIds=(assignedClasses.length ? assignedClasses : classes.filter(c=>c && c.id)).map(c=>c.id);
+    const mySubjects=subjects.filter(s=>(s.classIds||[]).some(id=>myClassIds.includes(id)));
+
+    if(!mySubjects.length){
+        document.getElementById("teacherSubjectsContent").innerHTML=
+            '<div class="empty">No subjects are linked to the available classes.</div>';
+        return;
+    }
+
+    document.getElementById("teacherSubjectsContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Classes</th>
+                <th>Academic Year</th>
+            </tr>
+        </thead>
+        <tbody>
+        ${mySubjects.map(s=>{
+            const classNames=(s.classIds||[])
+                .map(id=>classDisplay(getClass(id)))
+                .join(", ");
+
+            return `
+            <tr>
+                <td>${escapeHtml(s.name)}</td>
+                <td>${escapeHtml(s.code)}</td>
+                <td>${escapeHtml(classNames)}</td>
+                <td>${escapeHtml(s.academicYear)}</td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+
+
+/* =========================
+   ATTENDANCE MANAGEMENT
+========================= */
+
+function attendanceStatusClass(status){
+    return String(status||"").toLowerCase();
+}
+
+function formatDate(date){
+    if(!date)return "";
+    const parts=date.split("-");
+    if(parts.length!==3)return date;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function getClassStudents(classId){
+    const c=getClass(classId);
+    if(!c)return [];
+
+    const ids=c.studentIds||[];
+    const listed=ids.map(id=>getStudent(id)).filter(Boolean);
+
+    // Fallback to the student's class name in case an older record
+    // was saved without the class studentIds relationship.
+    const className=c.name;
+    const fallback=students.filter(s=>{
+        if(listed.some(x=>x.id===s.id))return false;
+        return String(s.className||"").trim()===String(className||"").trim();
+    });
+
+    return [...listed,...fallback];
+}
+
+function populateAttendanceClassSelect(type,selected=""){
+    const select=document.getElementById(
+        type==="Teacher" ? "teacherAttendanceClass" : "attendanceClass"
+    );
+    if(!select)return;
+
+    let available=classes;
+
+    if(type==="Teacher"){
+        const assigned=classes.filter(c=>c.teacherId===currentUser?.id);
+        available=assigned.length ? assigned : classes;
+    }
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        available.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+}
+
+function populateAttendanceStudentSelect(type,classId,selected=""){
+    if(type==="Teacher"){
+        renderTeacherAttendanceStudentList(classId,document.getElementById("teacherAttendanceDate")?.value||"");
+        return;
+    }
+
+    const select=document.getElementById("attendanceStudent");
+    if(!select)return;
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+    const classStudents=getClassStudents(classId);
+    select.innerHTML='<option value="">Select Student</option>'+classStudents.map(s=>`<option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>${escapeHtml(s.name)} (${escapeHtml(s.id)})</option>`).join("");
+    select.disabled=false;
+}
+
+function renderTeacherAttendanceStudentList(classId,date){
+    const box=document.getElementById("teacherAttendanceStudentList");
+    if(!box)return;
+    if(!classId){
+        box.innerHTML='<div class="empty">Select a class to display all students.</div>';
+        return;
+    }
+    if(!date){
+        box.innerHTML='<div class="empty">Select a date to display all students.</div>';
+        return;
+    }
+
+    const classStudents=getClassStudents(classId);
+    if(!classStudents.length){
+        box.innerHTML='<div class="empty">No students are assigned to this class.</div>';
+        return;
+    }
+
+    const records=attendance.filter(a=>a.classId===classId && a.date===date);
+    box.innerHTML=`
+        <h3 style="margin-bottom:12px">Students in ${escapeHtml(classDisplay(getClass(classId)))}</h3>
+        <div class="table-wrap">
+        <table>
+            <thead><tr><th>#</th><th>Student ID</th><th>Student Name</th><th>Status</th><th>Remarks</th></tr></thead>
+            <tbody>
+            ${classStudents.map((student,index)=>{
+                const record=records.find(a=>a.studentId===student.id);
+                const status=record?.status||"Present";
+                const remarks=record?.remarks||"";
+                return `<tr>
+                    <td>${index+1}</td>
+                    <td>${escapeHtml(student.id)}</td>
+                    <td>${escapeHtml(student.name)}</td>
+                    <td><select class="teacher-att-status" data-student-id="${escapeHtml(student.id)}">
+                        <option ${status==="Present"?"selected":""}>Present</option>
+                        <option ${status==="Absent"?"selected":""}>Absent</option>
+                        <option ${status==="Late"?"selected":""}>Late</option>
+                        <option ${status==="Excused"?"selected":""}>Excused</option>
+                    </select></td>
+                    <td><input class="teacher-att-remarks" data-student-id="${escapeHtml(student.id)}" value="${escapeHtml(remarks)}" placeholder="Optional remarks"></td>
+                </tr>`;
+            }).join("")}
+            </tbody>
+        </table>
+        </div>`;
+}
+
+function openAttendanceForm(type="Admin",id=null){
+    const isTeacher=type==="Teacher";
+    const formId=isTeacher ? "teacherAttendanceForm" : "attendanceForm";
+    const panelId=isTeacher ? "teacherAttendanceFormPanel" : "attendanceFormPanel";
+    const titleId=isTeacher ? "teacherAttendanceFormTitle" : "attendanceFormTitle";
+
+    if(isTeacher){
+        editingTeacherAttendanceId=null;
+        document.getElementById(formId).reset();
+        document.getElementById("teacherAttendanceYear").value="2026/2027";
+        document.getElementById("teacherAttendanceDate").value=new Date().toISOString().split("T")[0];
+        populateAttendanceClassSelect("Teacher");
+        document.getElementById(titleId).textContent="Mark Class Attendance";
+        renderTeacherAttendanceStudentList("","");
+        document.getElementById(panelId).style.display="block";
+        return;
+    }
+
+    editingAttendanceId=id;
+    document.getElementById(formId).reset();
+    const today=new Date().toISOString().split("T")[0];
+    document.getElementById("attendanceYear").value="2026/2027";
+    document.getElementById("attendanceDate").value=today;
+    populateAttendanceClassSelect("Admin");
+    document.getElementById(titleId).textContent=id ? "Edit Attendance" : "Add Attendance";
+
+    if(id){
+        const record=attendance.find(a=>a.id===id);
+        if(record){
+            document.getElementById("attendanceYear").value=record.academicYear;
+            document.getElementById("attendanceClass").value=record.classId;
+            populateAttendanceStudentSelect("Admin",record.classId,record.studentId);
+            document.getElementById("attendanceDate").value=record.date;
+            document.getElementById("attendanceStatus").value=record.status;
+            document.getElementById("attendanceRemarks").value=record.remarks||"";
+        }
+    }else{
+        populateAttendanceStudentSelect("Admin","");
+    }
+    document.getElementById(panelId).style.display="block";
+}
+
+function closeAttendanceForm(type="Admin"){
+    const panelId=type==="Teacher" ? "teacherAttendanceFormPanel" : "attendanceFormPanel";
+    document.getElementById(panelId).style.display="none";
+
+    if(type==="Teacher")editingTeacherAttendanceId=null;
+    else editingAttendanceId=null;
+}
+
+function saveAttendanceRecord(data,type){
+    const isTeacher=type==="Teacher";
+    const editingId=isTeacher ? editingTeacherAttendanceId : editingAttendanceId;
+    const messageId=isTeacher ? "teacherAttendanceMessage" : "attendanceMessage";
+
+    // One attendance record per student per date.
+    const duplicate=attendance.some(a=>
+        a.studentId===data.studentId &&
+        a.date===data.date &&
+        a.id!==editingId
+    );
+
+    if(duplicate){
+        showMessage(messageId,"Attendance for this student on this date already exists.","error");
+        return false;
+    }
+
+    if(editingId){
+        const index=attendance.findIndex(a=>a.id===editingId);
+        if(index!==-1)attendance[index]={...attendance[index],...data};
+        showMessage(messageId,"Attendance updated successfully.");
+    }else{
+        attendance.push({
+            id:"ATT-"+Math.random().toString(36).slice(2,8).toUpperCase(),
+            ...data
+        });
+        showMessage(messageId,"Attendance saved successfully.");
+    }
+
+    saveAll();
+    refreshDashboard();
+
+    if(isTeacher){
+        closeAttendanceForm("Teacher");
+        renderTeacherAttendance();
+    }else{
+        closeAttendanceForm("Admin");
+        renderAdminAttendance();
+    }
+
+    return true;
+}
+
+document.getElementById("attendanceClass").addEventListener("change",function(){
+    populateAttendanceStudentSelect("Admin",this.value);
+});
+
+document.getElementById("teacherAttendanceClass").addEventListener("change",function(){
+    renderTeacherAttendanceStudentList(this.value,document.getElementById("teacherAttendanceDate").value);
+});
+
+document.getElementById("teacherAttendanceDate").addEventListener("change",function(){
+    renderTeacherAttendanceStudentList(document.getElementById("teacherAttendanceClass").value,this.value);
+});
+
+document.getElementById("attendanceForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    saveAttendanceRecord({
+        academicYear:document.getElementById("attendanceYear").value.trim(),
+        classId:document.getElementById("attendanceClass").value,
+        studentId:document.getElementById("attendanceStudent").value,
+        date:document.getElementById("attendanceDate").value,
+        status:document.getElementById("attendanceStatus").value,
+        remarks:document.getElementById("attendanceRemarks").value.trim()
+    },"Admin");
+});
+
+document.getElementById("teacherAttendanceForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    const classId=document.getElementById("teacherAttendanceClass").value;
+    const academicYear=document.getElementById("teacherAttendanceYear").value.trim();
+    const date=document.getElementById("teacherAttendanceDate").value;
+    const messageId="teacherAttendanceMessage";
+
+    if(!classId || !date){
+        showMessage(messageId,"Please select a class and date.","error");
+        return;
+    }
+
+    const teacherOwnsClass=classes.some(c=>c.id===classId && c.teacherId===currentUser?.id);
+    if(!teacherOwnsClass){
+        showMessage(messageId,"You can only mark attendance for your assigned classes.","error");
+        return;
+    }
+
+    const classStudents=getClassStudents(classId);
+    if(!classStudents.length){
+        showMessage(messageId,"No students are assigned to this class.","error");
+        return;
+    }
+
+    let saved=0;
+    classStudents.forEach(student=>{
+        const status=document.querySelector(`.teacher-att-status[data-student-id="${CSS.escape(student.id)}"]`)?.value || "Present";
+        const remarks=document.querySelector(`.teacher-att-remarks[data-student-id="${CSS.escape(student.id)}"]`)?.value.trim() || "";
+        const existing=attendance.find(a=>a.studentId===student.id && a.date===date && a.classId===classId);
+        const data={academicYear,classId,studentId:student.id,date,status,remarks};
+        if(existing){
+            Object.assign(existing,data);
+        }else{
+            attendance.push({id:"ATT-"+Math.random().toString(36).slice(2,8).toUpperCase(),...data});
+        }
+        saved++;
+    });
+
+    saveAll();
+    closeAttendanceForm("Teacher");
+    renderTeacherAttendance();
+    refreshDashboard();
+    showMessage(messageId,`${saved} student attendance record${saved===1?"":"s"} saved successfully.`);
+});
+
+function attendanceRows(records,actions=false){
+    return records.map(a=>{
+        const student=getStudent(a.studentId);
+        const c=getClass(a.classId);
+
+        return `
+        <tr>
+            <td>${escapeHtml(formatDate(a.date))}</td>
+            <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+            <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+            <td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+            <td>${escapeHtml(a.academicYear)}</td>
+            <td>${escapeHtml(a.remarks||"")}</td>
+            ${actions ? `<td>
+                <button class="edit-btn" onclick="openAttendanceForm('Admin','${a.id}')">Edit</button>
+                <button class="danger-btn" onclick="deleteAttendance('${a.id}')">Delete</button>
+            </td>`:""}
+        </tr>`;
+    }).join("");
+}
+
+function renderAdminAttendance(){
+    const search=(document.getElementById("attendanceSearch")?.value||"").toLowerCase();
+
+    const filtered=attendance.filter(a=>{
+        const student=getStudent(a.studentId);
+        const c=getClass(a.classId);
+
+        const text=[
+            a.academicYear,a.date,a.status,a.remarks||"",
+            student?.name||"",student?.id||"",
+            c?.name||"",c?.section||""
+        ].join(" ").toLowerCase();
+
+        return text.includes(search);
+    });
+
+    if(!filtered.length){
+        document.getElementById("attendanceTable").innerHTML=
+            '<div class="empty">No attendance records found.</div>';
+        return;
+    }
+
+    document.getElementById("attendanceTable").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Date</th><th>Student</th><th>Class</th><th>Status</th>
+            <th>Academic Year</th><th>Remarks</th><th>Actions</th>
+        </tr></thead>
+        <tbody>${attendanceRows(filtered,true)}</tbody>
+    </table>
+    </div>`;
+}
+
+function deleteAttendance(id){
+    if(!confirm("Delete this attendance record?"))return;
+
+    attendance=attendance.filter(a=>a.id!==id);
+    saveAll();
+    renderAdminAttendance();
+    refreshDashboard();
+}
+
+function renderStudentAttendance(){
+    const myRecords=attendance
+        .filter(a=>a.studentId===currentUser?.id)
+        .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+
+    const summary=document.getElementById("studentAttendanceSummary");
+
+    const present=myRecords.filter(a=>a.status==="Present").length;
+    const absent=myRecords.filter(a=>a.status==="Absent").length;
+    const late=myRecords.filter(a=>a.status==="Late").length;
+    const excused=myRecords.filter(a=>a.status==="Excused").length;
+
+    summary.innerHTML=`
+        <div class="card stat-card"><h3>${myRecords.length}</h3><p>Total Records</p></div>
+        <div class="card stat-card"><h3>${present}</h3><p>Present</p></div>
+        <div class="card stat-card"><h3>${absent}</h3><p>Absent</p></div>
+        <div class="card stat-card"><h3>${late}</h3><p>Late</p></div>
+        <div class="card stat-card"><h3>${excused}</h3><p>Excused</p></div>
+    `;
+
+    if(!myRecords.length){
+        document.getElementById("studentAttendanceContent").innerHTML=
+            '<div class="empty">No attendance records available.</div>';
+        return;
+    }
+
+    document.getElementById("studentAttendanceContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Date</th><th>Class</th><th>Status</th><th>Academic Year</th><th>Remarks</th>
+        </tr></thead>
+        <tbody>
+        ${myRecords.map(a=>{
+            const c=getClass(a.classId);
+            return `<tr>
+                <td>${escapeHtml(formatDate(a.date))}</td>
+                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+                <td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+                <td>${escapeHtml(a.academicYear)}</td>
+                <td>${escapeHtml(a.remarks||"")}</td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function renderParentAttendance(){
+    const parent=getParent(currentUser?.id);
+
+    if(!parent){
+        document.getElementById("parentAttendanceContent").innerHTML=
+            '<div class="empty">Parent account not found.</div>';
+        return;
+    }
+
+    const childIds=parent.studentIds||[];
+
+    const records=attendance
+        .filter(a=>childIds.includes(a.studentId))
+        .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+
+    if(!records.length){
+        document.getElementById("parentAttendanceContent").innerHTML=
+            '<div class="empty">No attendance records available for your children.</div>';
+        return;
+    }
+
+    document.getElementById("parentAttendanceContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Date</th><th>Student</th><th>Class</th><th>Status</th><th>Academic Year</th><th>Remarks</th>
+        </tr></thead>
+        <tbody>
+        ${records.map(a=>{
+            const student=getStudent(a.studentId);
+            const c=getClass(a.classId);
+            return `<tr>
+                <td>${escapeHtml(formatDate(a.date))}</td>
+                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+                <td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+                <td>${escapeHtml(a.academicYear)}</td>
+                <td>${escapeHtml(a.remarks||"")}</td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function renderTeacherAttendance(){
+    const teacherId=currentUser?.id;
+
+    const assignedClasses=classes.filter(c=>c.teacherId===teacherId);
+    const classIds=(assignedClasses.length ? assignedClasses : classes).map(c=>c.id);
+
+    const search=(document.getElementById("teacherAttendanceSearch")?.value||"").toLowerCase();
+
+    const records=attendance
+        .filter(a=>classIds.includes(a.classId))
+        .filter(a=>{
+            const student=getStudent(a.studentId);
+            const c=getClass(a.classId);
+            const text=[
+                a.academicYear,a.date,a.status,a.remarks||"",
+                student?.name||"",student?.id||"",
+                c?.name||"",c?.section||""
+            ].join(" ").toLowerCase();
+
+            return text.includes(search);
+        })
+        .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+
+    if(!records.length){
+        document.getElementById("teacherAttendanceContent").innerHTML=
+            '<div class="empty">No attendance records found for your assigned classes.</div>';
+        return;
+    }
+
+    document.getElementById("teacherAttendanceContent").innerHTML=`
+    <div class="table-wrap">
+    <table>
+        <thead><tr>
+            <th>Date</th><th>Student</th><th>Class</th><th>Status</th>
+            <th>Academic Year</th><th>Remarks</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+        ${records.map(a=>{
+            const student=getStudent(a.studentId);
+            const c=getClass(a.classId);
+            return `<tr>
+                <td>${escapeHtml(formatDate(a.date))}</td>
+                <td>${escapeHtml(student?.name||"Unknown Student")}</td>
+                <td>${escapeHtml(c ? classDisplay(c):"Deleted Class")}</td>
+                <td><span class="badge ${attendanceStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+                <td>${escapeHtml(a.academicYear)}</td>
+                <td>${escapeHtml(a.remarks||"")}</td>
+                <td>
+                    <button class="edit-btn" onclick="openAttendanceForm('Teacher')">Edit</button>
+                    <button class="danger-btn" onclick="deleteTeacherAttendance('${a.id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+    </table>
+    </div>`;
+}
+
+function deleteTeacherAttendance(id){
+    const record=attendance.find(a=>a.id===id);
+    if(!record)return;
+
+    const teacherOwnsClass=classes.some(c=>
+        c.id===record.classId && c.teacherId===currentUser?.id
+    );
+
+    if(!teacherOwnsClass){
+        showMessage("teacherAttendanceMessage","You can only manage attendance for your assigned classes.","error");
+        return;
+    }
+
+    if(!confirm("Delete this attendance record?"))return;
+
+    attendance=attendance.filter(a=>a.id!==id);
+    saveAll();
+    renderTeacherAttendance();
+    refreshDashboard();
+}
+
+
+
+/* =========================
+   REPORT CARDS / STUDENT REPORTS
+========================= */
+
+let currentReportStudentId = "";
+let currentReportClassId = "";
+let currentReportAcademicYear = "";
+
+function reportCommentsKey(studentId, academicYear){
+    return `${studentId}_${academicYear}`;
+}
+
+function getReportComments(studentId, academicYear){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+    return all[reportCommentsKey(studentId,academicYear)] || {
+        teacher:"",
+        headteacher:""
+    };
+}
+
+function saveReportComments(studentId, academicYear, teacher, headteacher){
+    const all=JSON.parse(localStorage.getItem("schoolPortalReportComments")) || {};
+
+    all[reportCommentsKey(studentId,academicYear)]={
+        teacher:String(teacher||"").trim(),
+        headteacher:String(headteacher||"").trim()
+    };
+
+    localStorage.setItem("schoolPortalReportComments",JSON.stringify(all));
+}
+
+function populateReportClassSelect(selected=""){
+    const select=document.getElementById("reportClassSelect");
+    if(!select)return;
+
+    select.innerHTML='<option value="">Select Class</option>'+
+        classes.map(c=>`
+            <option value="${escapeHtml(c.id)}" ${selected===c.id?"selected":""}>
+                ${escapeHtml(classDisplay(c))}
+            </option>
+        `).join("");
+
+    if(selected){
+        populateReportStudentSelect(selected);
+    }else{
+        const studentSelect=document.getElementById("reportStudentSelect");
+        if(studentSelect){
+            studentSelect.innerHTML='<option value="">Select Student</option>';
+            studentSelect.disabled=true;
+        }
+    }
+}
+
+function populateReportStudentSelect(classId,selected=""){
+    const select=document.getElementById("reportStudentSelect");
+    if(!select)return;
+
+    if(!classId){
+        select.innerHTML='<option value="">Select Class First</option>';
+        select.disabled=true;
+        return;
+    }
+
+    const classStudents=getClassStudents(classId);
+
+    select.innerHTML='<option value="">Select Student</option>'+
+        classStudents.map(s=>`
+            <option value="${escapeHtml(s.id)}" ${selected===s.id?"selected":""}>
+                ${escapeHtml(s.name)} (${escapeHtml(s.id)})
+            </option>
+        `).join("");
+
+    select.disabled=false;
+}
+
+function calculateReportAttendance(studentId,classId,academicYear){
+    const records=attendance.filter(a=>
+        a.studentId===studentId &&
+        a.classId===classId &&
+        String(a.academicYear||"").trim()===String(academicYear||"").trim()
+    );
+
+    const present=records.filter(a=>String(a.status).toLowerCase()==="present").length;
+    const late=records.filter(a=>String(a.status).toLowerCase()==="late").length;
+    const absent=records.filter(a=>String(a.status).toLowerCase()==="absent").length;
+    const excused=records.filter(a=>String(a.status).toLowerCase()==="excused").length;
+
+    const counted=present+late+absent;
+    const attended=present+late;
+    const percentage=counted ? Math.round((attended/counted)*100) : 0;
+
+    return {
+        total:records.length,
+        present,
+        late,
+        absent,
+        excused,
+        counted,
+        attended,
+        percentage
+    };
+}
+
+function reportSubjectList(classId,studentId,academicYear){
+    const classSubjects=subjects.filter(s=>
+        (s.classIds||[]).includes(classId)
+    );
+
+    const studentResults=results.filter(r=>
+        r.studentId===studentId &&
+        r.classId===classId &&
+        String(r.academicYear||"").trim()===String(academicYear||"").trim()
+    );
+
+    const ids=new Set(classSubjects.map(s=>s.id));
+
+    studentResults.forEach(r=>{
+        if(r.subjectId)ids.add(r.subjectId);
+    });
+
+    return [...ids].map(id=>({
+        subject:getSubject(id),
+        result:studentResults.find(r=>r.subjectId===id)
+    })).filter(x=>x.subject || x.result);
+}
+
+function getReportResultLevel(result){
+    if(!result)return "No Result";
+
+    if(result.grade && String(result.grade).trim()){
+        return result.grade;
+    }
+
+    if(result.performance && String(result.performance).trim()){
+        return result.performance;
+    }
+
+    if(result.total!==undefined && result.total!==""){
+        return getPerformance(result.total);
+    }
+
+    return "No Result";
+}
+
+function saveCurrentReportComments(){
+    if(!currentReportStudentId || !currentReportAcademicYear){
+        showMessage("reportMessage","Generate a report before saving comments.","error");
+        return;
+    }
+
+    const teacher=document.getElementById("reportTeacherComment")?.value || "";
+    const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+    saveReportComments(
+        currentReportStudentId,
+        currentReportAcademicYear,
+        teacher,
+        headteacher
+    );
+
+    showMessage("reportMessage","Report comments saved successfully.","success");
+}
+
+function generateStudentReport(){
+    const classId=document.getElementById("reportClassSelect")?.value || "";
+    const studentId=document.getElementById("reportStudentSelect")?.value || "";
+    const academicYear=document.getElementById("reportAcademicYear")?.value.trim() || "";
+
+    const container=document.getElementById("studentReportContainer");
+
+    if(!classId){
+        showMessage("reportMessage","Please select a class.","error");
+        return;
+    }
+
+    if(!studentId){
+        showMessage("reportMessage","Please select a student.","error");
+        return;
+    }
+
+    if(!academicYear){
+        showMessage("reportMessage","Please enter the academic year.","error");
+        return;
+    }
+
+    const student=getStudent(studentId);
+    const schoolClass=getClass(classId);
+
+    if(!student || !schoolClass){
+        showMessage("reportMessage","The selected student or class could not be found.","error");
+        return;
+    }
+
+    currentReportStudentId=studentId;
+    currentReportClassId=classId;
+    currentReportAcademicYear=academicYear;
+
+    const subjectItems=reportSubjectList(classId,studentId,academicYear);
+    const attendanceSummary=calculateReportAttendance(studentId,classId,academicYear);
+    const comments=getReportComments(studentId,academicYear);
+
+    const scoredResults=subjectItems
+        .map(x=>x.result)
+        .filter(Boolean)
+        .filter(r=>r.total!==undefined && r.total!=="" && !isNaN(Number(r.total)));
+
+    const scores=scoredResults.map(r=>Number(r.total));
+    const average=scores.length
+        ? scores.reduce((sum,n)=>sum+n,0)/scores.length
+        : 0;
+
+    const highest=scores.length ? Math.max(...scores) : 0;
+    const overall=scores.length ? getPerformance(average) : "No Result";
+
+    const teacher=getTeacher(schoolClass.teacherId);
+
+    const subjectRows=subjectItems.length
+        ? subjectItems.map(item=>{
+            const subject=item.subject;
+            const result=item.result;
+            const total=result && result.total!==undefined && result.total!==""
+                ? Number(result.total)
+                : null;
+
+            const level=getReportResultLevel(result);
+
+            return `<tr>
+                <td>${escapeHtml(subject?.name || result?.subjectName || "Subject")}</td>
+                <td>${result?.classScore!==undefined && result.classScore!=="" ? escapeHtml(result.classScore) : "—"}</td>
+                <td>${result?.examScore!==undefined && result.examScore!=="" ? escapeHtml(result.examScore) : "—"}</td>
+                <td>${total!==null && !isNaN(total) ? escapeHtml(total) : "—"}</td>
+                <td>
+                    ${level==="No Result"
+                        ? "No Result"
+                        : `<span class="badge ${escapeHtml(performanceClass(level))}">
+                            ${escapeHtml(level)}
+                           </span>`}
+                </td>
+            </tr>`;
+        }).join("")
+        : `<tr><td colspan="5" style="text-align:center">No subjects or results available for this student.</td></tr>`;
+
+    const gender=student.gender || "";
+    const teacherName=teacher?.name || "Class Teacher";
+
+    container.className="report-card";
+    container.innerHTML=`
+        <div class="report-school-header">
+            <h1>SWIFTSCHOOL</h1>
+            <h2>STUDENT ACADEMIC REPORT</h2>
+            <p>Academic Year: <strong>${escapeHtml(academicYear)}</strong></p>
+        </div>
+
+        <div class="report-student-info">
+            <div class="report-info-box">
+                <strong>Student Name</strong>
+                ${escapeHtml(student.name)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Student ID</strong>
+                ${escapeHtml(student.id)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Class</strong>
+                ${escapeHtml(classDisplay(schoolClass))}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Gender</strong>
+                ${escapeHtml(gender || "—")}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Class Teacher</strong>
+                ${escapeHtml(teacherName)}
+            </div>
+
+            <div class="report-info-box">
+                <strong>Report Date</strong>
+                ${escapeHtml(new Date().toLocaleDateString())}
+            </div>
+        </div>
+
+        <h3>Academic Performance</h3>
+
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Class Score</th>
+                        <th>Exam Score</th>
+                        <th>Total</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${subjectRows}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-summary">
+            <div class="report-summary-box">
+                <strong>${scores.length ? average.toFixed(1) : "—"}</strong>
+                <span>Average Score</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${scores.length ? highest : "—"}</strong>
+                <span>Highest Score</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${escapeHtml(overall)}</strong>
+                <span>Overall Performance</span>
+            </div>
+
+            <div class="report-summary-box">
+                <strong>${attendanceSummary.percentage}%</strong>
+                <span>Attendance</span>
+            </div>
+        </div>
+
+        <h3>Attendance Summary</h3>
+
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Present</th>
+                        <th>Late</th>
+                        <th>Absent</th>
+                        <th>Excused</th>
+                        <th>Attendance %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${attendanceSummary.present}</td>
+                        <td>${attendanceSummary.late}</td>
+                        <td>${attendanceSummary.absent}</td>
+                        <td>${attendanceSummary.excused}</td>
+                        <td>${attendanceSummary.percentage}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-comments">
+            <div class="report-comment-box">
+                <h3>Class Teacher's Comment</h3>
+                <textarea id="reportTeacherComment"
+                    placeholder="Enter teacher's comment...">${escapeHtml(comments.teacher)}</textarea>
+            </div>
+
+            <div class="report-comment-box">
+                <h3>Headteacher's Comment</h3>
+                <textarea id="reportHeadteacherComment"
+                    placeholder="Enter headteacher's comment...">${escapeHtml(comments.headteacher)}</textarea>
+            </div>
+        </div>
+
+        <div class="report-comment-actions">
+            <button class="primary-btn" onclick="saveCurrentReportComments()">
+                Save Comments
+            </button>
+        </div>
+
+        <div class="report-footer">
+            <div>
+                <div class="signature-line">Class Teacher</div>
+            </div>
+
+            <div>
+                <div class="signature-line">Headteacher / Principal</div>
+            </div>
+        </div>
+    `;
+
+    showMessage("reportMessage","Report generated successfully.","success");
+}
+
+function printStudentReport(){
+    const container=document.getElementById("studentReportContainer");
+
+    if(!container || !container.classList.contains("report-card")){
+        showMessage("reportMessage","Generate a report before printing.","error");
+        return;
+    }
+
+    // Save any comments currently typed before printing.
+    if(currentReportStudentId && currentReportAcademicYear){
+        const teacher=document.getElementById("reportTeacherComment")?.value || "";
+        const headteacher=document.getElementById("reportHeadteacherComment")?.value || "";
+
+        saveReportComments(
+            currentReportStudentId,
+            currentReportAcademicYear,
+            teacher,
+            headteacher
+        );
+    }
+
+    document.body.classList.add("report-printing");
+
+    setTimeout(()=>{
+        window.print();
+
+        setTimeout(()=>{
+            document.body.classList.remove("report-printing");
+        },500);
+    },100);
+}
+
+document.getElementById("reportClassSelect")?.addEventListener("change",function(){
+    populateReportStudentSelect(this.value);
+    document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML=
+        '<p>Select a student, then click <strong>Generate Report</strong>.</p>';
+});
+
+document.getElementById("reportStudentSelect")?.addEventListener("change",function(){
+    document.getElementById("studentReportContainer").className="report-placeholder";
+    document.getElementById("studentReportContainer").innerHTML=
+        '<p>Click <strong>Generate Report</strong> to create the student report.</p>';
+});
+
+/* =========================
+   SEARCH EVENTS
+========================= */
+
+document.getElementById("studentSearch").addEventListener("input",renderStudents);
+document.getElementById("parentSearch").addEventListener("input",renderParents);
+document.getElementById("teacherSearch").addEventListener("input",renderTeachers);
+document.getElementById("classSearch").addEventListener("input",renderClasses);
+document.getElementById("subjectSearch").addEventListener("input",renderSubjects);
+document.getElementById("resultSearch").addEventListener("input",renderResults);
+document.getElementById("attendanceSearch").addEventListener("input",renderAdminAttendance);
+document.getElementById("teacherAttendanceSearch").addEventListener("input",renderTeacherAttendance);
+
+
+/* =========================
+   INITIAL SAVE
+========================= */
+
+saveAll();
+refreshDashboard();
+
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Portal</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;color:#222}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+    padding:20px
+}
+.login-box{
+    width:100%;
+    max-width:430px;
+    background:#fff;
+    padding:35px;
+    border-radius:16px;
+    box-shadow:0 20px 50px rgba(0,0,0,.2)
+}
+.login-box h1{text-align:center;margin-bottom:8px;color:#1d4ed8}
+.login-box p{text-align:center;color:#666;margin-bottom:25px}
+.form-group{margin-bottom:15px}
+.form-group label{
+    display:block;
+    font-weight:600;
+    margin-bottom:6px
+}
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    outline:none
+}
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#2563eb
+}
+.primary-btn{
+    background:#2563eb;
+    color:white;
+    border:0;
+    padding:11px 18px;
+    border-radius:8px;
+    font-weight:600
+}
+.primary-btn:hover{background:#1d4ed8}
+.secondary-btn{
+    background:#64748b;
+    color:#fff;
+    border:0;
+    padding:10px 15px;
+    border-radius:7px
+}
+.danger-btn{
+    background:#dc2626;
+    color:#fff;
+    border:0;
+    padding:7px 11px;
+    border-radius:6px
+}
+.edit-btn{
+    background:#f59e0b;
+    color:#fff;
+    border:0;
+    padding:7px 11px;
+    border-radius:6px;
+    margin-right:5px
+}
+.demo-box{
+    background:#f1f5f9;
+    padding:12px;
+    border-radius:8px;
+    margin-top:18px;
+    font-size:13px
+}
+
+.portal{display:none;min-height:100vh}
+.sidebar{
+    width:250px;
+    background:#111827;
+    color:#fff;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow-y:auto
+}
+.sidebar-header{
+    padding:22px 18px;
+    border-bottom:1px solid #374151
+}
+.sidebar-header h2{font-size:20px}
+.sidebar-header small{color:#9ca3af}
+.nav-section{padding:15px 10px 5px;color:#9ca3af;font-size:12px;text-transform:uppercase}
+.nav-link{
+    display:block;
+    padding:11px 15px;
+    color:#d1d5db;
+    text-decoration:none;
+    border-radius:7px;
+    margin:2px 8px;
+    cursor:pointer
+}
+.nav-link:hover,.nav-link.active{
+    background:#2563eb;
+    color:#fff
+}
+.logout-link{color:#fca5a5}
+
+.main{
+    margin-left:250px;
+    min-height:100vh
+}
+.topbar{
+    background:#fff;
+    padding:17px 25px;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+}
+.user-info{text-align:right}
+.user-info strong{display:block}
+.user-info small{color:#6b7280}
+
+.content{padding:25px}
+.page{display:none}
+.page.active{display:block}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    flex-wrap:wrap
+}
+.page-header h1{font-size:25px}
+.page-header p{color:#6b7280;margin-top:4px}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:16px;
+    margin-bottom:25px
+}
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+.stat-card h3{font-size:30px;color:#2563eb;margin-bottom:5px}
+.stat-card p{color:#6b7280}
+
+.panel{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    margin-bottom:20px
+}
+.panel h2{margin-bottom:15px}
+
+.table-wrap{overflow-x:auto}
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px
+}
+th,td{
+    padding:11px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left
+}
+th{background:#f8fafc;font-size:13px}
+td{font-size:14px}
+
+.search-box{
+    width:100%;
+    padding:11px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-bottom:15px
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px
+}
+.full{grid-column:1/-1}
+
+.checkbox-list{
+    max-height:180px;
+    overflow-y:auto;
+    border:1px solid #d1d5db;
+    padding:10px;
+    border-radius:8px
+}
+.checkbox-item{
+    display:block;
+    padding:6px
+}
+.checkbox-item input{margin-right:8px}
+
+.message{
+    padding:11px 14px;
+    border-radius:8px;
+    margin-bottom:15px;
+    display:none
+}
+.message.success{display:block;background:#dcfce7;color:#166534}
+.message.error{display:block;background:#fee2e2;color:#991b1b}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    background:#e0e7ff;
+    color:#3730a3
+}
+.badge.advanced{background:#dcfce7;color:#166534}
+.badge.approaching-advanced{background:#dbeafe;color:#1e40af}
+.badge.proficient{background:#e0f2fe;color:#075985}
+.badge.approaching-proficiency{background:#fef3c7;color:#92400e}
+.badge.developing{background:#ffedd5;color:#9a3412}
+.badge.beginning{background:#fee2e2;color:#991b1b}
+.badge.present{background:#dcfce7;color:#166534}
+.badge.absent{background:#fee2e2;color:#991b1b}
+.badge.late{background:#fef3c7;color:#92400e}
+.badge.excused{background:#dbeafe;color:#1e40af}
+
+
+.empty{
+    text-align:center;
+    padding:35px;
+    color:#6b7280
+}
+
+@media(max-width:800px){
+    .sidebar{
+        width:210px
+    }
+    .main{margin-left:210px}
+    .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto
+    }
+    .main{margin-left:0}
+    .topbar{flex-direction:column;align-items:flex-start;gap:10px}
+}
+
+/* =========================
+   REPORT CARDS
+========================= */
+
+.report-controls{
+    margin-bottom:20px;
+}
+
+.report-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+.report-placeholder{
+    background:#fff;
+    border-radius:12px;
+    padding:45px 25px;
+    text-align:center;
+    color:#6b7280;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.report-card{
+    background:#fff;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    max-width:1000px;
+    margin:0 auto 30px;
+}
+
+.report-school-header{
+    text-align:center;
+    border-bottom:2px solid #111827;
+    padding-bottom:18px;
+    margin-bottom:20px;
+}
+
+.report-school-header h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.report-school-header h2{
+    font-size:20px;
+    margin:5px 0;
+}
+
+.report-school-header p{
+    margin:4px 0;
+    color:#4b5563;
+}
+
+.report-student-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.report-info-box{
+    border:1px solid #d1d5db;
+    padding:11px 13px;
+    border-radius:7px;
+    background:#f8fafc;
+}
+
+.report-info-box strong{
+    display:block;
+    font-size:12px;
+    color:#6b7280;
+    margin-bottom:3px;
+}
+
+.report-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:20px 0;
+}
+
+.report-summary-box{
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    padding:13px;
+    text-align:center;
+}
+
+.report-summary-box strong{
+    display:block;
+    font-size:22px;
+    margin-bottom:4px;
+}
+
+.report-summary-box span{
+    font-size:12px;
+    color:#6b7280;
+}
+
+.report-table{
+    width:100%;
+    min-width:0;
+    margin-top:10px;
+}
+
+.report-table th,
+.report-table td{
+    border:1px solid #d1d5db;
+    padding:10px;
+}
+
+.report-table th{
+    background:#f1f5f9;
+}
+
+.report-comments{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:25px;
+}
+
+.report-comment-box{
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    padding:14px;
+}
+
+.report-comment-box h3{
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.report-comment-box textarea{
+    width:100%;
+    min-height:90px;
+    resize:vertical;
+}
+
+.report-comment-actions{
+    margin-top:8px;
+}
+
+.report-footer{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    margin-top:55px;
+}
+
+.signature-line{
+    border-top:1px solid #111827;
+    padding-top:8px;
+    text-align:center;
+    margin-top:35px;
+}
+
+.report-no-data{
+    text-align:center;
+    padding:25px;
+    color:#6b7280;
+    border:1px dashed #cbd5e1;
+    border-radius:8px;
+}
+
+@media(max-width:800px){
+    .report-student-info{
+        grid-template-columns:1fr;
+    }
+
+    .report-summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .report-comments,
+    .report-footer{
+        grid-template-columns:1fr;
+    }
+
+    .report-card{
+        padding:20px;
+    }
+}
+
+@media print{
+    body.report-printing *{
+        visibility:hidden !important;
+    }
+
+    body.report-printing #studentReportContainer,
+    body.report-printing #studentReportContainer *{
+        visibility:visible !important;
+    }
+
+    body.report-printing #studentReportContainer{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        margin:0;
+        padding:0;
+        box-shadow:none;
+        background:#fff;
+    }
+
+    body.report-printing .report-card{
+        max-width:none;
+        margin:0;
+        padding:20px;
+        box-shadow:none;
+        border-radius:0;
+    }
+
+    body.report-printing .report-comment-box textarea{
+        border:0;
+        padding:0;
+        min-height:50px;
+        resize:none;
+        font-family:inherit;
+        font-size:14px;
+    }
+
+    @page{
+        size:A4;
+        margin:12mm;
+    }
+}
+
+
+.parent-password-box{margin-top:20px;padding:20px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;}
+.parent-password-box h3{margin-top:0;}
+.parent-password-notice{padding:14px 16px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-bottom:18px;}
+.forgot-password{display:block;text-align:center;margin:14px 0 4px;color:#2563eb;text-decoration:none;cursor:pointer;font-weight:600;}
+.forgot-password:hover{text-decoration:underline;}
+.password-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.password-modal-box{background:#fff;width:min(520px,100%);border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.password-modal-box h2{margin-top:0;}
+.password-modal-actions{display:flex;gap:10px;margin-top:16px;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <h1>School Portal</h1>
+        <p>Admin, Teacher & Parent Management System</p>
+
+        <div id="loginMessage" class="message"></div>
+
+        <div class="form-group">
+            <label>Account Type</label>
+            <select id="loginRole">
                 <option value="Parent">Parent / Guardian</option>
                 <option value="Teacher">Teacher</option>
                 <option value="Administrator">Administrator</option>
