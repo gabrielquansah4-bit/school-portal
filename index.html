@@ -1073,6 +1073,38 @@ window.swiftSchoolExcelReady = typeof XLSX !== "undefined";
     </div>
 </section>
 
+
+<!-- TEACHER SUBMISSION MONITOR -->
+<section class="panel" id="teacherSubmissionMonitorPanel" style="display:none">
+    <h2>Teacher Submission Monitor</h2>
+    <p style="color:#666;margin-top:6px">Select one class and one term to check submission progress.</p>
+    <div class="form-grid" style="margin-top:12px">
+        <div class="form-group">
+            <label>Academic Year</label>
+            <input id="submissionMonitorYear" value="2026/2027">
+        </div>
+        <div class="form-group">
+            <label>Term</label>
+            <select id="submissionMonitorTerm">
+                <option value="Term 1">Term 1</option>
+                <option value="Term 2">Term 2</option>
+                <option value="Term 3">Term 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Class</label>
+            <select id="submissionMonitorClass">
+                <option value="">Select Class</option>
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:12px">
+        <button class="primary-btn" type="button" onclick="checkTeacherSubmission()">Check Submission</button>
+        <button class="secondary-btn" type="button" onclick="clearTeacherSubmissionMonitor()">Clear</button>
+    </div>
+    <div id="submissionMonitorResult" style="margin-top:15px"></div>
+</section>
+
 <!-- STUDENT ATTENDANCE -->
 
 
@@ -2641,6 +2673,68 @@ function deleteSubject(id){
     refreshDashboard();
 }
 
+
+
+function populateSubmissionMonitorClasses(){
+    const select=document.getElementById("submissionMonitorClass");
+    if(!select)return;
+    select.innerHTML='<option value="">Select Class</option>'+classes.map(c=>
+        `<option value="${escapeHtml(c.id)}">${escapeHtml(classDisplay(c))}</option>`
+    ).join("");
+}
+
+function checkTeacherSubmission(){
+    const year=(document.getElementById("submissionMonitorYear")?.value||"2026/2027").trim();
+    const term=document.getElementById("submissionMonitorTerm")?.value||"Term 1";
+    const classId=document.getElementById("submissionMonitorClass")?.value||"";
+    const box=document.getElementById("submissionMonitorResult");
+    if(!box)return;
+    if(!classId){
+        box.innerHTML='<div class="message error">Please select a class.</div>';
+        return;
+    }
+    const cls=getClass(classId);
+    const classStudents=getClassStudents(classId);
+    const classSubjects=subjects.filter(s=>(s.classIds||[]).includes(classId));
+    const expected=classStudents.length*classSubjects.length;
+    const submitted=results.filter(r=>
+        r.classId===classId &&
+        String(r.academicYear||"").trim()===year &&
+        String(r.term||"").trim()===term &&
+        classSubjects.some(s=>s.id===r.subjectId)
+    );
+    const uniqueKeys=new Set(submitted.map(r=>`${r.studentId}|${r.subjectId}`));
+    const done=uniqueKeys.size;
+    const complete=submitted.filter(r=>r.classScore!==undefined&&r.classScore!==""&&r.examMark!==undefined&&r.examMark!=="").length;
+    const incomplete=submitted.length-complete;
+    const percent=expected?Math.round(done/expected*100):0;
+    let status="Not Started";
+    if(expected && done>=expected)status="Complete";
+    else if(done>0)status="In Progress";
+
+    box.innerHTML=`
+        <div class="panel" style="background:#f8fafc;margin-top:10px">
+            <h3>${escapeHtml(classDisplay(cls))} — ${escapeHtml(term)}</h3>
+            <div class="stats-grid" style="margin-top:12px">
+                <div class="card stat-card"><h3>${expected}</h3><p>Expected Entries</p></div>
+                <div class="card stat-card"><h3>${done}</h3><p>Submitted</p></div>
+                <div class="card stat-card"><h3>${complete}</h3><p>Complete</p></div>
+                <div class="card stat-card"><h3>${incomplete}</h3><p>Incomplete</p></div>
+            </div>
+            <p style="margin-top:14px"><strong>Progress:</strong> ${percent}% &nbsp; <span class="badge">${status}</span></p>
+        </div>`;
+}
+
+function clearTeacherSubmissionMonitor(){
+    const year=document.getElementById("submissionMonitorYear");
+    const term=document.getElementById("submissionMonitorTerm");
+    const cls=document.getElementById("submissionMonitorClass");
+    const box=document.getElementById("submissionMonitorResult");
+    if(year)year.value="2026/2027";
+    if(term)term.value="Term 1";
+    if(cls)cls.value="";
+    if(box)box.innerHTML="";
+}
 
 /* =========================
    RESULTS MANAGEMENT
